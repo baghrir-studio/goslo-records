@@ -157,7 +157,7 @@
         "xp": {
           "plume": 40
         },
-        "text": "Yanis t'a classé dans son top « plumes de la décennie ». Entre deux légendes. Tu as fait une capture."
+        "text": "Yanis t'a classé dans son top « plumes de la décennie ». Entre deux légendes. Tu as imprimé la page. En A3."
       }
     },
     {
@@ -209,7 +209,7 @@
     {
       "id": "grande_scene",
       "title": "Remplir une grande salle",
-      "description": "Passer des bars aux salles où l'on voit le public jusqu'au fond.",
+      "description": "Passer des bars aux salles dont on ne voit pas le fond.",
       "conditions": {
         "min_counters": {
           "projets": 1
@@ -303,7 +303,7 @@
           "streams": 15,
           "credibilite": 10
         },
-        "text": "Le trône est à toi. Il grince un peu. Personne ne te l'avait dit."
+        "text": "Le trône est à toi. Il est en carton et il grince. Personne ne te l'avait dit."
       }
     }
   ]

@@ -54,7 +54,7 @@
       "id": "yanis",
       "name": "Yanis Tracklist",
       "role": "Chroniqueur · « Le Débrief »",
-      "bio": "Connaît la date de sortie de chaque album depuis 1991. Son top de fin d'année fait trembler le game. Bien vu par lui, il te dit où frapper avant un clash.",
+      "bio": "Connaît la date de sortie de chaque album depuis 1991. Son top de fin d'année fait trembler le game. Si tu es dans ses petits papiers, il te dit où frapper avant un clash.",
       "start_relation": 40,
       "look": {
         "skin": "#c68642",
@@ -128,7 +128,7 @@
       "id": "kolosse",
       "name": "Kolosse",
       "role": "Le colosse du quartier",
-      "bio": "Deux mètres, une voix de basse, et une passion pour les défis en live qu'il n'a jamais terminés. Sa batterie de téléphone non plus.",
+      "bio": "Deux mètres, une voix de basse et une passion pour les défis en live. Il n'en a jamais terminé un : sa batterie lâche toujours avant lui.",
       "start_relation": 45,
       "clash": {
         "stats": {
@@ -201,7 +201,7 @@
       "id": "tenebre",
       "name": "Ténèbre",
       "role": "Le poète sombre",
-      "bio": "Enregistre à 4h du matin, lumières éteintes. Répond aux interviews par des silences. Ses fans les analysent.",
+      "bio": "Enregistre à 4 h du matin, lumières éteintes. Répond aux interviews par des silences. Ses fans les analysent.",
       "start_relation": 40,
       "look": {
         "skin": "#e0ac7e",
@@ -216,7 +216,7 @@
     {
       "id": "orphee",
       "name": "Orphée",
-      "role": "Le prodige du collectif",
+      "role": "Le prodige lettré",
       "bio": "Références littéraires, salles pleines, disparitions de deux ans. Revient toujours avec un album surprise au pire moment pour toi.",
       "start_relation": 50,
       "clash": {
@@ -451,7 +451,7 @@
         "taunts": [
           "Ratio.",
           "C'était mieux avant.",
-          "Qui t'écoute sérieux ?"
+          "Qui t'écoute, sérieux ?"
         ]
       },
       "wild": true,
@@ -486,7 +486,7 @@
         "taunts": [
           "Tu peux signer mon front ?",
           "Fais le morceau de 2019 !",
-          "Je t'aime trop frère !!"
+          "Je t'aime trop, frère !!"
         ]
       },
       "wild": true,
@@ -534,7 +534,7 @@
     {
       "id": "influenceur_trottinette",
       "name": "Influenceur en trottinette",
-      "role": "12 000 abonnés, 0 freins",
+      "role": "12 000 abonnés, 0 frein",
       "bio": "Filme tout, comprend peu, roule sur le trottoir.",
       "look": {
         "skin": "#e0ac7e",
@@ -556,7 +556,7 @@
         "resistance": "story",
         "taunts": [
           "Abonne-toi !",
-          "On fait un TikTok ?",
+          "On fait une vidéo ? Juste une. Dix.",
           "Code promo GOSLO10."
         ]
       },
@@ -678,7 +678,7 @@
       "id": "lil_croon",
       "name": "Lil Croon",
       "role": "Rappeur sous autotune (ou chanteur ? personne ne sait)",
-      "bio": "Met de l'autotune sur sa voix, sur la prod et sur son répondeur. Les plateformes le classent dans « Ambiance spa ».",
+      "bio": "Met de l'autotune sur sa voix, sur la prod et sur son répondeur. Sa propre mère ne reconnaît plus sa voix au téléphone.",
       "start_relation": 55,
       "look": {
         "skin": "#8d5524",
@@ -730,7 +730,7 @@
       "id": "big_deal",
       "name": "Big Deal",
       "role": "Superstar américaine",
-      "bio": "Atlanta. Quatorze trophées, trois jets privés, zéro featuring avec la France. Ne se lève pas avant 15 h.",
+      "bio": "Superstar d'outre-Atlantique. Quatorze trophées, trois jets privés, zéro featuring avec la France. Ne se lève pas avant 15 h.",
       "start_relation": 20,
       "look": {
         "skin": "#5a3825",
