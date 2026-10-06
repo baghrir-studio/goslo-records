@@ -64,6 +64,7 @@ extension GameEngine {
         state.concert = nil
         state.negotiation = nil
         state.writing = nil
+        state.minigame = nil
         state.position = nil
         state.challengedThisSemester = []
     }

@@ -243,6 +243,21 @@ final class EventsDataTests: XCTestCase {
                         running = try engine.negotiate(open.randomElement(using: &rng)!, in: &state)
                     }
                     _ = try engine.finishNegotiation(in: &state)
+                case .minigame(let running):
+                    switch running.kind {
+                    case .punchliner:
+                        while let current = engine.punchlinerRound(in: state) {
+                            let count = Int.random(in: 0...4, using: &rng)
+                            _ = try engine.dropPunchline(Array(current.tiles.shuffled(using: &rng).prefix(count)), in: &state)
+                        }
+                    case .platine:
+                        while state.minigame?.isOver == false {
+                            _ = try engine.stopPlatine(after: Double.random(in: 0...6, using: &rng), in: &state)
+                        }
+                    case .fuite:
+                        try engine.endChase(escaped: Bool.random(using: &rng), in: &state)
+                    }
+                    _ = try engine.finishMinigame(in: &state)
                 case .writing:
                     while let running = state.writing, !running.isOver {
                         let options = engine.currentWritingRound(in: state)!.options

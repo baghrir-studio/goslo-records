@@ -24,6 +24,8 @@ struct TurnOutcome: Equatable {
     var negotiation: NegotiationState?
     /// Finished writing session, if the action was one.
     var writing: WritingState?
+    /// Finished mini-game, if the action was one.
+    var minigame: MinigameState?
     /// True if this action closed the semester (upkeep applied).
     var semesterEnded = false
     var ending: Ending?
@@ -46,6 +48,7 @@ enum Resolution: Equatable {
     case concert(ConcertState)
     case negotiation(NegotiationState)
     case writing(WritingState)
+    case minigame(MinigameState)
 }
 
 enum GameEngineError: Error, Equatable {
@@ -66,6 +69,8 @@ enum GameEngineError: Error, Equatable {
     case negotiationNotOver
     case noWriting
     case writingNotOver
+    case noMinigame
+    case minigameNotOver
     case gameOver
 }
 
@@ -147,7 +152,7 @@ struct GameEngine {
     /// The player can pick a location (no card awaiting, no clash, actions left).
     func canVisit(_ state: GameState) -> Bool {
         !state.isOver && state.currentEventId == nil && state.clash == nil && state.interview == nil && state.concert == nil && state.negotiation == nil
-            && state.writing == nil
+            && state.writing == nil && state.minigame == nil
             && state.pendingFollowUp == nil && state.actionsLeft > 0
     }
 
@@ -358,6 +363,12 @@ struct GameEngine {
             state.writing = running
             return .writing(running)
         }
+        if let id = choice.minigame, let minigame = story.minigame(id),
+           EndingResolver.prematureEnding(for: state.stats) == nil {
+            let running = MinigameState(minigame: minigame)
+            state.minigame = running
+            return .minigame(running)
+        }
         return .outcome(finishAction(outcome, in: &state))
     }
 
@@ -559,6 +570,82 @@ struct GameEngine {
             if applied != 0 { outcome.relationChanges[castId, default: 0] += applied }
         }
         state.writing = nil
+        return finishAction(outcome, in: &state)
+    }
+
+    // MARK: - Mini-games
+
+    func minigame(_ id: String) -> Minigame? { story.minigame(id) }
+
+    /// Punchliner: the round being played, and its tiles in a stable order.
+    func punchlinerRound(in state: GameState) -> (round: PunchlinerRound, tiles: [String])? {
+        guard let running = state.minigame, running.kind == .punchliner, let minigame = minigame(running.id),
+              minigame.rounds.indices.contains(running.round) else { return nil }
+        let round = minigame.rounds[running.round]
+        return (round, PunchlinerEngine.tiles(for: round, seed: PunchlinerEngine.seed(running.id, round: running.round)))
+    }
+
+    /// Punchliner: the player drops their line (empty = the timer ran out). Returns the reaction.
+    func dropPunchline(_ words: [String], in state: inout GameState) throws -> String {
+        guard var running = state.minigame, let current = punchlinerRound(in: state) else {
+            throw GameEngineError.noMinigame
+        }
+        guard words.count <= PunchlinerEngine.maxWords, words.allSatisfy(current.tiles.contains),
+              Set(words).count == words.count else { throw GameEngineError.invalidChoice(words.count) }
+        let (points, reaction) = PunchlinerEngine.judge(words, in: current.round)
+        running.points += points
+        running.log.append(reaction)
+        running.round += 1
+        state.minigame = running
+        return reaction
+    }
+
+    /// Cale la platine: the player stopped the fader `elapsed` seconds into the current run.
+    func stopPlatine(after elapsed: Double, in state: inout GameState) throws -> (pitch: Double, reaction: String) {
+        guard var running = state.minigame, running.kind == .platine, !running.isOver else { throw GameEngineError.noMinigame }
+        let pitch = PlatineEngine.pitch(at: max(0, elapsed), run: running.round)
+        let (points, reaction) = PlatineEngine.judge(pitch: pitch)
+        running.points += points
+        running.log.append(reaction)
+        running.round += 1
+        state.minigame = running
+        return (pitch, reaction)
+    }
+
+    /// Fuir la foule: the chase screen reports how it ended.
+    func endChase(escaped: Bool, in state: inout GameState) throws {
+        guard var running = state.minigame, running.kind == .fuite else { throw GameEngineError.noMinigame }
+        running.escaped = escaped
+        state.minigame = running
+    }
+
+    /// Score from 0 to 1.
+    func minigameScore(_ running: MinigameState) -> Double {
+        switch running.kind {
+        case .punchliner:
+            let best = minigame(running.id).map(PunchlinerEngine.maxPoints) ?? 0
+            return best > 0 ? Double(running.points) / Double(best) : 0
+        case .platine:
+            return Double(running.points) / Double(PlatineEngine.runs * PlatineEngine.maxPoints)
+        case .fuite:
+            return running.escaped == true ? 1 : 0
+        }
+    }
+
+    func finishMinigame(in state: inout GameState) throws -> TurnOutcome {
+        guard let running = state.minigame, let minigame = minigame(running.id) else { throw GameEngineError.noMinigame }
+        guard running.isOver else { throw GameEngineError.minigameNotOver }
+        let result = minigameScore(running) >= minigame.passScore ? minigame.win : minigame.lose
+        var outcome = TurnOutcome(consequence: result.consequence)
+        outcome.minigame = running
+        outcome.add(state.stats.apply(result.effects))
+        outcome.add(levelUps: state.skills.gain(result.xp))
+        state.flags.formUnion(result.setFlags)
+        for (castId, delta) in result.relations {
+            let applied = state.changeRelation(castId, by: delta)
+            if applied != 0 { outcome.relationChanges[castId, default: 0] += applied }
+        }
+        state.minigame = nil
         return finishAction(outcome, in: &state)
     }
 

@@ -194,9 +194,12 @@ struct EventChoice: Codable, Equatable {
     let followUp: String?
     /// Extra semesters skipped (e.g. a hiatus). 0 = normal turn.
     let skipTurns: Int
+    /// Starts a mini-game (id from story.json "minigames") after the choice.
+    let minigame: String?
 
     enum CodingKeys: String, CodingKey {
         case label, effects, counters, consequence, xp, relations, requires, clash, interview, concert, negotiation, writing
+        case minigame
         case setFlags = "set_flags"
         case clearFlags = "clear_flags"
         case giveItems = "give_items"
@@ -208,7 +211,7 @@ struct EventChoice: Codable, Equatable {
          counters: [CounterKind: Int] = [:], xp: [Skill: Int] = [:], relations: [String: Int] = [:],
          requires: ChoiceRequirement? = nil, clash: ClashSpec? = nil, interview: String? = nil,
          giveItems: [String] = [], concert: String? = nil, negotiation: String? = nil, writing: String? = nil, consequence: String, followUp: String? = nil,
-         skipTurns: Int = 0) {
+         skipTurns: Int = 0, minigame: String? = nil) {
         self.label = label
         self.effects = effects
         self.setFlags = setFlags
@@ -226,6 +229,7 @@ struct EventChoice: Codable, Equatable {
         self.consequence = consequence
         self.followUp = followUp
         self.skipTurns = skipTurns
+        self.minigame = minigame
     }
 
     init(from decoder: Decoder) throws {
@@ -247,6 +251,7 @@ struct EventChoice: Codable, Equatable {
         consequence = try c.decode(String.self, forKey: .consequence)
         followUp = try c.decodeIfPresent(String.self, forKey: .followUp)
         skipTurns = max(0, try c.decodeIfPresent(Int.self, forKey: .skipTurns) ?? 0)
+        minigame = try c.decodeIfPresent(String.self, forKey: .minigame)
     }
 
     func isAvailable(in state: GameState) -> Bool {

@@ -38,6 +38,7 @@ struct GameState: Codable, Equatable {
     var concert: ConcertState?
     var negotiation: NegotiationState?
     var writing: WritingState?
+    var minigame: MinigameState?
     /// Index of the next step for each quest in progress.
     var questProgress: [String: Int] = [:]
     var completedQuests: Set<String> = []
@@ -73,6 +74,7 @@ struct GameState: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id, startedAt, rapper, stats, counters, skills, flags, relations, metCast, turn, actionsLeft
         case seenUniqueEvents, recentEvents, pendingFollowUp, currentEventId, currentLocation, clash, interview, concert, negotiation, writing
+        case minigame
         case questProgress, completedQuests, ending, position, facing, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques
     }
@@ -102,6 +104,7 @@ struct GameState: Codable, Equatable {
         concert = try c.decodeIfPresent(ConcertState.self, forKey: .concert)
         negotiation = try c.decodeIfPresent(NegotiationState.self, forKey: .negotiation)
         writing = try c.decodeIfPresent(WritingState.self, forKey: .writing)
+        minigame = try c.decodeIfPresent(MinigameState.self, forKey: .minigame)
         questProgress = try c.decodeIfPresent([String: Int].self, forKey: .questProgress) ?? [:]
         completedQuests = try c.decodeIfPresent(Set<String>.self, forKey: .completedQuests) ?? []
         ending = try c.decodeIfPresent(Ending.self, forKey: .ending)

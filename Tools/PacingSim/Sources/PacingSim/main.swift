@@ -195,6 +195,7 @@ final class Player {
         case .concert: playConcert(); _ = try? engine.finishConcert(in: &state)
         case .negotiation: playNegotiation(); _ = try? engine.finishNegotiation(in: &state)
         case .writing: playWriting(); _ = try? engine.finishWriting(in: &state)
+        case .minigame: playMinigame(); _ = try? engine.finishMinigame(in: &state)
         }
     }
 
@@ -287,6 +288,27 @@ final class Player {
             let pick = chance(profile.pickBest) ? (best(from: current).first ?? available[0])
                                                 : available.randomElement(using: &rng)!
             if (try? engine.negotiate(pick, in: &state)) == nil { break }
+        }
+    }
+
+    func playMinigame() {
+        guard let running = state.minigame else { return }
+        switch running.kind {
+        case .punchliner:
+            while let current = engine.punchlinerRound(in: state) {
+                let best = current.round.answers.max { $0.score < $1.score }?.words ?? []
+                let words = chance(profile.pickBest) ? best : Array(current.tiles.shuffled(using: &rng).prefix(3))
+                if (try? engine.dropPunchline(words, in: &state)) == nil { break }
+            }
+        case .platine:
+            while state.minigame?.isOver == false {
+                // The fader crosses 100 % at a quarter of a swing; a good player stops close to it.
+                let period = PlatineEngine.period(run: state.minigame!.round)
+                let aim = period * 0.165 + Double.random(in: -0.25...0.25, using: &rng) * (1.2 - profile.pickBest)
+                if (try? engine.stopPlatine(after: aim, in: &state)) == nil { break }
+            }
+        case .fuite:
+            try? engine.endChase(escaped: chance(profile.pickBest), in: &state)
         }
     }
 
