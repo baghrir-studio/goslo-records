@@ -1854,7 +1854,7 @@
           "set_flags": [
             "baron_contact"
           ],
-          "consequence": "Le Baron a repartagé ta story avec un émoji clown. C'est la guerre. Et c'est la meilleure promo de ta vie."
+          "consequence": "Le Baron a repartagé ta story avec un émoji qui bâille. C'est la guerre. Et c'est la meilleure promo de ta vie."
         },
         {
           "label": "Lui envoyer un DM respectueux",
@@ -2027,7 +2027,7 @@
       ]
     },
     {
-      "id": "kolosse_octogone",
+      "id": "kolosse_defi_live",
       "title": "Le défi en live",
       "text": "Kolosse annonce un défi en live contre toi : 100 pompes, puis un freestyle, puis « on verra ». L'affiche a l'air dessinée à la souris. 40 000 personnes ont déjà réservé leur soirée.",
       "location": "reseaux",
@@ -2051,9 +2051,9 @@
             "kolosse": -10
           },
           "set_flags": [
-            "octogone_annonce"
+            "defi_live_annonce"
           ],
-          "follow_up": "kolosse_octogone_annule",
+          "follow_up": "kolosse_defi_live_annule",
           "consequence": "Tout le quartier en parle. Tu t'entraînes aux pompes. Tu en fais 11. Tu dis que c'était 30."
         },
         {
@@ -2069,7 +2069,7 @@
       ]
     },
     {
-      "id": "kolosse_octogone_annule",
+      "id": "kolosse_defi_live_annule",
       "title": "Défi annulé",
       "text": "Le soir du live, Kolosse lance le stream… et son téléphone s'éteint au bout de quarante secondes. Communiqué officiel : « problème technique ». Personne n'est surpris.",
       "npc": "kolosse",
@@ -2082,7 +2082,7 @@
             "mental": -3
           },
           "clear_flags": [
-            "octogone_annonce"
+            "defi_live_annonce"
           ],
           "clash": {
             "opponent": "kolosse",
@@ -2110,7 +2110,7 @@
             "credibilite": -6
           },
           "clear_flags": [
-            "octogone_annonce"
+            "defi_live_annonce"
           ],
           "consequence": "Une marque de boisson te paye pour un défi qui n'a pas eu lieu. Le rap dans toute sa splendeur."
         }
@@ -3101,7 +3101,7 @@
     },
     {
       "id": "tentation_miami",
-      "title": "Exil immédiat à Port-Paillettes ?",
+      "title": "Exil immédiat à Miami ?",
       "location": "chez_toi",
       "weight": 8,
       "unique": true,
@@ -3110,10 +3110,10 @@
           "argent": 70
         }
       },
-      "text": "Ton compte en banque a franchi un cap. Sur ton téléphone, une pub : « Port-Paillettes. Soleil. Personne ne vous connaît. » Tous les rappeurs riches finissent par y aller. C'est une règle.",
+      "text": "Ton compte en banque a franchi un cap. Sur ton téléphone, une pub : « Miami. Soleil. Personne ne vous connaît. » Tous les rappeurs riches finissent par y aller. C'est une règle.",
       "choices": [
         {
-          "label": "Exil immédiat à Port-Paillettes",
+          "label": "Exil immédiat à Miami",
           "effects": {
             "argent": -20,
             "mental": 8,

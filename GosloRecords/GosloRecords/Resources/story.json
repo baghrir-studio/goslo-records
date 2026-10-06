@@ -2838,7 +2838,7 @@
         },
         {
           "title": {
-            "text": "EXIL IMMÉDIAT À PORT-PAILLETTES",
+            "text": "EXIL IMMÉDIAT À MIAMI",
             "subtitle": "Lingot ne reviendra pas. Sauf pour les impôts."
           }
         },
@@ -3604,7 +3604,7 @@
       }
     },
     {
-      "text": "EXIL IMMÉDIAT À PORT-PAILLETTES : Lingot ne répond plus. Il poste des couchers de soleil et des factures.",
+      "text": "EXIL IMMÉDIAT À MIAMI : Lingot ne répond plus. Il poste des couchers de soleil et des factures.",
       "conditions": {
         "required_flags": [
           "clash_gagne_lingot"
@@ -3661,7 +3661,7 @@
       }
     },
     {
-      "text": "Les rappeurs trop riches du quartier disparaissent un à un. Destination présumée : Port-Paillettes. On ne leur reproche rien, on constate.",
+      "text": "Les rappeurs trop riches du quartier disparaissent un à un. Destination présumée : Miami. On ne leur reproche rien, on constate.",
       "conditions": {
         "min_stats": {
           "argent": 70
