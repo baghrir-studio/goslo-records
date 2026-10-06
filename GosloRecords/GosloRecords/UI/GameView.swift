@@ -40,6 +40,10 @@ struct GameView: View {
                             NegotiationView(negotiation: negotiation, state: state)
                                 .background(Color(red: 0.06, green: 0.06, blue: 0.08).ignoresSafeArea(edges: .bottom))
                                 .transition(.opacity)
+                        } else if case .minigame(let minigame) = model.phase {
+                            MinigameView(minigame: minigame, state: state)
+                                .background(Color(red: 0.05, green: 0.05, blue: 0.07).ignoresSafeArea(edges: .bottom))
+                                .transition(.opacity)
                         } else if case .concert(let concert) = model.phase {
                             ConcertView(concert: concert, state: state)
                                 .background(Color(red: 0.05, green: 0.03, blue: 0.06).ignoresSafeArea(edges: .bottom))
@@ -210,7 +214,7 @@ struct GameView: View {
         case .consequence(_, let outcome):
             ConsequenceBox(outcome: outcome, state: state)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
-        case .clash, .interview, .concert, .negotiation, .writing, .cinematic:
+        case .clash, .interview, .concert, .negotiation, .writing, .minigame, .cinematic:
             EmptyView()
         }
     }

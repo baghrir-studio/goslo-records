@@ -31,6 +31,7 @@ enum GamePhase: Equatable {
     case concert(ConcertState)
     case negotiation(NegotiationState)
     case writing(WritingState)
+    case minigame(MinigameState)
     /// A scripted scene is playing.
     case cinematic
 }
@@ -178,6 +179,8 @@ final class AppModel {
             phase = .negotiation(negotiation)
         } else if let writing = current.writing {
             phase = .writing(writing)
+        } else if let minigame = current.minigame {
+            phase = .minigame(minigame)
         } else if let event = engine.currentEvent(in: current) ?? engine.takeFollowUp(in: &current) {
             state = current
             phase = .encounter(event)
@@ -445,6 +448,9 @@ final class AppModel {
         case .writing(let running):
             phase = .writing(running)
             persist()
+        case .minigame(let running):
+            phase = .minigame(running)
+            persist()
         case .outcome(let outcome):
             show(outcome, for: event)
         }
@@ -580,6 +586,47 @@ final class AppModel {
         phase = .clash(clash)
         persist()
         return clash
+    }
+
+    // MARK: - Mini-games
+
+    /// Punchliner: drops the line (empty = time ran out). Returns the reaction.
+    @discardableResult
+    func dropPunchline(_ words: [String]) -> String? {
+        guard var current = state, case .minigame = phase else { return nil }
+        guard let reaction = try? engine.dropPunchline(words, in: &current) else { return nil }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+        return reaction
+    }
+
+    /// Cale la platine: stops the fader `elapsed` seconds into the run.
+    func stopPlatine(after elapsed: Double) -> (pitch: Double, reaction: String)? {
+        guard var current = state, case .minigame = phase else { return nil }
+        guard let result = try? engine.stopPlatine(after: elapsed, in: &current) else { return nil }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+        return result
+    }
+
+    /// Fuir la foule: the chase is over.
+    func endChase(escaped: Bool) {
+        guard var current = state, case .minigame = phase else { return }
+        guard (try? engine.endChase(escaped: escaped, in: &current)) != nil else { return }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+    }
+
+    func finishMinigame() {
+        guard var current = state, case .minigame = phase else { return }
+        let before = current.stats
+        guard let outcome = try? engine.finishMinigame(in: &current) else { return }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        show(outcome, for: nil)
     }
 
     /// Notebook: picks the secret technique used in clashes.
