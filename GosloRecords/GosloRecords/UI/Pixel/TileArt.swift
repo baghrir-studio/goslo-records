@@ -92,9 +92,18 @@ enum TileArt {
             c.fill(4, 4, 11, 15, NightPalette.door)
             c.fill(7, 4, 8, 15, NightPalette.door.shaded(1.4))
             c.dot(10, 10, NightPalette.doorFrame)
-            let neon = map.door(at: p)?.location.neon ?? NightPalette.lampLight
-            c.fill(3, 1, 12, 1, neon)
-            c.fill(2, 2, 13, 2, neon.shaded(0.45))
+            let location = map.door(at: p)?.location
+            let neon = location?.neon ?? NightPalette.lampLight
+            if location == .media {
+                // goslo radio sign: a tiny sound wave, the logo shrunk to 3 pixels tall.
+                for (x, height) in [(2, 1), (4, 2), (6, 3), (9, 3), (11, 2), (13, 1)] {
+                    c.fill(x, 2 - height + 1, x, 2, neon)
+                }
+                c.fill(7, 1, 8, 1, neon.shaded(0.45))
+            } else {
+                c.fill(3, 1, 12, 1, neon)
+                c.fill(2, 2, 13, 2, neon.shaded(0.45))
+            }
         case .roof:
             c.fill(0, 0, 15, 15, NightPalette.roof)
             if above != .roof { c.fill(0, 0, 15, 1, NightPalette.roofEdge) }

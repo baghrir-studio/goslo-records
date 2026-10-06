@@ -161,7 +161,7 @@ struct RadioTicker: View {
     var body: some View {
         HStack(spacing: 0) {
             HStack(spacing: 5) {
-                Circle().fill(Color.red).frame(width: 7, height: 7).opacity(onAir ? 1 : 0.3)
+                RadioLogo(pixel: 0.6, color: Theme.background).opacity(onAir ? 1 : 0.55)
                 Text("goslo radio")
                     .font(.system(size: 11, weight: .black, design: .monospaced))
             }

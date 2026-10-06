@@ -4,15 +4,7 @@ Textes prêts à coller dans App Store Connect. Les limites de caractères d'App
 
 ## Nom (30 max)
 
-Proposition retenue :
-
-- **Goslo Records – Carrière rap** (28)
-
-Variantes :
-
-- Goslo Records – Rap RPG (23)
-- Goslo Records – Du bloc au trône (32, trop long)
-- Goslo Records – Le jeu du rap (29)
+**Goslo Records – Le jeu du rap** (29)
 
 Sur l'écran d'accueil de l'iPhone, l'app garde le nom court `goslo records` (`CFBundleDisplayName`).
 
@@ -93,7 +85,7 @@ Pour envoyer un retour : faites une capture d'écran dans l'app, TestFlight prop
 
 - Collecte de données : **Non, nous ne collectons aucune donnée.**
 - Le fichier `PrivacyInfo.xcprivacy` de l'app déclare la même chose. `UserDefaults` y figure, car il sert aux réglages audio.
-- URL de politique de confidentialité : obligatoire pour l'App Store, pas pour TestFlight interne. Une page d'une ligne suffit (« goslo records ne collecte aucune donnée »).
+- URL de politique de confidentialité : https://claude.ai/artifact/WRbWdMVPehy2yGZ9ewHRdc (à rendre publique depuis le menu Partager de la page avant de la coller). Obligatoire pour l'App Store, pas pour TestFlight interne.
 
 ## Classification par âge (questionnaire)
 
