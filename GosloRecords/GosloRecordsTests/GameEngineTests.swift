@@ -369,6 +369,18 @@ final class GameEngineTests: XCTestCase {
         XCTAssertEqual(s.stats.credibilite, 50 - ClashState.storyCredCost)
     }
 
+    func testStoryMoveNeverEndsTheCareer() throws {
+        let engine = GameEngine(events: [event("defi", choices: [choice(clash: clashSpec("boss"))])], cast: [boss])
+        var s = neutralState(engine)
+        s.stats = Stats(streams: 50, credibilite: 3, argent: 50, mental: 50)
+        _ = try play(engine, &s)
+        _ = try engine.clashMove(.story, in: &s, using: &rng)
+        XCTAssertEqual(s.stats.credibilite, 1, "le coup Story s'arrête à 1 de respect")
+        _ = try engine.clashMove(.story, in: &s, using: &rng)
+        XCTAssertEqual(s.stats.credibilite, 1)
+        XCTAssertNil(EndingResolver.prematureEnding(for: s.stats))
+    }
+
     func testWeaknessAndResistanceMultipliers() {
         let profile = ClashProfile(stats: [:], weakness: .punchline, resistance: .story)
         XCTAssertEqual(ClashEngine.multiplier(for: .punchline, against: profile), ClashState.weaknessMultiplier)

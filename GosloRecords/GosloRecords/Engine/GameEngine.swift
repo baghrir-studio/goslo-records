@@ -654,7 +654,9 @@ struct GameEngine {
             throw GameEngineError.noClash
         }
         if move == .story {
-            state.stats.apply([.credibilite: -ClashState.storyCredCost])
+            // Your own move never costs you the game: credibility stops at 1 during a clash.
+            let cost = min(ClashState.storyCredCost, max(0, state.stats.credibilite - 1))
+            state.stats.apply([.credibilite: -cost])
         }
         let level = clashLevels(in: state)
         ClashEngine.playRound(&clash, playerMove: move, playerLevel: level,
