@@ -116,8 +116,8 @@ struct GameView: View {
             StatsBar(stats: state.stats, deltas: model.lastDeltas, token: model.deltaToken, compact: true)
             HStack(spacing: 10) {
                 HStack(alignment: .lastTextBaseline, spacing: 6) {
-                    Text("ANNÉE \(state.year)").font(.display(20))
-                    Text("S\(state.semester)").font(.mono(11, weight: .semibold)).foregroundStyle(Theme.muted)
+                    Text(state.periodLabel).font(.display(20)).lineLimit(1).minimumScaleFactor(0.6)
+                    Text(state.semesterLabel).font(.mono(11, weight: .semibold)).foregroundStyle(Theme.muted)
                 }
                 HStack(spacing: 4) {
                     ForEach(0..<GameState.actionsPerTurn, id: \.self) { index in

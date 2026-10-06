@@ -118,6 +118,18 @@ struct GameState: Codable, Equatable {
     var semester: Int { turn % 2 + 1 }
     var isOver: Bool { ending != nil }
     var yearsActive: Int { max(1, Int((Double(turn) / 2).rounded(.up))) }
+    /// Past semester 20 with the finale still to play (see `GameEngine.turnLimit`).
+    var isOvertime: Bool { turn >= GameState.totalTurns }
+    /// "ANNÉE 4", or "PROLONGATION" in overtime.
+    var periodLabel: String { isOvertime ? "PROLONGATION" : "ANNÉE \(year)" }
+    /// "S2", or "3/10" in overtime.
+    var semesterLabel: String {
+        isOvertime ? "\(turn - GameState.totalTurns + 1)/\(GameState.overtimeTurns)" : "S\(semester)"
+    }
+    /// Subtitle of the semester card.
+    var semesterCardLabel: String {
+        isOvertime ? "SEMESTRE \(turn - GameState.totalTurns + 1) SUR \(GameState.overtimeTurns)" : "SEMESTRE \(semester)"
+    }
 
     func relation(_ castId: String) -> Int {
         relations[castId] ?? CastMember.defaultRelation

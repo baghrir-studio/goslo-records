@@ -84,6 +84,8 @@ final class FinaleTests: XCTestCase {
         XCTAssertFalse(state.isOver, "la finale n'est pas jouée : la carrière continue en prolongation")
         XCTAssertTrue(engine.canVisit(state))
         XCTAssertEqual(state.year, GameState.totalTurns / 2)
+        XCTAssertEqual(state.periodLabel, "PROLONGATION")
+        XCTAssertEqual(state.semesterLabel, "1/\(GameState.overtimeTurns)")
 
         // Overtime has an end too: a player who never plays the finale gets a survival ending.
         state.turn = GameState.totalTurns + GameState.overtimeTurns - 1

@@ -10,8 +10,8 @@ struct TransitionOverlay: View {
             Color.black.ignoresSafeArea()
         case .battle:
             BattleWipe()
-        case .semester(let year, let semester):
-            SemesterCard(year: year, semester: semester)
+        case .semester(let title, let subtitle):
+            SemesterCard(title: title, subtitle: subtitle)
         }
     }
 }
@@ -48,22 +48,24 @@ private struct BattleWipe: View {
 
 /// Title card at the start of each semester.
 private struct SemesterCard: View {
-    let year: Int
-    let semester: Int
+    let title: String
+    let subtitle: String
     @State private var shown = false
 
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
             VStack(spacing: 10) {
-                Text("ANNÉE \(year)")
+                Text(title)
                     .font(.display(86))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.4)
                     .foregroundStyle(.white)
                     .offset(y: shown ? 0 : 30)
                 Rectangle()
                     .fill(Theme.accent)
                     .frame(width: shown ? 120 : 0, height: 5)
-                Text("SEMESTRE \(semester)")
+                Text(subtitle)
                     .font(.system(size: 16, weight: .heavy, design: .monospaced))
                     .tracking(4)
                     .foregroundStyle(.white.opacity(0.7))

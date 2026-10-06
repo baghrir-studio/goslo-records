@@ -52,7 +52,7 @@ struct CinematicCaption: Equatable {
 enum WorldTransition: Equatable {
     case fade
     case battle
-    case semester(year: Int, semester: Int)
+    case semester(title: String, subtitle: String)
 }
 
 /// Glue between the engine, persistence and the UI: current run, overworld, routing.
@@ -621,7 +621,7 @@ final class AppModel {
         if pendingSemesterCard, let state {
             pendingSemesterCard = false
             sound.play(.semester)
-            withAnimation(.easeInOut(duration: 0.4)) { transition = .semester(year: state.year, semester: state.semester) }
+            withAnimation(.easeInOut(duration: 0.4)) { transition = .semester(title: state.periodLabel, subtitle: state.semesterCardLabel) }
             try? await Task.sleep(for: .milliseconds(1900))
             withAnimation(.easeInOut(duration: 0.5)) { transition = nil }
         }
