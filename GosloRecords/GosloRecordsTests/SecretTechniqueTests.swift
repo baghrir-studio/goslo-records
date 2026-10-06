@@ -5,13 +5,13 @@ final class SecretTechniqueTests: XCTestCase {
     private var rng = SeededGenerator(seed: 12)
     private let rivalSecret = SecretTechnique(name: "Le Coup Test", line: "Ça fait mal.")
 
-    private func setup() throws -> (GameEngine, GameState) {
+    private func setup(boss: Bool = false) throws -> (GameEngine, GameState) {
         let rival = CastMember(id: "rival", name: "Rival", role: "",
                                clash: ClashProfile(stats: [.punchline: 3, .flow: 3, .presence: 3, .story: 3]),
                                secret: rivalSecret)
         let event = GameEvent(id: "defi", title: "", text: "", location: .studio, choices: [
             EventChoice(label: "Clash", clash: ClashSpec(opponent: "rival", win: ClashResultSpec(consequence: "w"),
-                                                         lose: ClashResultSpec(consequence: "l")),
+                                                         lose: ClashResultSpec(consequence: "l"), boss: boss),
                         consequence: "go"),
             EventChoice(label: "Non", consequence: "non"),
         ])
@@ -94,5 +94,64 @@ final class SecretTechniqueTests: XCTestCase {
         for style in Style.allCases {
             XCTAssertFalse(style.secret.name.isEmpty)
         }
+    }
+
+    // MARK: Countering a boss's technique
+
+    /// Fills the boss's gauge, then plays a round so it fires its technique.
+    private func bossFires() throws -> (GameEngine, GameState, Int) {
+        var (engine, state) = try setup(boss: true)
+        state.clash!.opponentMeter = ClashState.secretThreshold
+        state.clash!.opponentHype = 1_000
+        let before = state.clash!.playerHype
+        let clash = try engine.clashMove(.flow, in: &state, using: &rng)
+        XCTAssertNotNil(clash.pendingCounter, "la technique du boss attend le contre")
+        XCTAssertEqual(clash.playerHype, before, "rien ne tombe avant le contre")
+        XCTAssertFalse(clash.isOver)
+        return (engine, state, before)
+    }
+
+    func testBossTechniqueWaitsForTheCounter() throws {
+        var (engine, state, before) = try bossFires()
+        let damage = state.clash!.pendingCounter!.damage
+        let clash = try engine.counterSecret(taps: ClashState.counterTaps, in: &state)
+        XCTAssertNil(clash.pendingCounter)
+        let entry = try XCTUnwrap(clash.log.last)
+        XCTAssertEqual(entry.secret, rivalSecret)
+        XCTAssertEqual(entry.countered, ClashState.counterMaxReduction)
+        XCTAssertEqual(entry.damage, Int((Double(damage) * (1 - ClashState.counterMaxReduction)).rounded()))
+        XCTAssertEqual(clash.playerHype, before - entry.damage)
+    }
+
+    func testCounterScalesWithTaps() {
+        XCTAssertEqual(ClashState.counterReduction(taps: 0), 0)
+        XCTAssertEqual(ClashState.counterReduction(taps: ClashState.counterTaps / 2), ClashState.counterMaxReduction / 2, accuracy: 0.001)
+        XCTAssertEqual(ClashState.counterReduction(taps: ClashState.counterTaps * 3), ClashState.counterMaxReduction)
+    }
+
+    func testUncounteredTechniqueLandsInFullBeforeTheNextRound() throws {
+        var (engine, state, before) = try bossFires()
+        let damage = state.clash!.pendingCounter!.damage
+        let clash = try engine.clashMove(.flow, in: &state, using: &rng)
+        let secretEntry = try XCTUnwrap(clash.log.first { $0.secret == rivalSecret })
+        XCTAssertEqual(secretEntry.damage, damage, "sans contre, la technique fait tous ses dégâts")
+        XCTAssertNil(clash.pendingCounter)
+        XCTAssertLessThan(clash.playerHype, before)
+    }
+
+    func testOrdinaryRivalsAreNotCountered() throws {
+        var (engine, state) = try setup()
+        state.clash!.opponentMeter = ClashState.secretThreshold
+        state.clash!.opponentHype = 1_000
+        let clash = try engine.clashMove(.flow, in: &state, using: &rng)
+        XCTAssertNil(clash.pendingCounter)
+        XCTAssertNotNil(clash.log.first { $0.secret == rivalSecret })
+    }
+
+    func testPendingCounterSurvivesASave() throws {
+        let (_, state, _) = try bossFires()
+        let data = try JSONEncoder().encode(state)
+        let restored = try JSONDecoder().decode(GameState.self, from: data)
+        XCTAssertEqual(restored.clash?.pendingCounter, state.clash?.pendingCounter)
     }
 }

@@ -21,6 +21,15 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
 - **Secret technique**: each side fills a gauge with the damage it deals. At 35, a once-per-clash technique
   unlocks (never misses, ignores resistances) with a short cinematic. The player's depends on their style
   (e.g. "Le Sample Interdit" for Boom bap). Opponents fire theirs automatically, defined in `cast.json` under `"secret"`.
+- **Countering a boss**: when a boss fires its secret technique, the player has 2.5 s to tap the screen;
+  16 taps take off 75 % of the damage (`ClashState.counter*`). Without a tap, the damage is the same as before.
+- **Unlockable techniques** (`story.json` → `techniques`): each boss beaten before chapter 5 leaves a funny
+  technique (same damage, its own gag and falling props). The notebook (Objets tab) picks the one to use.
+- **Mini-games** (`story.json` → `minigames`, started by an event choice `"minigame": id`): Punchliner (finish
+  punchlines with 20 word tiles), Fuir la foule (run to the door through a crowd) and Cale la platine (stop DJ
+  Bobine's pitch on 100 %). Repeatable encounters with small rewards; rules in `Engine/Minigames.swift`.
+- **Look**: hair, hair colour, hat, glasses, beard, chain and headphones can be picked at creation
+  (nil = the style's look).
 - **Relationships** (0–100) with the cast, and **quests** with steps shown on the map (● QUÊTE).
 - Each semester ends with an upkeep: −2 argent, −4 streams (`GameEngine.semesterUpkeep`).
 - 4 early endings (a stat at 0) and 7 endings for finishing all 10 years, including **Héritier du trône**

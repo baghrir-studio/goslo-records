@@ -40,6 +40,10 @@ struct GameView: View {
                             NegotiationView(negotiation: negotiation, state: state)
                                 .background(Color(red: 0.06, green: 0.06, blue: 0.08).ignoresSafeArea(edges: .bottom))
                                 .transition(.opacity)
+                        } else if case .minigame(let minigame) = model.phase {
+                            MinigameView(minigame: minigame, state: state)
+                                .background(Color(red: 0.05, green: 0.05, blue: 0.07).ignoresSafeArea(edges: .bottom))
+                                .transition(.opacity)
                         } else if case .concert(let concert) = model.phase {
                             ConcertView(concert: concert, state: state)
                                 .background(Color(red: 0.05, green: 0.03, blue: 0.06).ignoresSafeArea(edges: .bottom))
@@ -140,6 +144,23 @@ struct GameView: View {
                 hudButton(systemImage: "book.closed.fill", label: "Carnet") { showCarnet = true }
                 Menu {
                     SoundToggles()
+                    #if DEBUG
+                    Section("Debug") {
+                        Menu("Aller au chapitre…") {
+                            ForEach(model.engine.story.chapters.map(\.number), id: \.self) { number in
+                                Button("Chapitre \(number)") { model.debug(.chapter(number)) }
+                            }
+                        }
+                        Button("Dernier semestre (prolongation)") { model.debug(.lastSemester) }
+                        Button("Stats et compétences au max") { model.debug(.maxOut) }
+                        Menu("Lancer un mini-jeu…") {
+                            Button("Punchliner") { model.debug(.event("punchliner_fred")) }
+                            Button("Fuir la foule") { model.debug(.event("fuite_fans")) }
+                            Button("Cale la platine") { model.debug(.event("platine_bobine")) }
+                        }
+                    }
+                    .disabled(!model.canMove)
+                    #endif
                     Button("Retour à l'accueil (sauvegardé)") { model.leaveGame() }
                 } label: {
                     Image(systemName: "ellipsis")
@@ -198,7 +219,7 @@ struct GameView: View {
         case .consequence(_, let outcome):
             ConsequenceBox(outcome: outcome, state: state)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
-        case .clash, .interview, .concert, .negotiation, .writing, .cinematic:
+        case .clash, .interview, .concert, .negotiation, .writing, .minigame, .cinematic:
             EmptyView()
         }
     }

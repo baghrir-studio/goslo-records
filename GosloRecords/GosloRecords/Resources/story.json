@@ -936,6 +936,7 @@
       "id": "story_feat_us",
       "title": "Le featuring américain",
       "location": "reseaux",
+      "sound": "ringtone",
       "npc": "big_deal",
       "weight": 0,
       "text": "Momo a eu le numéro du manager de Big Deal, superstar américaine : quatorze trophées, trois jets privés. Big Deal aurait « écouté ton son ». Le manager te rappelle. Il a l'air pressé et vaguement amusé.",
@@ -3115,6 +3116,9 @@
       "id": "appel_victor",
       "steps": [
         {
+          "sound": "ringtone"
+        },
+        {
           "narration": "Ton téléphone sonne. Numéro masqué. Personne n'appelle plus avec un numéro masqué, à part les huissiers et les directeurs artistiques."
         },
         {
@@ -4593,6 +4597,527 @@
           "mental": -7
         },
         "consequence": "Scalpel corrige ton dernier couplet au stylo rouge, à voix haute, et te rend la copie. « 9 sur 20. Revenez quand vous voulez. » Il te vouvoie. C'est pire. Retourne le voir quand tu seras prêt."
+      }
+    }
+  ],
+  "techniques": [
+    {
+      "id": "defile_retourne",
+      "secret": {
+        "name": "Le Défilé Retourné",
+        "line": "Tu enfiles un hoodie de la collection de Kevlar Jr., à l'envers, étiquette au vent. Le public le trouve plus stylé que l'original. La collection est en rupture de stock.",
+        "prop": "tshirt.fill"
+      },
+      "unlock": {
+        "required_flags": [
+          "clash_gagne_kevlar_jr"
+        ]
+      }
+    },
+    {
+      "id": "fausse_gourmette",
+      "secret": {
+        "name": "La Fausse Gourmette",
+        "line": "Tu sors une gourmette en plastique doré et tu la fais briller sous les projecteurs. Ton adversaire, ébloui, perd le fil. Elle t'a coûté 3 €.",
+        "prop": "sparkles"
+      },
+      "unlock": {
+        "required_flags": [
+          "clash_gagne_lingot"
+        ]
+      }
+    },
+    {
+      "id": "dossier_quarante_pages",
+      "secret": {
+        "name": "Le Dossier de Quarante Pages",
+        "line": "Tu ouvres un dossier de quarante pages et tu n'en lis qu'une ligne : la bonne. Ton adversaire demande une suspension de séance.",
+        "prop": "doc.text.fill"
+      },
+      "unlock": {
+        "required_flags": [
+          "debat_gagne"
+        ]
+      }
+    },
+    {
+      "id": "pancarte_maman",
+      "secret": {
+        "name": "La Pancarte de Maman",
+        "line": "Ta mère lève sa pancarte au premier rang. Toute la salle scande ton nom. Ton adversaire applaudit aussi, par réflexe.",
+        "prop": "heart.fill"
+      },
+      "unlock": {
+        "required_flags": [
+          "concert_reussi"
+        ]
+      }
+    },
+    {
+      "id": "batterie_un_pour_cent",
+      "secret": {
+        "name": "La Batterie à 1 %",
+        "line": "Tu lances un live et tu le coupes pile quand ton adversaire allait répondre. « Problème technique. » Personne n'est surpris.",
+        "prop": "battery.0percent"
+      },
+      "unlock": {
+        "required_flags": [
+          "kolosse_ko"
+        ]
+      }
+    },
+    {
+      "id": "clause_police_sept",
+      "secret": {
+        "name": "La Clause en Police 7",
+        "line": "Tu tends un contrat à ton adversaire. Il signe sans lire. Clause 12 : il te cède ses punchlines pour quatre-vingt-dix-neuf ans.",
+        "prop": "signature"
+      },
+      "unlock": {
+        "required_flags": [
+          "contrat_signe"
+        ]
+      }
+    }
+  ],
+  "minigames": [
+    {
+      "id": "punchliner_bunker",
+      "kind": "punchliner",
+      "title": "Punchliner · au Bunker",
+      "intro": "Fred a collé vingt mots sur la console. « Je te donne le début, tu finis la phrase. Trois couplets. Si ça rime pas, je te raconte 2009. »",
+      "pass_score": 0.5,
+      "rounds": [
+        {
+          "setup": "J'ai grandi dans l'ombre, entre deux machines à laver,",
+          "lead": "aujourd'hui je brille,",
+          "answers": [
+            {
+              "words": [
+                "même",
+                "Momo",
+                "est",
+                "épaté"
+              ],
+              "score": 10,
+              "reaction": "Momo, qui passait par là, en lâche son panier de linge. Fred applaudit avec une seule main."
+            },
+            {
+              "words": [
+                "comme",
+                "un",
+                "jeton",
+                "usé"
+              ],
+              "score": 8,
+              "reaction": "Amer, mais juste. Fred hoche la tête, lentement, comme en 2009."
+            },
+            {
+              "words": [
+                "et",
+                "mon",
+                "linge",
+                "est",
+                "lavé"
+              ],
+              "score": 6,
+              "reaction": "Propre. Littéralement. Fred dit que c'est « une rime de lessive », et c'est un compliment."
+            }
+          ],
+          "decoys": [
+            "essoré",
+            "frigo",
+            "baskets",
+            "Fred",
+            "2009",
+            "toujours",
+            "payé",
+            "chaussette"
+          ],
+          "rhymes": [
+            "épaté",
+            "usé",
+            "lavé",
+            "essoré",
+            "payé"
+          ]
+        },
+        {
+          "setup": "Fred me parle de son disque d'or depuis ce matin,",
+          "lead": "moi je vise le platine,",
+          "answers": [
+            {
+              "words": [
+                "lui",
+                "polit",
+                "le",
+                "sien"
+              ],
+              "score": 10,
+              "reaction": "« Lui polit le sien. » Fred fait semblant de ne pas comprendre. Il a très bien compris."
+            },
+            {
+              "words": [
+                "pas",
+                "le",
+                "même",
+                "destin"
+              ],
+              "score": 6,
+              "reaction": "Correct. Fred note « destin » sur un bout de ruban adhésif et le colle sur la console."
+            },
+            {
+              "words": [
+                "et",
+                "lui",
+                "fait",
+                "le",
+                "malin"
+              ],
+              "score": 6,
+              "reaction": "Ça rime, ça pique. Fred, vexé, te répond en rimant aussi. Mal."
+            },
+            {
+              "words": [
+                "comme",
+                "un",
+                "vrai",
+                "gamin"
+              ],
+              "score": 4,
+              "reaction": "Fred sourit. « Gamin. » Il le dit avec tendresse, ce qui est pire."
+            }
+          ],
+          "decoys": [
+            "chips",
+            "laverie",
+            "câble",
+            "écureuil",
+            "pitch",
+            "matin"
+          ],
+          "rhymes": [
+            "sien",
+            "destin",
+            "malin",
+            "gamin",
+            "matin"
+          ]
+        },
+        {
+          "setup": "Scalpel corrige mes rimes au stylo rouge,",
+          "lead": "mais sur scène,",
+          "answers": [
+            {
+              "words": [
+                "c'est",
+                "moi",
+                "qui",
+                "bouge"
+              ],
+              "score": 10,
+              "reaction": "Fred se lève de son siège. Il ne se lève jamais. Même pas pour 2009."
+            },
+            {
+              "words": [
+                "toute",
+                "la",
+                "salle",
+                "bouge"
+              ],
+              "score": 8,
+              "reaction": "Fred tape du pied en rythme. La console tremble. Un mot tombe : « courge »."
+            },
+            {
+              "words": [
+                "ma",
+                "mère",
+                "voit",
+                "rouge"
+              ],
+              "score": 6,
+              "reaction": "Fred rit. « Ta mère, elle voit rouge ? » Elle, de loin, confirme par message."
+            }
+          ],
+          "decoys": [
+            "courge",
+            "thé",
+            "cravate",
+            "gomme",
+            "Victor",
+            "contrat",
+            "lessive",
+            "bloc",
+            "chat"
+          ],
+          "rhymes": [
+            "bouge",
+            "rouge",
+            "courge"
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "credibilite": 3,
+          "streams": 2
+        },
+        "xp": {
+          "plume": 30
+        },
+        "consequence": "Fred décolle un mot de la console et te le tend : « punch ». Il le gardait depuis 2009."
+      },
+      "lose": {
+        "effects": {
+          "mental": -2
+        },
+        "xp": {
+          "plume": 10
+        },
+        "consequence": "Fred recolle les mots un par un. « On reprendra. Tu rimes comme on plie un drap-housse. »"
+      }
+    },
+    {
+      "id": "punchliner_banc",
+      "kind": "punchliner",
+      "title": "Punchliner · au banc",
+      "intro": "Vingt mots en vrac au feutre sur un carton, une phrase à finir. Le perdant offre les chips. Trois gamins t'attendent, très sérieux.",
+      "pass_score": 0.5,
+      "rounds": [
+        {
+          "setup": "Kolosse annonce un live, il promet la guerre,",
+          "lead": "mais sa batterie lâche",
+          "answers": [
+            {
+              "words": [
+                "avant",
+                "le",
+                "premier",
+                "vers"
+              ],
+              "score": 10,
+              "reaction": "Le banc explose. Le plus petit tombe du banc. Il se relève en criant « le premier vers ! »."
+            },
+            {
+              "words": [
+                "et",
+                "ça",
+                "le",
+                "désespère"
+              ],
+              "score": 8,
+              "reaction": "Ça rime, ça pique. Un gamin fait « ouh » tout bas, par respect."
+            },
+            {
+              "words": [
+                "il",
+                "finit",
+                "par",
+                "terre"
+              ],
+              "score": 6,
+              "reaction": "Simple et efficace. Kolosse, au loin, se sent visé sans savoir pourquoi."
+            }
+          ],
+          "decoys": [
+            "chargeur",
+            "pompes",
+            "verre",
+            "câble",
+            "réseau",
+            "trottoir",
+            "spectateurs",
+            "colère",
+            "11 %"
+          ],
+          "rhymes": [
+            "vers",
+            "désespère",
+            "terre",
+            "verre",
+            "colère",
+            "guerre"
+          ]
+        },
+        {
+          "setup": "Lingot porte trois chaînes et deux montres en or,",
+          "lead": "il brille tellement",
+          "answers": [
+            {
+              "words": [
+                "que",
+                "même",
+                "le",
+                "soleil",
+                "dort"
+              ],
+              "score": 10,
+              "reaction": "« Même le soleil dort. » Un gamin l'écrit au feutre sur le carton. C'est gravé."
+            },
+            {
+              "words": [
+                "qu'on",
+                "le",
+                "voit",
+                "de",
+                "dehors"
+              ],
+              "score": 8,
+              "reaction": "Correct. Lingot, s'il passait, prendrait ça pour un compliment."
+            },
+            {
+              "words": [
+                "qu'il",
+                "s'éblouit",
+                "encore"
+              ],
+              "score": 6,
+              "reaction": "Le banc rit. Quelque part, Lingot se regarde dans une cuillère."
+            }
+          ],
+          "decoys": [
+            "gourmette",
+            "facture",
+            "lunettes",
+            "carats",
+            "décor",
+            "Miami",
+            "impôts",
+            "fort"
+          ],
+          "rhymes": [
+            "dort",
+            "dehors",
+            "encore",
+            "décor",
+            "fort"
+          ]
+        },
+        {
+          "setup": "Le Baron dit que le trône lui appartient,",
+          "lead": "j'ai vérifié le trône :",
+          "answers": [
+            {
+              "words": [
+                "en",
+                "carton",
+                "et",
+                "ça",
+                "tient"
+              ],
+              "score": 10,
+              "reaction": "Silence. Puis tout le banc se lève. Ça, c'est une punchline de trône."
+            },
+            {
+              "words": [
+                "il",
+                "grince",
+                "pour",
+                "un",
+                "rien"
+              ],
+              "score": 8,
+              "reaction": "« Il grince pour un rien. » Le banc grince aussi, en signe d'approbation."
+            },
+            {
+              "words": [
+                "il",
+                "est",
+                "à",
+                "moi",
+                "demain"
+              ],
+              "score": 6,
+              "reaction": "Ambitieux. Les gamins notent la date, au cas où."
+            }
+          ],
+          "decoys": [
+            "velours",
+            "couronne",
+            "lunettes",
+            "escalier",
+            "bien",
+            "chien"
+          ],
+          "rhymes": [
+            "tient",
+            "rien",
+            "demain",
+            "bien",
+            "chien"
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "credibilite": 3,
+          "streams": 2
+        },
+        "xp": {
+          "plume": 30
+        },
+        "consequence": "Les gamins t'offrent les chips. Le plus petit te demande d'écrire son couplet. Tu repars avec une réputation et des miettes."
+      },
+      "lose": {
+        "effects": {
+          "mental": -2
+        },
+        "xp": {
+          "plume": 10
+        },
+        "consequence": "Tu offres les chips. Les gamins les mangent devant toi, avec respect quand même."
+      }
+    },
+    {
+      "id": "fuite_transfo",
+      "kind": "fuite",
+      "title": "Sortie des artistes",
+      "intro": "La foule bloque la sortie des artistes. Le van t'attend tout en haut, de l'autre côté du parking. Rejoins la porte sans te faire attraper.",
+      "pass_score": 1,
+      "win": {
+        "effects": {
+          "streams": 3,
+          "mental": 2
+        },
+        "xp": {
+          "scene": 25
+        },
+        "consequence": "Tu claques la porte du van. Dehors, la foule chante ton refrain contre les vitres. Le chauffeur demande un autographe."
+      },
+      "lose": {
+        "effects": {
+          "streams": 2,
+          "mental": -4
+        },
+        "consequence": "La foule t'a rattrapé. Quarante-sept selfies, une manche déchirée, et une vidéo de toi en train de courir, déjà partout."
+      }
+    },
+    {
+      "id": "platine_bobine",
+      "kind": "platine",
+      "title": "Cale la platine",
+      "intro": "DJ Bobine a encore poussé le pitch « pour l'énergie ». Arrête le curseur pile sur 100 %. Trois essais, et il accélère à chaque fois.",
+      "pass_score": 0.5,
+      "win": {
+        "effects": {
+          "credibilite": 2
+        },
+        "xp": {
+          "flow": 30
+        },
+        "relations": {
+          "dj_bobine": 3
+        },
+        "consequence": "Pile 100 %. DJ Bobine te fixe, ému : « Personne ne m'avait jamais calé. » Il remonte à 101 % dès que tu tournes le dos."
+      },
+      "lose": {
+        "effects": {
+          "mental": -1
+        },
+        "xp": {
+          "flow": 10
+        },
+        "consequence": "Le pitch t'échappe. Bobine hausse les épaules : « 109 %, c'est une couleur. » Tu as un peu le tournis."
       }
     }
   ]

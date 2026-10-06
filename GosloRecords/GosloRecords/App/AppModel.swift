@@ -31,6 +31,7 @@ enum GamePhase: Equatable {
     case concert(ConcertState)
     case negotiation(NegotiationState)
     case writing(WritingState)
+    case minigame(MinigameState)
     /// A scripted scene is playing.
     case cinematic
 }
@@ -64,7 +65,15 @@ final class AppModel {
 
     private(set) var route: Route = .home
     private(set) var state: GameState?
-    private(set) var phase: GamePhase = .overworld
+    private(set) var phase: GamePhase = .overworld {
+        didSet {
+            // A card with its own sound (a phone call rings once when it shows up).
+            if case .encounter(let event) = phase, oldValue != phase,
+               let name = event.sound, let effect = SoundEffect(rawValue: name) {
+                SoundEngine.shared.play(effect)
+            }
+        }
+    }
     private(set) var source: EncounterSource?
     private(set) var history: [CareerRecord]
     private(set) var lastDeltas: [StatKind: Int] = [:]
@@ -170,6 +179,8 @@ final class AppModel {
             phase = .negotiation(negotiation)
         } else if let writing = current.writing {
             phase = .writing(writing)
+        } else if let minigame = current.minigame {
+            phase = .minigame(minigame)
         } else if let event = engine.currentEvent(in: current) ?? engine.takeFollowUp(in: &current) {
             state = current
             phase = .encounter(event)
@@ -178,6 +189,37 @@ final class AppModel {
         }
         route = .game
     }
+
+    #if DEBUG
+    enum DebugAction {
+        case chapter(Int)
+        case lastSemester
+        case maxOut
+        /// Shows this event's card right away (e.g. a mini-game), without spending an action.
+        case event(String)
+    }
+
+    /// Debug builds only (menu "…" in the HUD): jumps around the story to test it quickly.
+    func debug(_ action: DebugAction) {
+        guard var current = state, canMove else { return }
+        switch action {
+        case .chapter(let number): engine.debugJump(toChapter: number, in: &current)
+        case .lastSemester: engine.debugLastSemester(in: &current)
+        case .maxOut: engine.debugMaxOut(in: &current)
+        case .event(let id):
+            guard let event = engine.event(withId: id) else { return }
+            current.currentEventId = id
+            state = current
+            phase = .encounter(event)
+            persist()
+            return
+        }
+        state = current
+        enterWorld()
+        persist()
+        Task { await playPendingCinematic() }
+    }
+    #endif
 
     /// Leaves the game (autosaved).
     func leaveGame() {
@@ -415,6 +457,9 @@ final class AppModel {
         case .writing(let running):
             phase = .writing(running)
             persist()
+        case .minigame(let running):
+            phase = .minigame(running)
+            persist()
         case .outcome(let outcome):
             show(outcome, for: event)
         }
@@ -546,6 +591,66 @@ final class AppModel {
     func clashSecret() -> ClashState? {
         guard var current = state, case .clash = phase else { return nil }
         guard let clash = try? engine.clashSecret(in: &current, using: &rng) else { return nil }
+        state = current
+        phase = .clash(clash)
+        persist()
+        return clash
+    }
+
+    // MARK: - Mini-games
+
+    /// Punchliner: drops the line (empty = time ran out). Returns the reaction.
+    @discardableResult
+    func dropPunchline(_ words: [String]) -> String? {
+        guard var current = state, case .minigame = phase else { return nil }
+        guard let reaction = try? engine.dropPunchline(words, in: &current) else { return nil }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+        return reaction
+    }
+
+    /// Cale la platine: stops the fader `elapsed` seconds into the run.
+    func stopPlatine(after elapsed: Double) -> (pitch: Double, reaction: String)? {
+        guard var current = state, case .minigame = phase else { return nil }
+        guard let result = try? engine.stopPlatine(after: elapsed, in: &current) else { return nil }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+        return result
+    }
+
+    /// Fuir la foule: the chase is over.
+    func endChase(escaped: Bool) {
+        guard var current = state, case .minigame = phase else { return }
+        guard (try? engine.endChase(escaped: escaped, in: &current)) != nil else { return }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+    }
+
+    func finishMinigame() {
+        guard var current = state, case .minigame = phase else { return }
+        let before = current.stats
+        guard let outcome = try? engine.finishMinigame(in: &current) else { return }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        show(outcome, for: nil)
+    }
+
+    /// Notebook: picks the secret technique used in clashes.
+    func equipTechnique(_ id: String) {
+        guard var current = state else { return }
+        engine.equipTechnique(id, in: &current)
+        state = current
+        persist()
+    }
+
+    /// The player tapped against a boss's technique: it lands, softened.
+    @discardableResult
+    func counterSecret(taps: Int) -> ClashState? {
+        guard var current = state, case .clash = phase else { return nil }
+        guard let clash = try? engine.counterSecret(taps: taps, in: &current) else { return nil }
         state = current
         phase = .clash(clash)
         persist()

@@ -91,7 +91,7 @@ final class EventsDataTests: XCTestCase {
         settable.formUnion(world.story.writings.flatMap { $0.win.setFlags + $0.lose.setFlags })
         settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap(\.clash).flatMap { $0.win.setFlags + $0.lose.setFlags } })
         settable.formUnion((1...world.story.chapters.count).map { "chapitre_\($0)" })
-        settable.formUnion(events.flatMap { $0.choices.compactMap { $0.clash.map { "clash_gagne_\($0.opponent)" } } })
+        settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap { $0.clash.map { "clash_gagne_\($0.opponent)" } } })
         settable.formUnion(world.quests.map { "quete_\($0.id)" })
 
         var required: [(String, String)] = events.flatMap { e in e.conditions.requiredFlags.map { (e.id, $0) } }
@@ -99,6 +99,7 @@ final class EventsDataTests: XCTestCase {
             required += quest.conditions.requiredFlags.map { (quest.id, $0) }
             required += quest.steps.flatMap { $0.conditions.requiredFlags.map { (quest.id, $0) } }
         }
+        required += world.story.techniques.flatMap { t in t.unlock.requiredFlags.map { (t.id, $0) } }
         for (owner, flag) in required {
             XCTAssertTrue(settable.contains(flag), "\(owner) requiert « \(flag) », qu'aucun choix ne pose")
         }
@@ -123,6 +124,15 @@ final class EventsDataTests: XCTestCase {
         for quest in world.quests {
             XCTAssertFalse(quest.steps.isEmpty, quest.id)
         }
+    }
+
+    func testEventSoundsExist() {
+        for event in events + world.story.events {
+            guard let sound = event.sound else { continue }
+            XCTAssertNotNil(SoundEffect(rawValue: sound), "\(event.id) : son inconnu « \(sound) »")
+        }
+        XCTAssertTrue((events + world.story.events).contains { $0.sound == SoundEffect.ringtone.rawValue },
+                      "au moins un appel doit sonner")
     }
 
     func testUnknownKeysAreRejected() {
@@ -233,6 +243,21 @@ final class EventsDataTests: XCTestCase {
                         running = try engine.negotiate(open.randomElement(using: &rng)!, in: &state)
                     }
                     _ = try engine.finishNegotiation(in: &state)
+                case .minigame(let running):
+                    switch running.kind {
+                    case .punchliner:
+                        while let current = engine.punchlinerRound(in: state) {
+                            let count = Int.random(in: 0...4, using: &rng)
+                            _ = try engine.dropPunchline(Array(current.tiles.shuffled(using: &rng).prefix(count)), in: &state)
+                        }
+                    case .platine:
+                        while state.minigame?.isOver == false {
+                            _ = try engine.stopPlatine(after: Double.random(in: 0...6, using: &rng), in: &state)
+                        }
+                    case .fuite:
+                        try engine.endChase(escaped: Bool.random(using: &rng), in: &state)
+                    }
+                    _ = try engine.finishMinigame(in: &state)
                 case .writing:
                     while let running = state.writing, !running.isOver {
                         let options = engine.currentWritingRound(in: state)!.options

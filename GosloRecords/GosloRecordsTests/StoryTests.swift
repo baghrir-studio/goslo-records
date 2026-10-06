@@ -152,6 +152,43 @@ final class StoryTests: XCTestCase {
     // MARK: Boss balance
 
     /// The boss must be beatable with a good strategy, without being a formality.
+    /// Without a single tap, countering changes nothing: same clashes, same winners as when a boss's
+    /// technique landed straight away. Each clash gets its own seed, so both runs see the same dice.
+    func testUncounteredBossTechniqueKeepsTheOldBalance() throws {
+        let engine = engine
+        for id in ["story_ring", "story_kolosse", "story_baron_clash"] {
+            let event = try XCTUnwrap(world.story.events.first { $0.id == id })
+            let spec = try XCTUnwrap(event.choices.compactMap(\.clash).first)
+            var countered = 0
+            for i in 0..<300 {
+                func play(immediate: Bool) throws -> ClashState {
+                    var dice = SeededGenerator(seed: UInt64(i) &* 2_654_435_761 &+ 1)
+                    var state = engine.newGame(rapper: Rapper(name: "T", city: .paris, style: Style.allCases[i % 4]))
+                    state.skills.gain(Dictionary(uniqueKeysWithValues: Skill.allCases.map { ($0, 60 * (i % 6)) }))
+                    state.clash = ClashState(spec: spec)
+                    var moves = SeededGenerator(seed: UInt64(i) &+ 99)
+                    while !(state.clash?.isOver ?? true) {
+                        if state.clash!.pendingCounter != nil {
+                            _ = try engine.counterSecret(taps: 0, in: &state)
+                            continue
+                        }
+                        let move = ClashMove.allCases.randomElement(using: &moves)!
+                        _ = try engine.clashMove(move, in: &state, using: &dice)
+                        if immediate, state.clash!.pendingCounter != nil {
+                            _ = try engine.counterSecret(taps: 0, in: &state)
+                        }
+                    }
+                    return state.clash!
+                }
+                let lazy = try play(immediate: false), now = try play(immediate: true)
+                XCTAssertEqual(lazy.playerWon, now.playerWon, "\(id) #\(i)")
+                XCTAssertEqual(lazy.playerHype, now.playerHype, "\(id) #\(i)")
+                if lazy.log.contains(where: { $0.countered != nil }) { countered += 1 }
+            }
+            XCTAssertGreaterThan(countered, 0, "\(id) : le boss n'a jamais lancé sa technique")
+        }
+    }
+
     func testKevlarBossIsHardButFair() throws {
         let engine = engine
         let ring = try XCTUnwrap(world.story.events.first { $0.id == "story_ring" })
@@ -329,4 +366,85 @@ final class StoryTests: XCTestCase {
             .reduce(debat.startHype, +)
         XCTAssertLessThan(middle, debat.passHype, "le boss ne doit pas se gagner avec des réponses moyennes")
     }
+
+    // MARK: Unlockable techniques
+
+    func testTechniquesDataIsConsistent() {
+        let techniques = world.story.techniques
+        XCTAssertEqual(techniques.count, 6, "une technique par boss avant le chapitre 5")
+        XCTAssertEqual(Set(techniques.map(\.id)).count, techniques.count)
+        for technique in techniques {
+            XCTAssertFalse(technique.secret.name.isEmpty, technique.id)
+            XCTAssertFalse(technique.secret.line.isEmpty, technique.id)
+            XCTAssertFalse(technique.secret.prop?.isEmpty ?? true, "\(technique.id) : pas d'animation")
+            XCTAssertFalse(technique.unlock.requiredFlags.isEmpty, "\(technique.id) se débloquerait dès le début")
+            XCTAssertNotEqual(technique.id, GameEngine.styleTechniqueId)
+            XCTAssertNil(world.story.item(technique.id), "\(technique.id) : même id qu'un objet")
+        }
+    }
+
+    func testBeatingABossUnlocksAndEquipsItsTechnique() throws {
+        var state = engine.newGame(rapper: Rapper(name: "T", city: .paris, style: .drill))
+        state.pendingCinematic = nil
+        XCTAssertEqual(engine.playerSecret(in: state), Style.drill.secret)
+        state.flags.insert("clash_gagne_kevlar_jr")
+        // Any action announces it.
+        let event = try engine.visit(.chezToi, in: &state, using: &rng)
+        let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.followUp == nil && $0.skipTurns == 0 })
+        guard case .outcome(let outcome) = try engine.resolve(choiceAt: choice, in: &state) else { return XCTFail() }
+        XCTAssertEqual(outcome.unlockedTechniques, ["Le Défilé Retourné"])
+        XCTAssertEqual(engine.playerSecret(in: state).name, "Le Défilé Retourné")
+        // Announced once only.
+        let again = try engine.visit(.chezToi, in: &state, using: &rng)
+        let next = try XCTUnwrap(again.choices.firstIndex { $0.isAvailable(in: state) && $0.followUp == nil && $0.skipTurns == 0 })
+        guard case .outcome(let second) = try engine.resolve(choiceAt: next, in: &state) else { return XCTFail() }
+        XCTAssertTrue(second.unlockedTechniques.isEmpty)
+        // The notebook can switch back to the style's technique, but not to a locked one.
+        engine.equipTechnique(GameEngine.styleTechniqueId, in: &state)
+        XCTAssertEqual(engine.playerSecret(in: state), Style.drill.secret)
+        engine.equipTechnique("clause_police_sept", in: &state)
+        XCTAssertEqual(engine.playerSecret(in: state), Style.drill.secret)
+        XCTAssertEqual(engine.availableTechniques(in: state).map(\.id), [GameEngine.styleTechniqueId, "defile_retourne"])
+    }
+
+    #if DEBUG
+    // MARK: Debug shortcuts
+
+    func testDebugJumpLandsOnAPlayableChapter() throws {
+        let map = try XCTUnwrap(world.map)
+        for chapter in world.story.chapters where chapter.number > 1 {
+            var state = engine.newGame(rapper: Rapper(name: "Dbg", city: .lyon, style: .trap))
+            engine.debugJump(toChapter: chapter.number, in: &state)
+            XCTAssertEqual(state.pendingCinematic, chapter.intro)
+            if let intro = chapter.intro { engine.cinematicFinished(intro, in: &state) }
+            let objective = try XCTUnwrap(engine.currentObjective(in: state))
+            XCTAssertEqual(objective.id, chapter.objectives.first?.id)
+            let trigger = try XCTUnwrap(objective.trigger, "chapitre \(chapter.number)")
+            let event: GameEvent?
+            if let npc = trigger.npc {
+                XCTAssertTrue(map.forChapter(chapter.number, flags: state.flags).npcs.contains { $0.id == npc },
+                              "chapitre \(chapter.number) : \(npc) absent de la carte")
+                event = try engine.talk(to: npc, in: &state, using: &rng)
+            } else {
+                let location = try XCTUnwrap(trigger.location)
+                XCTAssertTrue(engine.isUnlocked(location, in: state), "chapitre \(chapter.number) : \(location) fermé")
+                event = try engine.visit(location, in: &state, using: &rng)
+            }
+            XCTAssertEqual(event?.id, objective.event, "chapitre \(chapter.number)")
+            XCTAssertFalse(state.isOver)
+        }
+    }
+
+    func testDebugLastSemesterShowsTheOvertime() throws {
+        var state = engine.newGame(rapper: Rapper(name: "Dbg", city: .lyon, style: .trap))
+        state.pendingCinematic = nil
+        engine.debugLastSemester(in: &state)
+        let event = try engine.visit(.chezToi, in: &state, using: &rng)
+        let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.skipTurns == 0 && $0.followUp == nil })
+        _ = try engine.resolve(choiceAt: choice, in: &state)
+        XCTAssertTrue(state.isOvertime)
+        XCTAssertEqual(state.periodLabel, "PROLONGATION")
+        XCTAssertFalse(state.isOver)
+    }
+    #endif
 }

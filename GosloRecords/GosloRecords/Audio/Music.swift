@@ -171,6 +171,10 @@ enum SoundEffect: String, CaseIterable {
     case wipe, secretRiser, secretHit
     case victory, defeat, semester, radioJingle
     case concertKick, concertSnare, concertHat, concertHit, crowdCheer, crowdGroan
+    /// A phone call: two short trills, quiet, never looped.
+    case ringtone
+    /// A police siren far away, as the car passes.
+    case siren
 
     /// Frequent, quiet sounds: they go to a dedicated player.
     var isTick: Bool { self == .blip || self == .step || self == .tap }
@@ -184,6 +188,8 @@ enum SoundEffect: String, CaseIterable {
         case .concertHit: 0.45
         case .concertKick, .concertSnare: 0.7
         case .crowdCheer, .crowdGroan: 0.6
+        case .ringtone: 0.4
+        case .siren: 0.14
         default: 0.75
         }
     }
@@ -193,6 +199,16 @@ enum SoundEffect: String, CaseIterable {
         switch self {
         case .tap:
             out = Synth.pulse(note: 91, length: 0.025, duty: 0.25, decay: 60)
+        case .siren:
+            out = Synth.layer((0..<6).map { index in
+                (Synth.pulse(note: index % 2 == 0 ? 81 : 86, length: 0.38, duty: 0.5, decay: 0.5), Double(index) * 0.38, Float(1))
+            })
+            Synth.lowpass(&out, cutoff: 1_400)
+        case .ringtone:
+            let trill = (0..<8).map { index in
+                (Synth.pulse(note: index % 2 == 0 ? 88 : 92, length: 0.05, duty: 0.25, decay: 6), Double(index) * 0.05, Float(1))
+            }
+            out = Synth.layer(trill + trill.map { ($0.0, $0.1 + 0.55, $0.2) })
         case .blip:
             out = Synth.pulse(note: 84, length: 0.03, duty: 0.5, decay: 30)
         case .select:

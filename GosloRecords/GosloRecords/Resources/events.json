@@ -236,6 +236,7 @@
           "streams": 45
         }
       },
+      "sound": "ringtone",
       "choices": [
         {
           "label": "Rester chez goslo, par loyauté",
@@ -518,6 +519,7 @@
           "credibilite": 40
         }
       },
+      "sound": "ringtone",
       "choices": [
         {
           "label": "Accepter, c'est un honneur",
@@ -2132,6 +2134,7 @@
           "kolosse": 45
         }
       },
+      "sound": "ringtone",
       "choices": [
         {
           "label": "Foncer au studio",
@@ -3763,6 +3766,107 @@
             "credibilite": 4
           },
           "consequence": "Le réalisateur filme le chat à la place. Le documentaire s'appelle « Neuf vies ». Tu y apparais quatre secondes."
+        }
+      ]
+    },
+    {
+      "id": "punchliner_fred",
+      "title": "Punchliner au Bunker",
+      "text": "Fred a collé vingt mots sur la console, en vrac. « Tu connais le Punchliner ? Je te donne le début, tu finis la phrase. Si ça rime pas, je te raconte 2009. Encore. »",
+      "location": "studio",
+      "npc": "fred",
+      "weight": 6,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "choices": [
+        {
+          "label": "Jouer au Punchliner",
+          "minigame": "punchliner_bunker",
+          "consequence": "Fred lance un beat sans batterie. « Concentration. »"
+        },
+        {
+          "label": "Pas le temps, Fred",
+          "effects": {
+            "mental": 1
+          },
+          "consequence": "Fred décolle les mots un par un, très lentement, pour que tu culpabilises. Ça marche."
+        }
+      ]
+    },
+    {
+      "id": "punchliner_banc",
+      "title": "Punchliner au banc",
+      "text": "Sur le banc, trois gamins jouent au Punchliner : vingt mots en vrac sur un carton, une phrase à finir. Le perdant offre les chips. « Eh, le rappeur ! T'oses ? »",
+      "location": "quartier",
+      "weight": 6,
+      "choices": [
+        {
+          "label": "Relever le défi",
+          "minigame": "punchliner_banc",
+          "consequence": "Le plus petit retourne le carton. Les mots sont écrits au feutre, avec des fautes. Ça fait partie du jeu."
+        },
+        {
+          "label": "« Une autre fois, les gars »",
+          "effects": {
+            "credibilite": -1
+          },
+          "consequence": "« Il a peur ! » Tout le banc rit. Tu repasseras."
+        }
+      ]
+    },
+    {
+      "id": "fuite_fans",
+      "title": "Sortie des artistes",
+      "text": "Fin du concert. La sortie des artistes est bloquée : une foule veut des selfies, tout de suite. Le van t'attend de l'autre côté du parking.",
+      "location": "scene",
+      "weight": 5,
+      "conditions": {
+        "required_flags": [
+          "concert_reussi"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Sprinter jusqu'au van",
+          "minigame": "fuite_transfo",
+          "consequence": "Tu remontes ta capuche. Trois, deux, un…"
+        },
+        {
+          "label": "Signer tout le monde, un par un",
+          "effects": {
+            "streams": 2,
+            "mental": -3
+          },
+          "consequence": "Deux heures de selfies. Tu as signé un bras, un ticket et le front d'un monsieur. Tes fans t'adorent. Ton poignet, moins."
+        }
+      ]
+    },
+    {
+      "id": "platine_bobine",
+      "title": "Bobine s'emballe",
+      "text": "DJ Bobine a installé sa platine sur le banc et poussé le pitch « pour l'énergie ». Le morceau ressemble à un dessin animé. « Cale-la à 100 %, si t'es si fort. »",
+      "location": "quartier",
+      "npc": "dj_bobine",
+      "weight": 6,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "choices": [
+        {
+          "label": "Caler la platine",
+          "minigame": "platine_bobine",
+          "consequence": "Tu poses deux doigts sur le curseur. Bobine retient son souffle."
+        },
+        {
+          "label": "Rapper sur la version accélérée",
+          "effects": {
+            "mental": 1
+          },
+          "xp": {
+            "flow": 10
+          },
+          "consequence": "Tu rappes à 109 %. Ta langue fait un footing. Bobine trouve ça « très énergie »."
         }
       ]
     }

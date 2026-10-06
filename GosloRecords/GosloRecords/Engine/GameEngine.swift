@@ -12,6 +12,8 @@ struct TurnOutcome: Equatable {
     var completedObjectives: [String] = []
     /// Items received (names).
     var gainedItems: [String] = []
+    /// Secret techniques unlocked by this action (names).
+    var unlockedTechniques: [String] = []
     /// Finished clash, if the action was one.
     var clash: ClashState?
     /// Finished interview, if the action was one.
@@ -22,6 +24,8 @@ struct TurnOutcome: Equatable {
     var negotiation: NegotiationState?
     /// Finished writing session, if the action was one.
     var writing: WritingState?
+    /// Finished mini-game, if the action was one.
+    var minigame: MinigameState?
     /// True if this action closed the semester (upkeep applied).
     var semesterEnded = false
     var ending: Ending?
@@ -44,6 +48,7 @@ enum Resolution: Equatable {
     case concert(ConcertState)
     case negotiation(NegotiationState)
     case writing(WritingState)
+    case minigame(MinigameState)
 }
 
 enum GameEngineError: Error, Equatable {
@@ -64,7 +69,15 @@ enum GameEngineError: Error, Equatable {
     case negotiationNotOver
     case noWriting
     case writingNotOver
+    case noMinigame
+    case minigameNotOver
     case gameOver
+}
+
+/// A secret technique the player can equip (style, item or unlocked), keyed by where it comes from.
+struct EquippableTechnique: Equatable, Identifiable {
+    let id: String
+    let secret: SecretTechnique
 }
 
 /// Pure game rules: map, encounters, choices, clashes, quests, endings.
@@ -139,7 +152,7 @@ struct GameEngine {
     /// The player can pick a location (no card awaiting, no clash, actions left).
     func canVisit(_ state: GameState) -> Bool {
         !state.isOver && state.currentEventId == nil && state.clash == nil && state.interview == nil && state.concert == nil && state.negotiation == nil
-            && state.writing == nil
+            && state.writing == nil && state.minigame == nil
             && state.pendingFollowUp == nil && state.actionsLeft > 0
     }
 
@@ -303,6 +316,8 @@ struct GameEngine {
         for id in choice.giveItems where !state.items.contains(id) {
             state.items.insert(id)
             outcome.gainedItems.append(story.item(id)?.name ?? id)
+            // A new item with a technique gets equipped right away.
+            if story.item(id)?.secret != nil { state.equippedTechnique = id }
         }
         let visitXP = state.currentLocation?.visitXP ?? [:]
         outcome.add(levelUps: state.skills.gain(visitXP.merging(choice.xp, uniquingKeysWith: +)))
@@ -347,6 +362,12 @@ struct GameEngine {
             let running = WritingState(writing: writing)
             state.writing = running
             return .writing(running)
+        }
+        if let id = choice.minigame, let minigame = story.minigame(id),
+           EndingResolver.prematureEnding(for: state.stats) == nil {
+            let running = MinigameState(minigame: minigame)
+            state.minigame = running
+            return .minigame(running)
         }
         return .outcome(finishAction(outcome, in: &state))
     }
@@ -552,6 +573,82 @@ struct GameEngine {
         return finishAction(outcome, in: &state)
     }
 
+    // MARK: - Mini-games
+
+    func minigame(_ id: String) -> Minigame? { story.minigame(id) }
+
+    /// Punchliner: the round being played, and its tiles in a stable order.
+    func punchlinerRound(in state: GameState) -> (round: PunchlinerRound, tiles: [String])? {
+        guard let running = state.minigame, running.kind == .punchliner, let minigame = minigame(running.id),
+              minigame.rounds.indices.contains(running.round) else { return nil }
+        let round = minigame.rounds[running.round]
+        return (round, PunchlinerEngine.tiles(for: round, seed: PunchlinerEngine.seed(running.id, round: running.round)))
+    }
+
+    /// Punchliner: the player drops their line (empty = the timer ran out). Returns the reaction.
+    func dropPunchline(_ words: [String], in state: inout GameState) throws -> String {
+        guard var running = state.minigame, let current = punchlinerRound(in: state) else {
+            throw GameEngineError.noMinigame
+        }
+        guard words.count <= PunchlinerEngine.maxWords, words.allSatisfy(current.tiles.contains),
+              Set(words).count == words.count else { throw GameEngineError.invalidChoice(words.count) }
+        let (points, reaction) = PunchlinerEngine.judge(words, in: current.round)
+        running.points += points
+        running.log.append(reaction)
+        running.round += 1
+        state.minigame = running
+        return reaction
+    }
+
+    /// Cale la platine: the player stopped the fader `elapsed` seconds into the current run.
+    func stopPlatine(after elapsed: Double, in state: inout GameState) throws -> (pitch: Double, reaction: String) {
+        guard var running = state.minigame, running.kind == .platine, !running.isOver else { throw GameEngineError.noMinigame }
+        let pitch = PlatineEngine.pitch(at: max(0, elapsed), run: running.round)
+        let (points, reaction) = PlatineEngine.judge(pitch: pitch)
+        running.points += points
+        running.log.append(reaction)
+        running.round += 1
+        state.minigame = running
+        return (pitch, reaction)
+    }
+
+    /// Fuir la foule: the chase screen reports how it ended.
+    func endChase(escaped: Bool, in state: inout GameState) throws {
+        guard var running = state.minigame, running.kind == .fuite else { throw GameEngineError.noMinigame }
+        running.escaped = escaped
+        state.minigame = running
+    }
+
+    /// Score from 0 to 1.
+    func minigameScore(_ running: MinigameState) -> Double {
+        switch running.kind {
+        case .punchliner:
+            let best = minigame(running.id).map(PunchlinerEngine.maxPoints) ?? 0
+            return best > 0 ? Double(running.points) / Double(best) : 0
+        case .platine:
+            return Double(running.points) / Double(PlatineEngine.runs * PlatineEngine.maxPoints)
+        case .fuite:
+            return running.escaped == true ? 1 : 0
+        }
+    }
+
+    func finishMinigame(in state: inout GameState) throws -> TurnOutcome {
+        guard let running = state.minigame, let minigame = minigame(running.id) else { throw GameEngineError.noMinigame }
+        guard running.isOver else { throw GameEngineError.minigameNotOver }
+        let result = minigameScore(running) >= minigame.passScore ? minigame.win : minigame.lose
+        var outcome = TurnOutcome(consequence: result.consequence)
+        outcome.minigame = running
+        outcome.add(state.stats.apply(result.effects))
+        outcome.add(levelUps: state.skills.gain(result.xp))
+        state.flags.formUnion(result.setFlags)
+        for (castId, delta) in result.relations {
+            let applied = state.changeRelation(castId, by: delta)
+            if applied != 0 { outcome.relationChanges[castId, default: 0] += applied }
+        }
+        state.minigame = nil
+        return finishAction(outcome, in: &state)
+    }
+
     // MARK: - Story
 
     var story: Story { world.story }
@@ -650,6 +747,12 @@ struct GameEngine {
                                              using rng: inout R) throws -> ClashState {
         guard var clash = state.clash else { throw GameEngineError.noClash }
         guard !clash.isOver else { return clash }
+        // A boss technique left uncountered lands in full before the next round.
+        if clash.pendingCounter != nil {
+            ClashEngine.resolveCounter(&clash, taps: 0)
+            state.clash = clash
+            if clash.isOver { return clash }
+        }
         guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
             throw GameEngineError.noClash
         }
@@ -670,6 +773,11 @@ struct GameEngine {
     func clashSecret<R: RandomNumberGenerator>(in state: inout GameState, using rng: inout R) throws -> ClashState {
         guard var clash = state.clash else { throw GameEngineError.noClash }
         guard !clash.isOver else { return clash }
+        if clash.pendingCounter != nil {
+            ClashEngine.resolveCounter(&clash, taps: 0)
+            state.clash = clash
+            if clash.isOver { return clash }
+        }
         guard clash.playerSecretReady else { throw GameEngineError.secretNotReady }
         guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
             throw GameEngineError.noClash
@@ -682,15 +790,51 @@ struct GameEngine {
         return clash
     }
 
+    /// The player tapped `taps` times against the boss's technique: it lands, softened.
+    func counterSecret(taps: Int, in state: inout GameState) throws -> ClashState {
+        guard var clash = state.clash else { throw GameEngineError.noClash }
+        ClashEngine.resolveCounter(&clash, taps: taps)
+        state.clash = clash
+        return clash
+    }
+
     // MARK: - Items
 
     func ownedItems(in state: GameState) -> [Item] {
         story.items.filter { state.items.contains($0.id) }
     }
 
-    /// The secret technique: the last owned item that has one, otherwise the style's.
+    /// The secret technique: the one picked in the notebook, otherwise the last owned item that has one,
+    /// otherwise the style's.
     func playerSecret(in state: GameState) -> SecretTechnique {
-        ownedItems(in: state).last { $0.secret != nil }?.secret ?? state.rapper.style.secret
+        if let id = state.equippedTechnique, let chosen = availableTechniques(in: state).first(where: { $0.id == id }) {
+            return chosen.secret
+        }
+        return ownedItems(in: state).last { $0.secret != nil }?.secret ?? state.rapper.style.secret
+    }
+
+    /// Techniques the player can equip: the style's, those of owned items, and those unlocked so far.
+    func availableTechniques(in state: GameState) -> [EquippableTechnique] {
+        [EquippableTechnique(id: GameEngine.styleTechniqueId, secret: state.rapper.style.secret)]
+            + ownedItems(in: state).compactMap { item in item.secret.map { EquippableTechnique(id: item.id, secret: $0) } }
+            + story.techniques.filter { $0.unlock.isSatisfied(by: state) }.map { EquippableTechnique(id: $0.id, secret: $0.secret) }
+    }
+
+    static let styleTechniqueId = "style"
+
+    func equipTechnique(_ id: String, in state: inout GameState) {
+        guard availableTechniques(in: state).contains(where: { $0.id == id }) else { return }
+        state.equippedTechnique = id
+    }
+
+    /// Announces (and equips) techniques whose unlock conditions just came true.
+    private func applyTechniqueUnlocks(_ outcome: inout TurnOutcome, in state: inout GameState) {
+        for technique in story.techniques
+        where !state.knownTechniques.contains(technique.id) && technique.unlock.isSatisfied(by: state) {
+            state.knownTechniques.insert(technique.id)
+            state.equippedTechnique = technique.id
+            outcome.unlockedTechniques.append(technique.secret.name)
+        }
     }
 
     /// Bonus levels from items for a move.
@@ -785,6 +929,7 @@ struct GameEngine {
         var outcome = outcome
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
+        applyTechniqueUnlocks(&outcome, in: &state)
 
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {

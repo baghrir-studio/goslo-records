@@ -25,6 +25,13 @@ struct RootView: View {
         if case .clash(let clash) = model.phase { return clash.isWild ? .battle : .drill }
         if case .interview = model.phase { return .menu }
         if case .negotiation = model.phase { return .menu }
+        if case .minigame(let running) = model.phase {
+            switch running.kind {
+            case .punchliner: return .drill
+            case .fuite: return .battle
+            case .platine: return .menu
+            }
+        }
         if case .writing(let running) = model.phase {
             return model.engine.writing(running.id)?.duel == true ? .drill : .menu
         }

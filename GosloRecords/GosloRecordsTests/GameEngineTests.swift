@@ -478,6 +478,25 @@ final class GameEngineTests: XCTestCase {
 
     // MARK: Misc
 
+    func testCreationPicksOverrideTheStyleLook() throws {
+        let plain = Rapper(name: "A", city: .lyon, style: .trap)
+        XCTAssertEqual(plain.look, Style.trap.outfit.with(skin: Rapper.skinTones[2]))
+        let custom = Rapper(name: "A", city: .lyon, style: .trap, hairColor: 3, hairStyle: .long, hat: .beanie,
+                            glasses: false, beard: true, chain: false, headphones: true)
+        let look = custom.look
+        XCTAssertEqual(look.hair, Rapper.hairColors[3])
+        XCTAssertEqual(look.hairStyle, .long)
+        XCTAssertEqual(look.hat, .beanie)
+        XCTAssertFalse(look.glasses)
+        XCTAssertTrue(look.beard)
+        XCTAssertFalse(look.chain)
+        XCTAssertTrue(look.headphones)
+        // Saved and reloaded, and older saves without these fields keep the style's look.
+        XCTAssertEqual(try JSONDecoder().decode(Rapper.self, from: JSONEncoder().encode(custom)), custom)
+        let old = try JSONDecoder().decode(Rapper.self, from: Data(#"{"name":"A","city":"Lyon","style":"Trap"}"#.utf8))
+        XCTAssertEqual(old.look, Style.trap.outfit.with(skin: Rapper.skinTones[2]))
+    }
+
     func testTemplateReplacesNameAndCity() {
         XCTAssertEqual(TextTemplate.render("{nom} de {ville}", for: rapper), "Kiki Prélèvement de Marseille")
     }
@@ -501,5 +520,13 @@ final class GameEngineTests: XCTestCase {
         _ = try engine.clashMove(.punchline, in: &s, using: &rng)
         let data = try JSONEncoder().encode(s)
         XCTAssertEqual(try JSONDecoder().decode(GameState.self, from: data), s)
+    }
+}
+
+private extension CharacterLook {
+    func with(skin: String) -> CharacterLook {
+        var copy = self
+        copy.skin = skin
+        return copy
     }
 }

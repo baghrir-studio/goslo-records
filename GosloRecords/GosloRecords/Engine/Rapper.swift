@@ -81,12 +81,30 @@ struct Rapper: Codable, Equatable {
     var style: Style
     /// Index into Rapper.skinTones.
     var skinTone: Int
+    // Picked at creation; nil keeps the style's look.
+    /// Index into Rapper.hairColors.
+    var hairColor: Int?
+    var hairStyle: CharacterLook.HairStyle?
+    var hat: CharacterLook.Hat?
+    var glasses: Bool?
+    var beard: Bool?
+    var chain: Bool?
+    var headphones: Bool?
 
-    init(name: String, city: City, style: Style, skinTone: Int = 2) {
+    init(name: String, city: City, style: Style, skinTone: Int = 2, hairColor: Int? = nil,
+         hairStyle: CharacterLook.HairStyle? = nil, hat: CharacterLook.Hat? = nil, glasses: Bool? = nil,
+         beard: Bool? = nil, chain: Bool? = nil, headphones: Bool? = nil) {
         self.name = name
         self.city = city
         self.style = style
         self.skinTone = skinTone
+        self.hairColor = hairColor
+        self.hairStyle = hairStyle
+        self.hat = hat
+        self.glasses = glasses
+        self.beard = beard
+        self.chain = chain
+        self.headphones = headphones
     }
 
     init(from decoder: Decoder) throws {
@@ -95,5 +113,12 @@ struct Rapper: Codable, Equatable {
         city = try c.decode(City.self, forKey: .city)
         style = try c.decode(Style.self, forKey: .style)
         skinTone = try c.decodeIfPresent(Int.self, forKey: .skinTone) ?? 2
+        hairColor = try c.decodeIfPresent(Int.self, forKey: .hairColor)
+        hairStyle = try c.decodeIfPresent(CharacterLook.HairStyle.self, forKey: .hairStyle)
+        hat = try c.decodeIfPresent(CharacterLook.Hat.self, forKey: .hat)
+        glasses = try c.decodeIfPresent(Bool.self, forKey: .glasses)
+        beard = try c.decodeIfPresent(Bool.self, forKey: .beard)
+        chain = try c.decodeIfPresent(Bool.self, forKey: .chain)
+        headphones = try c.decodeIfPresent(Bool.self, forKey: .headphones)
     }
 }

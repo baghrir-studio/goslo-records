@@ -38,6 +38,7 @@ struct GameState: Codable, Equatable {
     var concert: ConcertState?
     var negotiation: NegotiationState?
     var writing: WritingState?
+    var minigame: MinigameState?
     /// Index of the next step for each quest in progress.
     var questProgress: [String: Int] = [:]
     var completedQuests: Set<String> = []
@@ -59,6 +60,10 @@ struct GameState: Codable, Equatable {
     var seenCinematics: Set<String> = []
     /// Collected items (ids from story.json).
     var items: Set<String> = []
+    /// Secret technique picked in the notebook: "style", an item id or a technique id (nil = automatic).
+    var equippedTechnique: String?
+    /// Unlocked techniques already announced to the player.
+    var knownTechniques: Set<String> = []
 
     init(rapper: Rapper, stats: Stats? = nil) {
         self.rapper = rapper
@@ -69,8 +74,9 @@ struct GameState: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case id, startedAt, rapper, stats, counters, skills, flags, relations, metCast, turn, actionsLeft
         case seenUniqueEvents, recentEvents, pendingFollowUp, currentEventId, currentLocation, clash, interview, concert, negotiation, writing
+        case minigame
         case questProgress, completedQuests, ending, position, facing, stepsSinceWild, challengedThisSemester
-        case chapter, objectiveIndex, pendingCinematic, seenCinematics, items
+        case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -98,6 +104,7 @@ struct GameState: Codable, Equatable {
         concert = try c.decodeIfPresent(ConcertState.self, forKey: .concert)
         negotiation = try c.decodeIfPresent(NegotiationState.self, forKey: .negotiation)
         writing = try c.decodeIfPresent(WritingState.self, forKey: .writing)
+        minigame = try c.decodeIfPresent(MinigameState.self, forKey: .minigame)
         questProgress = try c.decodeIfPresent([String: Int].self, forKey: .questProgress) ?? [:]
         completedQuests = try c.decodeIfPresent(Set<String>.self, forKey: .completedQuests) ?? []
         ending = try c.decodeIfPresent(Ending.self, forKey: .ending)
@@ -110,6 +117,8 @@ struct GameState: Codable, Equatable {
         pendingCinematic = try c.decodeIfPresent(String.self, forKey: .pendingCinematic)
         seenCinematics = try c.decodeIfPresent(Set<String>.self, forKey: .seenCinematics) ?? []
         items = try c.decodeIfPresent(Set<String>.self, forKey: .items) ?? []
+        equippedTechnique = try c.decodeIfPresent(String.self, forKey: .equippedTechnique)
+        knownTechniques = try c.decodeIfPresent(Set<String>.self, forKey: .knownTechniques) ?? []
     }
 
     /// Year 1 to 10.

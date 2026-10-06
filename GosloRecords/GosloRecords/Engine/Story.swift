@@ -12,10 +12,15 @@ struct Story: Codable, Equatable {
     var concerts: [Concert]
     var negotiations: [Negotiation]
     var writings: [Writing]
+    /// Secret techniques the player unlocks along the story (one per boss).
+    var techniques: [UnlockableTechnique]
+    /// Repeatable mini-games started from event choices.
+    var minigames: [Minigame]
 
     init(chapters: [Chapter] = [], events: [GameEvent] = [], cinematics: [Cinematic] = [],
          interviews: [Interview] = [], radio: [RadioHeadline] = [], items: [Item] = [], concerts: [Concert] = [],
-         negotiations: [Negotiation] = [], writings: [Writing] = []) {
+         negotiations: [Negotiation] = [], writings: [Writing] = [], techniques: [UnlockableTechnique] = [],
+         minigames: [Minigame] = []) {
         self.chapters = chapters
         self.events = events
         self.cinematics = cinematics
@@ -25,6 +30,8 @@ struct Story: Codable, Equatable {
         self.concerts = concerts
         self.negotiations = negotiations
         self.writings = writings
+        self.techniques = techniques
+        self.minigames = minigames
     }
 
     init(from decoder: Decoder) throws {
@@ -38,6 +45,8 @@ struct Story: Codable, Equatable {
         concerts = try c.decodeIfPresent([Concert].self, forKey: .concerts) ?? []
         negotiations = try c.decodeIfPresent([Negotiation].self, forKey: .negotiations) ?? []
         writings = try c.decodeIfPresent([Writing].self, forKey: .writings) ?? []
+        techniques = try c.decodeIfPresent([UnlockableTechnique].self, forKey: .techniques) ?? []
+        minigames = try c.decodeIfPresent([Minigame].self, forKey: .minigames) ?? []
     }
 
     func chapter(_ number: Int) -> Chapter? { chapters.first { $0.number == number } }
@@ -47,6 +56,7 @@ struct Story: Codable, Equatable {
     func concert(_ id: String) -> Concert? { concerts.first { $0.id == id } }
     func negotiation(_ id: String) -> Negotiation? { negotiations.first { $0.id == id } }
     func writing(_ id: String) -> Writing? { writings.first { $0.id == id } }
+    func minigame(_ id: String) -> Minigame? { minigames.first { $0.id == id } }
 }
 
 struct Chapter: Codable, Equatable, Identifiable {
@@ -400,6 +410,13 @@ struct RadioHeadline: Codable, Equatable {
 // MARK: - Items
 
 /// A collectible (La Mythique, Fred's drill…): passive clash bonus, and maybe a secret technique.
+/// A secret technique won along the story: it unlocks once `unlock` holds (usually a boss beaten).
+struct UnlockableTechnique: Codable, Equatable, Identifiable {
+    let id: String
+    let secret: SecretTechnique
+    let unlock: EventConditions
+}
+
 struct Item: Codable, Equatable, Identifiable {
     let id: String
     let name: String

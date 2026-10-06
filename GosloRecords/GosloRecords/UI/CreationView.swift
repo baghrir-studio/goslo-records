@@ -6,7 +6,20 @@ struct CreationView: View {
     @State private var city: City = .paris
     @State private var style: Style = .boomBap
     @State private var skinTone = 2
+    // Look: nil keeps the style's default.
+    @State private var hairColor: Int?
+    @State private var hairStyle: CharacterLook.HairStyle?
+    @State private var hat: CharacterLook.Hat?
+    @State private var glasses: Bool?
+    @State private var beard: Bool?
+    @State private var chain: Bool?
+    @State private var headphones: Bool?
     @FocusState private var nameFocused: Bool
+
+    private var draft: Rapper {
+        Rapper(name: trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones)
+    }
 
     private var trimmedName: String {
         name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -27,15 +40,16 @@ struct CreationView: View {
                             .font(.display(52))
                             .lineSpacing(-8)
                         Spacer()
-                        WalkingSprite(look: Rapper(name: "", city: city, style: style, skinTone: skinTone).look, size: 110)
-                            .id("\(style.rawValue)-\(skinTone)")
+                        WalkingSprite(look: draft.look, size: 110)
+                            .id(draft.look)
                             .transition(.scale.combined(with: .opacity))
                     }
                     .animation(.spring(response: 0.35, dampingFraction: 0.6), value: style)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.6), value: skinTone)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.6), value: draft.look)
 
                     nameSection
                     skinSection
+                    lookSection
                     citySection
                     styleSection
                 }
@@ -45,7 +59,7 @@ struct CreationView: View {
             .scrollDismissesKeyboard(.interactively)
 
             Button("Lancer la carrière") {
-                model.startCareer(Rapper(name: trimmedName, city: city, style: style, skinTone: skinTone))
+                model.startCareer(draft)
             }
             .buttonStyle(PrimaryButtonStyle())
             .disabled(trimmedName.isEmpty)
@@ -98,6 +112,37 @@ struct CreationView: View {
         }
     }
 
+    private var lookSection: some View {
+        let look = draft.look
+        return VStack(alignment: .leading, spacing: 14) {
+            Kicker(text: "Look")
+            HStack(spacing: 12) {
+                ForEach(Rapper.hairColors.indices, id: \.self) { index in
+                    Button {
+                        hairColor = index
+                    } label: {
+                        Circle()
+                            .fill(Color(uiColor: PixelColor(hex: Rapper.hairColors[index]).uiColor))
+                            .frame(width: 30, height: 30)
+                            .overlay(Circle().stroke(look.hair == Rapper.hairColors[index] ? Theme.accent : Theme.line,
+                                                     lineWidth: look.hair == Rapper.hairColors[index] ? 3 : 1))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Couleur de cheveux \(index + 1)")
+                }
+            }
+            ChoiceRow(options: CharacterLook.HairStyle.allCases, selected: look.hairStyle, label: \.label) { hairStyle = $0 }
+            ChoiceRow(options: CharacterLook.Hat.allCases, selected: look.hat, label: \.label) { hat = $0 }
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 8)], spacing: 8) {
+                ToggleChip(title: "Lunettes", isOn: look.glasses) { glasses = !look.glasses }
+                ToggleChip(title: "Barbe", isOn: look.beard) { beard = !look.beard }
+                ToggleChip(title: "Chaîne", isOn: look.chain) { chain = !look.chain }
+                ToggleChip(title: "Casque", isOn: look.headphones) { headphones = !look.headphones }
+            }
+        }
+        .animation(.easeOut(duration: 0.15), value: look)
+    }
+
     private var citySection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Kicker(text: "Ville de départ")
@@ -126,6 +171,71 @@ struct CreationView: View {
             ForEach(Style.allCases) { option in
                 StyleRow(style: option, selected: style == option) { style = option }
             }
+        }
+    }
+}
+
+/// One option per chip, the current one highlighted.
+private struct ChoiceRow<Option: Hashable>: View {
+    let options: [Option]
+    let selected: Option
+    let label: (Option) -> String
+    let pick: (Option) -> Void
+
+    var body: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 76), spacing: 8)], spacing: 8) {
+            ForEach(options, id: \.self) { option in
+                Button { pick(option) } label: {
+                    Text(label(option))
+                        .font(.system(size: 14, weight: .semibold))
+                        .frame(maxWidth: .infinity, minHeight: 38)
+                        .foregroundStyle(selected == option ? Theme.background : Theme.text)
+                        .background(selected == option ? Theme.accent : Color.clear)
+                        .overlay(Rectangle().stroke(selected == option ? Theme.accent : Theme.line, lineWidth: 1))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+}
+
+private struct ToggleChip: View {
+    let title: String
+    let isOn: Bool
+    let toggle: () -> Void
+
+    var body: some View {
+        Button(action: toggle) {
+            Text(title)
+                .font(.system(size: 14, weight: .semibold))
+                .frame(maxWidth: .infinity, minHeight: 38)
+                .foregroundStyle(isOn ? Theme.background : Theme.text)
+                .background(isOn ? Theme.accent : Color.clear)
+                .overlay(Rectangle().stroke(isOn ? Theme.accent : Theme.line, lineWidth: 1))
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isOn ? .isSelected : [])
+    }
+}
+
+private extension CharacterLook.HairStyle {
+    var label: String {
+        switch self {
+        case .short: "Courts"
+        case .long: "Longs"
+        case .bald: "Rasé"
+        case .puff: "Afro"
+        }
+    }
+}
+
+private extension CharacterLook.Hat {
+    var label: String {
+        switch self {
+        case .none: "Tête nue"
+        case .cap: "Casquette"
+        case .beanie: "Bonnet"
+        case .hood: "Capuche"
         }
     }
 }
