@@ -314,7 +314,7 @@ struct GameEngine {
         state.currentLocation = nil
 
         if choice.skipTurns > 0 {
-            state.turn = min(state.turn + choice.skipTurns, GameState.totalTurns - 1)
+            state.turn = min(state.turn + choice.skipTurns, turnLimit(in: state) - 1)
             state.actionsLeft = 0
         }
 
@@ -621,6 +621,18 @@ struct GameEngine {
         if let intro = currentChapter(in: state)?.intro { state.pendingCinematic = intro }
     }
 
+    /// The finale hasn't been played yet.
+    func isStoryUnfinished(in state: GameState) -> Bool {
+        guard let finale = story.chapters.first(where: \.isFinale) else { return false }
+        return !state.flags.contains("chapitre_\(finale.number)")
+    }
+
+    /// Semester at which the career ends. The limit waits for the story: while the finale is still to play,
+    /// the career goes into overtime, up to `GameState.overtimeTurns` more semesters.
+    func turnLimit(in state: GameState) -> Int {
+        GameState.totalTurns + (isStoryUnfinished(in: state) ? GameState.overtimeTurns : 0)
+    }
+
     /// goslo radio headlines that fit the current state.
     func radioHeadlines(in state: GameState) -> [String] {
         story.radio.filter { $0.conditions.isSatisfied(by: state) }.map(\.text)
@@ -775,12 +787,13 @@ struct GameEngine {
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
             outcome.add(state.stats.apply(GameEngine.upkeep(for: state.stats)))
-            state.turn = min(state.turn + 1, GameState.totalTurns)
+            let limit = turnLimit(in: state)
+            state.turn = min(state.turn + 1, limit)
             state.actionsLeft = GameState.actionsPerTurn
             state.challengedThisSemester = []
             outcome.semesterEnded = true
             ending = EndingResolver.prematureEnding(for: state.stats)
-                ?? (state.turn >= GameState.totalTurns ? EndingResolver.finalEnding(for: state) : nil)
+                ?? (state.turn >= limit ? EndingResolver.finalEnding(for: state) : nil)
         }
         state.ending = ending
         outcome.ending = ending

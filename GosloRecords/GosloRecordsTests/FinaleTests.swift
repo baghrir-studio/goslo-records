@@ -56,6 +56,43 @@ final class FinaleTests: XCTestCase {
         XCTAssertLessThan(random, 0.2, "boss final trop facile au hasard")
     }
 
+    func testSemesterLimitWaitsForTheFinale() throws {
+        let engine = GameEngine(world: world)
+        var state = engine.newGame(rapper: Rapper(name: "Kiki", city: .lyon, style: .melancolique))
+        state.pendingCinematic = nil
+        state.chapter = 6
+        state.flags = Set((1...5).map { "chapitre_\($0)" } + ["signe_goslo", "contrat_signe", "scalpel_battu"])
+        state.counters.increment(.projets)
+        func spendSemester() throws {
+            state.stats = Stats(streams: 60, credibilite: 60, argent: 50, mental: 70)
+            let semester = state.turn
+            while state.turn == semester && !state.isOver {
+                // Chez toi is never a chapter 6 objective: the story doesn't move.
+                let event = try engine.visit(.chezToi, in: &state, using: &rng)
+                let open = event.choices.indices.first { event.choices[$0].isAvailable(in: state) && event.choices[$0].skipTurns == 0 }
+                _ = try engine.resolve(choiceAt: try XCTUnwrap(open), in: &state)
+                while let followUp = engine.takeFollowUp(in: &state) {
+                    _ = try engine.resolve(choiceAt: followUp.choices.firstIndex { $0.isAvailable(in: state) }!, in: &state)
+                }
+            }
+        }
+
+        // Semester 20 ends with the finale still to play: overtime, the career goes on.
+        state.turn = GameState.totalTurns - 1
+        try spendSemester()
+        XCTAssertEqual(state.turn, GameState.totalTurns)
+        XCTAssertFalse(state.isOver, "la finale n'est pas jouée : la carrière continue en prolongation")
+        XCTAssertTrue(engine.canVisit(state))
+        XCTAssertEqual(state.year, GameState.totalTurns / 2)
+
+        // Overtime has an end too: a player who never plays the finale gets a survival ending.
+        state.turn = GameState.totalTurns + GameState.overtimeTurns - 1
+        try spendSemester()
+        XCTAssertEqual(state.turn, GameState.totalTurns + GameState.overtimeTurns)
+        XCTAssertEqual(state.ending.map(\.isPremature), false)
+        XCTAssertEqual(state.chapter, 6)
+    }
+
     func testChapterSixPlaythroughEndsTheCareer() throws {
         let engine = GameEngine(world: world)
         var state = engine.newGame(rapper: Rapper(name: "Kiki", city: .lyon, style: .melancolique))

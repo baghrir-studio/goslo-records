@@ -4,6 +4,8 @@ import Foundation
 struct GameState: Codable, Equatable {
     /// 1 turn = 1 semester. 20 semesters = 10 years.
     static let totalTurns = 20
+    /// Extra semesters allowed past `totalTurns` while the finale is still to play (5 years of overtime).
+    static let overtimeTurns = 10
     /// Visits per semester.
     static let actionsPerTurn = 2
     static let recentMemory = 8
@@ -20,7 +22,7 @@ struct GameState: Codable, Equatable {
     var relations: [String: Int] = [:]
     /// Characters already met (shown in the contacts list).
     var metCast: Set<String> = []
-    /// Semesters already played (0...20).
+    /// Semesters already played (0...20, up to 30 in overtime).
     var turn = 0
     var actionsLeft = GameState.actionsPerTurn
     var seenUniqueEvents: Set<String> = []
