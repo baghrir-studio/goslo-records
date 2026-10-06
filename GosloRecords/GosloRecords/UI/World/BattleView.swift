@@ -7,7 +7,7 @@ struct BattleView: View {
     let clash: ClashState
     let state: GameState
 
-    private enum Stage { case intro, menu, animating, finished }
+    private enum Stage { case intro, menu, animating, counter, finished }
 
     @State private var stage: Stage = .intro
     @State private var message = ""
@@ -39,6 +39,9 @@ struct BattleView: View {
     @State private var opponentSecretUsed = false
     @State private var cinematic: SecretCinematic?
     @State private var whiteFlash = false
+    // Countering a boss's technique.
+    @State private var counterTaps = 0
+    @State private var counterLeft: CGFloat = 1
 
     private var opponent: CastMember? { model.engine.castMember(clash.opponentId) }
     private var opponentName: String { opponent?.name ?? "???" }
@@ -138,6 +141,17 @@ struct BattleView: View {
                     .background(Color(red: 0.05, green: 0.05, blue: 0.06))
             }
         }
+        .overlay {
+            if stage == .counter {
+                CounterOverlay(taps: counterTaps, timeLeft: counterLeft)
+                    .contentShape(Rectangle())
+                    .gesture(DragGesture(minimumDistance: 0).onEnded { _ in
+                        counterTaps += 1
+                        SoundEngine.shared.play(.tap)
+                    })
+                    .transition(.opacity)
+            }
+        }
         .onAppear(perform: intro)
     }
 
@@ -183,7 +197,7 @@ struct BattleView: View {
                 Button("Continuer") { model.finishClash() }
                     .buttonStyle(PrimaryButtonStyle())
                     .transition(.scale.combined(with: .opacity))
-            case .intro, .animating:
+            case .intro, .animating, .counter:
                 EmptyView()
             }
         }
@@ -217,13 +231,50 @@ struct BattleView: View {
             } else {
                 await say(clash.isWild ? "\(opponentName) surgit du terrain vague !" : "\(opponentName) veut clasher !", hold: 0.6)
             }
-            if clash.isOver {
-                await finish(clash)
-            } else {
-                message = "Que vas-tu faire ?"
-                stage = .menu
-            }
+            await settle(clash)
         }
+    }
+
+    /// After a round: a boss's technique to counter, the end of the clash, or the next move.
+    private func settle(_ updated: ClashState) async {
+        if let pending = updated.pendingCounter {
+            await runCounter(pending)
+        } else if updated.isOver {
+            await finish(updated)
+        } else {
+            message = "Que vas-tu faire ?"
+            stage = .menu
+        }
+    }
+
+    /// The boss announces its technique, the player taps as fast as they can, then it lands (softened).
+    private func runCounter(_ pending: PendingCounter) async {
+        await say("Oh non. \(opponentName.uppercased()) déclenche sa TECHNIQUE SECRÈTE… Tapote vite pour la contrer !", hold: 0)
+        SoundEngine.shared.play(.secretRiser)
+        withAnimation(.easeOut(duration: 0.3)) {
+            cinematic = SecretCinematic(name: pending.secret.name, byPlayer: false, look: opponent?.look ?? CharacterLook())
+        }
+        try? await Task.sleep(for: .milliseconds(1400))
+        withAnimation(.easeIn(duration: 0.2)) { cinematic = nil }
+
+        counterTaps = 0
+        counterLeft = 1
+        message = "TAPOTE ! TAPOTE ! TAPOTE !"
+        withAnimation(.easeOut(duration: 0.15)) { stage = .counter }
+        withAnimation(.linear(duration: ClashState.counterSeconds)) { counterLeft = 0 }
+        try? await Task.sleep(for: .seconds(ClashState.counterSeconds))
+        withAnimation(.easeIn(duration: 0.15)) { stage = .animating }
+
+        guard let updated = model.counterSecret(taps: counterTaps) else {
+            stage = .menu
+            return
+        }
+        let entries = Array(updated.log.dropFirst(shown))
+        shown = updated.log.count
+        for entry in entries { await animate(entry) }
+        playerHype = Double(updated.playerHype)
+        withAnimation(.easeOut(duration: 0.4)) { opponentSecretUsed = updated.opponentSecretUsed }
+        await settle(updated)
     }
 
     private enum BattleAction { case move(ClashMove), secret }
@@ -251,12 +302,7 @@ struct BattleView: View {
                 playerSecretUsed = updated.playerSecretUsed
                 opponentSecretUsed = updated.opponentSecretUsed
             }
-            if updated.isOver {
-                await finish(updated)
-            } else {
-                message = "Que vas-tu faire ?"
-                stage = .menu
-            }
+            await settle(updated)
         }
     }
 
@@ -331,16 +377,19 @@ struct BattleView: View {
 
     /// The full secret technique sequence: announcement, cinematic, flash, big hit.
     private func playSecret(_ secret: SecretTechnique, entry: ClashLogEntry, attacker: String) async {
-        await say(entry.byPlayer
-                  ? "Ta jauge déborde… \(attacker.uppercased()) déclenche sa TECHNIQUE SECRÈTE !"
-                  : "Oh non. \(attacker.uppercased()) a gardé une TECHNIQUE SECRÈTE…", hold: 0.2)
-        SoundEngine.shared.play(.secretRiser)
-        withAnimation(.easeOut(duration: 0.3)) {
-            cinematic = SecretCinematic(name: secret.name, byPlayer: entry.byPlayer,
-                                        look: entry.byPlayer ? state.rapper.look : (opponent?.look ?? CharacterLook()))
+        // A countered boss technique was already announced before the taps.
+        if entry.countered == nil {
+            await say(entry.byPlayer
+                      ? "Ta jauge déborde… \(attacker.uppercased()) déclenche sa TECHNIQUE SECRÈTE !"
+                      : "Oh non. \(attacker.uppercased()) a gardé une TECHNIQUE SECRÈTE…", hold: 0.2)
+            SoundEngine.shared.play(.secretRiser)
+            withAnimation(.easeOut(duration: 0.3)) {
+                cinematic = SecretCinematic(name: secret.name, byPlayer: entry.byPlayer,
+                                            look: entry.byPlayer ? state.rapper.look : (opponent?.look ?? CharacterLook()))
+            }
+            try? await Task.sleep(for: .milliseconds(2200))
+            withAnimation(.easeIn(duration: 0.2)) { cinematic = nil }
         }
-        try? await Task.sleep(for: .milliseconds(2200))
-        withAnimation(.easeIn(duration: 0.2)) { cinematic = nil }
 
         SoundEngine.shared.play(.secretHit)
         withAnimation(.easeOut(duration: 0.08)) { whiteFlash = true }
@@ -359,8 +408,15 @@ struct BattleView: View {
             }
         }
         pop = DamagePop(value: entry.damage, onPlayer: !entry.byPlayer, id: entry.id)
-        await showBanner(entry.byPlayer ? "LÉGENDAIRE !" : "AÏE AÏE AÏE")
+        await showBanner(entry.byPlayer ? "LÉGENDAIRE !" : counterBanner(entry.countered))
         await say(entry.line, hold: 1.2)
+    }
+
+    private func counterBanner(_ countered: Double?) -> String {
+        guard let countered else { return "AÏE AÏE AÏE" }
+        if countered >= ClashState.counterMaxReduction * 0.9 { return "CONTRÉ !" }
+        if countered >= ClashState.counterMaxReduction * 0.4 { return "À MOITIÉ PARÉ" }
+        return "AÏE AÏE AÏE"
     }
 
     /// Shows a line and waits long enough to read it. Tap: show it all, tap again: next.
@@ -637,6 +693,51 @@ private struct BattleBackdrop: View {
         .onAppear {
             withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) { swing = true }
         }
+    }
+}
+
+// MARK: - Counter
+
+/// Full-screen tap zone while a boss's technique is on its way: a gauge to fill before time runs out.
+private struct CounterOverlay: View {
+    let taps: Int
+    let timeLeft: CGFloat
+
+    private var filled: CGFloat { min(1, CGFloat(taps) / CGFloat(ClashState.counterTaps)) }
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.55)
+            VStack(spacing: 18) {
+                Text(filled >= 1 ? "PARÉ !" : "TAPOTE !")
+                    .font(.display(64))
+                    .foregroundStyle(filled >= 1 ? Color(red: 1, green: 0.85, blue: 0.3) : .white)
+                    .shadow(color: Theme.accent, radius: 0, x: 4, y: 4)
+                    .scaleEffect(1 + 0.06 * CGFloat(taps % 2))
+                    .animation(.spring(response: 0.12, dampingFraction: 0.4), value: taps)
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("CONTRE  \(min(taps, ClashState.counterTaps))/\(ClashState.counterTaps)")
+                        .font(.system(size: 13, weight: .heavy, design: .monospaced))
+                        .foregroundStyle(.white)
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            Rectangle().fill(Color.white.opacity(0.15))
+                            Rectangle().fill(Theme.accent).frame(width: geo.size.width * filled)
+                        }
+                    }
+                    .frame(height: 16)
+                    .overlay(Rectangle().stroke(Color.white, lineWidth: 2))
+                    GeometryReader { geo in
+                        Rectangle().fill(Color.white.opacity(0.7)).frame(width: geo.size.width * timeLeft)
+                    }
+                    .frame(height: 4)
+                }
+                .frame(maxWidth: 280)
+            }
+        }
+        .ignoresSafeArea()
+        .sensoryFeedback(.impact(weight: .light), trigger: taps)
+        .accessibilityLabel("Tapote l'écran le plus vite possible pour contrer la technique secrète")
     }
 }
 

@@ -574,6 +574,17 @@ final class AppModel {
         return clash
     }
 
+    /// The player tapped against a boss's technique: it lands, softened.
+    @discardableResult
+    func counterSecret(taps: Int) -> ClashState? {
+        guard var current = state, case .clash = phase else { return nil }
+        guard let clash = try? engine.counterSecret(taps: taps, in: &current) else { return nil }
+        state = current
+        phase = .clash(clash)
+        persist()
+        return clash
+    }
+
     func finishClash() {
         guard var current = state, case .clash = phase else { return }
         let before = current.stats

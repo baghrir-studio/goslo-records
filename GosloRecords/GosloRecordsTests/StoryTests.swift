@@ -152,6 +152,43 @@ final class StoryTests: XCTestCase {
     // MARK: Boss balance
 
     /// The boss must be beatable with a good strategy, without being a formality.
+    /// Without a single tap, countering changes nothing: same clashes, same winners as when a boss's
+    /// technique landed straight away. Each clash gets its own seed, so both runs see the same dice.
+    func testUncounteredBossTechniqueKeepsTheOldBalance() throws {
+        let engine = engine
+        for id in ["story_ring", "story_kolosse", "story_baron_clash"] {
+            let event = try XCTUnwrap(world.story.events.first { $0.id == id })
+            let spec = try XCTUnwrap(event.choices.compactMap(\.clash).first)
+            var countered = 0
+            for i in 0..<300 {
+                func play(immediate: Bool) throws -> ClashState {
+                    var dice = SeededGenerator(seed: UInt64(i) &* 2_654_435_761 &+ 1)
+                    var state = engine.newGame(rapper: Rapper(name: "T", city: .paris, style: Style.allCases[i % 4]))
+                    state.skills.gain(Dictionary(uniqueKeysWithValues: Skill.allCases.map { ($0, 60 * (i % 6)) }))
+                    state.clash = ClashState(spec: spec)
+                    var moves = SeededGenerator(seed: UInt64(i) &+ 99)
+                    while !(state.clash?.isOver ?? true) {
+                        if state.clash!.pendingCounter != nil {
+                            _ = try engine.counterSecret(taps: 0, in: &state)
+                            continue
+                        }
+                        let move = ClashMove.allCases.randomElement(using: &moves)!
+                        _ = try engine.clashMove(move, in: &state, using: &dice)
+                        if immediate, state.clash!.pendingCounter != nil {
+                            _ = try engine.counterSecret(taps: 0, in: &state)
+                        }
+                    }
+                    return state.clash!
+                }
+                let lazy = try play(immediate: false), now = try play(immediate: true)
+                XCTAssertEqual(lazy.playerWon, now.playerWon, "\(id) #\(i)")
+                XCTAssertEqual(lazy.playerHype, now.playerHype, "\(id) #\(i)")
+                if lazy.log.contains(where: { $0.countered != nil }) { countered += 1 }
+            }
+            XCTAssertGreaterThan(countered, 0, "\(id) : le boss n'a jamais lancé sa technique")
+        }
+    }
+
     func testKevlarBossIsHardButFair() throws {
         let engine = engine
         let ring = try XCTUnwrap(world.story.events.first { $0.id == "story_ring" })

@@ -650,6 +650,12 @@ struct GameEngine {
                                              using rng: inout R) throws -> ClashState {
         guard var clash = state.clash else { throw GameEngineError.noClash }
         guard !clash.isOver else { return clash }
+        // A boss technique left uncountered lands in full before the next round.
+        if clash.pendingCounter != nil {
+            ClashEngine.resolveCounter(&clash, taps: 0)
+            state.clash = clash
+            if clash.isOver { return clash }
+        }
         guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
             throw GameEngineError.noClash
         }
@@ -670,6 +676,11 @@ struct GameEngine {
     func clashSecret<R: RandomNumberGenerator>(in state: inout GameState, using rng: inout R) throws -> ClashState {
         guard var clash = state.clash else { throw GameEngineError.noClash }
         guard !clash.isOver else { return clash }
+        if clash.pendingCounter != nil {
+            ClashEngine.resolveCounter(&clash, taps: 0)
+            state.clash = clash
+            if clash.isOver { return clash }
+        }
         guard clash.playerSecretReady else { throw GameEngineError.secretNotReady }
         guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
             throw GameEngineError.noClash
@@ -678,6 +689,14 @@ struct GameEngine {
         ClashEngine.playRound(&clash, playerMove: .presence, playerSecret: playerSecret(in: state),
                               playerLevel: level, opponent: profile.scaled(by: clash.levelBonus),
                               opponentName: opponent.name, opponentSecret: opponent.secret, using: &rng)
+        state.clash = clash
+        return clash
+    }
+
+    /// The player tapped `taps` times against the boss's technique: it lands, softened.
+    func counterSecret(taps: Int, in state: inout GameState) throws -> ClashState {
+        guard var clash = state.clash else { throw GameEngineError.noClash }
+        ClashEngine.resolveCounter(&clash, taps: taps)
         state.clash = clash
         return clash
     }

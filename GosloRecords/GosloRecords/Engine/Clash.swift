@@ -151,6 +151,15 @@ struct ClashLogEntry: Codable, Equatable, Identifiable {
     let line: String
     /// Secret technique used this round, if any.
     var secret: SecretTechnique? = nil
+    /// Share of a boss's technique the player countered by tapping (0…`ClashState.counterMaxReduction`).
+    var countered: Double? = nil
+}
+
+/// A boss's secret technique, waiting for the player to counter it (tap fast).
+struct PendingCounter: Codable, Equatable {
+    let secret: SecretTechnique
+    /// Damage before the counter.
+    let damage: Int
 }
 
 /// State of a clash in progress (saved with the game).
@@ -165,6 +174,10 @@ struct ClashState: Codable, Equatable {
     static let opponentDamageFactor = 0.85
     /// Damage to deal before you can trigger your secret technique.
     static let secretThreshold = 35
+    /// Countering a boss's technique: this many taps in this many seconds take off the most damage.
+    static let counterTaps = 16
+    static let counterSeconds = 2.5
+    static let counterMaxReduction = 0.75
 
     let spec: ClashSpec
     /// Clash in the terrain vague: no action spent, rewards in XP.
@@ -183,6 +196,8 @@ struct ClashState: Codable, Equatable {
     var opponentMeter = 0
     var playerSecretUsed = false
     var opponentSecretUsed = false
+    /// A boss's technique is on its way: the player can counter it before it lands.
+    var pendingCounter: PendingCounter?
 
     init(spec: ClashSpec, isWild: Bool = false, levelBonus: Int? = nil) {
         self.spec = spec
@@ -192,7 +207,7 @@ struct ClashState: Codable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case spec, isWild, levelBonus, playerHype, opponentHype, round, playerBoosted, opponentBoosted, log
-        case playerMeter, opponentMeter, playerSecretUsed, opponentSecretUsed
+        case playerMeter, opponentMeter, playerSecretUsed, opponentSecretUsed, pendingCounter
     }
 
     init(from decoder: Decoder) throws {
@@ -211,6 +226,7 @@ struct ClashState: Codable, Equatable {
         opponentMeter = try c.decodeIfPresent(Int.self, forKey: .opponentMeter) ?? 0
         playerSecretUsed = try c.decodeIfPresent(Bool.self, forKey: .playerSecretUsed) ?? false
         opponentSecretUsed = try c.decodeIfPresent(Bool.self, forKey: .opponentSecretUsed) ?? false
+        pendingCounter = try c.decodeIfPresent(PendingCounter.self, forKey: .pendingCounter)
     }
 
     var movesUsed: Set<ClashMove> { Set(log.filter { $0.byPlayer && $0.secret == nil }.map(\.move)) }
@@ -221,7 +237,13 @@ struct ClashState: Codable, Equatable {
     var rounds: Int { spec.rounds }
     var isBoss: Bool { spec.boss }
     var damageFactor: Double { spec.opponentPower ?? ClashState.opponentDamageFactor }
-    var isOver: Bool { playerHype <= 0 || opponentHype <= 0 || round > rounds }
+    /// Never over while a boss's technique waits to land.
+    var isOver: Bool { pendingCounter == nil && (playerHype <= 0 || opponentHype <= 0 || round > rounds) }
+
+    /// Share of the damage taken off by `taps` taps (up to `counterMaxReduction`).
+    static func counterReduction(taps: Int) -> Double {
+        min(1, Double(max(0, taps)) / Double(counterTaps)) * counterMaxReduction
+    }
     /// A tie goes to the opponent: the crowd wanted a clear winner.
     var playerWon: Bool { playerHype > 0 && playerHype > opponentHype }
 }
@@ -300,9 +322,14 @@ enum ClashEngine {
                 let hit = secretDamage(level: opponent.level, factor: state.damageFactor, using: &rng)
                 state.opponentSecretUsed = true
                 state.opponentBoosted = false
-                state.playerHype = max(0, state.playerHype - hit)
-                state.log.append(ClashLogEntry(id: state.log.count, byPlayer: false, move: .presence, damage: hit,
-                                               impact: .strong, line: secret.line, secret: secret))
+                if state.isBoss {
+                    // A boss's technique can be countered: it lands once the player has had a go (`resolveCounter`).
+                    state.pendingCounter = PendingCounter(secret: secret, damage: hit)
+                } else {
+                    state.playerHype = max(0, state.playerHype - hit)
+                    state.log.append(ClashLogEntry(id: state.log.count, byPlayer: false, move: .presence, damage: hit,
+                                                   impact: .strong, line: secret.line, secret: secret))
+                }
             } else {
                 let move = opponentMove(opponent, using: &rng)
                 let (opponentDamage, opponentImpact) = damage(move: move, level: opponent.stat(move),
@@ -319,10 +346,33 @@ enum ClashEngine {
         }
         state.round += 1
     }
+
+    /// The boss's technique lands, softened by the player's taps (0 = no counter, full damage).
+    static func resolveCounter(_ state: inout ClashState, taps: Int) {
+        guard let pending = state.pendingCounter else { return }
+        let reduction = ClashState.counterReduction(taps: taps)
+        let hit = max(1, Int((Double(pending.damage) * (1 - reduction)).rounded()))
+        state.pendingCounter = nil
+        state.playerHype = max(0, state.playerHype - hit)
+        state.log.append(ClashLogEntry(id: state.log.count, byPlayer: false, move: .presence, damage: hit, impact: .strong,
+                                       line: pending.secret.line + " " + ClashLines.counter(reduction),
+                                       secret: pending.secret, countered: reduction))
+    }
 }
 
 /// Clash commentary. Original lines only, no real lyrics.
 enum ClashLines {
+    /// How the player's counter went.
+    static func counter(_ reduction: Double) -> String {
+        if reduction >= ClashState.counterMaxReduction * 0.9 {
+            return "Mais tu pares au dernier moment : le coup te frôle à peine. Le public n'en revient pas."
+        }
+        if reduction >= ClashState.counterMaxReduction * 0.4 {
+            return "Tu en pares une partie. Ça pique, mais tu restes debout."
+        }
+        return "Tu n'as pas eu le temps de réagir. Tout est passé."
+    }
+
     static func defaultSecret(for name: String) -> SecretTechnique {
         SecretTechnique(name: "Coup de Grâce",
                         line: "\(name) sort sa botte secrète. Personne n'a compris ce qui s'est passé, mais tout le monde a crié.")
