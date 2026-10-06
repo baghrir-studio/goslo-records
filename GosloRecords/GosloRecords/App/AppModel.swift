@@ -64,7 +64,15 @@ final class AppModel {
 
     private(set) var route: Route = .home
     private(set) var state: GameState?
-    private(set) var phase: GamePhase = .overworld
+    private(set) var phase: GamePhase = .overworld {
+        didSet {
+            // A card with its own sound (a phone call rings once when it shows up).
+            if case .encounter(let event) = phase, oldValue != phase,
+               let name = event.sound, let effect = SoundEffect(rawValue: name) {
+                SoundEngine.shared.play(effect)
+            }
+        }
+    }
     private(set) var source: EncounterSource?
     private(set) var history: [CareerRecord]
     private(set) var lastDeltas: [StatKind: Int] = [:]

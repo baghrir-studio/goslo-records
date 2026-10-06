@@ -236,6 +236,7 @@
           "streams": 45
         }
       },
+      "sound": "ringtone",
       "choices": [
         {
           "label": "Rester chez goslo, par loyauté",
@@ -518,6 +519,7 @@
           "credibilite": 40
         }
       },
+      "sound": "ringtone",
       "choices": [
         {
           "label": "Accepter, c'est un honneur",
@@ -2132,6 +2134,7 @@
           "kolosse": 45
         }
       },
+      "sound": "ringtone",
       "choices": [
         {
           "label": "Foncer au studio",

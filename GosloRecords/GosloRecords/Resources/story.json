@@ -939,6 +939,7 @@
       "npc": "big_deal",
       "weight": 0,
       "text": "Momo a eu le numéro du manager de Big Deal, superstar d'Atlanta : quatorze trophées, trois jets privés. Big Deal aurait « écouté ton son ». Le manager te rappelle. Il a l'air pressé et vaguement amusé.",
+      "sound": "ringtone",
       "choices": [
         {
           "label": "Proposer 10 000 € pour un couplet",
@@ -3114,6 +3115,9 @@
     {
       "id": "appel_victor",
       "steps": [
+        {
+          "sound": "ringtone"
+        },
         {
           "narration": "Ton téléphone sonne. Numéro masqué. Personne n'appelle plus avec un numéro masqué, à part les huissiers et les directeurs artistiques."
         },

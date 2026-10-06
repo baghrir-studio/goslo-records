@@ -125,6 +125,15 @@ final class EventsDataTests: XCTestCase {
         }
     }
 
+    func testEventSoundsExist() {
+        for event in events + world.story.events {
+            guard let sound = event.sound else { continue }
+            XCTAssertNotNil(SoundEffect(rawValue: sound), "\(event.id) : son inconnu « \(sound) »")
+        }
+        XCTAssertTrue((events + world.story.events).contains { $0.sound == SoundEffect.ringtone.rawValue },
+                      "au moins un appel doit sonner")
+    }
+
     func testUnknownKeysAreRejected() {
         let badStat = #"{"events":[{"id":"x","title":"t","text":"t","location":"studio","choices":[{"label":"a","effects":{"stremas":5},"consequence":"c"}]}]}"#
         XCTAssertThrowsError(try EventLoader.load(from: Data(badStat.utf8)))

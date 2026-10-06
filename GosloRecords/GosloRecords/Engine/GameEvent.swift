@@ -18,10 +18,12 @@ struct GameEvent: Codable, Equatable, Identifiable {
     let unique: Bool
     let conditions: EventConditions
     let choices: [EventChoice]
+    /// Sound played when the card shows up (a SoundEffect name, e.g. "ringtone" for a phone call).
+    let sound: String?
 
     init(id: String, title: String, text: String, location: Location? = nil, npc: String? = nil,
          weight: Int = defaultWeight, unique: Bool = false,
-         conditions: EventConditions = EventConditions(), choices: [EventChoice]) {
+         conditions: EventConditions = EventConditions(), choices: [EventChoice], sound: String? = nil) {
         self.id = id
         self.title = title
         self.text = text
@@ -31,6 +33,7 @@ struct GameEvent: Codable, Equatable, Identifiable {
         self.unique = unique
         self.conditions = conditions
         self.choices = choices
+        self.sound = sound
     }
 
     init(from decoder: Decoder) throws {
@@ -44,6 +47,7 @@ struct GameEvent: Codable, Equatable, Identifiable {
         unique = try c.decodeIfPresent(Bool.self, forKey: .unique) ?? false
         conditions = try c.decodeIfPresent(EventConditions.self, forKey: .conditions) ?? EventConditions()
         choices = try c.decode([EventChoice].self, forKey: .choices)
+        sound = try c.decodeIfPresent(String.self, forKey: .sound)
     }
 }
 
