@@ -2,8 +2,8 @@ import Foundation
 
 /// A character's outfit (colors in #RRGGBB hex). The sprites are drawn from it.
 struct CharacterLook: Codable, Hashable {
-    enum HairStyle: String, Codable { case short, long, bald, puff }
-    enum Hat: String, Codable { case none, cap, beanie, hood }
+    enum HairStyle: String, Codable, CaseIterable { case short, long, bald, puff }
+    enum Hat: String, Codable, CaseIterable { case none, cap, beanie, hood }
 
     var skin = "#c68642"
     var hair = "#1b1b1f"
@@ -67,11 +67,20 @@ struct CharacterLook: Codable, Hashable {
 
 extension Rapper {
     static let skinTones = ["#f1c9a5", "#e0ac7e", "#c68642", "#8d5524", "#5a3825"]
+    /// Black, brown, auburn, blond, grey.
+    static let hairColors = ["#1b1b1f", "#5a3a22", "#9a4a24", "#d9bf73", "#9a9aa6"]
 
-    /// The player's outfit: set by the style, with the chosen skin tone.
+    /// The player's outfit: set by the style, then the skin tone and whatever was picked at creation.
     var look: CharacterLook {
         var look = style.outfit
         look.skin = Rapper.skinTones[min(max(skinTone, 0), Rapper.skinTones.count - 1)]
+        if let hairColor { look.hair = Rapper.hairColors[min(max(hairColor, 0), Rapper.hairColors.count - 1)] }
+        if let hairStyle { look.hairStyle = hairStyle }
+        if let hat { look.hat = hat }
+        if let glasses { look.glasses = glasses }
+        if let beard { look.beard = beard }
+        if let chain { look.chain = chain }
+        if let headphones { look.headphones = headphones }
         return look
     }
 }
