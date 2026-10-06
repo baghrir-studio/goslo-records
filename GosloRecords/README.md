@@ -15,7 +15,7 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
   La scène (unlocked after your first project), Chez toi.
 - Each place draws an **encounter** from its own events. Each place also trains a **skill** (Plume, Flow, Scène, Business).
 - Some choices are **locked** behind a skill or relationship level ("PLUME 3 REQUIS").
-- **Clashes**: 4 turn-based rounds, 4 moves (Punchline/Plume, Flow/Flow, Présence/Scène, Story Insta/Business).
+- **Clashes**: 4 turn-based rounds, 4 moves (Punchline/Plume, Flow/Flow, Présence/Scène, Story/Business).
   Every opponent has a weak spot and a resistance. **Yanis Tracklist** (the chroniqueur) tells you both
   once your relationship with him reaches 60.
 - **Secret technique**: each side fills a gauge with the damage it deals. At 35, a once-per-clash technique
@@ -31,7 +31,7 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
 | id | Character | Archetype |
 |---|---|---|
 | `le_baron` | Le Baron | Self-made mogul, master of story-trolling, final boss of the "trône" quest |
-| `kolosse` | Kolosse | Former protégé turned rival, announces a cage fight that never happens |
+| `kolosse` | Kolosse | Neighbourhood giant, announces live challenges he never finishes |
 | `le_conteur` | Le Conteur | Veteran storyteller, diss tracks "en épisodes" |
 | `tenebre` | Ténèbre | Dark poet, sessions at 4am, says very little |
 | `orphee` | Orphée | Literary prodigy with a collectif, surprise albums |

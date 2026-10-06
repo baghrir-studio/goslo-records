@@ -9,6 +9,11 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
 
+            RadioLogo(pixel: 3)
+                .padding(.bottom, 22)
+                .opacity(appeared ? 1 : 0)
+                .offset(y: appeared ? 0 : 16)
+
             Logo(size: 84)
                 .opacity(appeared ? 1 : 0)
                 .offset(y: appeared ? 0 : 16)

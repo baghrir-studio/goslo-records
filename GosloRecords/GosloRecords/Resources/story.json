@@ -207,7 +207,7 @@
         {
           "id": "repet",
           "label": "Fais une répétition au Bunker",
-          "hint": "Le studio, en haut à gauche. Fred a prévu des boules Quies.",
+          "hint": "Le studio, en haut à gauche. Fred a prévu des bouchons d'oreilles.",
           "trigger": {
             "location": "studio"
           },
@@ -899,7 +899,7 @@
       "location": "quartier",
       "npc": "lingot",
       "weight": 0,
-      "text": "Lingot te barre la route. Trois chaînes, deux montres, des lunettes de soleil à 23 h. « Toi, t'es le petit de la radio ? Ma chaîne coûte plus cher que ton quartier. Et mon quartier coûte plus cher que ta chaîne. »",
+      "text": "Lingot te barre la route. Trois chaînes, deux montres, des lunettes de soleil à 23 h. « Toi, t'es le petit de la radio ? Ma chaîne coûte plus cher que ton quartier. Et ma deuxième chaîne coûte plus cher que la première. »",
       "choices": [
         {
           "label": "Le clasher",
@@ -938,7 +938,7 @@
       "location": "reseaux",
       "npc": "big_deal",
       "weight": 0,
-      "text": "Momo a eu le numéro du manager de Big Deal, superstar d'Atlanta : quatorze trophées, trois jets privés. Big Deal aurait « écouté ton son ». Le manager te rappelle. Il a l'air pressé et vaguement amusé.",
+      "text": "Momo a eu le numéro du manager de Big Deal, superstar américaine : quatorze trophées, trois jets privés. Big Deal aurait « écouté ton son ». Le manager te rappelle. Il a l'air pressé et vaguement amusé.",
       "choices": [
         {
           "label": "Proposer 10 000 € pour un couplet",
@@ -979,7 +979,7 @@
       "location": "media",
       "npc": "delamorale",
       "weight": 0,
-      "text": "Devant goslo radio, une équipe de télé t'attend et t'embarque sur le plateau du « Grand Débat ». Thème du soir : « Le rap : fléau ou catastrophe ? ». Jean-Hubert Delamorale a préparé un dossier de quarante pages. Il n'a pas écouté ta mixtape.",
+      "text": "Devant goslo radio, une équipe de télé t'attend et t'embarque sur le plateau du « Grand Débat ». Thème du soir : « Le rap : fléau ou catastrophe ? » Jean-Hubert Delamorale a préparé un dossier de quarante pages. Il n'a pas écouté ta mixtape.",
       "choices": [
         {
           "label": "Monter sur le plateau",
@@ -1104,7 +1104,7 @@
       "location": "studio",
       "npc": "fred",
       "weight": 0,
-      "text": "Répétition au Bunker. Fred a distribué des boules Quies, DJ Bobine a branché sa platine sur une multiprise qui fume, et ton ingé retour, c'est ton cousin. Il ne sait pas ce qu'est un retour.",
+      "text": "Répétition au Bunker. Fred a distribué des bouchons d'oreilles, DJ Bobine a branché sa platine sur une multiprise qui fume, et ton ingé retour, c'est ton cousin. Il ne sait pas ce qu'est un retour.",
       "choices": [
         {
           "label": "Répéter le set trois fois en entier",
@@ -1315,7 +1315,7 @@
           "set_flags": [
             "buzz_lance"
           ],
-          "consequence": "Ton tweet indigné fait plus de vues que ton son. Tu as fait le buzz en te plaignant du buzz. C'est ça, le game."
+          "consequence": "Ton long message sur « le respect de l'œuvre » est repris en sous-titres sur la vidéo du chat. Trois millions de vues. Le chat, lui, n'a rien dit."
         }
       ]
     },
@@ -1439,7 +1439,7 @@
               "set_flags": [
                 "kolosse_ko"
               ],
-              "consequence": "Victoire, et Kolosse est à 100 % de batterie pour la voir en replay. Il la regarde neuf fois. Il te rend ton chargeur. Avec un câble en moins."
+              "consequence": "Victoire, et Kolosse est à 100 % de batterie pour la voir en replay. Il la regarde neuf fois. Il te rend ton chargeur. Sans le câble."
             },
             "lose": {
               "effects": {
@@ -1632,7 +1632,7 @@
       "location": "studio",
       "npc": "fred",
       "weight": 0,
-      "text": "Le Bunker. Hexagone a envoyé un micro neuf, un canapé neuf, et un post-it : « Un tube, svp. Merci. » Fred regarde le micro neuf avec méfiance. « Le vieux, il avait de l'âme. Et de la poussière. »",
+      "text": "Le Bunker. Hexagone a envoyé un micro neuf, un canapé neuf, et un petit mot collé sur la console : « Un tube, svp. Merci. » Fred regarde le micro neuf avec méfiance. « Le vieux, il avait de l'âme. Et de la poussière. »",
       "choices": [
         {
           "label": "Écrire le single",
@@ -1728,7 +1728,7 @@
               "set_flags": [
                 "conteur_ch5"
               ],
-              "consequence": "Le Conteur range son enceinte. « Changement de scénario. Dans l'épisode 3, tu deviens le héros. » Il annule la saison 2. Les fans sont furieux. Contre lui."
+              "consequence": "Le Conteur range son enceinte. « Changement de scénario. Dans l'épisode 3, tu deviens le héros. » Les fans crient au spoiler. Lui prend des notes."
             },
             "lose": {
               "effects": {
@@ -1860,7 +1860,7 @@
       "location": "label",
       "npc": "momo",
       "weight": 0,
-      "text": "Dans l'arrière-boutique, Victor et Momo se disputent devant la machine 4. Victor : « Hexagone a réservé Le Dôme. 6 000 places. » Momo : « Et qui va plier les t-shirts ? » Victor : « Petit détail : le Dôme, c'est si tu fais tomber le Baron avant. Le marketing adore les couronnements. »",
+      "text": "Dans l'arrière-boutique, Victor et Momo se disputent devant la machine 4. Victor : « Hexagone a réservé le Dôme. 6 000 places. » Momo : « Et qui va plier les t-shirts ? » Victor : « Petit détail : le Dôme, c'est si tu fais tomber le Baron avant. Le marketing adore les couronnements. »",
       "choices": [
         {
           "label": "« Le Dôme, c'est avec Momo, ou c'est rien. »",
@@ -2003,7 +2003,7 @@
               "set_flags": [
                 "baron_tombe"
               ],
-              "consequence": "Le Baron retire ses lunettes. C'est la première fois qu'on voit ses yeux depuis 2009. « Bien joué, petit. » La rue explose. Quelque part, un chat applaudit avec ses pattes."
+              "consequence": "Le Baron retire ses lunettes. C'est la première fois qu'on voit ses yeux depuis des années. « Bien joué, petit. » La rue explose. Quelque part, un chat applaudit avec ses pattes."
             },
             "lose": {
               "effects": {
@@ -2043,14 +2043,14 @@
             },
             "opponent_power": 1.2
           },
-          "consequence": "Tu lui récites son premier couplet, de 2009. Il hausse un sourcil. « Intéressant. Ça va pas t'aider. »"
+          "consequence": "Tu lui récites son tout premier couplet, celui d'avant les lunettes. Il hausse un sourcil. « Intéressant. Ça va pas t'aider. »"
         },
         {
           "label": "Pas encore",
           "effects": {
             "credibilite": -2
           },
-          "consequence": "« Je suis là. Je suis toujours là. C'est un peu le principe d'un trône. »"
+          "consequence": "« Prends ton temps. Moi, je bouge pas. C'est un peu le principe d'un trône. »"
         }
       ]
     },
@@ -2073,7 +2073,7 @@
             "big_nono": 5
           },
           "interview": "face_a_face",
-          "consequence": "Il regarde le paquet. Il regarde toi. Il prend une chip. Ça ne change rien, mais il a apprécié."
+          "consequence": "Il regarde le paquet. Puis il te regarde. Il prend une chip. Ça ne change rien, mais il a apprécié."
         }
       ]
     },
@@ -2207,7 +2207,7 @@
           "micro_ouvert_reussi",
           "freestyle_fait"
         ],
-        "consequence": "Big Nono : « Le petit du bloc. Retenez ce nom. » goslo radio va repasser ton passage toute la semaine."
+        "consequence": "Big Nono : « Le petit du bloc. Retenez ce nom. » goslo radio va rediffuser ton passage toute la semaine."
       },
       "lose": {
         "effects": {
@@ -2304,7 +2304,7 @@
               "relations": {
                 "lil_croon": -3
               },
-              "reaction": "Fou rire général. Lil Croon a tweeté « blessé-é-é ». À l'autotune."
+              "reaction": "Fou rire général. Lil Croon a posté « blessé-é-é ». À l'autotune."
             },
             {
               "label": "Répondre en chantant sous autotune",
@@ -2378,7 +2378,7 @@
             {
               "label": "Mal. Le trône grince.",
               "hype": 18,
-              "reaction": "Big Nono rit. Il ne rit jamais, sauf quand c'est vraiment bon. Il repose ses chips."
+              "reaction": "Big Nono rit. Il ne rit jamais, sauf quand c'est vraiment bon."
             },
             {
               "label": "Comme un bébé : je me réveille toutes les deux heures en pleurant.",
@@ -2443,7 +2443,7 @@
             {
               "label": "Euh… bonjour monsieur le Baron, j'adore votre travail.",
               "hype": -10,
-              "reaction": "Le standard raccroche, par pitié. Le Baron, lui, rit encore."
+              "reaction": "Big Nono coupe la ligne, par pitié. On entend encore le Baron rire."
             }
           ]
         },
@@ -2464,7 +2464,7 @@
             {
               "label": "Quel chat ?",
               "hype": -6,
-              "reaction": "Big Nono pose ses chips. « Ne fais jamais ça. » Le quartier entier est d'accord."
+              "reaction": "Big Nono se fige. « Ne fais jamais ça. » Le quartier entier est d'accord."
             }
           ]
         },
@@ -3337,7 +3337,7 @@
         {
           "say": {
             "who": "le_baron",
-            "text": "Le petit de la laverie, hein ? Qu'il monte. Le trône est au dernier étage. L'ascenseur est en panne. Je l'ai cassé moi-même, en 2009."
+            "text": "Le petit de la laverie, hein ? Qu'il monte. Le trône est au dernier étage. L'ascenseur est en panne. Je l'ai cassé moi-même, le jour où je suis monté."
           }
         },
         {
@@ -3455,7 +3455,7 @@
         {
           "say": {
             "who": "le_baron",
-            "text": "Tiens, le trône. Il est en carton, je l'ai acheté en 2009. Fais gaffe, il grince. Et tout le monde va vouloir s'asseoir dessus."
+            "text": "Tiens, le trône. Il est en carton. Il l'a toujours été. Fais gaffe, il grince. Et tout le monde va vouloir s'asseoir dessus."
           }
         },
         {
@@ -3633,7 +3633,7 @@
       }
     },
     {
-      "text": "Une superstar d'Atlanta aurait refusé un featuring avec un rappeur du quartier. Le quartier n'a jamais été aussi fier d'un refus.",
+      "text": "Une superstar d'outre-Atlantique aurait refusé un featuring avec un rappeur du quartier. Le quartier n'a jamais été aussi fier d'un refus.",
       "conditions": {
         "required_flags": [
           "feat_us_refuse"
@@ -3675,7 +3675,7 @@
       }
     },
     {
-      "text": "Premier concert du petit du bloc au Transfo. Il reste 297 places. Trois si on compte sa mère deux fois.",
+      "text": "Premier concert du petit du bloc au Transfo. 3 places vendues, dont une à sa mère. Elle demande si sa pancarte doit payer aussi.",
       "conditions": {
         "min_chapter": 3,
         "excluded_flags": [
@@ -3712,7 +3712,7 @@
       }
     },
     {
-      "text": "Un certain Kévin, porteur de crocs, raconte partout qu'il a eu un freestyle à son nom. Personne ne le croit. Il a la vidéo.",
+      "text": "Un certain Kévin, en claquettes-chaussettes, raconte partout qu'il a eu un freestyle à son nom. Personne ne le croit. Il a la vidéo.",
       "conditions": {
         "required_flags": [
           "concert_reussi"
@@ -3754,7 +3754,7 @@
       }
     },
     {
-      "text": "Une berline noire est garée sur trois places boulevard du quartier depuis une semaine. La fourrière dit qu'elle « n'ose pas ».",
+      "text": "Une berline noire est garée sur trois places, sur le boulevard du quartier, depuis une semaine. La fourrière dit qu'elle « n'ose pas ».",
       "conditions": {
         "min_chapter": 4,
         "excluded_flags": [
@@ -3777,7 +3777,7 @@
       }
     },
     {
-      "text": "Un rappeur du quartier aperçu en cagoule au mois d'août. Météo France recommande de boire beaucoup d'eau.",
+      "text": "Un rappeur du quartier aperçu en cagoule au mois d'août. Les services météo recommandent de boire beaucoup d'eau.",
       "conditions": {
         "required_flags": [
           "image_cagoule"
@@ -3785,7 +3785,7 @@
       }
     },
     {
-      "text": "Numéro 1 au Kazakhstan pour un single français. L'ambassade du Kazakhstan dit « ne pas être au courant ».",
+      "text": "Numéro 1 au Kazakhstan pour un single français. Sur place, personne n'est au courant.",
       "conditions": {
         "required_flags": [
           "faux_streams"
@@ -3877,7 +3877,7 @@
     {
       "id": "stylo_rouge",
       "name": "Le stylo rouge de Scalpel",
-      "description": "Un stylo plume rouge, capuchon mordillé. Scalpel a corrigé des centaines de couplets avec. +2 en Punchline, et une nouvelle technique secrète.",
+      "description": "Un stylo-plume rouge, capuchon mordillé. Scalpel a corrigé des centaines de couplets avec. +2 en Punchline, et une nouvelle technique secrète.",
       "clash_bonus": {
         "punchline": 2
       },
@@ -3927,12 +3927,12 @@
           "bars": 7,
           "density": 0.45,
           "interlude": {
-            "text": "Un spectateur tend son téléphone et crie : « FAIS UN FREESTYLE SUR MOI ! » Il s'appelle Kévin. Il porte des crocs.",
+            "text": "Un spectateur tend son téléphone et crie : « FAIS UN FREESTYLE SUR MOI ! » Il s'appelle Kévin. Il porte des claquettes-chaussettes.",
             "options": [
               {
-                "label": "Freestyler sur Kévin et ses crocs",
+                "label": "Freestyler sur Kévin et ses claquettes-chaussettes",
                 "hype": 12,
-                "reaction": "Seize mesures sur Kévin. La salle hurle. Kévin pleure de bonheur. Ses crocs aussi, un peu."
+                "reaction": "Seize mesures sur Kévin. La salle hurle. Kévin pleure de bonheur. Ses chaussettes aussi, un peu."
               },
               {
                 "label": "Lui faire signer un contrat chez goslo sur un ticket de caisse",
@@ -3942,7 +3942,7 @@
               {
                 "label": "L'ignorer et enchaîner",
                 "hype": -4,
-                "reaction": "Kévin a crié « TRAÎTRE ». Une partie de la salle était de son côté. Les crocs ont une communauté."
+                "reaction": "Kévin a crié « TRAÎTRE ». Une partie de la salle était de son côté. Les claquettes-chaussettes ont une communauté."
               }
             ]
           }
@@ -3993,7 +3993,7 @@
           "bars": 6,
           "density": 0.35,
           "interlude": {
-            "text": "Fin du premier morceau. Au premier rang : ta mère, Momo, Fred avec son disque d'or sous le bras, et Kévin, en crocs dorés.",
+            "text": "Fin du premier morceau. Au premier rang : ta mère, Momo, Fred avec son disque d'or sous le bras, et Kévin, en claquettes-chaussettes dorées.",
             "options": [
               {
                 "label": "« Faites du bruit pour la laverie ! »",
@@ -4108,7 +4108,7 @@
       "start_royalties": 8,
       "target_royalties": 18,
       "start_patience": 60,
-      "walkout": "Victor range son stylo en or. « Je t'appelle. » Il remonte dans sa berline. Il te laisse l'addition du déca.",
+      "walkout": "Victor range son stylo en or. « Je t'appelle. » Il remonte dans sa berline. Il ne t'appellera pas. Enfin, pas cette semaine.",
       "clauses": [
         {
           "text": "Durée. L'Artiste s'engage pour sept albums ou quatre-vingt-dix-neuf ans, selon ce qui arrive en dernier.",
@@ -4124,7 +4124,7 @@
               "label": "99 ans, ça me laisse le temps.",
               "royalties": -1,
               "patience": 10,
-              "reaction": "Il sourit comme un requin qui vient d'apprendre qu'il est en vacances."
+              "reaction": "Il sourit comme un requin devant un pédalo."
             },
             {
               "label": "Je peux appeler ma mère ?",
@@ -4201,7 +4201,7 @@
               "label": "Deux danses, mais je choisis la musique.",
               "royalties": 2,
               "patience": -3,
-              "reaction": "« Tu choisis la musique. » Tu choisis ta musique. Il réalise trop tard que c'était évident."
+              "reaction": "« Tu choisis la musique. » Tu choisis une marche funèbre. Il réalise trop tard ce qu'il a signé."
             },
             {
               "label": "Je danse si toi tu danses.",
@@ -4280,7 +4280,7 @@
         "set_flags": [
           "contrat_signe"
         ],
-        "consequence": "Signé. Un vrai contrat, avec des vrais chiffres, du bon côté de la virgule. Victor te serre la main un peu trop longtemps. Dans le quartier, on dit que t'as vendu ton âme. Tu réponds que tu l'as louée. À un bon prix."
+        "consequence": "Signé. Un vrai contrat, avec de vrais chiffres, du bon côté de la virgule. Victor te serre la main un peu trop longtemps. Dans le quartier, on dit que t'as vendu ton âme. Vu les royalties, tu l'as surtout bien négociée."
       },
       "lose": {
         "effects": {
@@ -4306,7 +4306,7 @@
           "time": 9,
           "options": [
             {
-              "line": "maintenant j'monte, et j'compte bien finir en haut du building.",
+              "line": "j'ai pas pris l'ascenseur, j'ai grimpé jusqu'au toit du building.",
               "score": 18,
               "reaction": "Fred hoche la tête. « Classique. Mais propre. Comme mon disque d'or. »"
             },
@@ -4368,7 +4368,7 @@
               "reaction": "Fred : « Dans le train. D'accord. » Il souligne « train ». Tu ne sais pas si c'est bon signe."
             },
             {
-              "line": "le chat s'appelle Michel, il a un compte Instagram.",
+              "line": "le chat s'appelle Michel, et Michel, il aime bien le pain.",
               "score": -8,
               "reaction": "Fred : « Michel ? » Toi : « Michel. » Le micro est coupé pendant cinq minutes."
             }
@@ -4379,9 +4379,9 @@
           "time": 9,
           "options": [
             {
-              "line": "aujourd'hui j'passe en boucle, même dans le hall de l'hôpital.",
+              "line": "aujourd'hui mon refrain tourne en boucle, du bloc jusqu'au festival.",
               "score": 12,
-              "reaction": "Fred : « Sombre. Efficace. » Il augmente la réverb, ému."
+              "reaction": "Fred : « Revanche. Efficace. » Il augmente la réverb, ému."
             },
             {
               "line": "aujourd'hui j'ai un single, et c'est déjà pas mal.",
@@ -4435,7 +4435,7 @@
             "line": "Ton seul tube, c'est un chat qui l'a fait décoller. Lui, il a eu la gloire ; toi, t'as eu le droit de le regarder.",
             "damage": 8
           },
-          "setup": "Le chat a neuf vies, moi j'en ai qu'une : j'la joue à fond,",
+          "setup": "Un chat m'a lancé, c'est vrai, mais c'est moi qui donne le ton,",
           "time": 8,
           "options": [
             {
@@ -4474,9 +4474,9 @@
               "reaction": "Le public hoche la tête. C'est juste… vrai. Scalpel note « différent » dans la marge : rime facile."
             },
             {
-              "line": "et moi j'ai des baskets neuves, elles sont toutes blanches.",
+              "line": "moi aussi j'ai mis des gants, pour la vaisselle, avant.",
               "score": -6,
-              "reaction": "« Blanches » et « gants ». Scalpel sourit. Il ne sourit jamais. Très mauvais signe."
+              "reaction": "La rue imagine la vaisselle. Scalpel sourit. Il ne sourit jamais. Très mauvais signe."
             }
           ]
         },
@@ -4559,7 +4559,7 @@
               "reaction": "La rue scande « D'ICI ! D'ICI ! ». Scalpel range son stylo. Doucement. Respectueusement."
             },
             {
-              "line": "range ton bistouri, docteur : la séance est finie. Merci.",
+              "line": "range ton bistouri, docteur : la séance est finie, merci.",
               "score": 12,
               "reaction": "Tu tends la main. Il la serre. Le public ne sait pas s'il doit applaudir ou pleurer. Il fait les deux."
             },

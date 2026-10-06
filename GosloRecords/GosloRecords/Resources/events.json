@@ -84,7 +84,7 @@
       },
       "choices": [
         {
-          "label": "Grosse promo : affiches, interviews, live Insta",
+          "label": "Grosse promo : affiches, interviews, lives sur les réseaux",
           "effects": {
             "argent": -12,
             "streams": 14,
@@ -323,7 +323,7 @@
     {
       "id": "goslo_anniversaire",
       "title": "Les 10 ans de goslo records",
-      "text": "goslo records fête ses 10 ans au Zénith de Bitume. Momo t'invite à monter sur scène, même si vous ne vous êtes pas vraiment parlé depuis un moment.",
+      "text": "goslo records fête ses 10 ans au Grand Hangar de Bitume. Momo t'invite à monter sur scène, même si vous ne vous êtes pas vraiment parlé depuis un moment.",
       "location": "label",
       "npc": "momo",
       "weight": 20,
@@ -451,7 +451,7 @@
             "mental": -8,
             "credibilite": -2
           },
-          "consequence": "Le label t'envoie des mails avec « RELANCE » en objet. Tu les lis à 3h du matin."
+          "consequence": "Le label t'envoie des mails avec « RELANCE » en objet. Tu les lis à 3 h du matin."
         }
       ]
     },
@@ -586,7 +586,7 @@
             "en_clash"
           ],
           "follow_up": "beef_escalade",
-          "consequence": "Sorti à 2h du mat. Trois minutes de rage, deux punchlines correctes, un million de vues.",
+          "consequence": "Sorti à 2 h du mat. Trois minutes de rage, deux punchlines correctes, un million de vues.",
           "relations": {
             "lil_sauge": -10
           }
@@ -637,14 +637,14 @@
                 "credibilite": 10,
                 "streams": 10
               },
-              "consequence": "Tu as gagné le clash selon 62 % d'un sondage Instagram. C'est officiel."
+              "consequence": "Tu as gagné le clash selon 62 % d'un sondage en story. C'est officiel."
             },
             "lose": {
               "effects": {
                 "credibilite": -6,
                 "mental": -8
               },
-              "consequence": "Lil Sauge a eu le dernier mot. Tu vas le rejouer dans ta tête à 3h du matin pendant des mois."
+              "consequence": "Lil Sauge a eu le dernier mot. Tu vas le rejouer dans ta tête à 3 h du matin pendant des mois."
             }
           }
         },
@@ -759,7 +759,7 @@
           "counters": {
             "featurings": 1
           },
-          "consequence": "Feat intergénérationnel. Tu passes pour un sage. En vrai, t'as juste peur de TikTok.",
+          "consequence": "Feat intergénérationnel. Tu passes pour un sage. En vrai, t'as juste peur de ses abonnés.",
           "relations": {
             "ptit_wifi": 15
           }
@@ -821,8 +821,8 @@
     },
     {
       "id": "buzz_tiktok",
-      "title": "Le buzz TikTok",
-      "text": "12 secondes de ton morceau le plus triste sont devenues une danse virale. Des gens se filment en mimant une vague. Sur un morceau sur le deuil.",
+      "title": "La danse virale",
+      "text": "12 secondes de ton morceau le plus triste sont devenues une danse virale. Des gens se filment en mimant une vague. Sur un morceau qui parle de deuil.",
       "location": "reseaux",
       "weight": 10,
       "unique": true,
@@ -929,7 +929,7 @@
       },
       "choices": [
         {
-          "label": "Tout donner à 15h en plein soleil",
+          "label": "Tout donner à 15 h en plein soleil",
           "effects": {
             "credibilite": 7,
             "streams": 6,
@@ -948,7 +948,7 @@
             "credibilite": 2,
             "mental": -3
           },
-          "consequence": "Tu passes à 2h du matin. Il reste 30 personnes, mais elles sont très investies.",
+          "consequence": "Tu passes à 2 h du matin. Il reste 30 personnes, mais elles sont très investies.",
           "set_flags": [
             "premier_concert"
           ]
@@ -958,7 +958,7 @@
     {
       "id": "pause_deux_ans",
       "title": "Tout lâcher ?",
-      "text": "Tu dors 4h par nuit, ton téléphone sonne en continu et tu as oublié ton propre refrain sur scène. Ton corps t'envoie des signaux. Pas des signaux d'écoute.",
+      "text": "Tu dors 4 h par nuit, ton téléphone sonne en continu et tu as oublié ton propre refrain sur scène. Ton corps t'envoie des notifications. Tu les laisses en « vu ».",
       "location": "chez_toi",
       "weight": 14,
       "unique": true,
@@ -1063,7 +1063,7 @@
           "set_flags": [
             "sans_manager"
           ],
-          "consequence": "Il est parti avec le disque dur des prods et ton mot de passe Instagram. Tu as gardé l'agrafeuse.",
+          "consequence": "Il est parti avec le disque dur des prods et le mot de passe de tes réseaux. Tu as gardé l'agrafeuse.",
           "relations": {
             "karim": -30
           }
@@ -1274,7 +1274,7 @@
           "set_flags": [
             "faux_streams"
           ],
-          "consequence": "Ton morceau cartonne au Kazakhstan, à 4h du matin, sur 50 000 comptes créés le même jour."
+          "consequence": "Ton morceau cartonne au Kazakhstan. 50 000 comptes, tous créés le même mardi, tous avec la même photo de profil."
         },
         {
           "label": "Refuser",
@@ -1450,7 +1450,7 @@
             "streams": 3,
             "mental": 4
           },
-          "consequence": "Ta grand-mère a filmé. La vidéo tourne dans tous les groupes WhatsApp de la famille."
+          "consequence": "Ta grand-mère a filmé. La vidéo tourne dans tous les groupes de discussion de la famille."
         },
         {
           "label": "Dire que tu bosses « dans la com »",
@@ -1551,7 +1551,7 @@
             "credibilite": -4,
             "mental": -4
           },
-          "consequence": "Rupture de stock en 2h. Tu en avais fabriqué 40."
+          "consequence": "Rupture de stock en 2 h. Tu en avais fabriqué 40."
         },
         {
           "label": "Collab avec une marque locale de {ville}",
@@ -1634,7 +1634,7 @@
             "argent": 3,
             "credibilite": 3
           },
-          "consequence": "Le morceau suivant est prêt. L'algorithme t'a à l'œil, dans le bon sens."
+          "consequence": "Le morceau suivant est prêt. L'algorithme te remarque. Pour une fois, ce n'est pas pour supprimer ta vidéo."
         }
       ]
     },
@@ -1752,8 +1752,8 @@
     },
     {
       "id": "scroll_nocturne",
-      "title": "3h du matin",
-      "text": "Il est 3h. Tu scrolles. Un rappeur que tu ne connais pas a 4 millions de vues avec un morceau sur son chat. Tu ressens des choses.",
+      "title": "3 h du matin",
+      "text": "Il est 3 h. Tu scrolles. Un rappeur que tu ne connais pas a 4 millions de vues avec un morceau sur son chat. Tu ressens des choses.",
       "location": "reseaux",
       "weight": 8,
       "choices": [
@@ -1854,7 +1854,7 @@
           "set_flags": [
             "baron_contact"
           ],
-          "consequence": "Le Baron a repartagé ta story avec un emoji clown. C'est la guerre. Et c'est la meilleure promo de ta vie."
+          "consequence": "Le Baron a repartagé ta story avec un émoji qui bâille. C'est la guerre. Et c'est la meilleure promo de ta vie."
         },
         {
           "label": "Lui envoyer un DM respectueux",
@@ -1937,7 +1937,7 @@
     {
       "id": "baron_trone",
       "title": "Le trône",
-      "text": "Le Baron poste une vidéo depuis son fauteuil en velours : « Personne ne me détrône. Surtout pas lui. » Il te tague. Tout le game attend ta réponse.",
+      "text": "Le Baron poste une vidéo depuis son trône, filmé en très gros plan : on ne voit pas de quoi il est fait. « Personne ne me détrône. Surtout pas lui. » Il te tague. Tout le game attend ta réponse.",
       "location": "reseaux",
       "npc": "le_baron",
       "weight": 20,
@@ -2027,9 +2027,9 @@
       ]
     },
     {
-      "id": "kolosse_octogone",
+      "id": "kolosse_defi_live",
       "title": "Le défi en live",
-      "text": "Kolosse annonce un défi en live contre toi : 100 pompes, puis un freestyle, puis « on verra ». L'affiche est faite sur Paint. 40 000 personnes ont déjà réservé leur soirée.",
+      "text": "Kolosse annonce un défi en live contre toi : 100 pompes, puis un freestyle, puis « on verra ». L'affiche a l'air dessinée à la souris. 40 000 personnes ont déjà réservé leur soirée.",
       "location": "reseaux",
       "npc": "kolosse",
       "weight": 11,
@@ -2051,9 +2051,9 @@
             "kolosse": -10
           },
           "set_flags": [
-            "octogone_annonce"
+            "defi_live_annonce"
           ],
-          "follow_up": "kolosse_octogone_annule",
+          "follow_up": "kolosse_defi_live_annule",
           "consequence": "Tout le quartier en parle. Tu t'entraînes aux pompes. Tu en fais 11. Tu dis que c'était 30."
         },
         {
@@ -2069,9 +2069,9 @@
       ]
     },
     {
-      "id": "kolosse_octogone_annule",
+      "id": "kolosse_defi_live_annule",
       "title": "Défi annulé",
-      "text": "Le soir du live, Kolosse lance le stream… et sa batterie meurt à 1 %. Communiqué officiel : « problème technique ». Tout le monde a compris. Personne n'est surpris.",
+      "text": "Le soir du live, Kolosse lance le stream… et son téléphone s'éteint au bout de quarante secondes. Communiqué officiel : « problème technique ». Personne n'est surpris.",
       "npc": "kolosse",
       "weight": 0,
       "unique": true,
@@ -2082,7 +2082,7 @@
             "mental": -3
           },
           "clear_flags": [
-            "octogone_annonce"
+            "defi_live_annonce"
           ],
           "clash": {
             "opponent": "kolosse",
@@ -2110,7 +2110,7 @@
             "credibilite": -6
           },
           "clear_flags": [
-            "octogone_annonce"
+            "defi_live_annonce"
           ],
           "consequence": "Une marque de boisson te paye pour un défi qui n'a pas eu lieu. Le rap dans toute sa splendeur."
         }
@@ -2119,7 +2119,7 @@
     {
       "id": "kolosse_feat",
       "title": "Le feat explosif",
-      "text": "Kolosse t'appelle à 2h du matin : « J'ai une prod, elle est sale, il me faut un couplet. Maintenant. » On entend des ad-libs en fond.",
+      "text": "Kolosse t'appelle à 2 h du matin : « J'ai une prod, elle est sale, il me faut un couplet. Maintenant. » On entend des ad-libs en fond.",
       "location": "studio",
       "npc": "kolosse",
       "weight": 7,
@@ -2272,8 +2272,8 @@
     },
     {
       "id": "tenebre_session",
-      "title": "Session à 4h du matin",
-      "text": "Ténèbre t'invite en studio. 4h du matin, toutes les lumières éteintes, une seule bougie. Il n'a pas dit bonjour. Il a juste montré le micro.",
+      "title": "Session à 4 h du matin",
+      "text": "Ténèbre t'invite en studio. 4 h du matin, toutes les lumières éteintes, une seule bougie. Il n'a pas dit bonjour. Il a juste montré le micro.",
       "location": "studio",
       "npc": "tenebre",
       "weight": 9,
@@ -2354,8 +2354,8 @@
     },
     {
       "id": "orphee_collectif",
-      "title": "Le collectif d'Orphée",
-      "text": "Orphée et son collectif tiennent un open mic dans un bar de ton quartier. Ils rappent sur des prods jazz en citant des poètes morts. L'ambiance est intimidante.",
+      "title": "L'open mic d'Orphée",
+      "text": "Orphée et sa bande tiennent un open mic dans un bar de ton quartier. Ils rappent sur des prods jazz en citant des poètes morts. L'ambiance est intimidante.",
       "location": "quartier",
       "npc": "orphee",
       "weight": 9,
@@ -2392,7 +2392,7 @@
           "relations": {
             "orphee": 4
           },
-          "consequence": "Tu as rimé « Baudelaire » avec « boulangère ». Le collectif a souri poliment."
+          "consequence": "Tu as rimé « poésie » avec « pâtisserie ». Le cercle a souri poliment."
         },
         {
           "label": "Écouter depuis le fond",
@@ -2438,7 +2438,7 @@
           "relations": {
             "orphee": -6
           },
-          "consequence": "Tu as fini 2e, loin derrière. Mais ton courage a été salué par Yanis en direct."
+          "consequence": "Tu as fini 2e, loin derrière. Yanis a salué ton courage en direct, avec la voix qu'on prend pour les condoléances."
         },
         {
           "label": "Le féliciter en story",
@@ -2494,7 +2494,7 @@
           "relations": {
             "orphee": -5
           },
-          "consequence": "Ambitieux. Ta propre tournée compte pour l'instant trois dates, dont un PMU."
+          "consequence": "Ambitieux. Ta propre tournée compte pour l'instant trois dates, dont un bar-tabac."
         }
       ]
     },
@@ -2709,7 +2709,7 @@
           "relations": {
             "yanis": -12
           },
-          "consequence": "Yanis a répondu avec un tableau Excel de 14 colonnes. Tu as perdu le débat avec des données."
+          "consequence": "Yanis a répondu avec un tableur de 14 colonnes. Tu as perdu le débat face à des données."
         },
         {
           "label": "Lui envoyer ton album dédicacé",
@@ -2912,7 +2912,7 @@
           "relations": {
             "big_kliks": -15
           },
-          "consequence": "Big Kliks a perdu 3,9 millions d'abonnés en une nuit. Il lui en reste 12. Ce sont des vrais. Il les remercie un par un."
+          "consequence": "Big Kliks a perdu 3 999 988 abonnés en une nuit. Il lui en reste 12. Ce sont des vrais. Il les remercie un par un."
         }
       ]
     },
@@ -2955,7 +2955,7 @@
           "relations": {
             "big_kliks": -5
           },
-          "consequence": "Il est revenu une heure plus tard avec un screenshot de 4 millions de fans. Le screenshot était flou."
+          "consequence": "Il est revenu une heure plus tard avec une capture d'écran de 4 millions de fans. La capture était floue."
         }
       ]
     },
@@ -2968,7 +2968,7 @@
       "conditions": {
         "min_chapter": 2
       },
-      "text": "Lil Croon t'invite en session. Il a mis l'autotune sur sa voix, sur la prod, et sur son répondeur. « Viens-e-e-e, on fait un hi-i-it. »",
+      "text": "Lil Croon t'invite en session. Même la sonnette du studio est sous autotune. « Viens-e-e-e, on fait un hi-i-it. »",
       "choices": [
         {
           "label": "Rapper sur sa prod",
@@ -2985,7 +2985,7 @@
           "relations": {
             "lil_croon": 10
           },
-          "consequence": "Le morceau est ni du rap, ni du RnB. Les plateformes l'ont classé dans « Ambiance spa ». Il cartonne dans les salons de massage."
+          "consequence": "Le morceau n'est ni du rap ni du RnB. Les plateformes l'ont rangé dans « Bruits blancs pour dormir ». Il cartonne chez les insomniaques."
         },
         {
           "label": "Lui demander de couper l'autotune",
@@ -3119,7 +3119,7 @@
             "mental": 8,
             "streams": -6
           },
-          "consequence": "Tu as tenu 48 heures. Il fait 38°, personne ne comprend tes punchlines, et ta mère a appelé 14 fois. Retour au bloc, bronzé et ruiné."
+          "consequence": "Tu as tenu 48 heures. Il fait 38 degrés, personne ne comprend tes punchlines, et ta mère a appelé 14 fois. Retour au bloc, bronzé et ruiné."
         },
         {
           "label": "Rester au quartier",
@@ -3208,7 +3208,7 @@
           "counters": {
             "projets": 1
           },
-          "consequence": "« Version speed up ». Elle cartonne sur les réseaux. Tu n'as rien fait. C'est le métier."
+          "consequence": "« Version 109 % ». Elle cartonne dans les salles de sport. Tu n'as rien fait. C'est le métier."
         }
       ]
     },
@@ -3296,7 +3296,7 @@
       "conditions": {
         "min_chapter": 4
       },
-      "text": "Quelqu'un a mis ton son en version accélérée. Ta voix ressemble à celle d'un hamster sous caféine. Elle fait trois fois plus de streams que l'originale.",
+      "text": "Quelqu'un a mis ton son en version accélérée. Ta voix ressemble à celle d'un hamster en retard pour son bus. Elle fait trois fois plus de streams que l'originale.",
       "choices": [
         {
           "label": "Sortir officiellement la version hamster",
@@ -3361,7 +3361,7 @@
     },
     {
       "id": "playlist_vaisselle",
-      "title": "La playlist",
+      "title": "La playlist vaisselle",
       "location": "reseaux",
       "weight": 8,
       "unique": true,
@@ -3443,7 +3443,7 @@
           "xp": {
             "business": 25
           },
-          "consequence": "Accord à 10 % et une boîte de pâtée par trimestre. Le chat a signé d'une patte. L'avocat a pleuré."
+          "consequence": "Accord à 10 % et une boîte de pâtée par trimestre. Le chat a signé d'une patte. Son agent a versé une larme."
         },
         {
           "label": "Proposer un feat au chat",
@@ -3454,7 +3454,7 @@
           "counters": {
             "featurings": 1
           },
-          "consequence": "Le chat miaule sur le refrain. Une fois. C'est le meilleur couplet de l'année, selon la presse spécialisée chats."
+          "consequence": "Le chat miaule sur le refrain. Une fois. C'est le meilleur couplet de l'année, selon la presse féline spécialisée."
         },
         {
           "label": "Appeler Momo",
@@ -3610,7 +3610,7 @@
           "effects": {
             "mental": 4
           },
-          "consequence": "Tu n'écoutes pas. Big Nono te résume quand même tout le débat. En chips."
+          "consequence": "Tu n'écoutes pas. Big Nono te résume quand même tout le débat, la bouche pleine de chips."
         }
       ]
     },
@@ -3662,7 +3662,7 @@
             "credibilite": 2,
             "streams": 2
           },
-          "consequence": "Tu l'as battu en trois rimes. Il s'excuse au nom du Baron. Le vrai Baron, mis au courant, a ri."
+          "consequence": "Tu l'as battu en trois rimes. Il s'excuse au nom du Baron. Le vrai Baron, mis au courant, a demandé son numéro. Pour les mariages."
         },
         {
           "label": "Prendre la photo",
@@ -3692,7 +3692,7 @@
           "relations": {
             "maman": 6
           },
-          "consequence": "Elle a quand même attendu dans la file « par principe ». Elle a eu sa place. Elle l'a offerte à la voisine. Elle viendra avec ta place à toi."
+          "consequence": "Elle a quand même fait la file « par principe ». Elle a eu sa place, l'a offerte à la voisine, et viendra avec la tienne."
         },
         {
           "label": "Ajouter une date",
@@ -3731,7 +3731,7 @@
           "relations": {
             "momo": 5
           },
-          "consequence": "Momo l'emballe dans un sac de linge propre. Il le scelle avec du scotch. Personne n'y touche jusqu'au Dôme."
+          "consequence": "Momo l'emballe dans un sac de linge propre et le scelle avec trois couches de ruban adhésif. Personne n'y touche jusqu'au Dôme."
         }
       ],
       "npc": "momo"

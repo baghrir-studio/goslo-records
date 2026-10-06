@@ -23,7 +23,7 @@ enum ClashMove: String, Codable, CaseIterable, CodingKeyRepresentable, Identifia
         case .punchline: "Punchline"
         case .flow: "Flow"
         case .presence: "Présence"
-        case .story: "Story Insta"
+        case .story: "Story"
         }
     }
 
@@ -351,7 +351,7 @@ enum ClashLines {
         case .presence: lines = [
             "Tu descends dans la fosse. La salle est à toi, et elle s'en souviendra au prochain couplet.",
             "Tu lèves la main, 2 000 personnes la lèvent avec toi.",
-            "Un regard caméra de huit secondes. Le live Insta s'emballe.",
+            "Un regard caméra de huit secondes. Le live s'emballe.",
         ]
         case .story: lines = [
             "Tu postes une capture de ses vieux tweets. Coup bas, mais efficace.",
