@@ -1,0 +1,3770 @@
+{
+  "version": 2,
+  "events": [
+    {
+      "id": "session_studio",
+      "title": "Session studio",
+      "text": "Le Bunker, studio en sous-sol, te propose une session. L'ingé son s'appelle Fred, il a mixé un disque d'or en 2009 et il en parle toutes les quatre minutes.",
+      "location": "studio",
+      "npc": "fred",
+      "weight": 12,
+      "choices": [
+        {
+          "label": "Payer la session complète avec Fred",
+          "effects": {
+            "argent": -7,
+            "streams": 6,
+            "credibilite": 3
+          },
+          "consequence": "Le son est propre. Tu connais maintenant la carrière de Fred, minute par minute.",
+          "relations": {
+            "fred": 5
+          }
+        },
+        {
+          "label": "Enregistrer dans ton placard, sous la couette",
+          "effects": {
+            "credibilite": 5,
+            "streams": 2,
+            "mental": -2
+          },
+          "consequence": "Le son est sale, mais « authentique ». C'est ce que tu te répètes."
+        },
+        {
+          "label": "Passer la journée à faire des prods de 8 secondes",
+          "effects": {
+            "mental": 5,
+            "streams": -2
+          },
+          "consequence": "Quarante débuts de morceaux, zéro fin. Classique."
+        }
+      ]
+    },
+    {
+      "id": "mixtape_gratuite",
+      "title": "Mixtape gratuite",
+      "text": "Quatorze morceaux dorment sur ton disque dur. Option : les balancer gratuitement en ligne, avec une pochette faite sur ton téléphone.",
+      "location": "chez_toi",
+      "weight": 14,
+      "unique": true,
+      "conditions": {
+        "max_year": 4
+      },
+      "choices": [
+        {
+          "label": "Balancer la mixtape",
+          "effects": {
+            "streams": 8,
+            "credibilite": 8,
+            "argent": -2
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "« Vol. 1 ». Il n'y aura jamais de Vol. 2, mais ça, personne ne le sait encore."
+        },
+        {
+          "label": "Attendre d'avoir un vrai budget",
+          "effects": {
+            "mental": -3,
+            "credibilite": -2
+          },
+          "consequence": "Le disque dur, lui, ne juge pas. Il attend."
+        }
+      ]
+    },
+    {
+      "id": "sortie_projet",
+      "title": "Sortie de projet",
+      "text": "Ton nouveau projet est prêt. Reste à le sortir sans finir en 4e page des sorties de la semaine, entre un album de Lil Sauge et une compile de zouk.",
+      "location": "studio",
+      "weight": 10,
+      "conditions": {
+        "min_year": 2
+      },
+      "choices": [
+        {
+          "label": "Grosse promo : affiches, interviews, live Insta",
+          "effects": {
+            "argent": -12,
+            "streams": 14,
+            "mental": -4
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "Ta tête est dans le métro. Quelqu'un lui a dessiné une moustache. Tu as réussi."
+        },
+        {
+          "label": "Drop surprise à minuit, sans prévenir",
+          "effects": {
+            "credibilite": 8,
+            "streams": 6
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "Les vrais l'ont trouvé. Les autres le découvriront dans trois mois, dans une playlist « chill »."
+        },
+        {
+          "label": "Repousser encore de six mois",
+          "effects": {
+            "mental": -6,
+            "credibilite": -3
+          },
+          "consequence": "« Bientôt. » La rumeur dit que tu peaufines. La vérité, c'est que t'as peur."
+        }
+      ]
+    },
+    {
+      "id": "certification_or",
+      "title": "Disque d'or",
+      "text": "Ton dernier projet est certifié or. Un monsieur en costume te tend un cadre. Il ne connaît pas ton nom, il le lit sur une fiche.",
+      "location": "label",
+      "weight": 10,
+      "conditions": {
+        "min_stats": {
+          "streams": 55
+        },
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "choices": [
+        {
+          "label": "Photo avec le disque et un gâteau en forme de disque",
+          "effects": {
+            "streams": 6,
+            "credibilite": -2
+          },
+          "counters": {
+            "disques_or": 1
+          },
+          "consequence": "4 000 likes. Le gâteau était sec. Personne n'en parle."
+        },
+        {
+          "label": "Remercier sobrement : « c'est pour le quartier »",
+          "effects": {
+            "credibilite": 6
+          },
+          "counters": {
+            "disques_or": 1
+          },
+          "consequence": "Le quartier n'avait rien demandé, mais le quartier apprécie."
+        },
+        {
+          "label": "T'acheter une montre pour fêter ça",
+          "effects": {
+            "argent": -15,
+            "mental": 6
+          },
+          "counters": {
+            "disques_or": 1
+          },
+          "consequence": "Elle donne l'heure. Comme ton téléphone, mais en plus cher."
+        }
+      ]
+    },
+    {
+      "id": "offre_major",
+      "title": "La major appelle",
+      "text": "Hexagone Music, la plus grosse major du pays, veut te signer. Avance confortable, open space avec baby-foot, et un DA de 26 ans qui t'appelle « mon reuf » dès le premier mail.",
+      "location": "reseaux",
+      "weight": 14,
+      "unique": true,
+      "conditions": {
+        "min_year": 2,
+        "min_stats": {
+          "streams": 40
+        },
+        "excluded_flags": [
+          "signe_major",
+          "signe_goslo",
+          "signe_baron"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Signer chez Hexagone Music",
+          "effects": {
+            "argent": 30,
+            "streams": 10,
+            "credibilite": -14
+          },
+          "set_flags": [
+            "signe_major",
+            "sous_contrat"
+          ],
+          "clear_flags": [
+            "independant"
+          ],
+          "consequence": "Tu as un badge. Tu as une place de parking. Tu as perdu un truc, mais tu ne sais pas encore quoi."
+        },
+        {
+          "label": "Refuser poliment",
+          "effects": {
+            "credibilite": 10,
+            "argent": -4
+          },
+          "consequence": "Le DA a répondu « pas de souci mon reuf ». Il a signé quelqu'un d'autre dans l'heure."
+        },
+        {
+          "label": "Négocier une simple distribution",
+          "effects": {
+            "argent": 12,
+            "credibilite": 3,
+            "mental": -6
+          },
+          "consequence": "Trois mois de mails. Tu gardes tes masters, tu perds tes cheveux."
+        }
+      ]
+    },
+    {
+      "id": "goslo_vs_major",
+      "title": "goslo contre la major",
+      "text": "Hexagone Music veut racheter ton contrat chez goslo records. Momo t'appelle, la voix tremblante : « fais ce que t'as à faire, frère. Mais oublie pas d'où tu viens. »",
+      "location": "label",
+      "npc": "momo",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "min_year": 3,
+        "required_flags": [
+          "signe_goslo"
+        ],
+        "min_stats": {
+          "streams": 45
+        }
+      },
+      "choices": [
+        {
+          "label": "Rester chez goslo, par loyauté",
+          "effects": {
+            "credibilite": 12,
+            "argent": -5,
+            "mental": 4
+          },
+          "set_flags": [
+            "fidele_goslo"
+          ],
+          "consequence": "Momo a pleuré. Puis il a imprimé 200 t-shirts « FIDÈLE ». Il en reste 196.",
+          "relations": {
+            "momo": 15
+          }
+        },
+        {
+          "label": "Partir chez Hexagone Music",
+          "effects": {
+            "argent": 28,
+            "streams": 10,
+            "credibilite": -12,
+            "mental": -6
+          },
+          "set_flags": [
+            "signe_major"
+          ],
+          "clear_flags": [
+            "signe_goslo"
+          ],
+          "consequence": "Momo a liké ta photo de signature. C'est pire qu'un message.",
+          "relations": {
+            "momo": -25
+          }
+        }
+      ]
+    },
+    {
+      "id": "goslo_compilation",
+      "title": "La compile goslo",
+      "text": "Momo prépare « goslo records Vol. 3 », une compile avec tout le label. Il a déjà la pochette : une photo floue de la laverie.",
+      "location": "label",
+      "npc": "momo",
+      "weight": 9,
+      "conditions": {
+        "required_flags": [
+          "signe_goslo"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Poser un couplet de feu",
+          "effects": {
+            "credibilite": 6,
+            "streams": 5,
+            "mental": -2
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Ton couplet est le meilleur de la compile. C'était pas dur, mais ça compte.",
+          "set_flags": [
+            "compile_goslo"
+          ]
+        },
+        {
+          "label": "Envoyer un couplet enregistré au téléphone",
+          "effects": {
+            "streams": 1,
+            "credibilite": -4
+          },
+          "consequence": "On entend un bus passer à 1:42. Momo dit que c'est « une texture »."
+        },
+        {
+          "label": "Exiger d'être payé d'abord",
+          "effects": {
+            "argent": 6,
+            "credibilite": -2,
+            "mental": -3
+          },
+          "consequence": "Momo t'a payé en jetons de laverie. Techniquement, c'est un paiement."
+        }
+      ]
+    },
+    {
+      "id": "goslo_anniversaire",
+      "title": "Les 10 ans de goslo records",
+      "text": "goslo records fête ses 10 ans au Zénith de Bitume. Momo t'invite à monter sur scène, même si vous ne vous êtes pas vraiment parlé depuis un moment.",
+      "location": "label",
+      "npc": "momo",
+      "weight": 20,
+      "unique": true,
+      "conditions": {
+        "min_year": 7
+      },
+      "choices": [
+        {
+          "label": "Monter sur scène en surprise",
+          "effects": {
+            "credibilite": 10,
+            "streams": 6,
+            "mental": 6
+          },
+          "consequence": "La salle explose. Momo pleure, encore. Il pleure beaucoup pour un patron de label.",
+          "set_flags": [
+            "goslo_dix_ans"
+          ],
+          "relations": {
+            "momo": 10
+          }
+        },
+        {
+          "label": "Envoyer une vidéo de soutien",
+          "effects": {
+            "credibilite": -3,
+            "mental": 2
+          },
+          "consequence": "Diffusée sur l'écran géant. Sans le son. On t'a vu articuler en silence pendant 40 secondes."
+        },
+        {
+          "label": "Ne pas y aller",
+          "effects": {
+            "credibilite": -6
+          },
+          "consequence": "Ton absence a été remarquée. Surtout par Momo, qui a gardé ta chaise vide toute la soirée."
+        }
+      ]
+    },
+    {
+      "id": "avance_label",
+      "title": "Avance sur royalties",
+      "text": "Ton label te propose une avance. Le mot « avance » est important : c'est de l'argent qui est déjà un peu à eux.",
+      "location": "label",
+      "weight": 9,
+      "conditions": {
+        "required_flags": [
+          "sous_contrat"
+        ],
+        "excluded_flags": [
+          "dette_label"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Prendre l'avance maximale",
+          "effects": {
+            "argent": 25,
+            "mental": -4
+          },
+          "set_flags": [
+            "dette_label"
+          ],
+          "consequence": "Six mois de loyer d'avance, et des sneakers que tu ne mettras jamais."
+        },
+        {
+          "label": "Juste de quoi bosser",
+          "effects": {
+            "argent": 10
+          },
+          "consequence": "Raisonnable. Ta conseillère bancaire t'a envoyé un émoji pouce."
+        },
+        {
+          "label": "Refuser, pas de dettes",
+          "effects": {
+            "credibilite": 3,
+            "mental": 2
+          },
+          "consequence": "Ton comptable imaginaire est fier de toi."
+        }
+      ]
+    },
+    {
+      "id": "dette_label",
+      "title": "Le label veut son argent",
+      "text": "L'avance n'est toujours pas remboursée. Le label propose une « solution créative » : un single d'été avec un refrain sifflé.",
+      "location": "label",
+      "weight": 12,
+      "conditions": {
+        "required_flags": [
+          "dette_label"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Faire le single sifflé",
+          "effects": {
+            "streams": 12,
+            "credibilite": -10,
+            "argent": 5
+          },
+          "clear_flags": [
+            "dette_label"
+          ],
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "Le refrain passe dans toutes les pubs de crème solaire. Tu ne peux plus entrer dans un supermarché."
+        },
+        {
+          "label": "Rembourser de ta poche",
+          "effects": {
+            "argent": -18,
+            "mental": -3
+          },
+          "clear_flags": [
+            "dette_label"
+          ],
+          "consequence": "Tu es libre. Pauvre, mais libre."
+        },
+        {
+          "label": "Faire le mort",
+          "effects": {
+            "mental": -8,
+            "credibilite": -2
+          },
+          "consequence": "Le label t'envoie des mails avec « RELANCE » en objet. Tu les lis à 3h du matin."
+        }
+      ]
+    },
+    {
+      "id": "feat_commercial",
+      "title": "Le feat de l'été",
+      "text": "Clara Soleil, chanteuse de variété, veut un couplet de toi sur son tube estival : « Danse avec ton cœur ». Le chèque est épais.",
+      "location": "reseaux",
+      "npc": "clara_soleil",
+      "weight": 10,
+      "conditions": {
+        "min_stats": {
+          "streams": 30
+        }
+      },
+      "choices": [
+        {
+          "label": "Accepter et assumer",
+          "effects": {
+            "streams": 15,
+            "argent": 14,
+            "credibilite": -12
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Tu as rimé « cœur » avec « bonheur ». Ton grand frère ne te parle plus.",
+          "relations": {
+            "clara_soleil": 10
+          }
+        },
+        {
+          "label": "Accepter, mais rapper sur la crise du logement",
+          "effects": {
+            "streams": 8,
+            "argent": 10,
+            "credibilite": 2,
+            "mental": -3
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Personne ne comprend ce que tu fais là. C'est presque de l'art contemporain."
+        },
+        {
+          "label": "Refuser",
+          "effects": {
+            "credibilite": 6,
+            "argent": -2
+          },
+          "consequence": "Clara a pris Lil Sauge. Il passe dans toutes les radios. Toi, tu as ta dignité et une facture d'électricité."
+        }
+      ]
+    },
+    {
+      "id": "feat_underground",
+      "title": "L'invitation du vétéran",
+      "text": "Vieux Mic Lucien, légende de l'underground des années 90, t'invite sur son nouveau morceau. Il ne connaît pas les réseaux. Il t'a appelé sur un fixe.",
+      "location": "quartier",
+      "npc": "lucien",
+      "weight": 8,
+      "conditions": {
+        "min_stats": {
+          "credibilite": 40
+        }
+      },
+      "choices": [
+        {
+          "label": "Accepter, c'est un honneur",
+          "effects": {
+            "credibilite": 12,
+            "streams": 2,
+            "argent": -4
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Il t'a fait réenregistrer 17 fois. Le morceau est incroyable. Personne ne l'écoutera, et c'est ça qui est beau.",
+          "relations": {
+            "lucien": 12
+          }
+        },
+        {
+          "label": "Accepter s'il y a un clip",
+          "effects": {
+            "credibilite": 6,
+            "streams": 6,
+            "argent": -6
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Lucien a accepté, à condition que ce soit en noir et blanc, dans une cage d'escalier. Ça l'est."
+        },
+        {
+          "label": "Décliner, pas le temps",
+          "effects": {
+            "credibilite": -5
+          },
+          "consequence": "Lucien a dit en interview qu'il « ne connaît pas ce petit ». C'est gravé dans le marbre.",
+          "relations": {
+            "lucien": -10
+          }
+        }
+      ]
+    },
+    {
+      "id": "beef_debut",
+      "title": "Lil Sauge t'allume",
+      "text": "Lil Sauge t'a mentionné dans sa story : « les rappeurs de {ville}, c'est des intermittents du flow ». Ta mère t'a envoyé la capture.",
+      "location": "reseaux",
+      "npc": "lil_sauge",
+      "weight": 9,
+      "conditions": {
+        "min_year": 2,
+        "min_stats": {
+          "streams": 25
+        },
+        "excluded_flags": [
+          "en_clash"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Répondre par un diss track",
+          "effects": {
+            "streams": 10,
+            "credibilite": 6,
+            "mental": -8
+          },
+          "set_flags": [
+            "en_clash"
+          ],
+          "follow_up": "beef_escalade",
+          "consequence": "Sorti à 2h du mat. Trois minutes de rage, deux punchlines correctes, un million de vues.",
+          "relations": {
+            "lil_sauge": -10
+          }
+        },
+        {
+          "label": "L'ignorer avec classe",
+          "effects": {
+            "credibilite": -3,
+            "mental": 4
+          },
+          "consequence": "Le silence est d'or. Mais l'or, ça ne stream pas."
+        },
+        {
+          "label": "Liker sa story, ironiquement",
+          "effects": {
+            "streams": 4,
+            "mental": -2
+          },
+          "consequence": "Personne n'a compris si c'était ironique. Toi non plus."
+        }
+      ]
+    },
+    {
+      "id": "beef_escalade",
+      "title": "Ça dégénère",
+      "text": "Lil Sauge a répondu avec un morceau de 7 minutes. Il cite le prénom de ton chat. Les médias rap parlent du « clash de l'année ».",
+      "npc": "lil_sauge",
+      "weight": 0,
+      "conditions": {
+        "required_flags": [
+          "en_clash"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Envoyer la réponse finale",
+          "effects": {
+            "mental": -4
+          },
+          "clear_flags": [
+            "en_clash"
+          ],
+          "consequence": "Tu entres en cabine. Lil Sauge aussi, de son côté. Le public compte les points.",
+          "clash": {
+            "opponent": "lil_sauge",
+            "win": {
+              "effects": {
+                "credibilite": 10,
+                "streams": 10
+              },
+              "consequence": "Tu as gagné le clash selon 62 % d'un sondage Instagram. C'est officiel."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -6,
+                "mental": -8
+              },
+              "consequence": "Lil Sauge a eu le dernier mot. Tu vas le rejouer dans ta tête à 3h du matin pendant des mois."
+            }
+          }
+        },
+        {
+          "label": "Proposer la paix en live",
+          "effects": {
+            "credibilite": -6,
+            "streams": 6,
+            "mental": 6
+          },
+          "clear_flags": [
+            "en_clash"
+          ],
+          "consequence": "Vous vous êtes serré la main en live. 400 000 personnes déçues qu'il ne se passe rien."
+        },
+        {
+          "label": "Laisser traîner, ça fait parler",
+          "effects": {
+            "streams": 5,
+            "mental": -8
+          },
+          "consequence": "Tous les jours, quelqu'un te demande « et Lil Sauge alors ? ». Tous les jours."
+        }
+      ]
+    },
+    {
+      "id": "clash_mediation",
+      "title": "La médiation",
+      "text": "Un ami commun propose de vous réconcilier autour d'un feat. Titre de travail : « Frères de son ». Ça commence mal.",
+      "location": "quartier",
+      "npc": "lil_sauge",
+      "weight": 12,
+      "conditions": {
+        "required_flags": [
+          "en_clash"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Accepter le feat de la paix",
+          "effects": {
+            "streams": 12,
+            "credibilite": -4,
+            "mental": 6
+          },
+          "clear_flags": [
+            "en_clash"
+          ],
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Le morceau cartonne. Vous ne vous parlez toujours pas, mais vous partagez les royalties.",
+          "relations": {
+            "lil_sauge": 20
+          }
+        },
+        {
+          "label": "Refuser, la guerre continue",
+          "effects": {
+            "credibilite": 4,
+            "mental": -8
+          },
+          "consequence": "L'ami commun a choisi son camp. Ce n'est pas le tien."
+        }
+      ]
+    },
+    {
+      "id": "nouvelle_generation",
+      "title": "La nouvelle génération",
+      "text": "P'tit Wifi, 17 ans, a déclaré dans une interview que tu es « un rappeur de daron ». La vidéo fait 2 millions de vues.",
+      "location": "media",
+      "npc": "ptit_wifi",
+      "weight": 7,
+      "conditions": {
+        "min_year": 4,
+        "excluded_flags": [
+          "en_clash"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Clasher le petit",
+          "effects": {
+            "mental": -2
+          },
+          "consequence": "« Rappeur de daron » ? On va voir ça.",
+          "clash": {
+            "opponent": "ptit_wifi",
+            "win": {
+              "effects": {
+                "streams": 6,
+                "credibilite": -3
+              },
+              "consequence": "Tu as gagné contre un gamin de 17 ans. Victoire technique, défaite morale. P'tit Wifi a gagné 300 000 abonnés."
+            },
+            "lose": {
+              "effects": {
+                "streams": -4,
+                "credibilite": -8,
+                "mental": -6
+              },
+              "consequence": "Tu as perdu contre un gamin de 17 ans. Internet ne l'oubliera jamais. Toi non plus."
+            }
+          }
+        },
+        {
+          "label": "Le prendre sous ton aile",
+          "effects": {
+            "credibilite": 8,
+            "streams": 4
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Feat intergénérationnel. Tu passes pour un sage. En vrai, t'as juste peur de TikTok.",
+          "relations": {
+            "ptit_wifi": 15
+          }
+        },
+        {
+          "label": "Répondre « c'est qui ? »",
+          "effects": {
+            "credibilite": 4
+          },
+          "consequence": "La réponse la plus brutale de l'année. Trois mots."
+        }
+      ]
+    },
+    {
+      "id": "album_concept",
+      "title": "L'album concept",
+      "text": "Tu as une vision : un album entier racontant la vie d'une machine à laver dans une laverie de {ville}. Ton entourage te regarde en silence.",
+      "location": "chez_toi",
+      "weight": 10,
+      "unique": true,
+      "conditions": {
+        "min_year": 2
+      },
+      "choices": [
+        {
+          "label": "Aller au bout de la vision",
+          "effects": {
+            "credibilite": 16,
+            "streams": -8,
+            "argent": -8
+          },
+          "set_flags": [
+            "album_concept"
+          ],
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "Les critiques parlent de « chef-d'œuvre incompris ». Les chiffres retiennent surtout « incompris »."
+        },
+        {
+          "label": "Un album normal, avec un interlude sur la machine",
+          "effects": {
+            "streams": 8,
+            "credibilite": 3
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "La piste 7, c'est 4 minutes d'essorage. Les fans adorent."
+        },
+        {
+          "label": "Abandonner l'idée",
+          "effects": {
+            "mental": -4
+          },
+          "consequence": "La machine à laver ne sera jamais racontée. Elle continuera de tourner, seule."
+        }
+      ]
+    },
+    {
+      "id": "buzz_tiktok",
+      "title": "Le buzz TikTok",
+      "text": "12 secondes de ton morceau le plus triste sont devenues une danse virale. Des gens se filment en mimant une vague. Sur un morceau sur le deuil.",
+      "location": "reseaux",
+      "weight": 10,
+      "unique": true,
+      "conditions": {
+        "min_stats": {
+          "streams": 15
+        }
+      },
+      "choices": [
+        {
+          "label": "Surfer dessus et faire la danse",
+          "effects": {
+            "streams": 20,
+            "credibilite": -12
+          },
+          "set_flags": [
+            "buzz_tiktok"
+          ],
+          "consequence": "Ton couplet sur ton grand-père est désormais associé à une chorégraphie."
+        },
+        {
+          "label": "Laisser faire sans commenter",
+          "effects": {
+            "streams": 12,
+            "credibilite": -2
+          },
+          "set_flags": [
+            "buzz_tiktok"
+          ],
+          "consequence": "Les streams montent. Tu regardes les chiffres comme on regarde la mer."
+        },
+        {
+          "label": "Poster un message pour dénoncer la danse",
+          "effects": {
+            "credibilite": 6,
+            "streams": 3,
+            "mental": -3
+          },
+          "consequence": "Ton message est devenu viral aussi. Les gens dansent dessus."
+        }
+      ]
+    },
+    {
+      "id": "tournee",
+      "title": "La tournée",
+      "text": "Un tourneur propose 15 dates dans les petites salles de France. Hôtels deux étoiles, sandwichs triangle, van qui sent le pied.",
+      "location": "scene",
+      "weight": 9,
+      "conditions": {
+        "min_year": 2,
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "choices": [
+        {
+          "label": "Faire toute la tournée",
+          "effects": {
+            "argent": 14,
+            "credibilite": 8,
+            "streams": 5,
+            "mental": -14
+          },
+          "consequence": "Tu as vu la France depuis des aires d'autoroute. Le public était chaud. Ton dos, moins.",
+          "set_flags": [
+            "premier_concert",
+            "tournee_complete"
+          ]
+        },
+        {
+          "label": "Juste les grandes villes",
+          "effects": {
+            "argent": 7,
+            "streams": 3,
+            "mental": -5
+          },
+          "consequence": "Paris, Lyon, Marseille. Les autres villes l'ont pris personnellement.",
+          "set_flags": [
+            "premier_concert"
+          ]
+        },
+        {
+          "label": "Annuler, t'es pas prêt",
+          "effects": {
+            "credibilite": -6,
+            "mental": 5,
+            "argent": -3
+          },
+          "consequence": "Communiqué : « raisons personnelles ». Tout le monde sait que c'était la peur."
+        }
+      ]
+    },
+    {
+      "id": "festival",
+      "title": "Festival d'été",
+      "text": "Le festival Rap au Lac te propose une scène. Pas la grande. Celle d'à côté, coincée entre les food trucks et les toilettes sèches.",
+      "location": "scene",
+      "weight": 8,
+      "conditions": {
+        "min_year": 2,
+        "min_stats": {
+          "streams": 35
+        }
+      },
+      "choices": [
+        {
+          "label": "Tout donner à 15h en plein soleil",
+          "effects": {
+            "credibilite": 7,
+            "streams": 6,
+            "argent": 4,
+            "mental": -6
+          },
+          "consequence": "200 personnes, dont 150 faisaient la queue au food truck. Mais les 50 autres ont filmé.",
+          "set_flags": [
+            "premier_concert"
+          ]
+        },
+        {
+          "label": "Négocier un meilleur créneau",
+          "effects": {
+            "streams": 3,
+            "credibilite": 2,
+            "mental": -3
+          },
+          "consequence": "Tu passes à 2h du matin. Il reste 30 personnes, mais elles sont très investies.",
+          "set_flags": [
+            "premier_concert"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pause_deux_ans",
+      "title": "Tout lâcher ?",
+      "text": "Tu dors 4h par nuit, ton téléphone sonne en continu et tu as oublié ton propre refrain sur scène. Ton corps t'envoie des signaux. Pas des signaux d'écoute.",
+      "location": "chez_toi",
+      "weight": 14,
+      "unique": true,
+      "conditions": {
+        "min_year": 3,
+        "max_year": 8,
+        "max_stats": {
+          "mental": 45
+        }
+      },
+      "choices": [
+        {
+          "label": "Faire une pause de deux ans",
+          "effects": {
+            "mental": 40,
+            "streams": -18,
+            "argent": -12,
+            "credibilite": 4
+          },
+          "set_flags": [
+            "pause_faite"
+          ],
+          "skip_turns": 3,
+          "follow_up": "retour_apres_pause",
+          "consequence": "Deux ans plus tard. Tu as appris la poterie. Les algorithmes t'ont oublié, mais toi, tu t'es retrouvé."
+        },
+        {
+          "label": "Juste une semaine à la campagne",
+          "effects": {
+            "mental": 10,
+            "argent": -4
+          },
+          "consequence": "Une semaine sans wifi. Tu as écrit trois morceaux sur les vaches. Ils sont bons."
+        },
+        {
+          "label": "Serrer les dents",
+          "effects": {
+            "mental": -8,
+            "streams": 5
+          },
+          "consequence": "« Le grind ne s'arrête jamais. » Ton corps n'était pas d'accord, mais il n'avait pas le droit de vote."
+        }
+      ]
+    },
+    {
+      "id": "retour_apres_pause",
+      "title": "Le retour",
+      "text": "Après deux ans d'absence, tes fans réclament ton retour. Enfin, 400 d'entre eux. Mais ils font beaucoup de bruit.",
+      "weight": 0,
+      "unique": true,
+      "conditions": {
+        "required_flags": [
+          "pause_faite"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Album de retour, introspectif",
+          "effects": {
+            "credibilite": 10,
+            "streams": 10
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "« Le retour du roi », titre un blog. Un seul blog, mais c'est un début."
+        },
+        {
+          "label": "Single drill agressif",
+          "effects": {
+            "streams": 12,
+            "credibilite": -2,
+            "mental": -4
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "Tu as crié pendant trois minutes. Les gens ont compris que t'étais revenu."
+        }
+      ]
+    },
+    {
+      "id": "conflit_manager",
+      "title": "Le manager",
+      "text": "Karim Deux-Fois, ton manager, prend 40 % de tes revenus. Tu lui demandes pourquoi « Deux-Fois ». Il répond : « parce que je compte deux fois ».",
+      "location": "label",
+      "npc": "karim",
+      "weight": 8,
+      "conditions": {
+        "min_year": 2,
+        "excluded_flags": [
+          "sans_manager"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Le virer",
+          "effects": {
+            "argent": 8,
+            "mental": -6
+          },
+          "set_flags": [
+            "sans_manager"
+          ],
+          "consequence": "Il est parti avec le disque dur des prods et ton mot de passe Instagram. Tu as gardé l'agrafeuse.",
+          "relations": {
+            "karim": -30
+          }
+        },
+        {
+          "label": "Renégocier à 20 %",
+          "effects": {
+            "argent": 5,
+            "mental": -3,
+            "credibilite": 2
+          },
+          "consequence": "Il a accepté. Il prend maintenant 20 %, deux fois.",
+          "relations": {
+            "karim": -5
+          }
+        },
+        {
+          "label": "Ne rien dire, il connaît du monde",
+          "effects": {
+            "argent": -8,
+            "mental": 2
+          },
+          "consequence": "Il connaît du monde, oui. Surtout des gens à qui il doit de l'argent."
+        }
+      ]
+    },
+    {
+      "id": "morceau_leak",
+      "title": "Le leak",
+      "text": "Un morceau pas fini a fuité : la maquette où tu fredonnes « na na na » à la place du deuxième couplet. 300 000 écoutes en une nuit.",
+      "location": "reseaux",
+      "weight": 7,
+      "conditions": {
+        "min_year": 2,
+        "min_stats": {
+          "streams": 25
+        }
+      },
+      "choices": [
+        {
+          "label": "Le sortir officiellement tel quel",
+          "effects": {
+            "streams": 12,
+            "credibilite": -4
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "« na na na » est ton plus gros succès. Ce couplet n'a jamais été écrit. Il ne le sera jamais."
+        },
+        {
+          "label": "Accuser l'ingé son",
+          "effects": {
+            "credibilite": 3,
+            "mental": -4
+          },
+          "consequence": "Fred, du Bunker, nie tout. Il en parle quand même toutes les quatre minutes."
+        },
+        {
+          "label": "Faire une story en pleurant",
+          "effects": {
+            "streams": 5,
+            "mental": -8
+          },
+          "consequence": "La story a plus de vues que le morceau. On t'appelle « le rappeur qui pleure ». Il y a pire."
+        }
+      ]
+    },
+    {
+      "id": "placement_produit",
+      "title": "Le placement produit",
+      "text": "Krak Energy, boisson énergisante au goût de pile, veut te sponsoriser. Le contrat : boire une canette dans chaque clip. Le chèque est très convaincant.",
+      "location": "reseaux",
+      "weight": 8,
+      "conditions": {
+        "min_stats": {
+          "streams": 35
+        }
+      },
+      "choices": [
+        {
+          "label": "Signer et boire",
+          "effects": {
+            "argent": 20,
+            "credibilite": -10,
+            "mental": -4
+          },
+          "consequence": "Ton rythme cardiaque a doublé. Ton compte en banque aussi."
+        },
+        {
+          "label": "Négocier : juste en story",
+          "effects": {
+            "argent": 9,
+            "credibilite": -3
+          },
+          "consequence": "Une canette posée en arrière-plan. Subtil. Personne n'a été dupe."
+        },
+        {
+          "label": "Refuser",
+          "effects": {
+            "credibilite": 5
+          },
+          "consequence": "Le mois suivant, Lil Sauge boit du Krak dans tous ses clips. Sa peau a changé de couleur."
+        }
+      ]
+    },
+    {
+      "id": "interview_media",
+      "title": "Interview chez Rap Ou Pas",
+      "text": "Le média Rap Ou Pas t'invite. Le journaliste a préparé une seule question : « Est-ce que le rap, c'était mieux avant ? »",
+      "location": "media",
+      "weight": 8,
+      "conditions": {
+        "min_stats": {
+          "streams": 25
+        }
+      },
+      "choices": [
+        {
+          "label": "Répondre avec sincérité et nuance",
+          "effects": {
+            "credibilite": 6,
+            "mental": 3,
+            "streams": 2
+          },
+          "consequence": "45 minutes d'interview. L'extrait qui tourne : 4 secondes où tu te grattes le nez."
+        },
+        {
+          "label": "Lâcher une petite phrase polémique",
+          "effects": {
+            "streams": 10,
+            "credibilite": -3,
+            "mental": -4
+          },
+          "consequence": "« Le rap d'avant, c'était du slam avec des casquettes. » Trois jours de débat national."
+        },
+        {
+          "label": "Ne répondre que « on est focus »",
+          "effects": {
+            "credibilite": -2,
+            "mental": 4
+          },
+          "consequence": "Une heure de « on est focus ». Le journaliste a démissionné. Le média appelle ça « un moment de télé »."
+        }
+      ]
+    },
+    {
+      "id": "clip",
+      "title": "Le clip",
+      "text": "Ton prochain clip a besoin d'un concept. Le réalisateur, Mattéo Vision, a trois idées et une seule caméra.",
+      "location": "quartier",
+      "weight": 8,
+      "conditions": {
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "choices": [
+        {
+          "label": "Voiture de luxe louée et piscine",
+          "effects": {
+            "argent": -12,
+            "streams": 10,
+            "credibilite": -6
+          },
+          "consequence": "La voiture était louée à l'heure. Le clip dure 2 minutes 40. Tout était calculé."
+        },
+        {
+          "label": "Plan-séquence en bas de chez toi, à {ville}",
+          "effects": {
+            "credibilite": 8,
+            "streams": 5,
+            "argent": -3
+          },
+          "consequence": "Ton voisin du 3e passe dans le fond en peignoir. Il est devenu iconique."
+        },
+        {
+          "label": "Clip d'animation fait par un stagiaire",
+          "effects": {
+            "streams": 3,
+            "credibilite": 3,
+            "mental": 2
+          },
+          "consequence": "Le stagiaire a dessiné ton nez à l'envers. Personne n'ose lui dire."
+        }
+      ]
+    },
+    {
+      "id": "faux_streams_offre",
+      "title": "Des streams à vendre",
+      "text": "Un type sur une messagerie cryptée propose « 2 millions de streams 100 % organiques » pour 500 balles. Sa photo de profil : un lion à lunettes de soleil.",
+      "location": "reseaux",
+      "weight": 7,
+      "unique": true,
+      "conditions": {
+        "min_year": 2,
+        "max_stats": {
+          "streams": 50
+        }
+      },
+      "choices": [
+        {
+          "label": "Acheter le pack",
+          "effects": {
+            "streams": 15,
+            "argent": -8
+          },
+          "set_flags": [
+            "faux_streams"
+          ],
+          "consequence": "Ton morceau cartonne au Kazakhstan, à 4h du matin, sur 50 000 comptes créés le même jour."
+        },
+        {
+          "label": "Refuser",
+          "effects": {
+            "credibilite": 3
+          },
+          "consequence": "Le lion à lunettes t'a bloqué. C'est mieux comme ça."
+        }
+      ]
+    },
+    {
+      "id": "faux_streams_scandale",
+      "title": "Le scandale des streams",
+      "text": "Un compte d'enquête rap a analysé tes chiffres. La vidéo s'intitule « {nom} : le Kazakhstan dit merci ». Elle fait plus de vues que ta discographie.",
+      "location": "media",
+      "weight": 14,
+      "unique": true,
+      "conditions": {
+        "min_year": 3,
+        "required_flags": [
+          "faux_streams"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Tout avouer",
+          "effects": {
+            "credibilite": -8,
+            "streams": -10,
+            "mental": -6
+          },
+          "consequence": "Ton honnêteté a été saluée. Par trois personnes. Les autres ont surtout retenu « Kazakhstan »."
+        },
+        {
+          "label": "Nier en bloc",
+          "effects": {
+            "credibilite": -14,
+            "streams": -6,
+            "mental": -4
+          },
+          "consequence": "Tu as parlé d'une « grosse fanbase en Asie centrale ». Le mème durera dix ans."
+        }
+      ]
+    },
+    {
+      "id": "ghostwriting",
+      "title": "Plume fantôme",
+      "text": "Un candidat de télé-crochet veut que tu lui écrives un « morceau de rue ». Il vit à Saint-Glinglin-sur-Marne et n'a jamais pris le bus.",
+      "location": "studio",
+      "weight": 7,
+      "unique": true,
+      "conditions": {
+        "min_year": 2,
+        "min_stats": {
+          "streams": 25
+        }
+      },
+      "choices": [
+        {
+          "label": "Écrire et encaisser discrètement",
+          "effects": {
+            "argent": 18,
+            "credibilite": -3
+          },
+          "set_flags": [
+            "ghostwriter"
+          ],
+          "consequence": "Le morceau cartonne. En interview, il dit l'avoir écrit « avec ses tripes ». Tes tripes."
+        },
+        {
+          "label": "Refuser",
+          "effects": {
+            "credibilite": 4
+          },
+          "consequence": "Il a trouvé quelqu'un d'autre. Le morceau parle de « la street à Saint-Glinglin ». Flop. Bien fait."
+        }
+      ]
+    },
+    {
+      "id": "ghostwriter_revele",
+      "title": "Le secret éclate",
+      "text": "Une capture de tes mails a fuité : c'est toi qui as écrit le tube du candidat de télé-crochet. Internet hésite entre « traître » et « génie ».",
+      "location": "media",
+      "weight": 10,
+      "unique": true,
+      "conditions": {
+        "min_year": 3,
+        "required_flags": [
+          "ghostwriter"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Assumer fièrement",
+          "effects": {
+            "credibilite": 5,
+            "streams": 8,
+            "mental": -2
+          },
+          "consequence": "Quatre propositions d'écriture dans la journée. Et des insultes. Surtout des insultes."
+        },
+        {
+          "label": "Démentir",
+          "effects": {
+            "credibilite": -8,
+            "mental": -5
+          },
+          "clear_flags": [
+            "ghostwriter"
+          ],
+          "consequence": "Le candidat a confirmé que c'était toi. Il voulait juste être honnête. C'est bien le seul."
+        }
+      ]
+    },
+    {
+      "id": "petit_boulot",
+      "title": "Fin de mois difficile",
+      "text": "Ton compte est dans le rouge. Ton cousin a un plan : livreur de nuit, à vélo, dans {ville}.",
+      "location": "quartier",
+      "weight": 14,
+      "conditions": {
+        "max_stats": {
+          "argent": 30
+        }
+      },
+      "choices": [
+        {
+          "label": "Livrer la nuit, rapper le jour",
+          "effects": {
+            "argent": 12,
+            "mental": -7,
+            "credibilite": 2
+          },
+          "consequence": "Tu as écrit un couplet entier entre deux livraisons de sushis. C'est peut-être ton meilleur."
+        },
+        {
+          "label": "Vendre ta collection de sneakers",
+          "effects": {
+            "argent": 10,
+            "mental": -4
+          },
+          "consequence": "Les sneakers sont parties. Ta jeunesse avec."
+        },
+        {
+          "label": "Demander à tes parents",
+          "effects": {
+            "argent": 8,
+            "credibilite": -3,
+            "mental": -3
+          },
+          "consequence": "Ta mère a dit oui. Puis : « et sinon, tu cherches un vrai travail ? »"
+        }
+      ]
+    },
+    {
+      "id": "repas_famille",
+      "title": "Repas de famille",
+      "text": "Dimanche, repas de famille. Ton oncle, trois verres de rosé dans le nez, demande : « Alors, le rap, ça paye ? »",
+      "location": "chez_toi",
+      "weight": 6,
+      "choices": [
+        {
+          "label": "Sortir ton relevé de streams",
+          "effects": {
+            "mental": -3,
+            "credibilite": 1
+          },
+          "consequence": "Ton oncle a dit « ah ouais, c'est rien ». Il n'a pas tort. Silence total au dessert."
+        },
+        {
+          "label": "Faire un freestyle à table",
+          "effects": {
+            "streams": 3,
+            "mental": 4
+          },
+          "consequence": "Ta grand-mère a filmé. La vidéo tourne dans tous les groupes WhatsApp de la famille."
+        },
+        {
+          "label": "Dire que tu bosses « dans la com »",
+          "effects": {
+            "mental": 2,
+            "credibilite": -2
+          },
+          "consequence": "Techniquement vrai. Tu communiques. Parfois."
+        }
+      ]
+    },
+    {
+      "id": "therapie",
+      "title": "Ça ne va pas fort",
+      "text": "Trois semaines que tu ne réponds plus aux messages. Ton pote d'enfance te donne le numéro d'une psy. « Elle est bien, elle écoute pas de rap. »",
+      "location": "chez_toi",
+      "weight": 14,
+      "conditions": {
+        "max_stats": {
+          "mental": 35
+        }
+      },
+      "choices": [
+        {
+          "label": "Prendre rendez-vous",
+          "effects": {
+            "mental": 20,
+            "argent": -7
+          },
+          "set_flags": [
+            "therapie"
+          ],
+          "consequence": "Première séance : tu as parlé une heure de Lil Sauge. Elle a dit « intéressant ». Tu vas y retourner."
+        },
+        {
+          "label": "Tout mettre dans un album",
+          "effects": {
+            "mental": 2,
+            "credibilite": 10
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "Ton album le plus sombre. Le public adore. Ta mère, elle, s'inquiète."
+        },
+        {
+          "label": "Ça va passer",
+          "effects": {
+            "mental": -6,
+            "streams": 3
+          },
+          "consequence": "Tu as posté une photo souriante. 2 000 likes. Ça ne passe pas."
+        }
+      ]
+    },
+    {
+      "id": "atelier_quartier",
+      "title": "Atelier d'écriture",
+      "text": "La MJC de ton quartier te demande d'animer un atelier d'écriture pour des ados. Payé en sandwichs et en reconnaissance.",
+      "location": "quartier",
+      "weight": 7,
+      "choices": [
+        {
+          "label": "Accepter",
+          "effects": {
+            "credibilite": 6,
+            "mental": 8,
+            "argent": -2
+          },
+          "consequence": "Un gamin de 13 ans t'a mis une punchline en pleine figure. Tu as appris quelque chose."
+        },
+        {
+          "label": "Refuser, trop de taf",
+          "effects": {
+            "mental": -2
+          },
+          "consequence": "Ils ont fait l'atelier avec un influenceur. Ils écrivent des slogans de pub maintenant."
+        }
+      ]
+    },
+    {
+      "id": "ligne_vetements",
+      "title": "Ta ligne de vêtements",
+      "text": "Un partenaire propose de lancer ta marque : des hoodies noirs avec ton nom écrit en blanc. Révolutionnaire.",
+      "location": "label",
+      "weight": 7,
+      "unique": true,
+      "conditions": {
+        "min_stats": {
+          "streams": 40
+        }
+      },
+      "choices": [
+        {
+          "label": "Lancer la marque",
+          "effects": {
+            "argent": 15,
+            "credibilite": -4,
+            "mental": -4
+          },
+          "consequence": "Rupture de stock en 2h. Tu en avais fabriqué 40."
+        },
+        {
+          "label": "Collab avec une marque locale de {ville}",
+          "effects": {
+            "argent": 6,
+            "credibilite": 6
+          },
+          "consequence": "Le hoodie est moche. Mais il est éthique. Ça compte."
+        },
+        {
+          "label": "Refuser : « je suis pas un panneau publicitaire »",
+          "effects": {
+            "credibilite": 4,
+            "argent": -2
+          },
+          "consequence": "Tu l'as dit en portant un t-shirt avec un énorme logo de marque."
+        }
+      ]
+    },
+    {
+      "id": "tele_realite",
+      "title": "L'Île des Influs",
+      "text": "L'émission de télé-réalité « L'Île des Influs » veut un rappeur au casting. Trois mois sur une île, entre un coach en séduction et une ex-miss.",
+      "location": "media",
+      "weight": 6,
+      "unique": true,
+      "conditions": {
+        "min_stats": {
+          "streams": 30
+        },
+        "max_stats": {
+          "credibilite": 50
+        }
+      },
+      "choices": [
+        {
+          "label": "Signer",
+          "effects": {
+            "streams": 18,
+            "argent": 15,
+            "credibilite": -20,
+            "mental": -8
+          },
+          "consequence": "Tu as clashé un coach en développement personnel au bord d'une piscine. Ton père envisage de changer de nom."
+        },
+        {
+          "label": "Refuser",
+          "effects": {
+            "credibilite": 5
+          },
+          "consequence": "Ils ont pris un type qui imite Lil Sauge. Il est très bon, en fait."
+        }
+      ]
+    },
+    {
+      "id": "playlist_editoriale",
+      "title": "La playlist",
+      "text": "Ton morceau est entré dans une grosse playlist éditoriale, « Rap Bouillant ». Entre un remix de comptine et une pub pour un VPN.",
+      "location": "reseaux",
+      "weight": 9,
+      "conditions": {
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "choices": [
+        {
+          "label": "Le crier sur tous les toits",
+          "effects": {
+            "streams": 10,
+            "argent": 4,
+            "credibilite": -2
+          },
+          "consequence": "Tu as partagé la capture 14 fois. Le morceau est sorti de la playlist le lendemain."
+        },
+        {
+          "label": "Rester discret et bosser le suivant",
+          "effects": {
+            "streams": 6,
+            "argent": 3,
+            "credibilite": 3
+          },
+          "consequence": "Le morceau suivant est prêt. L'algorithme t'a à l'œil, dans le bon sens."
+        }
+      ]
+    },
+    {
+      "id": "laverie_quotidien",
+      "title": "Une journée à la laverie",
+      "text": "Tu passes au bureau de goslo records. Momo est en train de plier du linge qui n'est pas à lui. « Assieds-toi, on parle stratégie entre deux essorages. »",
+      "location": "label",
+      "npc": "momo",
+      "weight": 8,
+      "choices": [
+        {
+          "label": "Aider Momo à plier le linge",
+          "effects": {
+            "mental": 4
+          },
+          "relations": {
+            "momo": 6
+          },
+          "consequence": "Vous avez plié 40 t-shirts et refait tout le plan promo. Momo dit que c'est comme ça qu'on construit un empire."
+        },
+        {
+          "label": "Négocier un budget clip",
+          "requires": {
+            "skills": {
+              "business": 3
+            }
+          },
+          "effects": {
+            "argent": 8
+          },
+          "relations": {
+            "momo": -3
+          },
+          "consequence": "Momo a sorti une enveloppe de derrière la machine numéro 4. Tu ne poses pas de questions."
+        },
+        {
+          "label": "Éplucher les contrats du label",
+          "xp": {
+            "business": 30
+          },
+          "effects": {
+            "mental": -2
+          },
+          "consequence": "Tu as découvert qu'une clause parle de « droits sur les chaussettes perdues ». Tu as appris beaucoup."
+        }
+      ]
+    },
+    {
+      "id": "antenne_libre",
+      "title": "Antenne libre",
+      "text": "goslo radio ouvre l'antenne aux rappeurs du coin le mardi soir. Le standard sent le café froid, le micro sent la gloire.",
+      "location": "media",
+      "weight": 8,
+      "choices": [
+        {
+          "label": "Lâcher un couplet inédit",
+          "effects": {
+            "streams": 4,
+            "credibilite": 3
+          },
+          "xp": {
+            "flow": 15
+          },
+          "consequence": "Un auditeur a appelé pour dire « c'est chaud ». C'était ton cousin, mais quand même."
+        },
+        {
+          "label": "Squatter le standard et écouter",
+          "xp": {
+            "plume": 20
+          },
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Tu as entendu trois rappeurs rater le même flow. Tu sais maintenant ce qu'il ne faut pas faire."
+        }
+      ]
+    },
+    {
+      "id": "nuit_ecriture",
+      "title": "Nuit blanche",
+      "text": "Minuit. Une page blanche, un thé froid, et le voisin du dessus qui fait du vélo d'appartement. Le moment parfait pour écrire. Ou pour dormir.",
+      "location": "chez_toi",
+      "weight": 10,
+      "choices": [
+        {
+          "label": "Écrire jusqu'au lever du soleil",
+          "effects": {
+            "mental": -4,
+            "credibilite": 2
+          },
+          "xp": {
+            "plume": 35
+          },
+          "consequence": "Trois couplets, dont un vraiment bon. Le voisin a pédalé 60 km. Chacun son grind."
+        },
+        {
+          "label": "Dormir 14 heures",
+          "effects": {
+            "mental": 9
+          },
+          "consequence": "Tu t'es réveillé en paix avec le monde. Le monde, lui, ne t'a pas attendu."
+        },
+        {
+          "label": "Bosser ton flow sur des faces B",
+          "effects": {
+            "mental": -2
+          },
+          "xp": {
+            "flow": 30
+          },
+          "consequence": "Tu as rappé 200 fois le même couplet. Ta langue est fatiguée, ton flow est affûté."
+        }
+      ]
+    },
+    {
+      "id": "scroll_nocturne",
+      "title": "3h du matin",
+      "text": "Il est 3h. Tu scrolles. Un rappeur que tu ne connais pas a 4 millions de vues avec un morceau sur son chat. Tu ressens des choses.",
+      "location": "reseaux",
+      "weight": 8,
+      "choices": [
+        {
+          "label": "Poster un extrait de ton prochain son",
+          "effects": {
+            "streams": 5,
+            "mental": -2
+          },
+          "xp": {
+            "business": 15
+          },
+          "consequence": "180 likes, dont 40 bots. C'est un début."
+        },
+        {
+          "label": "Lire les commentaires sous tes sons",
+          "effects": {
+            "mental": -5,
+            "credibilite": 2
+          },
+          "xp": {
+            "plume": 20
+          },
+          "consequence": "« Pas mal mais il manque un truc. » Tu vas y penser pendant trois semaines."
+        },
+        {
+          "label": "Fermer l'appli et dormir",
+          "effects": {
+            "mental": 5
+          },
+          "consequence": "Décision la plus punk de ta carrière."
+        }
+      ]
+    },
+    {
+      "id": "plateau_partage",
+      "title": "Plateau partagé",
+      "text": "Une petite salle de {ville} organise une soirée avec cinq rappeurs locaux. Tu passes troisième, juste après un mec qui fait du beatbox avec un mégaphone.",
+      "location": "scene",
+      "weight": 8,
+      "choices": [
+        {
+          "label": "Tout donner",
+          "effects": {
+            "streams": 4,
+            "credibilite": 4,
+            "mental": -3,
+            "argent": 2
+          },
+          "xp": {
+            "scene": 20
+          },
+          "set_flags": [
+            "premier_concert"
+          ],
+          "consequence": "Le public était chaud. Le mégaphone aussi. Tu repars avec 30 abonnés et un acouphène."
+        },
+        {
+          "label": "Faire le minimum et réseauter au bar",
+          "effects": {
+            "argent": 2
+          },
+          "xp": {
+            "business": 20
+          },
+          "set_flags": [
+            "premier_concert"
+          ],
+          "consequence": "Tu as échangé 14 numéros. 13 sont des ingés son."
+        }
+      ]
+    },
+    {
+      "id": "baron_story",
+      "title": "Le Baron t'a vu",
+      "text": "Le Baron a posté ta photo en story avec un seul mot : « Qui ? ». 800 000 personnes l'ont vue. Ton téléphone n'arrête plus de vibrer.",
+      "location": "reseaux",
+      "npc": "le_baron",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_year": 2,
+        "min_stats": {
+          "streams": 40
+        }
+      },
+      "choices": [
+        {
+          "label": "Répondre en story : « Ton successeur. »",
+          "effects": {
+            "streams": 10,
+            "credibilite": 2,
+            "mental": -4
+          },
+          "relations": {
+            "le_baron": -12
+          },
+          "set_flags": [
+            "baron_contact"
+          ],
+          "consequence": "Le Baron a repartagé ta story avec un emoji clown. C'est la guerre. Et c'est la meilleure promo de ta vie."
+        },
+        {
+          "label": "Lui envoyer un DM respectueux",
+          "effects": {
+            "credibilite": -2
+          },
+          "relations": {
+            "le_baron": 12
+          },
+          "set_flags": [
+            "baron_contact"
+          ],
+          "consequence": "Il a répondu « respect petit ». Tu as fait une capture. Tu l'as encadrée."
+        },
+        {
+          "label": "Ne rien dire",
+          "effects": {
+            "credibilite": 3,
+            "mental": 2
+          },
+          "consequence": "Le silence, face au Baron, c'est déjà une réponse. Il n'aime pas ça."
+        }
+      ]
+    },
+    {
+      "id": "baron_debauche",
+      "title": "Le Domaine recrute",
+      "text": "Le Baron veut te signer sur son label, Le Domaine. Contrat en cuir, avance à six chiffres, et une clause qui t'interdit de clasher le patron.",
+      "location": "label",
+      "npc": "le_baron",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_year": 3,
+        "min_stats": {
+          "streams": 45
+        },
+        "required_flags": [
+          "baron_contact"
+        ],
+        "excluded_flags": [
+          "signe_baron"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Signer au Domaine",
+          "effects": {
+            "argent": 30,
+            "streams": 8,
+            "credibilite": -12
+          },
+          "relations": {
+            "le_baron": 20,
+            "momo": -30
+          },
+          "set_flags": [
+            "signe_baron",
+            "sous_contrat"
+          ],
+          "clear_flags": [
+            "signe_goslo",
+            "independant"
+          ],
+          "consequence": "Ta première séance photo se fait dans un château loué. Momo a appris la nouvelle en story."
+        },
+        {
+          "label": "Rester fidèle à goslo",
+          "effects": {
+            "credibilite": 8
+          },
+          "relations": {
+            "le_baron": -10,
+            "momo": 15
+          },
+          "consequence": "Le Baron a dit « tu le regretteras ». Momo a fait un gâteau. Il est raté. Il est parfait."
+        }
+      ]
+    },
+    {
+      "id": "baron_trone",
+      "title": "Le trône",
+      "text": "Le Baron poste une vidéo depuis son fauteuil en velours : « Personne ne me détrône. Surtout pas lui. » Il te tague. Tout le game attend ta réponse.",
+      "location": "reseaux",
+      "npc": "le_baron",
+      "weight": 20,
+      "unique": true,
+      "conditions": {
+        "min_year": 4,
+        "required_flags": [
+          "baron_contact"
+        ],
+        "excluded_flags": [
+          "signe_baron"
+        ],
+        "min_stats": {
+          "streams": 55,
+          "credibilite": 50
+        }
+      },
+      "choices": [
+        {
+          "label": "Le défier en clash",
+          "effects": {
+            "mental": -5
+          },
+          "clash": {
+            "opponent": "le_baron",
+            "win": {
+              "effects": {
+                "streams": 15,
+                "credibilite": 15
+              },
+              "consequence": "Le Baron a supprimé sa vidéo. Puis son compte. Puis il l'a recréé pour te féliciter, du bout des lèvres. Le trône vacille."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -10,
+                "mental": -10
+              },
+              "consequence": "Le Baron t'a démonté en quatre mesures et deux stories. Il a fait de ta défaite un t-shirt. Il se vend bien."
+            }
+          },
+          "consequence": "Tu as répondu « Rendez-vous ». Le game retient son souffle."
+        },
+        {
+          "label": "Pas maintenant, t'es pas prêt",
+          "effects": {
+            "credibilite": -6
+          },
+          "consequence": "Le Baron a posté « c'est bien ce que je pensais ». Il y aura d'autres occasions. Peut-être."
+        }
+      ]
+    },
+    {
+      "id": "baron_platine",
+      "title": "Concours de plaques",
+      "text": "Le Baron poste une photo de son mur couvert de disques de platine, avec ta tête en filigrane. Légende : « Compte les tiennes. Ah, pardon. »",
+      "location": "reseaux",
+      "npc": "le_baron",
+      "weight": 12,
+      "conditions": {
+        "required_flags": [
+          "baron_contact"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Poster tes plaques, même les petites",
+          "effects": {
+            "streams": 6,
+            "credibilite": -2
+          },
+          "relations": {
+            "le_baron": -5
+          },
+          "consequence": "Ton mur fait pitié à côté du sien. Mais les fans ont trouvé ça courageux."
+        },
+        {
+          "label": "« Les plaques, c'est du plastique »",
+          "effects": {
+            "credibilite": 7,
+            "mental": 2
+          },
+          "relations": {
+            "le_baron": -8
+          },
+          "consequence": "Phrase reprise par tous les puristes. Le Baron a répondu par un vocal de 6 minutes. Personne ne l'a écouté en entier."
+        }
+      ]
+    },
+    {
+      "id": "kolosse_octogone",
+      "title": "Le défi en live",
+      "text": "Kolosse annonce un défi en live contre toi : 100 pompes, puis un freestyle, puis « on verra ». L'affiche est faite sur Paint. 40 000 personnes ont déjà réservé leur soirée.",
+      "location": "reseaux",
+      "npc": "kolosse",
+      "weight": 11,
+      "unique": true,
+      "conditions": {
+        "min_year": 3,
+        "min_stats": {
+          "streams": 45
+        }
+      },
+      "choices": [
+        {
+          "label": "Accepter publiquement",
+          "effects": {
+            "streams": 12,
+            "mental": -6
+          },
+          "relations": {
+            "kolosse": -10
+          },
+          "set_flags": [
+            "octogone_annonce"
+          ],
+          "follow_up": "kolosse_octogone_annule",
+          "consequence": "Tout le quartier en parle. Tu t'entraînes aux pompes. Tu en fais 11. Tu dis que c'était 30."
+        },
+        {
+          "label": "« Moi je me défie avec des rimes »",
+          "effects": {
+            "credibilite": 6
+          },
+          "relations": {
+            "kolosse": -4
+          },
+          "consequence": "Les puristes applaudissent. Kolosse dit que tu as peur des pompes. Ce n'est pas faux."
+        }
+      ]
+    },
+    {
+      "id": "kolosse_octogone_annule",
+      "title": "Défi annulé",
+      "text": "Le soir du live, Kolosse lance le stream… et sa batterie meurt à 1 %. Communiqué officiel : « problème technique ». Tout le monde a compris. Personne n'est surpris.",
+      "npc": "kolosse",
+      "weight": 0,
+      "unique": true,
+      "choices": [
+        {
+          "label": "Régler ça au micro, en vrai",
+          "effects": {
+            "mental": -3
+          },
+          "clear_flags": [
+            "octogone_annonce"
+          ],
+          "clash": {
+            "opponent": "kolosse",
+            "win": {
+              "effects": {
+                "streams": 12,
+                "credibilite": 10
+              },
+              "consequence": "Pas de pompes, que des rimes. Kolosse parle déjà d'une « revanche en live ». Il faudra qu'il charge son téléphone."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -8,
+                "mental": -6
+              },
+              "consequence": "Kolosse a gagné à la voix grave. Il annonce une revanche en live. Elle n'aura jamais lieu non plus."
+            }
+          },
+          "consequence": "Tu as posté : « Pas de live ? Alors on se voit au micro. »"
+        },
+        {
+          "label": "Encaisser le dédommagement du sponsor",
+          "effects": {
+            "argent": 15,
+            "credibilite": -6
+          },
+          "clear_flags": [
+            "octogone_annonce"
+          ],
+          "consequence": "Une marque de boisson te paye pour un défi qui n'a pas eu lieu. Le rap dans toute sa splendeur."
+        }
+      ]
+    },
+    {
+      "id": "kolosse_feat",
+      "title": "Le feat explosif",
+      "text": "Kolosse t'appelle à 2h du matin : « J'ai une prod, elle est sale, il me faut un couplet. Maintenant. » On entend des ad-libs en fond.",
+      "location": "studio",
+      "npc": "kolosse",
+      "weight": 7,
+      "unique": true,
+      "conditions": {
+        "min_stats": {
+          "streams": 35
+        },
+        "min_relations": {
+          "kolosse": 45
+        }
+      },
+      "choices": [
+        {
+          "label": "Foncer au studio",
+          "effects": {
+            "streams": 10,
+            "mental": -4
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "relations": {
+            "kolosse": 12
+          },
+          "xp": {
+            "flow": 20
+          },
+          "set_flags": [
+            "feat_kolosse"
+          ],
+          "consequence": "Le morceau fait trembler les enceintes. Sa voix fait vibrer les vitres. Fred a dû recoller un panneau acoustique."
+        },
+        {
+          "label": "« Demain, frère »",
+          "relations": {
+            "kolosse": -8
+          },
+          "effects": {
+            "mental": 3
+          },
+          "consequence": "Demain, il avait déjà pris Lil Sauge. Ça s'entend."
+        }
+      ]
+    },
+    {
+      "id": "conteur_episode",
+      "title": "Épisode 1",
+      "text": "Le Conteur vient de sortir « Épisode 1 », un diss track de 9 minutes. Tu es cité à 4:12, entre une métaphore sur les pigeons et un règlement de comptes de 2006.",
+      "location": "media",
+      "npc": "le_conteur",
+      "weight": 9,
+      "unique": true,
+      "conditions": {
+        "min_year": 3,
+        "min_stats": {
+          "credibilite": 40
+        }
+      },
+      "choices": [
+        {
+          "label": "Répondre avec ton propre épisode",
+          "effects": {
+            "mental": -4
+          },
+          "clash": {
+            "opponent": "le_conteur",
+            "win": {
+              "effects": {
+                "credibilite": 12,
+                "streams": 8
+              },
+              "consequence": "Le Conteur a annoncé « Épisode 2 ». Il ne l'a jamais sorti. Les fans considèrent que la série est annulée."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -6,
+                "mental": -6
+              },
+              "consequence": "Épisode 2 est sorti. Puis 3. Puis 4. Tu es devenu un personnage secondaire de sa série."
+            }
+          },
+          "consequence": "Tu as appelé ton morceau « Saison 2 ». Le ton est donné."
+        },
+        {
+          "label": "Demander à Yanis ce qu'il en pense",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "yanis": 6
+          },
+          "consequence": "Yanis a fait 20 minutes d'analyse. Conclusion : « c'est un épisode de transition ». Tu te sens mieux."
+        },
+        {
+          "label": "En rire",
+          "effects": {
+            "credibilite": -3,
+            "mental": 4
+          },
+          "relations": {
+            "le_conteur": 5
+          },
+          "consequence": "Le Conteur a trouvé ça classe. Il t'a retiré de l'épisode 2."
+        }
+      ]
+    },
+    {
+      "id": "conteur_conseil",
+      "title": "La leçon du vétéran",
+      "text": "Le Conteur est assis sur un banc de ton quartier, carnet à la main. « Assieds-toi. Je vais te raconter comment j'ai écrit mon premier album. Ça va prendre un moment. »",
+      "location": "quartier",
+      "npc": "le_conteur",
+      "weight": 8,
+      "conditions": {
+        "min_relations": {
+          "le_conteur": 55
+        }
+      },
+      "choices": [
+        {
+          "label": "Écouter jusqu'au bout",
+          "effects": {
+            "credibilite": 4,
+            "mental": 2
+          },
+          "xp": {
+            "plume": 45
+          },
+          "relations": {
+            "le_conteur": 6
+          },
+          "consequence": "Ça a pris quatre heures. Tu as rempli un carnet entier. Il t'a dit « maintenant, oublie tout ». Tu n'as rien compris, et pourtant si."
+        },
+        {
+          "label": "Lui demander un feat",
+          "effects": {
+            "credibilite": 8,
+            "streams": 4
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "relations": {
+            "le_conteur": -3
+          },
+          "consequence": "Il a accepté, à condition d'avoir le dernier couplet. Il l'a écrit en 11 minutes. Il est meilleur que le tien."
+        }
+      ]
+    },
+    {
+      "id": "tenebre_session",
+      "title": "Session à 4h du matin",
+      "text": "Ténèbre t'invite en studio. 4h du matin, toutes les lumières éteintes, une seule bougie. Il n'a pas dit bonjour. Il a juste montré le micro.",
+      "location": "studio",
+      "npc": "tenebre",
+      "weight": 9,
+      "unique": true,
+      "conditions": {
+        "min_stats": {
+          "credibilite": 45
+        }
+      },
+      "choices": [
+        {
+          "label": "Poser dans le noir",
+          "effects": {
+            "credibilite": 10,
+            "mental": -6,
+            "streams": 6
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "relations": {
+            "tenebre": 15
+          },
+          "xp": {
+            "plume": 25
+          },
+          "set_flags": [
+            "feat_tenebre"
+          ],
+          "consequence": "Tu as écrit le couplet le plus triste de ta vie. Ténèbre a dit un seul mot : « Oui. » C'est le plus beau compliment de ta carrière."
+        },
+        {
+          "label": "Rallumer la lumière",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "tenebre": -10
+          },
+          "consequence": "Ténèbre est parti sans un mot. Il a laissé la bougie. Tu la gardes, par superstition."
+        }
+      ]
+    },
+    {
+      "id": "tenebre_silence",
+      "title": "Le silence de Ténèbre",
+      "text": "Ténèbre a sorti un album sans annonce, sans interview, sans réseaux. Il est numéro un. Un journaliste te demande ce que tu en penses, en direct.",
+      "location": "media",
+      "npc": "tenebre",
+      "weight": 6,
+      "conditions": {
+        "min_year": 3
+      },
+      "choices": [
+        {
+          "label": "En dire du bien, sincèrement",
+          "effects": {
+            "credibilite": 4
+          },
+          "relations": {
+            "tenebre": 8,
+            "yanis": 3
+          },
+          "consequence": "Ténèbre a liké l'extrait. Son premier like en trois ans. Les fans en parlent comme d'un événement."
+        },
+        {
+          "label": "« Le mystère, c'est du marketing »",
+          "effects": {
+            "streams": 6,
+            "credibilite": -4
+          },
+          "relations": {
+            "tenebre": -8
+          },
+          "consequence": "Ténèbre n'a pas répondu. Évidemment. Son silence a fait plus de bruit que ta phrase."
+        }
+      ]
+    },
+    {
+      "id": "orphee_collectif",
+      "title": "Le collectif d'Orphée",
+      "text": "Orphée et son collectif tiennent un open mic dans un bar de ton quartier. Ils rappent sur des prods jazz en citant des poètes morts. L'ambiance est intimidante.",
+      "location": "quartier",
+      "npc": "orphee",
+      "weight": 9,
+      "unique": true,
+      "conditions": {
+        "max_year": 6
+      },
+      "choices": [
+        {
+          "label": "Lâcher ton meilleur texte",
+          "requires": {
+            "skills": {
+              "plume": 3
+            }
+          },
+          "effects": {
+            "credibilite": 12,
+            "streams": 4
+          },
+          "relations": {
+            "orphee": 18
+          },
+          "consequence": "Orphée a hoché la tête lentement. Dans ce milieu, c'est l'équivalent d'un disque d'or."
+        },
+        {
+          "label": "Freestyler à l'instinct",
+          "effects": {
+            "credibilite": 2,
+            "mental": -3
+          },
+          "xp": {
+            "flow": 20
+          },
+          "relations": {
+            "orphee": 4
+          },
+          "consequence": "Tu as rimé « Baudelaire » avec « boulangère ». Le collectif a souri poliment."
+        },
+        {
+          "label": "Écouter depuis le fond",
+          "xp": {
+            "plume": 30
+          },
+          "consequence": "Tu as pris des notes. Beaucoup de notes. Tu as cherché « anaphore » en rentrant."
+        }
+      ]
+    },
+    {
+      "id": "orphee_disparition",
+      "title": "Le retour surprise",
+      "text": "Orphée avait disparu des réseaux depuis deux ans. Il revient cette nuit avec un album surprise. La même semaine que ta sortie. Évidemment.",
+      "location": "reseaux",
+      "npc": "orphee",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_year": 4,
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "choices": [
+        {
+          "label": "Décaler ta sortie",
+          "effects": {
+            "mental": -3,
+            "argent": -4
+          },
+          "relations": {
+            "orphee": 4
+          },
+          "consequence": "Sage décision. Pendant deux semaines, plus personne n'a écouté autre chose que lui."
+        },
+        {
+          "label": "Sortir quand même, frontalement",
+          "effects": {
+            "streams": -6,
+            "credibilite": 6
+          },
+          "relations": {
+            "orphee": -6
+          },
+          "consequence": "Tu as fini 2e, loin derrière. Mais ton courage a été salué par Yanis en direct."
+        },
+        {
+          "label": "Le féliciter en story",
+          "effects": {
+            "credibilite": 3,
+            "streams": 2
+          },
+          "relations": {
+            "orphee": 10
+          },
+          "consequence": "Il a repartagé. 400 000 de ses fans ont découvert ton nom. Il y a pire, comme défaite."
+        }
+      ]
+    },
+    {
+      "id": "orphee_tournee",
+      "title": "La première partie",
+      "text": "Orphée te propose d'ouvrir sa tournée des grandes salles. 6 000 personnes par soir qui ne te connaissent pas et qui attendent quelqu'un d'autre.",
+      "location": "scene",
+      "npc": "orphee",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_relations": {
+          "orphee": 60
+        }
+      },
+      "choices": [
+        {
+          "label": "Accepter et tout donner",
+          "effects": {
+            "streams": 12,
+            "credibilite": 6,
+            "mental": -8,
+            "argent": 6
+          },
+          "xp": {
+            "scene": 45
+          },
+          "relations": {
+            "orphee": 8
+          },
+          "set_flags": [
+            "premiere_partie_orphee"
+          ],
+          "consequence": "Le premier soir, personne ne t'écoutait. Le dixième, ils connaissaient ton refrain."
+        },
+        {
+          "label": "Décliner, tu veux ta propre tournée",
+          "effects": {
+            "credibilite": 3
+          },
+          "relations": {
+            "orphee": -5
+          },
+          "consequence": "Ambitieux. Ta propre tournée compte pour l'instant trois dates, dont un PMU."
+        }
+      ]
+    },
+    {
+      "id": "scalpel_feat",
+      "title": "Le feat chirurgical",
+      "text": "Scalpel accepte un feat. Condition : un couplet de 32 mesures, sans une rime faible. Il relira le tien avec un stylo rouge. Il a déjà sorti le stylo.",
+      "location": "studio",
+      "npc": "scalpel",
+      "weight": 9,
+      "unique": true,
+      "conditions": {
+        "min_year": 3,
+        "min_stats": {
+          "credibilite": 45
+        }
+      },
+      "choices": [
+        {
+          "label": "Tenir la cadence",
+          "requires": {
+            "skills": {
+              "plume": 5
+            }
+          },
+          "effects": {
+            "credibilite": 15,
+            "streams": 8
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "relations": {
+            "scalpel": 15
+          },
+          "set_flags": [
+            "feat_scalpel"
+          ],
+          "consequence": "Le stylo rouge n'a pas servi. Scalpel a dit « propre ». Les forums débattent pour savoir qui a gagné le morceau."
+        },
+        {
+          "label": "Essayer quand même",
+          "effects": {
+            "credibilite": -6,
+            "mental": -5,
+            "streams": 5
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "xp": {
+            "plume": 40
+          },
+          "consequence": "Il t'a découpé sur ton propre morceau. Poliment. Mais tu as plus appris en une session qu'en un an."
+        },
+        {
+          "label": "Laisser tomber",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "scalpel": -4
+          },
+          "consequence": "Scalpel a dit « dommage ». Ce n'était pas une insulte. C'était pire."
+        }
+      ]
+    },
+    {
+      "id": "scalpel_pique",
+      "title": "Une rime pour toi",
+      "text": "Dans son nouveau morceau, Scalpel glisse une rime sur « ceux qui rappent comme on remplit un formulaire ». Il ne te nomme pas. Il n'en a pas besoin.",
+      "location": "media",
+      "npc": "scalpel",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_year": 4,
+        "min_stats": {
+          "streams": 50
+        },
+        "excluded_flags": [
+          "feat_scalpel"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Répondre, rime contre rime",
+          "effects": {
+            "mental": -5
+          },
+          "clash": {
+            "opponent": "scalpel",
+            "win": {
+              "effects": {
+                "credibilite": 18,
+                "streams": 10
+              },
+              "consequence": "Tu as battu Scalpel sur son terrain. Il t'a envoyé un message : « Belle incision. » Tu l'as fait tatouer."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -8,
+                "mental": -8
+              },
+              "consequence": "Scalpel a répondu en huit mesures. Calmement. Chirurgicalement. Tu as encore mal."
+            }
+          },
+          "consequence": "Tu as répondu. Le game sort le pop-corn."
+        },
+        {
+          "label": "Le prendre comme une leçon",
+          "xp": {
+            "plume": 40
+          },
+          "effects": {
+            "mental": -2
+          },
+          "consequence": "Tu as réécrit ton dernier couplet trois fois. Il est meilleur. Merci, Scalpel. Pas à voix haute."
+        },
+        {
+          "label": "Faire semblant de ne pas avoir entendu",
+          "effects": {
+            "credibilite": -4
+          },
+          "consequence": "Tout le monde sait que tu as entendu. Les commentaires te le rappellent."
+        }
+      ]
+    },
+    {
+      "id": "debrief_invitation",
+      "title": "Invité au Débrief",
+      "text": "Yanis Tracklist t'invite dans « Le Débrief ». Il a réécouté toute ta discographie, annoté tes textes et préparé 47 questions. Dont une sur un morceau que tu as supprimé en 2019.",
+      "location": "media",
+      "npc": "yanis",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_stats": {
+          "streams": 30
+        }
+      },
+      "choices": [
+        {
+          "label": "Parler technique, rimes et références",
+          "requires": {
+            "skills": {
+              "plume": 3
+            }
+          },
+          "effects": {
+            "credibilite": 10,
+            "streams": 4
+          },
+          "relations": {
+            "yanis": 18
+          },
+          "set_flags": [
+            "debrief_invite"
+          ],
+          "consequence": "Yanis a dit « enfin quelqu'un qui parle de ses textes ». L'épisode est classé dans ses favoris de l'année."
+        },
+        {
+          "label": "Faire le show, sortir des anecdotes",
+          "effects": {
+            "streams": 8,
+            "credibilite": 2
+          },
+          "relations": {
+            "yanis": 8
+          },
+          "set_flags": [
+            "debrief_invite"
+          ],
+          "consequence": "Ton anecdote sur Fred et son disque d'or de 2009 devient virale. Fred est ravi."
+        },
+        {
+          "label": "Répondre « on est focus » à tout",
+          "effects": {
+            "credibilite": -5,
+            "mental": 3
+          },
+          "relations": {
+            "yanis": -12
+          },
+          "set_flags": [
+            "debrief_invite"
+          ],
+          "consequence": "Yanis a tenu 47 minutes. Puis il a dit « bon ». Le mot le plus dur de l'histoire du podcast."
+        }
+      ]
+    },
+    {
+      "id": "classement_annuel",
+      "title": "Le top de fin d'année",
+      "text": "Yanis Tracklist publie son classement des albums de l'année. Tu es 14e. Juste derrière Lil Sauge. Le game entier te tague.",
+      "location": "media",
+      "npc": "yanis",
+      "weight": 9,
+      "conditions": {
+        "min_year": 2,
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "choices": [
+        {
+          "label": "Contester en story",
+          "effects": {
+            "streams": 6,
+            "credibilite": -3
+          },
+          "relations": {
+            "yanis": -12
+          },
+          "consequence": "Yanis a répondu avec un tableau Excel de 14 colonnes. Tu as perdu le débat avec des données."
+        },
+        {
+          "label": "Lui envoyer ton album dédicacé",
+          "effects": {
+            "credibilite": 2
+          },
+          "relations": {
+            "yanis": 10
+          },
+          "consequence": "Il l'a réécouté en live. Il a dit « je l'ai peut-être sous-coté ». Tu es remonté à la 11e place."
+        },
+        {
+          "label": "Faire de la 14e place ton identité",
+          "effects": {
+            "credibilite": 6,
+            "streams": 3
+          },
+          "relations": {
+            "yanis": 5
+          },
+          "consequence": "Ton prochain morceau s'appelle « 14e ». Yanis l'a classé premier de la semaine. L'ironie est totale."
+        }
+      ]
+    },
+    {
+      "id": "yanis_reecoute",
+      "title": "Réécoute commentée",
+      "text": "Yanis propose une réécoute commentée de tes projets, morceau par morceau. Il a remarqué des choses que toi-même tu n'avais pas vues.",
+      "location": "media",
+      "npc": "yanis",
+      "weight": 8,
+      "conditions": {
+        "min_relations": {
+          "yanis": 60
+        },
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "choices": [
+        {
+          "label": "Participer et tout expliquer",
+          "effects": {
+            "credibilite": 8,
+            "mental": 2
+          },
+          "xp": {
+            "plume": 30
+          },
+          "relations": {
+            "yanis": 6
+          },
+          "consequence": "Trois heures de direct. Il t'a demandé pourquoi tu avais respiré à 2:14. Tu ne savais pas. Maintenant, si."
+        },
+        {
+          "label": "Lui demander les points faibles de tes rivaux",
+          "effects": {
+            "mental": 2
+          },
+          "xp": {
+            "business": 20
+          },
+          "relations": {
+            "yanis": 3
+          },
+          "consequence": "Yanis a souri. « Hors antenne, alors. » Tu repars avec un carnet plein d'informations très précieuses."
+        }
+      ]
+    },
+    {
+      "id": "accusation_ghostwriter",
+      "title": "La rumeur",
+      "text": "Un compte anonyme affirme que tu as un ghostwriter. Preuve avancée : « Il est trop bon depuis six mois, c'est louche. »",
+      "location": "reseaux",
+      "weight": 7,
+      "unique": true,
+      "conditions": {
+        "min_stats": {
+          "streams": 45
+        }
+      },
+      "choices": [
+        {
+          "label": "Freestyle en live, sans texte, une heure",
+          "requires": {
+            "skills": {
+              "flow": 4
+            }
+          },
+          "effects": {
+            "credibilite": 12,
+            "streams": 8,
+            "mental": -4
+          },
+          "consequence": "Une heure sans t'arrêter. Le compte anonyme a supprimé son post. Puis il s'est abonné."
+        },
+        {
+          "label": "Montrer tes brouillons raturés",
+          "effects": {
+            "credibilite": 5,
+            "mental": -2
+          },
+          "consequence": "Tes brouillons sont illisibles. Mais l'effort a été apprécié. Et ton écriture fait peur."
+        },
+        {
+          "label": "Ignorer",
+          "effects": {
+            "credibilite": -6
+          },
+          "consequence": "La rumeur a grossi. Dans certains forums, ton ghostwriter a maintenant un nom et une adresse."
+        }
+      ]
+    },
+    {
+      "id": "grande_salle",
+      "title": "La grande salle",
+      "text": "On te propose ta propre date dans une salle de 5 000 places. Si elle n'est pas pleine, tout le monde le verra. Les photos de gradins vides ne pardonnent pas.",
+      "location": "scene",
+      "weight": 10,
+      "unique": true,
+      "conditions": {
+        "min_year": 4,
+        "min_stats": {
+          "streams": 50
+        },
+        "min_skills": {
+          "scene": 3
+        }
+      },
+      "choices": [
+        {
+          "label": "Tenter le coup",
+          "requires": {
+            "skills": {
+              "scene": 4
+            }
+          },
+          "effects": {
+            "streams": 12,
+            "argent": 15,
+            "credibilite": 8,
+            "mental": -6
+          },
+          "set_flags": [
+            "grande_salle"
+          ],
+          "consequence": "Complet en une semaine. Tu as pleuré sur scène pendant le dernier morceau. La vidéo fait 5 millions de vues."
+        },
+        {
+          "label": "Prendre une salle plus petite",
+          "effects": {
+            "argent": 6,
+            "credibilite": 3
+          },
+          "xp": {
+            "scene": 30
+          },
+          "consequence": "1 200 places, complet. Petit pas, mais pas de photo de gradins vides."
+        }
+      ]
+    },
+    {
+      "id": "kliks_fournisseur",
+      "title": "Le fournisseur de Big Kliks",
+      "location": "reseaux",
+      "npc": "big_kliks",
+      "weight": 9,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Big Kliks t'écrit : « Frère, j'ai un fournisseur. Un million de streams pour 200 balles. Ils viennent tous du même village, mais c'est des vrais gens. Enfin, des vrais téléphones. »",
+      "choices": [
+        {
+          "label": "Acheter le pack « Starter »",
+          "effects": {
+            "streams": 15,
+            "argent": -8
+          },
+          "set_flags": [
+            "faux_streams"
+          ],
+          "relations": {
+            "big_kliks": 10
+          },
+          "consequence": "Ton morceau cartonne dans un village de 300 habitants. Chacun l'a écouté 3 333 fois. Ils doivent l'adorer."
+        },
+        {
+          "label": "Refuser poliment",
+          "effects": {
+            "credibilite": 4
+          },
+          "consequence": "Big Kliks répond par un émoji pouce. Il a été liké 50 000 fois en une seconde. Toujours le même village."
+        },
+        {
+          "label": "Le signaler aux plateformes",
+          "effects": {
+            "credibilite": 6
+          },
+          "relations": {
+            "big_kliks": -15
+          },
+          "consequence": "Big Kliks a perdu 3,9 millions d'abonnés en une nuit. Il lui en reste 12. Ce sont des vrais. Il les remercie un par un."
+        }
+      ]
+    },
+    {
+      "id": "kliks_defi",
+      "title": "Clash « pour les vues »",
+      "location": "quartier",
+      "npc": "big_kliks",
+      "weight": 7,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Big Kliks veut un clash. Pas pour le respect : « pour les vues ». Il a déjà réservé deux millions de spectateurs. Livrés demain.",
+      "choices": [
+        {
+          "label": "Accepter",
+          "clash": {
+            "opponent": "big_kliks",
+            "win": {
+              "effects": {
+                "credibilite": 8,
+                "streams": 6
+              },
+              "consequence": "Big Kliks a perdu devant deux millions de spectateurs. 1 999 988 n'existaient pas. Les douze autres ont adoré."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -4
+              },
+              "consequence": "Big Kliks a gagné. Le vote du public est venu du même village. À 100 %."
+            }
+          },
+          "consequence": "Le live est lancé. Le compteur affiche 2 000 000 de spectateurs et 3 commentaires."
+        },
+        {
+          "label": "« Reviens quand t'auras de vrais fans »",
+          "effects": {
+            "credibilite": 5
+          },
+          "relations": {
+            "big_kliks": -5
+          },
+          "consequence": "Il est revenu une heure plus tard avec un screenshot de 4 millions de fans. Le screenshot était flou."
+        }
+      ]
+    },
+    {
+      "id": "croon_session",
+      "title": "Session autotune",
+      "location": "studio",
+      "npc": "lil_croon",
+      "weight": 8,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Lil Croon t'invite en session. Il a mis l'autotune sur sa voix, sur la prod, et sur son répondeur. « Viens-e-e-e, on fait un hi-i-it. »",
+      "choices": [
+        {
+          "label": "Rapper sur sa prod",
+          "effects": {
+            "streams": 8,
+            "mental": 3
+          },
+          "xp": {
+            "flow": 25
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "relations": {
+            "lil_croon": 10
+          },
+          "consequence": "Le morceau est ni du rap, ni du RnB. Les plateformes l'ont classé dans « Ambiance spa ». Il cartonne dans les salons de massage."
+        },
+        {
+          "label": "Lui demander de couper l'autotune",
+          "effects": {
+            "credibilite": 4
+          },
+          "relations": {
+            "lil_croon": -8
+          },
+          "consequence": "Il a coupé l'autotune. Long silence. Puis il l'a rallumé, en larmes. « Je ne sais plus qui je suis-i-i. »"
+        },
+        {
+          "label": "Chanter un refrain toi aussi",
+          "effects": {
+            "streams": 5,
+            "credibilite": -4
+          },
+          "xp": {
+            "scene": 20
+          },
+          "consequence": "Tu as chanté un refrain. Ta mère a pleuré de joie. Ton grand frère, de honte."
+        }
+      ]
+    },
+    {
+      "id": "gestuel_conversation",
+      "title": "Une conversation avec Gestuel",
+      "location": "quartier",
+      "npc": "gestuel",
+      "weight": 8,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Gestuel te fait un geste. Puis un autre, plus compliqué, qui implique ses deux coudes. Il attend une réponse.",
+      "choices": [
+        {
+          "label": "Répondre par un geste",
+          "effects": {
+            "mental": 4
+          },
+          "xp": {
+            "scene": 20
+          },
+          "relations": {
+            "gestuel": 10
+          },
+          "consequence": "Dix minutes de conversation silencieuse. Tu n'as rien compris. C'était magnifique."
+        },
+        {
+          "label": "Lui répondre à voix haute",
+          "relations": {
+            "gestuel": -3
+          },
+          "consequence": "Il te regarde comme si tu venais d'insulter sa famille. Peut-être que c'est le cas, dans sa langue."
+        },
+        {
+          "label": "Lui proposer un feat",
+          "effects": {
+            "streams": 8
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "requires": {
+            "relations": {
+              "gestuel": 60
+            }
+          },
+          "consequence": "Il a posé un couplet entièrement en gestes. Le clip fait deux millions de vues. Personne ne sait ce qu'il dit. Tout le monde est d'accord."
+        }
+      ]
+    },
+    {
+      "id": "chroniqueur_beurre",
+      "title": "Le rap à la télé",
+      "location": "media",
+      "npc": "delamorale",
+      "weight": 7,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "À la télé, Jean-Hubert Delamorale accuse le rap d'être responsable de la hausse du prix du beurre, du réchauffement climatique et de la fermeture de sa boulangerie préférée.",
+      "choices": [
+        {
+          "label": "Répondre par un morceau de 2 minutes",
+          "effects": {
+            "streams": 8,
+            "credibilite": 4
+          },
+          "xp": {
+            "plume": 25
+          },
+          "relations": {
+            "delamorale": -5
+          },
+          "consequence": "« Le prix du beurre », ton nouveau morceau. Delamorale l'a cité à l'antenne pour le critiquer. Merci pour la promo."
+        },
+        {
+          "label": "L'inviter à écouter ta mixtape",
+          "relations": {
+            "delamorale": 5
+          },
+          "consequence": "Il a écouté 14 secondes. Il a écrit une chronique de 6 pages sur ces 14 secondes."
+        },
+        {
+          "label": "Éteindre la télé",
+          "effects": {
+            "mental": 5
+          },
+          "consequence": "La meilleure réponse au Grand Débat reste souvent la télécommande."
+        }
+      ]
+    },
+    {
+      "id": "tentation_miami",
+      "title": "Exil immédiat à Miami ?",
+      "location": "chez_toi",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_stats": {
+          "argent": 70
+        }
+      },
+      "text": "Ton compte en banque a franchi un cap. Sur ton téléphone, une pub : « Miami. Soleil. Personne ne vous connaît. » Tous les rappeurs riches finissent par y aller. C'est une règle.",
+      "choices": [
+        {
+          "label": "Exil immédiat à Miami",
+          "effects": {
+            "argent": -20,
+            "mental": 8,
+            "streams": -6
+          },
+          "consequence": "Tu as tenu 48 heures. Il fait 38°, personne ne comprend tes punchlines, et ta mère a appelé 14 fois. Retour au bloc, bronzé et ruiné."
+        },
+        {
+          "label": "Rester au quartier",
+          "effects": {
+            "credibilite": 5
+          },
+          "consequence": "Le quartier respecte. Lucien a dit « c'est bien, petit ». Venant de lui, c'est une médaille."
+        }
+      ]
+    },
+    {
+      "id": "premier_autographe",
+      "title": "Le premier autographe",
+      "location": "quartier",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 3
+      },
+      "text": "Un ado t'arrête dans la rue : « T'es pas le gars de la radio ? Tu peux me signer un truc ? » Il te tend un ticket de métro, un bras, et un paquet de chips.",
+      "choices": [
+        {
+          "label": "Signer le ticket de métro",
+          "effects": {
+            "credibilite": 3,
+            "mental": 4
+          },
+          "consequence": "Il l'a plastifié. Il l'a montré à toute sa classe. Ton premier fan est en 4e B."
+        },
+        {
+          "label": "Signer le bras",
+          "effects": {
+            "streams": 4
+          },
+          "consequence": "Il a refusé de se laver le bras pendant une semaine. Sa mère t'en veut personnellement."
+        },
+        {
+          "label": "Signer les chips",
+          "effects": {
+            "mental": 6
+          },
+          "consequence": "Il les a mangées. Puis il a regretté. Puis il a encadré le paquet vide."
+        }
+      ]
+    },
+    {
+      "id": "bobine_vitesse",
+      "title": "DJ Bobine accélère",
+      "location": "studio",
+      "npc": "dj_bobine",
+      "weight": 8,
+      "conditions": {
+        "min_chapter": 3
+      },
+      "text": "DJ Bobine passe ta prod pendant une session. 2 %, puis 4 %, puis 9 % trop vite. « C'est pour l'énergie. » Tu rappes comme une mitraillette sous caféine.",
+      "choices": [
+        {
+          "label": "Suivre le rythme coûte que coûte",
+          "effects": {
+            "mental": -3
+          },
+          "xp": {
+            "flow": 35
+          },
+          "relations": {
+            "dj_bobine": 5
+          },
+          "consequence": "Tu as tenu à 109 %. Ton flow n'a jamais été aussi rapide. Ta langue demande un arrêt maladie."
+        },
+        {
+          "label": "Débrancher sa platine",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "dj_bobine": -6
+          },
+          "consequence": "Il a continué à scratcher dans le vide pendant deux minutes. Par fierté."
+        },
+        {
+          "label": "Enregistrer la version accélérée et la sortir",
+          "effects": {
+            "streams": 8,
+            "credibilite": -2
+          },
+          "counters": {
+            "projets": 1
+          },
+          "consequence": "« Version speed up ». Elle cartonne sur les réseaux. Tu n'as rien fait. C'est le métier."
+        }
+      ]
+    },
+    {
+      "id": "gege_conseil",
+      "title": "Le conseil de Gégé",
+      "location": "scene",
+      "npc": "gege",
+      "weight": 12,
+      "conditions": {
+        "min_chapter": 3,
+        "required_flags": [
+          "concert_reussi"
+        ]
+      },
+      "text": "Gégé range des câbles au Transfo. Il ne te regarde pas, mais il parle : « Tu veux un conseil ? » Ce n'est pas vraiment une question.",
+      "choices": [
+        {
+          "label": "L'écouter",
+          "xp": {
+            "scene": 40
+          },
+          "relations": {
+            "gege": 6
+          },
+          "consequence": "« Ne touche jamais à ton retour. Bois de l'eau. Et salue le régisseur. » Il a enroulé un câble parfait. C'était émouvant."
+        },
+        {
+          "label": "Lui demander de sourire pour une photo",
+          "relations": {
+            "gege": -4
+          },
+          "consequence": "Il a fixé l'objectif sans bouger. La photo est devenue un mème : « Quand le régisseur a vu ta setlist »."
+        }
+      ]
+    },
+    {
+      "id": "merch_lessive",
+      "title": "Le merch goslo",
+      "location": "label",
+      "npc": "momo",
+      "weight": 7,
+      "conditions": {
+        "min_chapter": 3
+      },
+      "text": "Momo a imprimé 200 t-shirts goslo records. Ils sentent la lessive, ont été lavés trois fois avant d'être vendus, et le logo est à l'envers.",
+      "choices": [
+        {
+          "label": "Les vendre comme « édition limitée »",
+          "effects": {
+            "argent": 10,
+            "credibilite": -2
+          },
+          "relations": {
+            "momo": 6
+          },
+          "consequence": "« Logo inversé, édition collector. » Sold out. Momo veut tout imprimer à l'envers désormais."
+        },
+        {
+          "label": "Les porter toi-même en concert",
+          "effects": {
+            "credibilite": 4
+          },
+          "relations": {
+            "momo": 10
+          },
+          "consequence": "Les fans pensent que c'est un choix artistique. Personne n'ose dire que c'est une erreur."
+        },
+        {
+          "label": "Les offrir au quartier",
+          "effects": {
+            "mental": 6,
+            "argent": -3
+          },
+          "consequence": "Tout le quartier porte ton t-shirt. Lucien aussi. Il le porte à l'envers, pour que le logo soit à l'endroit."
+        }
+      ]
+    },
+    {
+      "id": "version_acceleree",
+      "title": "La version accélérée",
+      "location": "reseaux",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "text": "Quelqu'un a mis ton son en version accélérée. Ta voix ressemble à celle d'un hamster sous caféine. Elle fait trois fois plus de streams que l'originale.",
+      "choices": [
+        {
+          "label": "Sortir officiellement la version hamster",
+          "effects": {
+            "streams": 7,
+            "credibilite": -3
+          },
+          "consequence": "La version hamster entre dans le top. Ta vraie voix, elle, entre en dépression."
+        },
+        {
+          "label": "Sortir une version ralentie, pour l'équilibre",
+          "effects": {
+            "streams": 3,
+            "mental": 3
+          },
+          "consequence": "Ta voix ressemble maintenant à celle d'un ours qui fait sa déclaration d'impôts. Les fans adorent. Personne ne sait pourquoi."
+        },
+        {
+          "label": "Ignorer, par dignité",
+          "effects": {
+            "credibilite": 3
+          },
+          "consequence": "Tu ignores. Le hamster, lui, continue sa carrière sans toi."
+        }
+      ]
+    },
+    {
+      "id": "tatouage_faute",
+      "title": "Le tatouage",
+      "location": "quartier",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "text": "Un fan te montre son avant-bras : ta punchline, tatouée en lettres gothiques. Avec une faute d'orthographe. Il est très fier. Le tatoueur aussi.",
+      "choices": [
+        {
+          "label": "Lui dire que c'est parfait",
+          "effects": {
+            "mental": 4,
+            "credibilite": 1
+          },
+          "consequence": "Il pleure de joie. Tu gardes le secret. Tu viens peut-être d'inventer une nouvelle orthographe."
+        },
+        {
+          "label": "Lui signaler la faute",
+          "effects": {
+            "credibilite": 2,
+            "mental": -2
+          },
+          "consequence": "Il te regarde longtemps. « C'est voulu. » Ce n'était pas voulu."
+        },
+        {
+          "label": "Changer officiellement les paroles",
+          "effects": {
+            "streams": 4
+          },
+          "consequence": "Les paroles officielles ont désormais la faute. Le fan est cité dans les crédits. Sa mère encadre la pochette."
+        }
+      ]
+    },
+    {
+      "id": "playlist_vaisselle",
+      "title": "La playlist",
+      "location": "reseaux",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "text": "Une plateforme t'ajoute à une playlist officielle : « Chill pour faire la vaisselle ». 4 millions d'abonnés. Ton son le plus énervé est coincé entre une flûte de pan et un bruit de pluie.",
+      "choices": [
+        {
+          "label": "Remercier la plateforme",
+          "effects": {
+            "streams": 6
+          },
+          "consequence": "Des milliers de gens font leur vaisselle sur ta rage. Les assiettes n'ont jamais été aussi propres."
+        },
+        {
+          "label": "Exiger une playlist plus street",
+          "effects": {
+            "credibilite": 4,
+            "streams": -2
+          },
+          "consequence": "Ils te déplacent dans « Énergie pour la salle de sport ». Entre deux sons de sifflet. C'est un progrès."
+        }
+      ]
+    },
+    {
+      "id": "reaction_stream",
+      "title": "La réaction en direct",
+      "location": "media",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "text": "Un streamer très connu réagit à ton son en direct. Il met pause toutes les trois secondes pour dire « attends, attends ». Le son dure 2 min 40. La vidéo dure quatre heures.",
+      "choices": [
+        {
+          "label": "Passer dans le chat pour dire merci",
+          "effects": {
+            "streams": 5,
+            "mental": -2
+          },
+          "consequence": "Il lit ton message à voix haute. Il met pause. « Attends, attends. » Tu as passé quatre heures à attendre."
+        },
+        {
+          "label": "Réagir à sa réaction",
+          "effects": {
+            "streams": 4,
+            "credibilite": 2
+          },
+          "consequence": "Ta réaction à sa réaction fait réagir sa communauté. Plus personne ne sait qui réagit à quoi. Les chiffres, eux, explosent."
+        },
+        {
+          "label": "Ne pas regarder",
+          "effects": {
+            "mental": 4
+          },
+          "consequence": "Tu as passé une soirée tranquille. Tu as appris le lendemain qu'il t'avait mis 9/10. Puis 6/10 après une pause."
+        }
+      ]
+    },
+    {
+      "id": "chat_agent",
+      "title": "L'agent du chat",
+      "location": "label",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "text": "Un homme en costume se présente à la laverie. Il est l'agent du chat de la vidéo. Il réclame 30 % sur ton refrain « au titre de la performance féline ».",
+      "choices": [
+        {
+          "label": "Négocier à 10 %",
+          "effects": {
+            "argent": -3,
+            "credibilite": 2
+          },
+          "xp": {
+            "business": 25
+          },
+          "consequence": "Accord à 10 % et une boîte de pâtée par trimestre. Le chat a signé d'une patte. L'avocat a pleuré."
+        },
+        {
+          "label": "Proposer un feat au chat",
+          "effects": {
+            "streams": 5,
+            "argent": -2
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Le chat miaule sur le refrain. Une fois. C'est le meilleur couplet de l'année, selon la presse spécialisée chats."
+        },
+        {
+          "label": "Appeler Momo",
+          "relations": {
+            "momo": 4
+          },
+          "effects": {
+            "mental": 3
+          },
+          "consequence": "Momo lance une machine en essorage maximum. L'agent part sans un mot. Tu ne sais toujours pas ce qui s'est passé."
+        }
+      ]
+    },
+    {
+      "id": "seminaire_label",
+      "title": "Le séminaire d'entreprise",
+      "location": "label",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 5
+      },
+      "text": "Hexagone Music t'invite à son séminaire annuel : « Rester authentique dans un monde digital ». Il a lieu dans un hôtel quatre étoiles. Il y a un atelier poterie.",
+      "choices": [
+        {
+          "label": "Participer à l'atelier poterie",
+          "effects": {
+            "mental": 6
+          },
+          "consequence": "Tu as fait un bol. Il est raté. C'est le seul objet authentique de tout le séminaire."
+        },
+        {
+          "label": "Faire un freestyle au buffet",
+          "effects": {
+            "credibilite": 3,
+            "streams": 3
+          },
+          "consequence": "Les commerciaux filment, gênés et ravis. Ton freestyle devient la vidéo d'onboarding des nouveaux stagiaires."
+        },
+        {
+          "label": "Repartir avec tous les mini-croissants",
+          "effects": {
+            "argent": 3
+          },
+          "consequence": "Quarante mini-croissants dans un sac de sport. Momo en a pleuré de joie. La laverie a mangé pendant une semaine."
+        }
+      ]
+    },
+    {
+      "id": "ghostwriter_stagiaire",
+      "title": "Le stagiaire qui écrit",
+      "location": "studio",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 5
+      },
+      "text": "Un stagiaire d'Hexagone te tend une feuille : « J'ai écrit un couplet pour toi. Victor dit que c'est “dans ton univers”. » Le couplet parle de yachts. Tu n'as jamais vu de yacht.",
+      "choices": [
+        {
+          "label": "Le refuser poliment",
+          "effects": {
+            "credibilite": 4
+          },
+          "consequence": "Il est soulagé. Il voulait surtout écrire sur les yachts. Il a créé un compte de poésie nautique. Il a 12 abonnés."
+        },
+        {
+          "label": "Garder une seule rime",
+          "effects": {
+            "streams": 3
+          },
+          "xp": {
+            "plume": 20
+          },
+          "consequence": "Tu gardes « amarre / cauchemar ». Le reste part à la mer. Le stagiaire est crédité en tout petit."
+        },
+        {
+          "label": "Lui proposer d'écrire ensemble",
+          "relations": {
+            "fred": 3
+          },
+          "effects": {
+            "mental": 3
+          },
+          "consequence": "Vous écrivez jusqu'à 4 h. Le résultat est nul. Mais Fred dit qu'il a « vu une vocation ». Il parlait de lui-même."
+        }
+      ]
+    },
+    {
+      "id": "disque_or_maman",
+      "title": "Le disque d'or de ta mère",
+      "location": "chez_toi",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 5
+      },
+      "text": "Ta mère a fait encadrer une capture d'écran de tes streams. Elle l'a accrochée dans le salon, à côté de ta photo de CE1. Elle l'appelle « le disque d'or ».",
+      "choices": [
+        {
+          "label": "Lui offrir un vrai disque, un jour",
+          "effects": {
+            "mental": 5
+          },
+          "relations": {
+            "maman": 6
+          },
+          "consequence": "Elle dit qu'elle préfère la capture. « Elle, au moins, je l'ai faite moi-même. »"
+        },
+        {
+          "label": "Lui expliquer ce qu'est vraiment un disque d'or",
+          "effects": {
+            "mental": -1
+          },
+          "consequence": "Elle écoute tout, hoche la tête, et rajoute « (presque) » sous la capture. Au feutre doré."
+        }
+      ]
+    },
+    {
+      "id": "debat_plume",
+      "title": "Le débat sur ta plume",
+      "location": "media",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 5
+      },
+      "text": "« Le Débrief » organise un débat : « Le petit de la laverie sait-il écrire ? » Yanis Tracklist a invité trois experts. L'un d'eux pense que tu es un chat.",
+      "choices": [
+        {
+          "label": "Venir défendre ta plume en direct",
+          "effects": {
+            "credibilite": 5,
+            "mental": -3
+          },
+          "relations": {
+            "yanis": 5
+          },
+          "consequence": "Tu récites un couplet sans fautes. L'expert qui pensait que tu étais un chat s'excuse. Il ne retire rien sur le chat."
+        },
+        {
+          "label": "Envoyer ta mère à ta place",
+          "effects": {
+            "streams": 5
+          },
+          "relations": {
+            "maman": 4
+          },
+          "consequence": "Ta mère a gagné le débat, puis donné sa recette de gratin à l'antenne. L'émission bat son record d'audience."
+        },
+        {
+          "label": "Ne pas écouter",
+          "effects": {
+            "mental": 4
+          },
+          "consequence": "Tu n'écoutes pas. Big Nono te résume quand même tout le débat. En chips."
+        }
+      ]
+    },
+    {
+      "id": "fan_stylo_rouge",
+      "title": "Le fan au stylo rouge",
+      "location": "quartier",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 5
+      },
+      "text": "Un ado t'arrête dans la rue avec un stylo rouge. « Je corrige tes textes, comme Scalpel. Page 2, t'as mis “sa” au lieu de “ça”. » Il a raison. C'est terrible.",
+      "choices": [
+        {
+          "label": "L'embaucher comme correcteur",
+          "effects": {
+            "argent": -2,
+            "credibilite": 2
+          },
+          "xp": {
+            "plume": 25
+          },
+          "consequence": "Il est payé en places de concert. Il corrige même tes messages à ta mère. Elle trouve que tu as changé."
+        },
+        {
+          "label": "Lui dire que c'est du style",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "« Du style ? » Il réfléchit. Il note « style » dans un carnet. Il a un carnet sur toi. Il en a trois."
+        }
+      ]
+    },
+    {
+      "id": "sosie_baron",
+      "title": "Le sosie",
+      "location": "quartier",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 6
+      },
+      "text": "Un homme en lunettes noires t'arrête : « Je suis le sosie officiel du Baron. Je fais les mariages. Tu veux une photo avec moi, pour l'entraînement ? »",
+      "choices": [
+        {
+          "label": "Clasher le sosie, pour t'échauffer",
+          "effects": {
+            "credibilite": 2,
+            "streams": 2
+          },
+          "consequence": "Tu l'as battu en trois rimes. Il s'excuse au nom du Baron. Le vrai Baron, mis au courant, a ri."
+        },
+        {
+          "label": "Prendre la photo",
+          "effects": {
+            "mental": 3
+          },
+          "consequence": "La photo fait le tour des réseaux. Tout le monde croit que c'est le vrai. Le vrai Baron est vexé : le sosie a de meilleures lunettes."
+        }
+      ]
+    },
+    {
+      "id": "billets_dome",
+      "title": "Les billets du Dôme",
+      "location": "reseaux",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 6
+      },
+      "text": "La billetterie du Dôme a planté. 40 000 personnes dans la file d'attente pour 6 000 places. Ta mère est 39 998e.",
+      "choices": [
+        {
+          "label": "Lui garder une place au premier rang",
+          "effects": {
+            "mental": 4
+          },
+          "relations": {
+            "maman": 6
+          },
+          "consequence": "Elle a quand même attendu dans la file « par principe ». Elle a eu sa place. Elle l'a offerte à la voisine. Elle viendra avec ta place à toi."
+        },
+        {
+          "label": "Ajouter une date",
+          "effects": {
+            "argent": 6,
+            "mental": -3
+          },
+          "consequence": "Deuxième Dôme, le lendemain. Complet aussi. Victor parle déjà d'une tournée « des Dômes ». Tu ne sais pas combien il y en a."
+        }
+      ]
+    },
+    {
+      "id": "couronne_carton",
+      "title": "La couronne",
+      "location": "label",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 6
+      },
+      "text": "Momo a fabriqué une couronne en carton avec des boîtes de lessive. « Pour le jour où tu seras roi. » Elle sent la lavande.",
+      "choices": [
+        {
+          "label": "La porter tout de suite",
+          "effects": {
+            "streams": 3,
+            "credibilite": -1
+          },
+          "consequence": "Tu la portes au Bunker. Fred ne dit rien. Il en veut une. Momo lui en fait une."
+        },
+        {
+          "label": "La garder pour le Dôme",
+          "effects": {
+            "mental": 4
+          },
+          "relations": {
+            "momo": 5
+          },
+          "consequence": "Momo l'emballe dans un sac de linge propre. Il le scelle avec du scotch. Personne n'y touche jusqu'au Dôme."
+        }
+      ],
+      "npc": "momo"
+    },
+    {
+      "id": "documentaire",
+      "title": "Le documentaire",
+      "location": "media",
+      "weight": 8,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 6
+      },
+      "text": "Une plateforme veut tourner un documentaire sur ta carrière : « Du bas du bloc au trône ». Le réalisateur veut surtout filmer le chat.",
+      "choices": [
+        {
+          "label": "Accepter, à condition de raconter la laverie",
+          "effects": {
+            "streams": 5
+          },
+          "relations": {
+            "momo": 4
+          },
+          "consequence": "Le documentaire dure deux heures, dont quarante minutes sur la machine 4. Les critiques parlent d'un chef-d'œuvre sur le linge."
+        },
+        {
+          "label": "Refuser : ton histoire n'est pas finie",
+          "effects": {
+            "credibilite": 4
+          },
+          "consequence": "Le réalisateur filme le chat à la place. Le documentaire s'appelle « Neuf vies ». Tu y apparais quatre secondes."
+        }
+      ]
+    }
+  ]
+}

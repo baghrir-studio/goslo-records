@@ -1,0 +1,225 @@
+{
+  "rows": [
+    "TTTTTTTTTTTTTTTTTTTTTTTT",
+    "TRRRRRRT=RRRRR=RRRRRRRRT",
+    "TRRRRRRT=RRRRR=RRRRRRRRT",
+    "T######T=#####=########T",
+    "T##D###L=##D##=###D####T",
+    "T======================T",
+    "T..........++..........T",
+    "T..........++..........T",
+    "T======================T",
+    "TRRRRRR==TT==TT==RRRRRRT",
+    "TRRRRRR==B====B==RRRRRRT",
+    "T######==========######T",
+    "T##D###===L==L===####D#T",
+    "T======================T",
+    "TFFFFFFFF==FFFFFFFFFFFFT",
+    "T\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"T",
+    "T\"\"\"\"\"\"TT\"\"\"\"\"\"\"\"\"\"\"\"\"\"T",
+    "T\"\"\"\"\"\"\"\"\"\"==\"\"\"\"\"\"\"\"\"\"T",
+    "T\"\"\"T\"\"\"\"\"\"==\"\"\"\"\"\"\"TT\"T",
+    "T\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"T",
+    "TWWWWWWWWWWWWWWWWWWWWWWT",
+    "TTTTTTTTTTTTTTTTTTTTTTTT"
+  ],
+  "spawn": {
+    "x": 21,
+    "y": 13
+  },
+  "doors": [
+    {
+      "x": 3,
+      "y": 4,
+      "location": "studio"
+    },
+    {
+      "x": 11,
+      "y": 4,
+      "location": "media"
+    },
+    {
+      "x": 18,
+      "y": 4,
+      "location": "scene"
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "location": "label"
+    },
+    {
+      "x": 21,
+      "y": 12,
+      "location": "chez_toi"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "fred",
+      "x": 4,
+      "y": 5,
+      "facing": "down"
+    },
+    {
+      "id": "tenebre",
+      "x": 1,
+      "y": 5,
+      "facing": "right",
+      "from_chapter": 2
+    },
+    {
+      "id": "yanis",
+      "x": 12,
+      "y": 5,
+      "facing": "down",
+      "from_chapter": 2
+    },
+    {
+      "id": "le_baron",
+      "x": 20,
+      "y": 5,
+      "facing": "left",
+      "sight": 3,
+      "from_chapter": 2
+    },
+    {
+      "id": "clara_soleil",
+      "x": 19,
+      "y": 7,
+      "facing": "up",
+      "from_chapter": 2
+    },
+    {
+      "id": "kolosse",
+      "x": 6,
+      "y": 7,
+      "facing": "right",
+      "sight": 4,
+      "from_chapter": 2
+    },
+    {
+      "id": "momo",
+      "x": 2,
+      "y": 13,
+      "facing": "right",
+      "from_chapter": 2
+    },
+    {
+      "id": "karim",
+      "x": 7,
+      "y": 12,
+      "facing": "right",
+      "from_chapter": 2
+    },
+    {
+      "id": "lucien",
+      "x": 11,
+      "y": 9,
+      "facing": "down"
+    },
+    {
+      "id": "orphee",
+      "x": 10,
+      "y": 11,
+      "facing": "right",
+      "from_chapter": 2
+    },
+    {
+      "id": "le_conteur",
+      "x": 12,
+      "y": 10,
+      "facing": "down",
+      "from_chapter": 2
+    },
+    {
+      "id": "scalpel",
+      "x": 16,
+      "y": 10,
+      "facing": "down",
+      "sight": 3,
+      "from_chapter": 2
+    },
+    {
+      "id": "lil_sauge",
+      "x": 13,
+      "y": 13,
+      "facing": "left",
+      "sight": 4
+    },
+    {
+      "id": "kevlar_jr",
+      "x": 15,
+      "y": 17,
+      "facing": "left",
+      "sight": 3
+    },
+    {
+      "id": "ptit_wifi",
+      "x": 10,
+      "y": 19,
+      "facing": "up",
+      "sight": 3,
+      "from_chapter": 2
+    },
+    {
+      "id": "big_nono",
+      "x": 13,
+      "y": 5,
+      "facing": "left"
+    },
+    {
+      "id": "lingot",
+      "x": 20,
+      "y": 8,
+      "facing": "left",
+      "sight": 3,
+      "from_chapter": 2,
+      "hidden_if": "clash_gagne_lingot"
+    },
+    {
+      "id": "big_kliks",
+      "x": 5,
+      "y": 8,
+      "facing": "right",
+      "sight": 3,
+      "from_chapter": 2
+    },
+    {
+      "id": "lil_croon",
+      "x": 16,
+      "y": 12,
+      "facing": "down",
+      "from_chapter": 2
+    },
+    {
+      "id": "gestuel",
+      "x": 8,
+      "y": 9,
+      "facing": "down",
+      "from_chapter": 2
+    },
+    {
+      "id": "dj_bobine",
+      "x": 9,
+      "y": 11,
+      "facing": "up",
+      "from_chapter": 3
+    },
+    {
+      "id": "victor_contrat",
+      "x": 15,
+      "y": 8,
+      "facing": "down",
+      "from_chapter": 4,
+      "hidden_if": "contrat_signe"
+    },
+    {
+      "id": "victor_contrat",
+      "x": 5,
+      "y": 5,
+      "facing": "down",
+      "from_chapter": 5
+    }
+  ]
+}

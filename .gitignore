@@ -1,0 +1,7 @@
+.DS_Store
+xcuserdata/
+DerivedData/
+build/
+*.xcresult
+# Sound previews rendered from the in-code synth (regenerable)
+apercu-sons/

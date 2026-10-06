@@ -1,0 +1,4599 @@
+{
+  "chapters": [
+    {
+      "number": 1,
+      "title": "En bas du bloc",
+      "intro": "prologue",
+      "outro": "ch1_outro",
+      "objectives": [
+        {
+          "id": "ecrire",
+          "label": "Écris ton premier texte",
+          "hint": "Rentre chez toi : la porte juste au-dessus de toi.",
+          "trigger": {
+            "location": "chez_toi"
+          },
+          "event": "story_carnet",
+          "conditions": {
+            "required_flags": [
+              "premier_texte"
+            ]
+          }
+        },
+        {
+          "id": "lucien",
+          "label": "Fais écouter ton texte à Vieux Mic Lucien",
+          "hint": "Il est sur la place, près des bancs. Approche-toi et appuie sur A.",
+          "trigger": {
+            "npc": "lucien"
+          },
+          "event": "story_lucien",
+          "conditions": {
+            "required_flags": [
+              "conseil_lucien"
+            ]
+          }
+        },
+        {
+          "id": "micro_ouvert",
+          "label": "Passe au Micro Ouvert de goslo radio",
+          "hint": "La porte au néon jaune, en haut de la rue.",
+          "trigger": {
+            "location": "media"
+          },
+          "event": "story_micro_ouvert",
+          "conditions": {
+            "required_flags": [
+              "micro_ouvert_fait"
+            ]
+          },
+          "cinematic": "ton_nom_a_la_radio"
+        },
+        {
+          "id": "terrain_vague",
+          "label": "Fais tes preuves : gagne 2 clashs au terrain vague",
+          "hint": "Derrière la grille, dans les herbes hautes. Les rappeurs du coin y traînent.",
+          "conditions": {
+            "min_counters": {
+              "victoires_terrain": 2
+            }
+          }
+        },
+        {
+          "id": "ring",
+          "label": "BOSS : bats Kevlar Jr. au Ring des Mots",
+          "hint": "Il t'attend au terrain vague. Il te verra arriver.",
+          "trigger": {
+            "npc": "kevlar_jr",
+            "spot": true
+          },
+          "event": "story_ring",
+          "conditions": {
+            "required_flags": [
+              "clash_gagne_kevlar_jr"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "La laverie",
+      "intro": "ch2_intro",
+      "outro": "ch2_outro",
+      "objectives": [
+        {
+          "id": "signature",
+          "label": "Signe chez goslo records",
+          "hint": "La laverie, en bas à gauche. La porte est cassée, donc ouverte.",
+          "trigger": {
+            "location": "label"
+          },
+          "event": "story_signature",
+          "conditions": {
+            "required_flags": [
+              "signe_goslo"
+            ]
+          }
+        },
+        {
+          "id": "mixtape",
+          "label": "Enregistre ta mixtape au Bunker",
+          "hint": "Le studio, en haut à gauche. Fred t'attend avec sa perceuse.",
+          "trigger": {
+            "location": "studio"
+          },
+          "event": "story_mixtape",
+          "conditions": {
+            "required_flags": [
+              "mixtape_ch2"
+            ]
+          }
+        },
+        {
+          "id": "clip",
+          "label": "Tourne ton premier clip",
+          "hint": "Momo a « un budget ». Il est à la laverie.",
+          "trigger": {
+            "location": "label"
+          },
+          "event": "story_clip",
+          "conditions": {
+            "required_flags": [
+              "clip_fait"
+            ]
+          }
+        },
+        {
+          "id": "lingot",
+          "label": "Remets Lingot à sa place",
+          "hint": "Il frime au bout de la rue, à droite. Il te verra arriver, il voit tout le monde : il brille.",
+          "trigger": {
+            "npc": "lingot",
+            "spot": true
+          },
+          "event": "story_lingot",
+          "conditions": {
+            "required_flags": [
+              "clash_gagne_lingot"
+            ]
+          },
+          "cinematic": "exil_lingot"
+        },
+        {
+          "id": "feat_us",
+          "label": "Décroche un featuring américain",
+          "hint": "Ouvre ton téléphone. Momo a « un contact ».",
+          "trigger": {
+            "location": "reseaux"
+          },
+          "event": "story_feat_us",
+          "conditions": {
+            "required_flags": [
+              "feat_us_refuse"
+            ]
+          }
+        },
+        {
+          "id": "debat",
+          "label": "BOSS : survis au Grand Débat",
+          "hint": "Une équipe de télé t'attend devant goslo radio. Bonne chance.",
+          "trigger": {
+            "location": "media"
+          },
+          "event": "story_debat",
+          "conditions": {
+            "required_flags": [
+              "debat_gagne"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Première scène",
+      "intro": "ch3_intro",
+      "outro": "ch3_outro",
+      "objectives": [
+        {
+          "id": "setlist",
+          "label": "Écris ta setlist",
+          "hint": "Chez toi. Prends un stylo et ton courage.",
+          "trigger": {
+            "location": "chez_toi"
+          },
+          "event": "story_setlist",
+          "conditions": {
+            "required_flags": [
+              "setlist_faite"
+            ]
+          }
+        },
+        {
+          "id": "dj",
+          "label": "Trouve un DJ",
+          "hint": "DJ Bobine traîne dans le quartier. Il a une platine. Une seule.",
+          "trigger": {
+            "npc": "dj_bobine"
+          },
+          "event": "story_dj",
+          "conditions": {
+            "required_flags": [
+              "dj_recrute"
+            ]
+          }
+        },
+        {
+          "id": "repet",
+          "label": "Fais une répétition au Bunker",
+          "hint": "Le studio, en haut à gauche. Fred a prévu des boules Quies.",
+          "trigger": {
+            "location": "studio"
+          },
+          "event": "story_repet",
+          "conditions": {
+            "required_flags": [
+              "repet_faite"
+            ]
+          }
+        },
+        {
+          "id": "promo",
+          "label": "Remplis la salle",
+          "hint": "Ton téléphone. Il faut vendre 300 places. Il en reste 297.",
+          "trigger": {
+            "location": "reseaux"
+          },
+          "event": "story_promo",
+          "conditions": {
+            "required_flags": [
+              "promo_faite"
+            ]
+          }
+        },
+        {
+          "id": "balance",
+          "label": "Fais la balance avec Gégé",
+          "hint": "La scène, en haut à droite. Gégé t'attend. Il ne sourit pas.",
+          "trigger": {
+            "location": "scene"
+          },
+          "event": "story_balance",
+          "conditions": {
+            "required_flags": [
+              "balance_faite"
+            ]
+          }
+        },
+        {
+          "id": "concert",
+          "label": "BOSS : ton premier concert",
+          "hint": "Retourne à la scène. 300 personnes. Ta mère. Pas de pression.",
+          "trigger": {
+            "location": "scene"
+          },
+          "event": "story_concert",
+          "conditions": {
+            "required_flags": [
+              "concert_reussi"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Le buzz",
+      "intro": "ch4_intro",
+      "outro": "ch4_outro",
+      "objectives": [
+        {
+          "id": "buzz",
+          "label": "Regarde ce qui arrive à ton son",
+          "hint": "Ton téléphone. Il vibre depuis ce matin. Il chauffe un peu.",
+          "trigger": {
+            "location": "reseaux"
+          },
+          "event": "story_buzz",
+          "conditions": {
+            "required_flags": [
+              "buzz_lance"
+            ]
+          },
+          "cinematic": "appel_victor"
+        },
+        {
+          "id": "sauge",
+          "label": "Lil Sauge veut te parler",
+          "hint": "Il traîne au milieu du quartier. Il a l'air d'avoir une idée. C'est rarement bon.",
+          "trigger": {
+            "npc": "lil_sauge"
+          },
+          "event": "story_sauge",
+          "conditions": {
+            "required_flags": [
+              "sauge_ch4"
+            ]
+          }
+        },
+        {
+          "id": "kolosse",
+          "label": "BOSS : Kolosse veut sa part du buzz",
+          "hint": "Kolosse fait un live sur le trottoir d'en face. Il cherche un adversaire. Et du réseau.",
+          "trigger": {
+            "npc": "kolosse",
+            "spot": true
+          },
+          "event": "story_kolosse",
+          "conditions": {
+            "required_flags": [
+              "kolosse_ko"
+            ]
+          }
+        },
+        {
+          "id": "momo",
+          "label": "Préviens Momo",
+          "hint": "goslo records, l'arrière-boutique de la laverie. Il est au courant. Il fait semblant que non.",
+          "trigger": {
+            "location": "label"
+          },
+          "event": "story_momo_major",
+          "conditions": {
+            "required_flags": [
+              "momo_prevenu"
+            ]
+          }
+        },
+        {
+          "id": "contrat",
+          "label": "Lis le contrat",
+          "hint": "Chez toi. 84 pages, police 7. Prévois du café.",
+          "trigger": {
+            "location": "chez_toi"
+          },
+          "event": "story_contrat_lu",
+          "conditions": {
+            "required_flags": [
+              "contrat_lu"
+            ]
+          }
+        },
+        {
+          "id": "negociation",
+          "label": "BOSS : négocie avec Victor Contrat",
+          "hint": "Victor t'attend sur le boulevard, garé sur trois places.",
+          "trigger": {
+            "npc": "victor_contrat"
+          },
+          "event": "story_negociation",
+          "conditions": {
+            "required_flags": [
+              "contrat_signe"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Le game",
+      "intro": "ch5_intro",
+      "outro": "ch5_outro",
+      "objectives": [
+        {
+          "id": "image",
+          "label": "Réunion image avec Victor",
+          "hint": "Victor t'attend devant le Bunker, avec trois stagiaires et un tableau blanc.",
+          "trigger": {
+            "npc": "victor_contrat"
+          },
+          "event": "story_image",
+          "conditions": {
+            "required_flags": [
+              "image_choisie"
+            ]
+          }
+        },
+        {
+          "id": "single",
+          "label": "Écris le single au Bunker",
+          "hint": "Le studio, en haut à gauche. Fred a rangé son disque d'or. Il l'a ressorti.",
+          "trigger": {
+            "location": "studio"
+          },
+          "event": "story_single",
+          "conditions": {
+            "required_flags": [
+              "single_ecrit"
+            ]
+          }
+        },
+        {
+          "id": "sortie",
+          "label": "Survis à la semaine de sortie",
+          "hint": "Ton téléphone. Les chiffres tombent. Toi aussi, un peu.",
+          "trigger": {
+            "location": "reseaux"
+          },
+          "event": "story_sortie",
+          "conditions": {
+            "required_flags": [
+              "sortie_faite"
+            ]
+          }
+        },
+        {
+          "id": "conteur",
+          "label": "Le Conteur sort un épisode sur toi",
+          "hint": "Le Conteur, au milieu de la rue. Il a écrit une série sur toi. Tu es le méchant. Va lui parler.",
+          "trigger": {
+            "npc": "le_conteur"
+          },
+          "event": "story_conteur",
+          "conditions": {
+            "required_flags": [
+              "conteur_ch5"
+            ]
+          }
+        },
+        {
+          "id": "autopsie",
+          "label": "Scalpel dissèque ton single à la radio",
+          "hint": "goslo radio, en haut au centre. Il est à l'antenne. Il a un stylo rouge.",
+          "trigger": {
+            "location": "media"
+          },
+          "event": "story_autopsie",
+          "conditions": {
+            "required_flags": [
+              "duel_lance"
+            ]
+          },
+          "cinematic": "defi_scalpel"
+        },
+        {
+          "id": "duel",
+          "label": "BOSS : duel à la plume contre Scalpel",
+          "hint": "Scalpel t'attend dans la rue, sans beat. Prends un stylo. Et une gomme.",
+          "trigger": {
+            "npc": "scalpel",
+            "spot": true
+          },
+          "event": "story_duel",
+          "conditions": {
+            "required_flags": [
+              "scalpel_battu"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Le trône",
+      "intro": "ch6_intro",
+      "outro": "ch6_outro",
+      "finale": true,
+      "objectives": [
+        {
+          "id": "dome",
+          "label": "Va voir ce qui se passe à la laverie",
+          "hint": "goslo records, en bas à gauche. Victor est chez Momo. Il touche les machines.",
+          "trigger": {
+            "location": "label"
+          },
+          "event": "story_dome",
+          "conditions": {
+            "required_flags": [
+              "dome_annonce"
+            ]
+          },
+          "cinematic": "baron_provoc"
+        },
+        {
+          "id": "stylo",
+          "label": "Scalpel veut te parler",
+          "hint": "Scalpel, au milieu de la rue. Il a refermé son carnet. Ça veut dire qu'il est sérieux.",
+          "trigger": {
+            "npc": "scalpel"
+          },
+          "event": "story_stylo",
+          "conditions": {
+            "required_flags": [
+              "allie_scalpel"
+            ]
+          }
+        },
+        {
+          "id": "equipe",
+          "label": "Prépare l'équipe du Dôme",
+          "hint": "DJ Bobine, au centre du quartier. Il a acheté une deuxième platine. Il doute.",
+          "trigger": {
+            "npc": "dj_bobine"
+          },
+          "event": "story_bobine_dome",
+          "conditions": {
+            "required_flags": [
+              "equipe_prete"
+            ]
+          }
+        },
+        {
+          "id": "baron",
+          "label": "BOSS : fais tomber le Baron",
+          "hint": "Tout en haut à droite. Le Baron ne descend jamais. Monte.",
+          "trigger": {
+            "npc": "le_baron",
+            "spot": true
+          },
+          "event": "story_baron_clash",
+          "conditions": {
+            "required_flags": [
+              "baron_tombe"
+            ]
+          }
+        },
+        {
+          "id": "face_a_face",
+          "label": "BOSS : le Face-à-face sur goslo radio",
+          "hint": "goslo radio, en haut au centre. Big Nono a ouvert un paquet de chips neuf.",
+          "trigger": {
+            "location": "media"
+          },
+          "event": "story_face_a_face",
+          "conditions": {
+            "required_flags": [
+              "face_a_face_gagne"
+            ]
+          }
+        },
+        {
+          "id": "dome_concert",
+          "label": "BOSS FINAL : remplis le Dôme",
+          "hint": "La navette pour le Dôme part devant la scène, en haut à droite. 6 000 personnes t'attendent.",
+          "trigger": {
+            "location": "scene"
+          },
+          "event": "story_dome_concert",
+          "conditions": {
+            "required_flags": [
+              "dome_reussi"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "id": "story_carnet",
+      "title": "Le carnet à spirale",
+      "location": "chez_toi",
+      "weight": 0,
+      "text": "Ta chambre. Le radiateur fait un bruit de moteur d'avion. Sur le bureau, un carnet à spirale acheté en 2016 et jamais fini. Ce soir, tu écris ton premier vrai texte.",
+      "choices": [
+        {
+          "label": "Écrire sur le bas du bloc, ce que tu vois",
+          "effects": {
+            "credibilite": 4,
+            "mental": 2
+          },
+          "xp": {
+            "plume": 40
+          },
+          "set_flags": [
+            "premier_texte"
+          ],
+          "consequence": "Seize mesures sur le hall, la boîte aux lettres cassée et le voisin qui tousse. C'est brut. C'est vrai. C'est toi."
+        },
+        {
+          "label": "Écrire un egotrip : t'es le meilleur, point",
+          "effects": {
+            "streams": 2,
+            "credibilite": 1
+          },
+          "xp": {
+            "flow": 40
+          },
+          "set_flags": [
+            "premier_texte"
+          ],
+          "consequence": "« Je suis le roi du bloc » rimé avec « je suis le roi du bloc ». La forme est à revoir. L'énergie, elle, est là."
+        },
+        {
+          "label": "Écrire sur ta daronne",
+          "effects": {
+            "mental": 6
+          },
+          "xp": {
+            "plume": 30
+          },
+          "set_flags": [
+            "premier_texte"
+          ],
+          "consequence": "Tu as pleuré à la troisième mesure. Ta mère a frappé à la porte : « Ça va ? » Ça va très bien."
+        }
+      ]
+    },
+    {
+      "id": "story_lucien",
+      "title": "Le vieux du banc",
+      "location": "quartier",
+      "npc": "lucien",
+      "weight": 0,
+      "text": "Vieux Mic Lucien est assis sur la place, comme tous les soirs depuis 1994. « Alors petit, il paraît que t'écris. Vas-y, fais-moi écouter. Doucement, j'ai plus mes oreilles de vingt ans. »",
+      "choices": [
+        {
+          "label": "Lui rapper ton texte a cappella",
+          "effects": {
+            "credibilite": 3
+          },
+          "xp": {
+            "scene": 20
+          },
+          "relations": {
+            "lucien": 12
+          },
+          "set_flags": [
+            "conseil_lucien"
+          ],
+          "consequence": "Lucien ferme les yeux. Long silence. « Pas mal. Tu respires au mauvais endroit, mais pas mal. Va au Micro Ouvert de goslo radio. Dis que tu viens de ma part. Ils me connaissent. Enfin, ils me connaissaient. »"
+        },
+        {
+          "label": "Lui demander comment on perce",
+          "xp": {
+            "business": 20
+          },
+          "relations": {
+            "lucien": 8
+          },
+          "set_flags": [
+            "conseil_lucien"
+          ],
+          "consequence": "« On perce pas, petit. On creuse. » Il pointe goslo radio en haut de la rue. « Le Micro Ouvert. C'est là que tout commence. Ou que tout s'arrête. »"
+        }
+      ]
+    },
+    {
+      "id": "story_micro_ouvert",
+      "title": "Micro Ouvert",
+      "location": "media",
+      "npc": "big_nono",
+      "weight": 0,
+      "text": "Le studio de goslo radio : deux micros, un néon ON AIR qui grésille, et Big Nono, l'animateur, qui mange des chips au-dessus de la console. « Toi, c'est le petit de Lucien ? Installe-toi. Dans dix secondes, t'es en direct. »",
+      "choices": [
+        {
+          "label": "Rapper le texte de ton carnet",
+          "xp": {
+            "plume": 25
+          },
+          "interview": "micro_ouvert",
+          "consequence": "Ton texte part sur les ondes de goslo radio."
+        },
+        {
+          "label": "Improviser sur la prod de Big Nono",
+          "xp": {
+            "flow": 25
+          },
+          "interview": "micro_ouvert",
+          "consequence": "Tu improvises sur les ondes de goslo radio."
+        }
+      ]
+    },
+    {
+      "id": "story_ring",
+      "title": "Le Ring des Mots",
+      "location": "quartier",
+      "npc": "kevlar_jr",
+      "weight": 0,
+      "text": "Au milieu du terrain vague, quarante personnes en cercle, une enceinte sur batterie, des téléphones déjà levés. Kevlar Jr. fait craquer sa nuque. « 31 victoires, 0 défaite. Toi, t'es la 32e. »",
+      "choices": [
+        {
+          "label": "Monter sur le ring",
+          "clash": {
+            "opponent": "kevlar_jr",
+            "boss": true,
+            "rounds": 5,
+            "level_bonus": 1,
+            "win": {
+              "effects": {
+                "credibilite": 15,
+                "streams": 10
+              },
+              "consequence": "Kevlar Jr. reste figé, le micro à la main. Le cercle explose. Pour la première fois en 32 battles, il a perdu. Et c'est contre toi."
+            },
+            "lose": {
+              "effects": {
+                "mental": -6,
+                "credibilite": -2
+              },
+              "consequence": "Kevlar Jr. lève les bras. 32 victoires. « Reviens quand t'auras des punchlines, petit. » Tu reviendras. Parle-lui quand tu seras prêt."
+            }
+          },
+          "consequence": "Le cercle se referme. Plus moyen de reculer."
+        },
+        {
+          "label": "Pas ce soir",
+          "effects": {
+            "credibilite": -2
+          },
+          "consequence": "Kevlar Jr. : « Je serai là. Je suis toujours là. » Le cercle se disperse en ricanant."
+        }
+      ]
+    },
+    {
+      "id": "story_signature",
+      "title": "Le contrat sur un ticket de caisse",
+      "location": "label",
+      "npc": "momo",
+      "weight": 0,
+      "text": "La laverie de goslo records : odeur de lessive, néon qui clignote, un micro à 400 balles posé sur un sèche-linge. Momo pose le contrat sur la machine numéro 4. C'est un ticket de caisse, avec des clauses au dos.",
+      "choices": [
+        {
+          "label": "Signer sans lire",
+          "effects": {
+            "argent": 10
+          },
+          "relations": {
+            "momo": 10
+          },
+          "set_flags": [
+            "signe_goslo",
+            "sous_contrat"
+          ],
+          "clear_flags": [
+            "independant"
+          ],
+          "consequence": "Tu as signé. Clause 7 : « L'artiste s'engage à plier son linge lui-même. » C'est un label sérieux."
+        },
+        {
+          "label": "Lire les petites lignes d'abord",
+          "xp": {
+            "business": 40
+          },
+          "relations": {
+            "momo": 5
+          },
+          "set_flags": [
+            "signe_goslo",
+            "sous_contrat"
+          ],
+          "clear_flags": [
+            "independant"
+          ],
+          "consequence": "Clause 12 : « En cas de disque d'or, Momo pleure. » Clause 13 : « Ce n'est pas négociable. » Tu signes."
+        },
+        {
+          "label": "Négocier ton pourcentage",
+          "effects": {
+            "argent": 18
+          },
+          "relations": {
+            "momo": -3
+          },
+          "requires": {
+            "skills": {
+              "business": 3
+            }
+          },
+          "set_flags": [
+            "signe_goslo",
+            "sous_contrat"
+          ],
+          "clear_flags": [
+            "independant"
+          ],
+          "consequence": "Tu obtiens 3 % de plus. Momo a dû vendre une machine à laver. Il ne t'en veut pas. Un peu."
+        }
+      ]
+    },
+    {
+      "id": "story_mixtape",
+      "title": "La mixtape",
+      "location": "studio",
+      "npc": "fred",
+      "weight": 0,
+      "text": "Le Bunker. Fred fixe des panneaux acoustiques à la perceuse en te racontant son disque d'or de 2009 pour la quatrième fois. Momo a payé trois sessions. Pas une de plus.",
+      "choices": [
+        {
+          "label": "Enregistrer 12 titres en une nuit",
+          "effects": {
+            "streams": 6,
+            "mental": -6
+          },
+          "xp": {
+            "flow": 40
+          },
+          "counters": {
+            "projets": 1
+          },
+          "set_flags": [
+            "mixtape_ch2"
+          ],
+          "give_items": [
+            "perceuse"
+          ],
+          "consequence": "Douze titres, quatre cafés, zéro sommeil. En partant, Fred te tend sa perceuse : « Garde-la. Un jour, elle te servira. » Tu ne sais pas encore à quoi."
+        },
+        {
+          "label": "Inviter Lil Croon sur un titre",
+          "effects": {
+            "streams": 10,
+            "credibilite": -4
+          },
+          "xp": {
+            "flow": 20
+          },
+          "counters": {
+            "projets": 1,
+            "featurings": 1
+          },
+          "relations": {
+            "lil_croon": 10
+          },
+          "set_flags": [
+            "mixtape_ch2"
+          ],
+          "give_items": [
+            "perceuse"
+          ],
+          "consequence": "Lil Croon a posé seize mesures à l'autotune. Fred n'a pas su dire si c'était du rap ou du RnB. Lil Croon non plus. En partant, Fred te laisse sa perceuse : « Pour les cas désespérés. »"
+        },
+        {
+          "label": "Faire trois titres, mais parfaits",
+          "effects": {
+            "credibilite": 8
+          },
+          "xp": {
+            "plume": 40
+          },
+          "counters": {
+            "projets": 1
+          },
+          "set_flags": [
+            "mixtape_ch2"
+          ],
+          "give_items": [
+            "perceuse"
+          ],
+          "consequence": "Trois titres, réécrits onze fois. Fred a pleuré au mixage. En partant, il te tend sa perceuse : « Tu la mérites. » Tu n'as toujours pas compris pourquoi."
+        }
+      ]
+    },
+    {
+      "id": "story_clip",
+      "title": "Le budget clip",
+      "location": "label",
+      "npc": "momo",
+      "weight": 0,
+      "text": "Momo a « un budget clip ». Il le sort de la machine numéro 4 : 340 € et des jetons de lavage. « Fais-nous un truc qui marque, petit. »",
+      "choices": [
+        {
+          "label": "Réserver un monument national pour le clip",
+          "effects": {
+            "argent": -15,
+            "streams": 14,
+            "credibilite": 4
+          },
+          "set_flags": [
+            "clip_fait",
+            "clip_monument"
+          ],
+          "consequence": "Tu as réservé un monument national pour ton prochain clip. Budget : catastrophique. Aura : +100. La sécurité a coupé le tournage au bout de 40 secondes. Les 40 secondes les plus vues de l'année."
+        },
+        {
+          "label": "Tourner dans la voiture du cousin",
+          "effects": {
+            "streams": 8,
+            "credibilite": 8
+          },
+          "set_flags": [
+            "clip_fait"
+          ],
+          "give_items": [
+            "la_mythique"
+          ],
+          "consequence": "Ton cousin te prête La Mythique : citadine grise de 2001, trois portes, un seul enjoliveur. Les anciens du quartier se signent quand elle passe. Après le tournage, il a dit « garde-la ». Il avait peur d'elle."
+        },
+        {
+          "label": "Plan-séquence dans la laverie",
+          "effects": {
+            "argent": -2,
+            "credibilite": 6
+          },
+          "relations": {
+            "momo": 8
+          },
+          "set_flags": [
+            "clip_fait"
+          ],
+          "consequence": "Un plan-séquence entre les machines 3 et 4. Une cliente plie son linge dans le fond, imperturbable. Elle est devenue culte. Momo veut la signer."
+        }
+      ]
+    },
+    {
+      "id": "story_lingot",
+      "title": "Lingot",
+      "location": "quartier",
+      "npc": "lingot",
+      "weight": 0,
+      "text": "Lingot te barre la route. Trois chaînes, deux montres, des lunettes de soleil à 23 h. « Toi, t'es le petit de la radio ? Ma chaîne coûte plus cher que ton quartier. Et mon quartier coûte plus cher que ta chaîne. »",
+      "choices": [
+        {
+          "label": "Le clasher",
+          "clash": {
+            "opponent": "lingot",
+            "rounds": 4,
+            "level_bonus": 1,
+            "win": {
+              "effects": {
+                "credibilite": 12,
+                "streams": 8
+              },
+              "consequence": "Lingot reste muet. Ses bijoux, eux, tintent nerveusement. Pour la première fois, quelqu'un ne l'a pas trouvé brillant."
+            },
+            "lose": {
+              "effects": {
+                "mental": -6
+              },
+              "consequence": "Lingot a gagné aux carats. Il te fait une remise de 10 % sur une photo avec lui. Reviens quand tu veux, il est toujours là. Il brille trop pour partir."
+            }
+          },
+          "consequence": "Les passants sortent leurs téléphones. Lingot sort ses lunettes de soleil numéro 2."
+        },
+        {
+          "label": "Passer ton chemin",
+          "effects": {
+            "credibilite": -3
+          },
+          "consequence": "Lingot te suit sur 200 mètres en énumérant ses bijoux. Tu connais maintenant le prix d'une gourmette."
+        }
+      ]
+    },
+    {
+      "id": "story_feat_us",
+      "title": "Le featuring américain",
+      "location": "reseaux",
+      "npc": "big_deal",
+      "weight": 0,
+      "text": "Momo a eu le numéro du manager de Big Deal, superstar d'Atlanta : quatorze trophées, trois jets privés. Big Deal aurait « écouté ton son ». Le manager te rappelle. Il a l'air pressé et vaguement amusé.",
+      "choices": [
+        {
+          "label": "Proposer 10 000 € pour un couplet",
+          "effects": {
+            "mental": -3
+          },
+          "set_flags": [
+            "feat_us_refuse"
+          ],
+          "consequence": "Le manager rit pendant quatre minutes. Puis : « Big Deal ne se lève pas pour moins de 400 000 $. Et il ne se lève pas tout court avant 15 h. » Il raccroche. Il riait encore."
+        },
+        {
+          "label": "Envoyer la prod avec un message traduit par une appli",
+          "effects": {
+            "streams": 6
+          },
+          "set_flags": [
+            "feat_us_refuse"
+          ],
+          "consequence": "Réponse de Big Deal, en personne : « Who is this? » Tu fais une capture. C'est la plus belle interaction de ta carrière. Le quartier entier l'a en fond d'écran."
+        },
+        {
+          "label": "Faire croire en story qu'il a dit oui",
+          "effects": {
+            "streams": 10,
+            "credibilite": -8
+          },
+          "set_flags": [
+            "feat_us_refuse"
+          ],
+          "consequence": "Big Deal a démenti en story : « I don't know this man. » Trente millions de vues. Techniquement, c'est un featuring."
+        }
+      ]
+    },
+    {
+      "id": "story_debat",
+      "title": "Le Grand Débat",
+      "location": "media",
+      "npc": "delamorale",
+      "weight": 0,
+      "text": "Devant goslo radio, une équipe de télé t'attend et t'embarque sur le plateau du « Grand Débat ». Thème du soir : « Le rap : fléau ou catastrophe ? ». Jean-Hubert Delamorale a préparé un dossier de quarante pages. Il n'a pas écouté ta mixtape.",
+      "choices": [
+        {
+          "label": "Monter sur le plateau",
+          "interview": "grand_debat",
+          "consequence": "Maquillage, micro-cravate, lumière dans les yeux. Trois, deux, un…"
+        },
+        {
+          "label": "Envoyer Gestuel à ta place",
+          "effects": {
+            "credibilite": 2
+          },
+          "relations": {
+            "gestuel": 5
+          },
+          "consequence": "Gestuel a répondu à toutes les questions par des gestes. Le chroniqueur a cru à une insulte. C'en était peut-être une. Le débat t'attend toujours."
+        }
+      ]
+    },
+    {
+      "id": "story_setlist",
+      "title": "La setlist",
+      "location": "chez_toi",
+      "weight": 0,
+      "text": "Une feuille A4, un stylo qui marche une fois sur deux. Tu dois choisir le premier morceau du concert. Celui qui décide si la salle reste ou part au bar.",
+      "choices": [
+        {
+          "label": "Ouvrir avec ton titre le plus énervé",
+          "effects": {
+            "streams": 2
+          },
+          "xp": {
+            "scene": 30
+          },
+          "set_flags": [
+            "setlist_faite"
+          ],
+          "consequence": "« On ouvre fort. » Tu as écrit le titre en majuscules et souligné trois fois. Le stylo a lâché à la troisième."
+        },
+        {
+          "label": "Ouvrir avec un morceau triste, pour surprendre",
+          "effects": {
+            "credibilite": 4
+          },
+          "xp": {
+            "plume": 30
+          },
+          "set_flags": [
+            "setlist_faite"
+          ],
+          "consequence": "Ouvrir un concert en pleurant. Audacieux. Ton DJ va détester. Ta mère va adorer."
+        },
+        {
+          "label": "Ouvrir avec un freestyle sur le prénom du régisseur",
+          "effects": {
+            "mental": 3
+          },
+          "xp": {
+            "flow": 30
+          },
+          "set_flags": [
+            "setlist_faite"
+          ],
+          "consequence": "Tu ne connais pas encore le prénom du régisseur. Tu as prévu trois rimes en « -é » au cas où."
+        }
+      ]
+    },
+    {
+      "id": "story_dj",
+      "title": "DJ Bobine",
+      "location": "quartier",
+      "npc": "dj_bobine",
+      "weight": 0,
+      "text": "DJ Bobine installe sa platine sur un banc. Une seule platine. « Deux platines, c'est pour les gens qui doutent. » Il passe ton son 2 % trop vite. Tu as l'air d'un écureuil sous pression.",
+      "choices": [
+        {
+          "label": "Le recruter tel quel",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "dj_bobine": 12
+          },
+          "set_flags": [
+            "dj_recrute"
+          ],
+          "consequence": "Marché conclu. Il sera payé en sandwichs et en mentions sur les réseaux. Il a demandé les sandwichs d'abord."
+        },
+        {
+          "label": "Exiger qu'il joue à la bonne vitesse",
+          "effects": {
+            "credibilite": 3
+          },
+          "relations": {
+            "dj_bobine": -4
+          },
+          "set_flags": [
+            "dj_recrute"
+          ],
+          "consequence": "Il a accepté de jouer à 1 % trop vite. C'est un compromis. C'est sa dernière offre."
+        },
+        {
+          "label": "Lui prêter ta deuxième platine imaginaire",
+          "effects": {
+            "streams": 2
+          },
+          "xp": {
+            "business": 20
+          },
+          "relations": {
+            "dj_bobine": 6
+          },
+          "set_flags": [
+            "dj_recrute"
+          ],
+          "consequence": "Il a fait semblant de la brancher. Tu as fait semblant d'y croire. Le début d'une grande collaboration."
+        }
+      ]
+    },
+    {
+      "id": "story_repet",
+      "title": "La répétition",
+      "location": "studio",
+      "npc": "fred",
+      "weight": 0,
+      "text": "Répétition au Bunker. Fred a distribué des boules Quies, DJ Bobine a branché sa platine sur une multiprise qui fume, et ton ingé retour, c'est ton cousin. Il ne sait pas ce qu'est un retour.",
+      "choices": [
+        {
+          "label": "Répéter le set trois fois en entier",
+          "effects": {
+            "mental": -5
+          },
+          "xp": {
+            "scene": 50
+          },
+          "set_flags": [
+            "repet_faite"
+          ],
+          "consequence": "Trois fois le set entier. À la troisième, la multiprise a pris feu. Fred l'a éteinte avec un disque d'or. Le sien, de 2009."
+        },
+        {
+          "label": "Travailler uniquement les enchaînements",
+          "effects": {
+            "credibilite": 2
+          },
+          "xp": {
+            "scene": 30,
+            "flow": 20
+          },
+          "set_flags": [
+            "repet_faite"
+          ],
+          "consequence": "Les transitions sont fluides. Le reste, on verra en live. « C'est le live qui décide », dit Fred, qui n'a pas fait de live depuis 2009."
+        },
+        {
+          "label": "Répéter les saluts à la fin",
+          "effects": {
+            "mental": 4
+          },
+          "xp": {
+            "scene": 20
+          },
+          "set_flags": [
+            "repet_faite"
+          ],
+          "consequence": "Ton salut final est parfait. Ta courbette a même un léger effet de cape. Le concert, lui, reste un mystère."
+        }
+      ]
+    },
+    {
+      "id": "story_promo",
+      "title": "Remplir la salle",
+      "location": "reseaux",
+      "npc": "big_kliks",
+      "weight": 0,
+      "text": "300 places à vendre. 3 vendues : ta mère, ton cousin, et un certain « Jean-Hubert D. » qui a pris une place au fond, près de la sortie. Big Kliks t'écrit : « Frère, j'ai des billets fantômes. Ils se vendent tout seuls. »",
+      "choices": [
+        {
+          "label": "Coller des affiches dans tout le quartier",
+          "effects": {
+            "argent": -6,
+            "streams": 6
+          },
+          "xp": {
+            "business": 30
+          },
+          "set_flags": [
+            "promo_faite"
+          ],
+          "consequence": "Tu as collé 200 affiches. Big Nono les a lues à l'antenne. Lucien en a gardé une pour son salon. Complet en quatre jours."
+        },
+        {
+          "label": "Faire un compte à rebours en story tous les jours",
+          "effects": {
+            "streams": 8,
+            "mental": -3
+          },
+          "set_flags": [
+            "promo_faite"
+          ],
+          "consequence": "J-30, J-29, J-28… Tes abonnés n'en peuvent plus. Mais ils viennent. Surtout pour que ça s'arrête."
+        },
+        {
+          "label": "Acheter les billets fantômes de Big Kliks",
+          "effects": {
+            "streams": 10,
+            "credibilite": -6
+          },
+          "relations": {
+            "big_kliks": 8
+          },
+          "set_flags": [
+            "promo_faite",
+            "billets_fantomes"
+          ],
+          "consequence": "« COMPLET » en une heure. La billetterie indique 300 spectateurs, tous nés le même jour, dans le même village. On verra le soir même combien existent."
+        }
+      ]
+    },
+    {
+      "id": "story_balance",
+      "title": "La balance",
+      "location": "scene",
+      "npc": "gege",
+      "weight": 0,
+      "text": "Le Transfo, 16 h. Gégé, le régisseur, te tend un micro sans te regarder. « Un, deux. » Tu dis « un, deux ». « Encore. » Ça fait quarante minutes.",
+      "choices": [
+        {
+          "label": "Dire « un, deux » avec conviction",
+          "effects": {
+            "mental": -2
+          },
+          "relations": {
+            "gege": 10
+          },
+          "xp": {
+            "scene": 20
+          },
+          "set_flags": [
+            "balance_faite"
+          ],
+          "consequence": "Au bout de la 212e fois, Gégé a hoché la tête. Les techniciens disent qu'il ne l'avait pas fait depuis 2011."
+        },
+        {
+          "label": "Freestyler sur le prénom de Gégé",
+          "effects": {
+            "credibilite": 3
+          },
+          "relations": {
+            "gege": -5
+          },
+          "xp": {
+            "flow": 20
+          },
+          "set_flags": [
+            "balance_faite"
+          ],
+          "consequence": "Tu as trouvé onze rimes en « -é ». Gégé n'a pas souri. Mais il a monté ton micro de 2 dB. C'est sa façon d'aimer."
+        },
+        {
+          "label": "Lui demander s'il a déjà souri",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "gege": -2
+          },
+          "set_flags": [
+            "balance_faite"
+          ],
+          "consequence": "« Une fois. En 1997. C'était une erreur. » Il retourne à sa console. La balance est terminée."
+        }
+      ]
+    },
+    {
+      "id": "story_concert",
+      "title": "Ton premier concert",
+      "location": "scene",
+      "npc": "gege",
+      "weight": 0,
+      "text": "20 h 58. Derrière le rideau, tu entends 300 personnes. Enfin, des gens. Ta mère a déjà sorti sa pancarte. DJ Bobine règle sa platine à 102 %. Gégé lève un pouce. Il ne l'avait jamais fait.",
+      "choices": [
+        {
+          "label": "Entrer en scène",
+          "concert": "premier_concert",
+          "consequence": "Le rideau s'ouvre. La lumière t'aveugle. Quelqu'un crie ton nom. C'est ta mère."
+        },
+        {
+          "label": "Vomir en coulisses, puis entrer en scène",
+          "effects": {
+            "mental": 5,
+            "credibilite": -1
+          },
+          "concert": "premier_concert",
+          "consequence": "Tradition respectée. Tous les grands l'ont fait. Gégé te tend une bouteille d'eau sans un mot. Tu entres en scène."
+        }
+      ]
+    },
+    {
+      "id": "story_buzz",
+      "title": "Le son qui explose",
+      "location": "reseaux",
+      "weight": 0,
+      "text": "Quelqu'un a mis neuf secondes de ton refrain sur la vidéo d'un chat qui tombe dans une piscine gonflable. 2 millions de vues. Les commentaires disent « le chat est trop fort ». Personne ne parle de toi. Mais tout le monde fredonne ton refrain.",
+      "choices": [
+        {
+          "label": "Remercier le chat publiquement",
+          "effects": {
+            "streams": 10,
+            "credibilite": -2
+          },
+          "set_flags": [
+            "buzz_lance"
+          ],
+          "consequence": "Ton message « merci au chat » fait 400 000 likes. Le chat ne t'a pas répondu. Il a déjà un agent."
+        },
+        {
+          "label": "Tomber toi aussi dans une piscine, en vidéo",
+          "effects": {
+            "streams": 8,
+            "mental": -3
+          },
+          "set_flags": [
+            "buzz_lance"
+          ],
+          "consequence": "Tu ne savais pas nager. Tu sais maintenant. La vidéo fait 1,2 million de vues. Le chat reste devant."
+        },
+        {
+          "label": "Dénoncer le détournement de ton art",
+          "effects": {
+            "credibilite": 5,
+            "streams": 4
+          },
+          "set_flags": [
+            "buzz_lance"
+          ],
+          "consequence": "Ton tweet indigné fait plus de vues que ton son. Tu as fait le buzz en te plaignant du buzz. C'est ça, le game."
+        }
+      ]
+    },
+    {
+      "id": "story_sauge",
+      "title": "Lil Sauge a une idée",
+      "location": "quartier",
+      "npc": "lil_sauge",
+      "weight": 0,
+      "text": "Lil Sauge t'attend, bras croisés, tout sourire. « Toi, t'as le buzz. Moi, j'ai… l'envie de profiter de ton buzz. On fait un feat ? Je pose seize mesures. Sur le chat. »",
+      "choices": [
+        {
+          "label": "Accepter le feat",
+          "effects": {
+            "streams": 6,
+            "credibilite": -2
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "relations": {
+            "lil_sauge": 8
+          },
+          "set_flags": [
+            "sauge_ch4",
+            "feat_sauge"
+          ],
+          "consequence": "Il a posé seize mesures sur le chat. Littéralement : il parle du chat. Le chat a désormais deux tubes et toujours pas de contrat."
+        },
+        {
+          "label": "Refuser poliment",
+          "effects": {
+            "credibilite": 3
+          },
+          "relations": {
+            "lil_sauge": -5
+          },
+          "set_flags": [
+            "sauge_ch4"
+          ],
+          "consequence": "Il a signé le lendemain avec une marque d'eau gazeuse. Il te l'annonce en story. Il t'a identifié. Deux fois."
+        },
+        {
+          "label": "Le clasher, pour la forme",
+          "set_flags": [
+            "sauge_ch4"
+          ],
+          "clash": {
+            "opponent": "lil_sauge",
+            "rounds": 3,
+            "win": {
+              "effects": {
+                "credibilite": 6,
+                "streams": 3
+              },
+              "consequence": "Lil Sauge range son téléphone. Il ne filme plus. C'est sa façon de dire « t'as gagné »."
+            },
+            "lose": {
+              "effects": {
+                "mental": -4
+              },
+              "consequence": "Lil Sauge a gagné, et il l'a déjà posté. Avec un filtre chat. Le chat a encore gagné."
+            }
+          },
+          "consequence": "Lil Sauge sort son téléphone et lance un live. « Les gars, il me clashe. Abonnez-vous. »"
+        }
+      ]
+    },
+    {
+      "id": "story_kolosse",
+      "title": "Le live de Kolosse",
+      "location": "quartier",
+      "npc": "kolosse",
+      "weight": 0,
+      "text": "Kolosse te barre le trottoir, téléphone tendu à bout de bras, déjà en live. « 14 spectateurs. Un chat fait 2 millions de vues avec TON son, et moi je fais 200 pompes pour 14 personnes. On règle ça. Maintenant. Batterie : 11 %. »",
+      "choices": [
+        {
+          "label": "Accepter le clash en live",
+          "clash": {
+            "opponent": "kolosse",
+            "boss": true,
+            "rounds": 5,
+            "level_bonus": 2,
+            "win": {
+              "effects": {
+                "credibilite": 10,
+                "streams": 8
+              },
+              "set_flags": [
+                "kolosse_ko"
+              ],
+              "consequence": "Kolosse baisse son téléphone. Le compteur affiche 3 400 spectateurs. Il n'en a jamais eu autant. Il a perdu, mais il te remercie. Puis sa batterie meurt."
+            },
+            "lose": {
+              "effects": {
+                "mental": -6
+              },
+              "consequence": "Kolosse lève les bras devant la caméra. « Abonnez-vous ! » Puis sa batterie meurt. Tu as perdu contre un homme à 1 %. Retourne le voir quand tu seras prêt."
+            }
+          },
+          "consequence": "Kolosse cale son téléphone contre une poubelle. « Bonsoir le live. On commence. Personne ne part. »"
+        },
+        {
+          "label": "Lui prêter ton chargeur avant",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "kolosse": 5
+          },
+          "clash": {
+            "opponent": "kolosse",
+            "boss": true,
+            "rounds": 5,
+            "level_bonus": 2,
+            "win": {
+              "effects": {
+                "credibilite": 12,
+                "streams": 8
+              },
+              "set_flags": [
+                "kolosse_ko"
+              ],
+              "consequence": "Victoire, et Kolosse est à 100 % de batterie pour la voir en replay. Il la regarde neuf fois. Il te rend ton chargeur. Avec un câble en moins."
+            },
+            "lose": {
+              "effects": {
+                "mental": -6
+              },
+              "consequence": "Il a gagné avec TON chargeur. Il le garde « en souvenir ». Retourne le voir quand tu seras prêt. Et achète un autre chargeur."
+            }
+          },
+          "consequence": "Kolosse branche ton chargeur. Il est ému. Il te prévient quand même : « Ça change rien. Je vais te détruire. Merci pour le chargeur. »"
+        },
+        {
+          "label": "Pas devant 14 personnes",
+          "effects": {
+            "credibilite": -2
+          },
+          "consequence": "« 13 personnes. 12. Ils partent tous à cause de toi. » Kolosse reste là, à attendre. Il sera encore là demain."
+        }
+      ]
+    },
+    {
+      "id": "story_momo_major",
+      "title": "Momo plie des t-shirts",
+      "location": "label",
+      "npc": "momo",
+      "weight": 0,
+      "text": "Dans l'arrière-boutique, Momo plie le même t-shirt depuis dix minutes. « Paraît qu'Hexagone Music t'a appelé. » Il ne lève pas les yeux. La machine numéro 4 essore très fort, comme pour couvrir un sanglot.",
+      "choices": [
+        {
+          "label": "Promettre de ne jamais l'oublier",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "momo": 12
+          },
+          "set_flags": [
+            "momo_prevenu"
+          ],
+          "consequence": "Il te serre dans ses bras. Il sent la lessive. Il te donne 40 jetons de laverie « pour les débuts difficiles ». Tu ne sais pas quoi en faire. Tu les gardes quand même."
+        },
+        {
+          "label": "Lui demander conseil",
+          "relations": {
+            "momo": 5
+          },
+          "xp": {
+            "business": 40
+          },
+          "set_flags": [
+            "momo_prevenu"
+          ],
+          "consequence": "« Ne signe jamais au premier stylo. Lis les petites lignes. Et les grandes. Et regarde s'il y a des lignes au dos. » Puis il t'apprend à plier un t-shirt. Ça n'avait rien à voir, mais ça l'a calmé."
+        },
+        {
+          "label": "Dire que c'est juste un rendez-vous",
+          "effects": {
+            "credibilite": -1
+          },
+          "relations": {
+            "momo": -3
+          },
+          "set_flags": [
+            "momo_prevenu"
+          ],
+          "consequence": "Il fait semblant de te croire. Tu fais semblant de croire qu'il te croit. La machine 4 s'arrête net. Même elle n'y croit pas."
+        }
+      ]
+    },
+    {
+      "id": "story_contrat_lu",
+      "title": "Le contrat",
+      "location": "chez_toi",
+      "weight": 0,
+      "text": "Un coursier t'a livré le contrat d'Hexagone Music. 84 pages. Police 7. Une page entière s'intitule « Divers ». Une autre « Divers (suite) ».",
+      "choices": [
+        {
+          "label": "Tout lire, ligne par ligne",
+          "effects": {
+            "mental": -4
+          },
+          "xp": {
+            "business": 60
+          },
+          "set_flags": [
+            "contrat_lu"
+          ],
+          "consequence": "Trois nuits blanches. Tu connais maintenant le mot « nonobstant ». Tu l'utilises au petit-déjeuner. Ta mère s'inquiète."
+        },
+        {
+          "label": "Le donner à ta mère",
+          "relations": {
+            "maman": 6
+          },
+          "xp": {
+            "business": 30
+          },
+          "set_flags": [
+            "contrat_lu"
+          ],
+          "consequence": "Elle a surligné 31 passages, écrit « NON » en rouge à côté de l'article 15, et « mange quelque chose » en marge de la page 40. Elle n'a pas tort, sur les deux points."
+        },
+        {
+          "label": "Lire seulement les pages avec des chiffres",
+          "effects": {
+            "mental": 2
+          },
+          "xp": {
+            "business": 15
+          },
+          "set_flags": [
+            "contrat_lu"
+          ],
+          "consequence": "Il y a beaucoup de zéros. Ils sont presque tous du mauvais côté de la virgule."
+        }
+      ]
+    },
+    {
+      "id": "story_negociation",
+      "title": "Victor Contrat",
+      "location": "quartier",
+      "npc": "victor_contrat",
+      "weight": 0,
+      "text": "Victor t'attend sur le boulevard, appuyé contre une berline noire garée sur trois places. Il tient un stylo en or. « Monte, on signe dans la voiture. Le bureau, c'est pour les gens qui ont le temps. Moi, j'ai un rendez-vous dans 40 minutes avec un autre toi. »",
+      "choices": [
+        {
+          "label": "S'asseoir et négocier",
+          "negotiation": "contrat_hexagone",
+          "consequence": "Tu t'assois. Le cuir des sièges est plus confortable que ton lit. C'est fait exprès."
+        },
+        {
+          "label": "Exiger un vrai bureau",
+          "effects": {
+            "credibilite": 2
+          },
+          "negotiation": "contrat_hexagone",
+          "consequence": "Il soupire et t'emmène dans un café. Il commande pour toi. Un déca. C'est déjà une négociation."
+        }
+      ]
+    },
+    {
+      "id": "story_image",
+      "title": "La réunion image",
+      "location": "quartier",
+      "npc": "victor_contrat",
+      "weight": 0,
+      "text": "Victor a installé un tableau blanc sur le trottoir, devant le Bunker. Trois stagiaires prennent des notes. Il a écrit « IMAGE » en gros, puis « ??? » en plus gros. « On a trois concepts. Ils ont tous été validés par un algorithme. »",
+      "choices": [
+        {
+          "label": "Le rappeur mystérieux : cagoule, jamais de visage",
+          "effects": {
+            "streams": 6,
+            "mental": -2
+          },
+          "set_flags": [
+            "image_choisie",
+            "image_cagoule"
+          ],
+          "consequence": "Tu portes une cagoule en plein mois d'août. Personne ne doit savoir qui tu es. Ta mère te reconnaît quand même. À la démarche."
+        },
+        {
+          "label": "Le rappeur authentique : survêt, bas du bloc",
+          "effects": {
+            "credibilite": 4
+          },
+          "set_flags": [
+            "image_choisie",
+            "image_authentique"
+          ],
+          "consequence": "Le service marketing t'achète un survêt « authentique » à 380 €. Il est pré-usé. Par une machine. Momo est vexé : lui le faisait gratuitement."
+        },
+        {
+          "label": "Le rappeur concept : tu ne parles qu'en rimes",
+          "effects": {
+            "mental": -3
+          },
+          "xp": {
+            "plume": 40
+          },
+          "set_flags": [
+            "image_choisie",
+            "image_rimes"
+          ],
+          "consequence": "Tu tiens deux jours. Au troisième, tu commandes une baguette en alexandrins. La boulangère pleure. Ta plume, elle, a progressé."
+        }
+      ]
+    },
+    {
+      "id": "story_single",
+      "title": "Le single",
+      "location": "studio",
+      "npc": "fred",
+      "weight": 0,
+      "text": "Le Bunker. Hexagone a envoyé un micro neuf, un canapé neuf, et un post-it : « Un tube, svp. Merci. » Fred regarde le micro neuf avec méfiance. « Le vieux, il avait de l'âme. Et de la poussière. »",
+      "choices": [
+        {
+          "label": "Écrire le single",
+          "writing": "session_single",
+          "consequence": "Tu ouvres ton carnet. Page blanche. Fred lance le beat. La page reste blanche, mais avec un beat."
+        },
+        {
+          "label": "Écrire le single, en cagoule",
+          "requires": {
+            "stats": {
+              "mental": 20
+            }
+          },
+          "effects": {
+            "credibilite": 1
+          },
+          "writing": "session_single",
+          "consequence": "Fred te regarde écrire en cagoule. Il ne pose aucune question. C'est un professionnel."
+        }
+      ]
+    },
+    {
+      "id": "story_sortie",
+      "title": "La semaine de sortie",
+      "location": "reseaux",
+      "weight": 0,
+      "text": "Ton single est sorti vendredi à minuit. Il est 0 h 01. Tu as déjà rafraîchi les chiffres quarante fois. Victor t'envoie un message toutes les dix minutes : « 🔥 ? »",
+      "choices": [
+        {
+          "label": "Rafraîchir les chiffres toutes les 30 secondes",
+          "effects": {
+            "mental": -5,
+            "streams": 4
+          },
+          "counters": {
+            "projets": 1
+          },
+          "set_flags": [
+            "sortie_faite"
+          ],
+          "consequence": "Tu as rafraîchi 2 880 fois. Le chiffre a bougé trois fois, dont une à la baisse. Tu as maintenant une tendinite au pouce et un single dans le top 10."
+        },
+        {
+          "label": "Couper le téléphone et attendre lundi",
+          "effects": {
+            "mental": 6,
+            "streams": 3
+          },
+          "counters": {
+            "projets": 1
+          },
+          "set_flags": [
+            "sortie_faite"
+          ],
+          "consequence": "Lundi, tu rallumes : 4e du top. Ta mère, elle, est 1re des acheteurs : elle a pris 200 exemplaires « pour la famille ». Vous êtes six dans la famille."
+        },
+        {
+          "label": "Accepter les streams du Kazakhstan",
+          "effects": {
+            "streams": 12,
+            "credibilite": -8
+          },
+          "counters": {
+            "projets": 1
+          },
+          "set_flags": [
+            "sortie_faite",
+            "faux_streams"
+          ],
+          "consequence": "Tu es numéro 1 au Kazakhstan. Tu n'as jamais été au Kazakhstan. Le Kazakhstan non plus ne t'a jamais vu. Yanis Tracklist a déjà remarqué."
+        }
+      ]
+    },
+    {
+      "id": "story_conteur",
+      "title": "Le Conteur, épisode 1",
+      "location": "quartier",
+      "npc": "le_conteur",
+      "weight": 0,
+      "text": "Le Conteur t'attend, une enceinte à la main. « J'ai sorti l'épisode 1 de ma nouvelle série : “Le petit de la laverie”. Tu es le méchant. L'épisode 2, on le fait en direct. Maintenant. »",
+      "choices": [
+        {
+          "label": "Clasher le Conteur, en direct",
+          "clash": {
+            "opponent": "le_conteur",
+            "rounds": 4,
+            "level_bonus": 1,
+            "win": {
+              "effects": {
+                "credibilite": 10,
+                "streams": 6
+              },
+              "set_flags": [
+                "conteur_ch5"
+              ],
+              "consequence": "Le Conteur range son enceinte. « Changement de scénario. Dans l'épisode 3, tu deviens le héros. » Il annule la saison 2. Les fans sont furieux. Contre lui."
+            },
+            "lose": {
+              "effects": {
+                "mental": -6
+              },
+              "consequence": "Le Conteur conclut l'épisode 2 par un cliffhanger : toi, à terre. « À suivre. » Reviens le voir quand tu veux écrire la suite."
+            }
+          },
+          "consequence": "Le Conteur appuie sur play. « Précédemment, dans “Le petit de la laverie”… »"
+        },
+        {
+          "label": "Exiger un meilleur rôle avant de clasher",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "le_conteur": 4
+          },
+          "clash": {
+            "opponent": "le_conteur",
+            "rounds": 4,
+            "level_bonus": 1,
+            "win": {
+              "effects": {
+                "credibilite": 10,
+                "streams": 6
+              },
+              "set_flags": [
+                "conteur_ch5"
+              ],
+              "consequence": "Tu as gagné, et il te réécrit en anti-héros torturé. C'est mieux que méchant. C'est presque une promotion."
+            },
+            "lose": {
+              "effects": {
+                "mental": -6
+              },
+              "consequence": "Il te garde comme méchant, mais il t'a donné une moustache dans l'épisode. Reviens le voir quand tu veux."
+            }
+          },
+          "consequence": "« D'accord. Tu passes de “méchant” à “méchant complexe”. » Il appuie sur play quand même."
+        },
+        {
+          "label": "Ne pas jouer dans sa série",
+          "effects": {
+            "credibilite": -2
+          },
+          "consequence": "Il te remplace par un acteur. Enfin, par son cousin avec une casquette. Les fans trouvent qu'il te ressemble. C'est vexant."
+        }
+      ]
+    },
+    {
+      "id": "story_autopsie",
+      "title": "L'autopsie",
+      "location": "media",
+      "npc": "scalpel",
+      "weight": 0,
+      "text": "Sur goslo radio, Scalpel est invité dans « Le Débrief ». Il a imprimé les paroles de ton single et les corrige au stylo rouge, en direct. « Ici, rime pauvre. Ici, rime absente. Ici… un chat. » Yanis Tracklist ne respire plus.",
+      "choices": [
+        {
+          "label": "Débarquer dans le studio et le défier",
+          "effects": {
+            "credibilite": 4
+          },
+          "set_flags": [
+            "duel_lance"
+          ],
+          "consequence": "Tu ouvres la porte du studio en direct. Big Nono lâche son paquet de chips. Scalpel lève les yeux, sans surprise. « Je vous attendais. »",
+          "counters": {
+            "disques_or": 1
+          }
+        },
+        {
+          "label": "Appeler l'émission en direct",
+          "effects": {
+            "streams": 3
+          },
+          "relations": {
+            "yanis": 4
+          },
+          "set_flags": [
+            "duel_lance"
+          ],
+          "consequence": "« Allô, Le Débrief ? C'est le chat. » Silence. Puis Scalpel rit. Une seule fois. Les auditeurs en parlent encore.",
+          "counters": {
+            "disques_or": 1
+          }
+        },
+        {
+          "label": "Laisser dire, et lui répondre par écrit",
+          "xp": {
+            "plume": 30
+          },
+          "set_flags": [
+            "duel_lance"
+          ],
+          "consequence": "Tu lui envoies une lettre manuscrite. Il te la renvoie corrigée, avec une note : « 11/20. Peut mieux faire. Rendez-vous demain. »",
+          "counters": {
+            "disques_or": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "story_duel",
+      "title": "Le duel à la plume",
+      "location": "quartier",
+      "npc": "scalpel",
+      "weight": 0,
+      "text": "Scalpel t'attend au milieu du trottoir, debout, carnet relié en cuir à la main. Pas de beat. Pas de DJ. Une petite foule s'est formée en silence, comme à la bibliothèque. « Prends ton stylo. Le mien est déjà ouvert. »",
+      "choices": [
+        {
+          "label": "Ouvrir ton carnet",
+          "writing": "duel_scalpel",
+          "consequence": "Tu ouvres ton carnet. Une page a encore une tache de lessive. C'est un signe."
+        },
+        {
+          "label": "Ouvrir ton carnet, et ton cœur",
+          "effects": {
+            "mental": 3
+          },
+          "writing": "duel_scalpel",
+          "consequence": "Tu inspires. Tu penses au Transfo, à ta mère, au chat. Scalpel attend, poliment. Il a tout le temps. Toi aussi, maintenant."
+        }
+      ]
+    },
+    {
+      "id": "story_dome",
+      "title": "Le Dôme",
+      "location": "label",
+      "npc": "momo",
+      "weight": 0,
+      "text": "Dans l'arrière-boutique, Victor et Momo se disputent devant la machine 4. Victor : « Hexagone a réservé Le Dôme. 6 000 places. » Momo : « Et qui va plier les t-shirts ? » Victor : « Petit détail : le Dôme, c'est si tu fais tomber le Baron avant. Le marketing adore les couronnements. »",
+      "choices": [
+        {
+          "label": "« Le Dôme, c'est avec Momo, ou c'est rien. »",
+          "effects": {
+            "credibilite": 3
+          },
+          "relations": {
+            "momo": 10,
+            "victor_contrat": -3
+          },
+          "set_flags": [
+            "dome_annonce"
+          ],
+          "consequence": "Momo te serre dans ses bras. Victor soupire et ajoute « + laverie » sur l'affiche. En tout petit, mais c'est écrit."
+        },
+        {
+          "label": "Merch par la laverie, billetterie par Hexagone",
+          "xp": {
+            "business": 40
+          },
+          "set_flags": [
+            "dome_annonce"
+          ],
+          "consequence": "Contrat signé sur le capot d'une machine à laver. Victor et Momo se serrent la main. Ils se méfient l'un de l'autre. C'est parfait."
+        },
+        {
+          "label": "Les laisser se battre pour le crédit",
+          "effects": {
+            "mental": 3
+          },
+          "set_flags": [
+            "dome_annonce"
+          ],
+          "consequence": "Ils font un baby-foot pour décider. Momo gagne 10 à 2. Victor demande une revanche depuis."
+        }
+      ]
+    },
+    {
+      "id": "story_stylo",
+      "title": "Le stylo rouge",
+      "location": "quartier",
+      "npc": "scalpel",
+      "weight": 0,
+      "text": "Scalpel t'attend, carnet fermé. « Le Baron rime avec sa présence, pas avec sa tête. Vise ses punchlines : c'est là qu'il saigne. » Il sort son stylo rouge, le regarde longtemps, puis te le tend.",
+      "choices": [
+        {
+          "label": "Accepter le stylo",
+          "give_items": [
+            "stylo_rouge"
+          ],
+          "relations": {
+            "scalpel": 8
+          },
+          "set_flags": [
+            "allie_scalpel"
+          ],
+          "consequence": "Le capuchon est mordillé. Scalpel prétend que ce n'est pas lui. C'est lui."
+        },
+        {
+          "label": "Accepter, et lui demander une dernière leçon",
+          "give_items": [
+            "stylo_rouge"
+          ],
+          "effects": {
+            "mental": -2
+          },
+          "xp": {
+            "plume": 40
+          },
+          "set_flags": [
+            "allie_scalpel"
+          ],
+          "consequence": "Il te fait réécrire trois fois le même vers. À la troisième, il hoche la tête. Chez lui, c'est une standing ovation."
+        }
+      ]
+    },
+    {
+      "id": "story_bobine_dome",
+      "title": "Deux platines",
+      "location": "quartier",
+      "npc": "dj_bobine",
+      "weight": 0,
+      "text": "DJ Bobine a acheté une deuxième platine. Il la regarde avec méfiance. « Pour le Dôme, j'ai cédé. Deux platines. Mais maintenant, je doute. C'est terrible, le doute. »",
+      "choices": [
+        {
+          "label": "Le rassurer : deux platines, deux fois plus d'énergie",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "dj_bobine": 8
+          },
+          "set_flags": [
+            "equipe_prete"
+          ],
+          "consequence": "« Deux fois plus d'énergie… » Il sourit. Il règle les deux platines à 102 %. Tu as créé un monstre."
+        },
+        {
+          "label": "Lui demander de jouer à la bonne vitesse, pour une fois",
+          "effects": {
+            "credibilite": 2
+          },
+          "set_flags": [
+            "equipe_prete"
+          ],
+          "consequence": "« 100 %, pas plus. » Il a tenu deux minutes, puis il est passé à 101 %. C'est un progrès historique."
+        },
+        {
+          "label": "Faire répéter Gégé, Fred et Bobine ensemble",
+          "xp": {
+            "scene": 40
+          },
+          "set_flags": [
+            "equipe_prete"
+          ],
+          "consequence": "Gégé règle les lumières, Fred règle le son, Bobine dérègle tout. C'est l'équipe parfaite."
+        }
+      ]
+    },
+    {
+      "id": "story_baron_clash",
+      "title": "Le Baron",
+      "location": "quartier",
+      "npc": "le_baron",
+      "weight": 0,
+      "text": "Tout en haut de la rue, le Baron t'attend devant sa porte, lunettes noires, bras croisés. Quarante téléphones filment déjà. « Le trône est là-haut. Pour monter, faut passer par moi. Et je suis très large. »",
+      "choices": [
+        {
+          "label": "Monter sur le ring",
+          "clash": {
+            "opponent": "le_baron",
+            "boss": true,
+            "rounds": 6,
+            "level_bonus": 2,
+            "win": {
+              "effects": {
+                "credibilite": 15,
+                "streams": 10
+              },
+              "set_flags": [
+                "baron_tombe"
+              ],
+              "consequence": "Le Baron retire ses lunettes. C'est la première fois qu'on voit ses yeux depuis 2009. « Bien joué, petit. » La rue explose. Quelque part, un chat applaudit avec ses pattes."
+            },
+            "lose": {
+              "effects": {
+                "mental": -8
+              },
+              "consequence": "Le Baron remet ses lunettes. « Reviens quand t'auras grandi. » Il remonte. Il ne descend jamais. Toi, tu remonteras."
+            },
+            "opponent_power": 1.2
+          },
+          "consequence": "Les téléphones se lèvent. Le Baron fait craquer ses doigts, un par un. Ça prend du temps. C'est voulu."
+        },
+        {
+          "label": "Monter sur le ring, en citant ses propres paroles",
+          "effects": {
+            "credibilite": 2
+          },
+          "clash": {
+            "opponent": "le_baron",
+            "boss": true,
+            "rounds": 6,
+            "level_bonus": 2,
+            "win": {
+              "effects": {
+                "credibilite": 15,
+                "streams": 10
+              },
+              "set_flags": [
+                "baron_tombe"
+              ],
+              "consequence": "Battu avec ses propres mots. Le Baron sourit, pour la première fois en quinze ans. « T'as fait tes devoirs. » Le trône est vacant."
+            },
+            "lose": {
+              "effects": {
+                "mental": -8
+              },
+              "consequence": "Il connaît ses paroles mieux que toi. Évidemment. « Révise, petit. » Retourne le voir quand tu seras prêt."
+            },
+            "opponent_power": 1.2
+          },
+          "consequence": "Tu lui récites son premier couplet, de 2009. Il hausse un sourcil. « Intéressant. Ça va pas t'aider. »"
+        },
+        {
+          "label": "Pas encore",
+          "effects": {
+            "credibilite": -2
+          },
+          "consequence": "« Je suis là. Je suis toujours là. C'est un peu le principe d'un trône. »"
+        }
+      ]
+    },
+    {
+      "id": "story_face_a_face",
+      "title": "Le Face-à-face",
+      "location": "media",
+      "npc": "big_nono",
+      "weight": 0,
+      "text": "goslo radio t'invite pour « Le Face-à-face », l'émission la plus écoutée du quartier. Big Nono a ouvert un paquet de chips neuf. C'est mauvais signe : il est concentré.",
+      "choices": [
+        {
+          "label": "Entrer dans le studio",
+          "interview": "face_a_face",
+          "consequence": "Le voyant rouge s'allume. Big Nono croque une chip. Le direct commence."
+        },
+        {
+          "label": "Entrer, et offrir des chips à Big Nono",
+          "relations": {
+            "big_nono": 5
+          },
+          "interview": "face_a_face",
+          "consequence": "Il regarde le paquet. Il regarde toi. Il prend une chip. Ça ne change rien, mais il a apprécié."
+        }
+      ]
+    },
+    {
+      "id": "story_dome_concert",
+      "title": "Le Dôme",
+      "location": "scene",
+      "npc": "gege",
+      "weight": 0,
+      "text": "Devant le Transfo, une navette t'emmène au Dôme. 6 000 places, toutes vendues. Ta mère a fait imprimer une pancarte de quatre mètres. Gégé, venu en renfort, lève les deux pouces. DJ Bobine allume ses deux platines, en doutant.",
+      "choices": [
+        {
+          "label": "Entrer en scène",
+          "concert": "le_dome",
+          "consequence": "Le noir complet. Puis 6 000 lumières de téléphones. Quelqu'un crie ton nom. Ce n'est pas ta mère. C'est tout le monde."
+        },
+        {
+          "label": "Prendre une seconde pour regarder la salle",
+          "effects": {
+            "mental": 4
+          },
+          "concert": "le_dome",
+          "consequence": "Tu penses au bas du bloc, au Transfo, à la laverie. Puis tu entres. Tu n'as plus peur."
+        }
+      ]
+    }
+  ],
+  "interviews": [
+    {
+      "id": "micro_ouvert",
+      "host": "big_nono",
+      "show": "Micro Ouvert · goslo radio",
+      "intro": "Ton freestyle vient de passer à l'antenne. Big Nono enchaîne : trois questions, en direct, devant tout le quartier.",
+      "start_hype": 30,
+      "pass_hype": 60,
+      "timeout_penalty": 12,
+      "questions": [
+        {
+          "text": "Alors {nom}, présente-toi aux auditeurs. T'es qui ?",
+          "time": 12,
+          "answers": [
+            {
+              "label": "{nom}, du bas du bloc. Je rappe ce que je vis.",
+              "hype": 15,
+              "reaction": "Simple, efficace. Le standard s'allume."
+            },
+            {
+              "label": "Le futur du rap français, rien que ça.",
+              "hype": 5,
+              "effects": {
+                "credibilite": -1
+              },
+              "reaction": "Ambitieux. Un auditeur a raccroché en riant. Un autre a noté ton nom."
+            },
+            {
+              "label": "Répondre par une rime improvisée sur {ville}",
+              "hype": 22,
+              "requires": {
+                "skills": {
+                  "plume": 2
+                }
+              },
+              "reaction": "Big Nono tape sur la table. « Ça, c'est du direct ! »"
+            }
+          ]
+        },
+        {
+          "text": "On dit que le rap, c'était mieux avant. T'en penses quoi ?",
+          "time": 11,
+          "answers": [
+            {
+              "label": "Avant, c'était bien. Maintenant, c'est à nous.",
+              "hype": 18,
+              "reaction": "Big Nono hoche la tête. « Bien répondu, petit. »"
+            },
+            {
+              "label": "Oui, tout est nul depuis 2005.",
+              "hype": -10,
+              "reaction": "Big Nono : « Et toi, t'as commencé quand ? » Silence gêné."
+            },
+            {
+              "label": "Je sais pas, j'avais pas l'âge.",
+              "hype": 8,
+              "reaction": "Honnête. Les vieux auditeurs ont souri, les jeunes n'ont pas compris."
+            }
+          ]
+        },
+        {
+          "text": "Dernière question : un mot pour le quartier ?",
+          "time": 10,
+          "answers": [
+            {
+              "label": "Merci à ceux qui m'ont jamais cru. Ça m'a motivé.",
+              "hype": 12,
+              "reaction": "Lil Sauge, s'il écoute, vient de se sentir visé."
+            },
+            {
+              "label": "Abonnez-vous, likez, partagez !",
+              "hype": -6,
+              "reaction": "Big Nono soupire. « C'est une radio, frère. »"
+            },
+            {
+              "label": "Dédicace à Vieux Mic Lucien, c'est lui qui m'a poussé.",
+              "hype": 20,
+              "relations": {
+                "lucien": 6
+              },
+              "requires": {
+                "relations": {
+                  "lucien": 55
+                }
+              },
+              "reaction": "Quelque part sur la place, un vieux monsieur monte le son de son poste."
+            }
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 8,
+          "credibilite": 8
+        },
+        "xp": {
+          "scene": 30
+        },
+        "relations": {
+          "big_nono": 15
+        },
+        "set_flags": [
+          "micro_ouvert_fait",
+          "micro_ouvert_reussi",
+          "freestyle_fait"
+        ],
+        "consequence": "Big Nono : « Le petit du bloc. Retenez ce nom. » goslo radio va repasser ton passage toute la semaine."
+      },
+      "lose": {
+        "effects": {
+          "streams": 3,
+          "mental": -5
+        },
+        "xp": {
+          "scene": 15
+        },
+        "set_flags": [
+          "micro_ouvert_fait",
+          "freestyle_fait"
+        ],
+        "consequence": "Big Nono te remercie poliment, ce qui à la radio veut dire « au suivant ». Mais ton freestyle, lui, a été enregistré."
+      }
+    },
+    {
+      "id": "grand_debat",
+      "host": "delamorale",
+      "show": "Le Grand Débat · Télé",
+      "boss": true,
+      "intro": "Jean-Hubert Delamorale ajuste ses lunettes. « Monsieur {nom}, merci d'être venu défendre l'indéfendable. » Le public du plateau a été choisi pour ne pas t'aimer.",
+      "start_hype": 20,
+      "pass_hype": 80,
+      "timeout_penalty": 14,
+      "questions": [
+        {
+          "text": "Le rap fait-il baisser le niveau en orthographe ?",
+          "time": 11,
+          "answers": [
+            {
+              "label": "J'ai eu 16 au bac de français. Et vous, en rap ?",
+              "hype": 20,
+              "reaction": "Rires dans le public. Même le cameraman a souri. Delamorale tourne une page de son dossier, nerveusement."
+            },
+            {
+              "label": "Ça dépend des rappeurs. Et des chroniqueurs.",
+              "hype": 10,
+              "reaction": "Réponse correcte. Delamorale note quelque chose dans son dossier. Probablement « insolent »."
+            },
+            {
+              "label": "Je sais pas, j'ai pas lu la question.",
+              "hype": -8,
+              "reaction": "Delamorale jubile. « Vous voyez ? » Le public applaudit. Contre toi."
+            },
+            {
+              "label": "Lui répondre en alexandrins improvisés",
+              "hype": 26,
+              "requires": {
+                "skills": {
+                  "plume": 4
+                }
+              },
+              "reaction": "Douze syllabes, rime riche, césure parfaite. Delamorale ouvre la bouche, puis la referme. L'audimat explose."
+            }
+          ]
+        },
+        {
+          "text": "Vos textes sont violents. Vous mesurez votre responsabilité ?",
+          "time": 11,
+          "answers": [
+            {
+              "label": "Je raconte ce que je vois. Si ça choque, c'est la réalité qui est violente.",
+              "hype": 18,
+              "reaction": "Silence sur le plateau. Puis un applaudissement, au fond. Puis dix."
+            },
+            {
+              "label": "Vous avez regardé votre propre journal de 20 h ?",
+              "hype": 14,
+              "reaction": "Le réalisateur coupe la musique de transition. Personne ne sait quoi faire. C'est parfait."
+            },
+            {
+              "label": "Quitter le plateau en faisant tomber le micro",
+              "hype": -12,
+              "effects": {
+                "credibilite": 4
+              },
+              "reaction": "Effet garanti, mais tu as dû revenir : ton téléphone était resté sur la table."
+            }
+          ]
+        },
+        {
+          "text": "On dit qu'un de vos amis chante sous autotune. Est-ce encore de la musique ?",
+          "time": 10,
+          "answers": [
+            {
+              "label": "La musique évolue. Vous aussi, peut-être, un jour.",
+              "hype": 15,
+              "reaction": "Un « ooooh » parcourt le public. Delamorale rougit jusqu'aux oreilles."
+            },
+            {
+              "label": "Lil Croon est mon ami et ma plus grande inquiétude.",
+              "hype": 10,
+              "relations": {
+                "lil_croon": -3
+              },
+              "reaction": "Fou rire général. Lil Croon a tweeté « blessé-é-é ». À l'autotune."
+            },
+            {
+              "label": "Répondre en chantant sous autotune",
+              "hype": 4,
+              "reaction": "Le public ne sait pas s'il doit rire ou applaudir. Il fait les deux, mal."
+            }
+          ]
+        },
+        {
+          "text": "Dernière question : vous comptez faire un vrai métier un jour ?",
+          "time": 10,
+          "answers": [
+            {
+              "label": "Oui : chroniqueur télé. Ça a l'air reposant.",
+              "hype": 24,
+              "reaction": "Le plateau explose. Delamorale range son dossier. Il a perdu, et il le sait."
+            },
+            {
+              "label": "Vous êtes payé pour critiquer ce que vous n'écoutez pas. Moi, au moins, j'écris.",
+              "hype": 20,
+              "reaction": "Applaudissements nourris. La phrase est déjà en sous-titre sur tous les réseaux."
+            },
+            {
+              "label": "Je fais ça pour ma mère.",
+              "hype": 8,
+              "reaction": "Le public attendri fait « ooh ». Delamorale aussi, malgré lui."
+            }
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 15,
+          "credibilite": 12
+        },
+        "xp": {
+          "plume": 40,
+          "business": 30
+        },
+        "relations": {
+          "yanis": 10,
+          "delamorale": -15
+        },
+        "set_flags": [
+          "debat_gagne"
+        ],
+        "consequence": "Le Grand Débat a été coupé au montage. Ta réponse, elle, a fait quatre millions de vues. Jean-Hubert Delamorale prépare déjà un dossier sur toi. Cette fois, il va peut-être écouter la mixtape."
+      },
+      "lose": {
+        "effects": {
+          "credibilite": -6,
+          "mental": -8
+        },
+        "consequence": "Le bandeau du Grand Débat titre : « Le rap, toujours aussi inculte ». Le public du plateau rentre content. Tu pourras revenir : Delamorale réinvite tout le monde, il adore avoir raison."
+      }
+    },
+    {
+      "id": "face_a_face",
+      "host": "big_nono",
+      "show": "Le Face-à-face · goslo radio",
+      "boss": true,
+      "intro": "Big Nono pose son paquet de chips, ce qu'il ne fait jamais. « Ce soir, Le Face-à-face. Le standard est ouvert. Tout le quartier écoute. Même ceux qui disent qu'ils n'écoutent pas. »",
+      "start_hype": 25,
+      "pass_hype": 80,
+      "timeout_penalty": 12,
+      "questions": [
+        {
+          "text": "Tu as fait tomber le Baron hier soir. Première question : tu dors comment, maintenant ?",
+          "time": 10,
+          "answers": [
+            {
+              "label": "Mal. Le trône grince.",
+              "hype": 18,
+              "reaction": "Big Nono rit. Il ne rit jamais, sauf quand c'est vraiment bon. Il repose ses chips."
+            },
+            {
+              "label": "Comme un bébé : je me réveille toutes les deux heures en pleurant.",
+              "hype": 14,
+              "reaction": "Le standard explose. Une maman appelle pour dire « c'est tellement vrai »."
+            },
+            {
+              "label": "Je dors pas. Je suis un loup.",
+              "hype": -6,
+              "reaction": "Big Nono te fixe. « Un loup. » Il mange une chip, très lentement."
+            }
+          ]
+        },
+        {
+          "text": "On dit que t'as vendu ton âme à Hexagone Music. Alors ?",
+          "time": 10,
+          "answers": [
+            {
+              "label": "Je l'ai louée. Bail de trois albums, préavis d'un mois.",
+              "hype": 18,
+              "reaction": "« Préavis d'un mois. » Big Nono le note sur son paquet de chips. Il va le citer pendant dix ans."
+            },
+            {
+              "label": "Mon âme est à la laverie. Machine 4, programme délicat.",
+              "hype": 14,
+              "reaction": "Momo appelle le standard, en larmes : « C'est vrai. Elle est propre. »",
+              "relations": {
+                "momo": 5
+              }
+            },
+            {
+              "label": "27 % de royalties, un droit de regard sur la coiffure de mon DA, zéro danse. Mon âme va très bien.",
+              "hype": 24,
+              "reaction": "Silence admiratif. Quelque part, Victor Contrat a recraché son café.",
+              "requires": {
+                "skills": {
+                  "business": 5
+                }
+              }
+            },
+            {
+              "label": "Qui a dit ça ? Donne-moi son adresse.",
+              "hype": -8,
+              "reaction": "Big Nono coupe ton micro trois secondes. « On reste courtois sur goslo radio. »"
+            }
+          ]
+        },
+        {
+          "text": "Attention, appel au standard… C'est le Baron. Il dit : « Le petit a gagné un clash. Moi, j'ai gagné quinze ans. » Ta réponse ?",
+          "time": 9,
+          "answers": [
+            {
+              "label": "Quinze ans au sommet, respect. Laisse-moi les clés, je fermerai derrière moi.",
+              "hype": 16,
+              "reaction": "Le Baron raccroche. Puis il rappelle, juste pour dire « bien joué ». Puis il raccroche encore."
+            },
+            {
+              "label": "Quinze ans ? Mon single a mis trois jours. Grâce à un chat, mais quand même.",
+              "hype": 12,
+              "reaction": "Le Baron rit au téléphone. L'antenne aussi. Le chat, lui, ne commente pas."
+            },
+            {
+              "label": "Euh… bonjour monsieur le Baron, j'adore votre travail.",
+              "hype": -10,
+              "reaction": "Le standard raccroche, par pitié. Le Baron, lui, rit encore."
+            }
+          ]
+        },
+        {
+          "text": "On doit parler du chat. Il paraît qu'il sera au Dôme ce soir ?",
+          "time": 9,
+          "answers": [
+            {
+              "label": "Il a refusé : il voulait une loge plus grande que la mienne.",
+              "hype": 16,
+              "reaction": "Big Nono s'étouffe avec une chip. Les auditeurs appellent pour savoir s'il va bien. Il va bien."
+            },
+            {
+              "label": "Le chat, c'est le passé. Ce soir, c'est 6 000 personnes et zéro croquette.",
+              "hype": 12,
+              "reaction": "Applaudissements dans le studio. Les deux techniciens. C'est déjà beaucoup."
+            },
+            {
+              "label": "Quel chat ?",
+              "hype": -6,
+              "reaction": "Big Nono pose ses chips. « Ne fais jamais ça. » Le quartier entier est d'accord."
+            }
+          ]
+        },
+        {
+          "text": "Dernière question. Ta mère est en ligne. Elle demande… si tu cherches toujours un vrai travail.",
+          "time": 10,
+          "answers": [
+            {
+              "label": "Oui maman. Après le Dôme, je postule à la laverie.",
+              "hype": 18,
+              "reaction": "Momo appelle le standard à son tour : « Il est pris. » L'antenne fond en larmes. Big Nono aussi, discrètement."
+            },
+            {
+              "label": "Maman, ce soir je remplis le Dôme. C'est un vrai travail, avec des heures sup.",
+              "hype": 16,
+              "reaction": "« Des heures sup ? Payées ? » Ta mère est rassurée. Elle raccroche pour imprimer une pancarte."
+            },
+            {
+              "label": "Raccrocher en direct",
+              "hype": -12,
+              "reaction": "Tu as raccroché au nez de ta mère en direct. Big Nono te regarde comme on regarde un homme perdu."
+            }
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 12,
+          "credibilite": 10
+        },
+        "xp": {
+          "business": 40
+        },
+        "relations": {
+          "big_nono": 15,
+          "maman": 5
+        },
+        "set_flags": [
+          "face_a_face_gagne"
+        ],
+        "consequence": "Le Face-à-face bat tous les records de goslo radio. Big Nono finit l'émission sans avoir fini ses chips. C'est une première. Il les garde « en souvenir »."
+      },
+      "lose": {
+        "effects": {
+          "mental": -7
+        },
+        "consequence": "L'émission se termine sur un blanc de cinq secondes. Big Nono range ses chips sans un mot. Il te réinvite quand même : « Reviens quand t'as dormi. »"
+      }
+    }
+  ],
+  "cinematics": [
+    {
+      "id": "prologue",
+      "steps": [
+        {
+          "title": {
+            "text": "CHAPITRE 1",
+            "subtitle": "En bas du bloc"
+          }
+        },
+        {
+          "place": {
+            "who": "player",
+            "x": 21,
+            "y": 13,
+            "facing": "down"
+          }
+        },
+        {
+          "narration": "{ville}, 23 h 47. En bas du bloc, rien ne bouge. À part toi."
+        },
+        {
+          "narration": "Zéro abonné. Un carnet à spirale. Et une certitude : un jour, tout le quartier connaîtra ton nom."
+        },
+        {
+          "move": {
+            "who": "lil_sauge",
+            "x": 20,
+            "y": 13
+          }
+        },
+        {
+          "face": {
+            "who": "player",
+            "facing": "left"
+          }
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Encore en train de gratter, {nom} ? Laisse tomber, frère. Le rap, c'est pas pour les gens d'ici."
+          }
+        },
+        {
+          "say": {
+            "who": "player",
+            "text": "On verra."
+          }
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "C'est tout vu. Moi j'ai 800 abonnés. Toi t'as un cahier."
+          }
+        },
+        {
+          "move": {
+            "who": "lil_sauge",
+            "x": 13,
+            "y": 13
+          }
+        },
+        {
+          "face": {
+            "who": "lil_sauge",
+            "facing": "left"
+          }
+        },
+        {
+          "face": {
+            "who": "player",
+            "facing": "up"
+          }
+        },
+        {
+          "narration": "Il a peut-être raison. Mais ce soir, tu vas écrire ton premier vrai texte."
+        }
+      ]
+    },
+    {
+      "id": "ton_nom_a_la_radio",
+      "steps": [
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Le lendemain. goslo radio repasse ton freestyle en boucle. Dans tout le quartier, les fenêtres sont ouvertes."
+        },
+        {
+          "camera": {
+            "x": 11,
+            "y": 9
+          }
+        },
+        {
+          "say": {
+            "who": "lucien",
+            "text": "Eh ! C'est le petit du bloc, ça ! Je l'avais dit. Enfin, je l'ai pensé très fort."
+          }
+        },
+        {
+          "camera": {
+            "x": 13,
+            "y": 13
+          }
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Il passe sur goslo radio, lui ? Sérieux ? J'ai envoyé quarante sons, ils m'ont jamais rappelé."
+          }
+        },
+        {
+          "camera": {
+            "x": 15,
+            "y": 17
+          }
+        },
+        {
+          "exclaim": "kevlar_jr"
+        },
+        {
+          "say": {
+            "who": "kevlar_jr",
+            "text": "On verra s'il rappe aussi bien sans micro. Ring des Mots, terrain vague. Je l'attends."
+          }
+        },
+        {
+          "camera_reset": true
+        },
+        {
+          "narration": "Kevlar Jr. 19 ans, 31 victoires, 0 défaite au Ring des Mots. Le boss du quartier vient de te défier. Avant de l'affronter, fais tes preuves au terrain vague."
+        }
+      ]
+    },
+    {
+      "id": "ch1_outro",
+      "steps": [
+        {
+          "fade": true
+        },
+        {
+          "place": {
+            "who": "player",
+            "x": 10,
+            "y": 16,
+            "facing": "right"
+          }
+        },
+        {
+          "place": {
+            "who": "kevlar_jr",
+            "x": 12,
+            "y": 16,
+            "facing": "left"
+          }
+        },
+        {
+          "fade": false
+        },
+        {
+          "sound": "victory"
+        },
+        {
+          "narration": "Le terrain vague explose. Les téléphones filment. Pour la première fois, le quartier scande ton nom."
+        },
+        {
+          "say": {
+            "who": "kevlar_jr",
+            "text": "Respect. T'as un truc, toi. Mais la prochaine fois, je t'attends au tournant. Et j'aurai une nouvelle collection."
+          }
+        },
+        {
+          "place": {
+            "who": "momo",
+            "x": 10,
+            "y": 13,
+            "facing": "down"
+          }
+        },
+        {
+          "exclaim": "player"
+        },
+        {
+          "move": {
+            "who": "momo",
+            "x": 10,
+            "y": 15
+          }
+        },
+        {
+          "face": {
+            "who": "player",
+            "facing": "up"
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Momo. goslo records. On est à la laverie, au bout de la rue. Ton passage à la radio, ton battle ce soir… ça m'a mis des frissons. Et je frissonne pas souvent, je bosse dans une laverie."
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Passe me voir. On a un micro à 400 balles qui t'attend."
+          }
+        },
+        {
+          "narration": "Il te tend une carte de visite. Elle sent la lessive."
+        },
+        {
+          "title": {
+            "text": "FIN DU CHAPITRE 1",
+            "subtitle": "En bas du bloc"
+          }
+        },
+        {
+          "title": {
+            "text": "À SUIVRE",
+            "subtitle": "Chapitre 2 · La laverie"
+          }
+        },
+        {
+          "fade": true
+        },
+        {
+          "despawn": "momo"
+        },
+        {
+          "fade": false
+        }
+      ]
+    },
+    {
+      "id": "ch2_intro",
+      "steps": [
+        {
+          "title": {
+            "text": "CHAPITRE 2",
+            "subtitle": "La laverie"
+          }
+        },
+        {
+          "narration": "Le lendemain du Ring des Mots. Dans ta poche, une carte de visite qui sent la lessive."
+        },
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Sur goslo radio : « Le petit du bloc a battu Kevlar Jr. Les labels s'agitent. Lingot, rappeur et bijouterie ambulante, annonce qu'il va “remettre de l'ordre dans le quartier”. »"
+        },
+        {
+          "camera": {
+            "x": 3,
+            "y": 12
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "La porte est ouverte, petit. Enfin, elle est cassée, mais c'est pareil."
+          }
+        },
+        {
+          "camera": {
+            "x": 19,
+            "y": 8
+          }
+        },
+        {
+          "exclaim": "lingot"
+        },
+        {
+          "say": {
+            "who": "lingot",
+            "text": "Un nouveau dans le quartier ? Il va falloir qu'il brille. Ou qu'il disparaisse. Comme mes concurrents."
+          }
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "exil_lingot",
+      "steps": [
+        {
+          "place": {
+            "who": "lingot",
+            "x": 20,
+            "y": 8,
+            "facing": "down"
+          }
+        },
+        {
+          "camera": {
+            "x": 19,
+            "y": 8
+          }
+        },
+        {
+          "say": {
+            "who": "lingot",
+            "text": "Ce quartier ne mérite pas mon éclat. Je pars là où les gens comprennent les bijoux."
+          }
+        },
+        {
+          "move": {
+            "who": "lingot",
+            "x": 22,
+            "y": 8,
+            "facing": "right"
+          }
+        },
+        {
+          "despawn": "lingot"
+        },
+        {
+          "sound": "wipe"
+        },
+        {
+          "title": {
+            "text": "EXIL IMMÉDIAT À MIAMI",
+            "subtitle": "Lingot ne reviendra pas. Sauf pour les impôts."
+          }
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "ch2_outro",
+      "steps": [
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Une semaine plus tard. Ta réponse au Grand Débat tourne en boucle. Ta mixtape aussi."
+        },
+        {
+          "camera": {
+            "x": 12,
+            "y": 5
+          }
+        },
+        {
+          "say": {
+            "who": "yanis",
+            "text": "J'ai mis ta réponse dans mon top de la semaine. Entre deux chefs-d'œuvre. Ne prends pas la grosse tête, c'est un top hebdomadaire."
+          }
+        },
+        {
+          "say": {
+            "who": "big_nono",
+            "text": "Ta mixtape est numéro 1 du Top goslo ! Bon, le Top goslo, c'est moi qui le fais. Mais quand même."
+          }
+        },
+        {
+          "camera": {
+            "x": 5,
+            "y": 8
+          }
+        },
+        {
+          "say": {
+            "who": "big_kliks",
+            "text": "Moi aussi je suis numéro 1. Dans 47 pays. Enfin, dans un village. Mais 47 fois."
+          }
+        },
+        {
+          "camera_reset": true
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Petit… on a reçu un mail. Une vraie salle. Avec une vraie scène. Et de vrais gens qui paient. Tu vas faire ton premier concert."
+          }
+        },
+        {
+          "title": {
+            "text": "FIN DU CHAPITRE 2",
+            "subtitle": "La laverie"
+          }
+        },
+        {
+          "title": {
+            "text": "À SUIVRE",
+            "subtitle": "Chapitre 3 · Première scène"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch3_intro",
+      "steps": [
+        {
+          "title": {
+            "text": "CHAPITRE 3",
+            "subtitle": "Première scène"
+          }
+        },
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Sur goslo radio : « Le petit du bloc annonce son premier concert, au Transfo. 300 places. Big Nono a déjà réservé la sienne. Il a demandé un siège renforcé. »"
+        },
+        {
+          "camera": {
+            "x": 3,
+            "y": 12
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Trois semaines, petit. Il te faut une setlist, un DJ, une répète, et une salle pleine. Moi, je m'occupe du merch. J'ai imprimé des t-shirts. Ils sentent la lessive."
+          }
+        },
+        {
+          "camera": {
+            "x": 18,
+            "y": 4
+          }
+        },
+        {
+          "narration": "Au Transfo, Gégé le régisseur a déjà été prévenu. Il n'a rien dit. Il a juste regardé le plafond pendant dix minutes."
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "ch3_outro",
+      "steps": [
+        {
+          "fade": true
+        },
+        {
+          "place": {
+            "who": "player",
+            "x": 18,
+            "y": 5,
+            "facing": "down"
+          }
+        },
+        {
+          "place": {
+            "who": "maman",
+            "x": 17,
+            "y": 6,
+            "facing": "up"
+          }
+        },
+        {
+          "place": {
+            "who": "gege",
+            "x": 19,
+            "y": 6,
+            "facing": "up"
+          }
+        },
+        {
+          "fade": false
+        },
+        {
+          "sound": "crowdCheer"
+        },
+        {
+          "narration": "23 h 40. Devant le Transfo, les oreilles qui sifflent encore. Tu viens de faire ton premier concert."
+        },
+        {
+          "say": {
+            "who": "maman",
+            "text": "C'était magnifique. J'ai tout filmé. En portrait. Et sinon, tu cherches toujours un vrai travail ?"
+          }
+        },
+        {
+          "say": {
+            "who": "gege",
+            "text": "Pas mal, petit. Reviens quand tu veux. Mais préviens-moi pour l'écureuil à la platine."
+          }
+        },
+        {
+          "place": {
+            "who": "victor_contrat",
+            "x": 22,
+            "y": 5,
+            "facing": "left"
+          }
+        },
+        {
+          "exclaim": "player"
+        },
+        {
+          "move": {
+            "who": "victor_contrat",
+            "x": 19,
+            "y": 5,
+            "facing": "left"
+          }
+        },
+        {
+          "face": {
+            "who": "player",
+            "facing": "right"
+          }
+        },
+        {
+          "say": {
+            "who": "victor_contrat",
+            "text": "Victor. Hexagone Music. J'étais dans la salle. Enfin, au bar, mais j'entendais. On va faire des grandes choses ensemble. C'est quoi ton nom déjà ?"
+          }
+        },
+        {
+          "say": {
+            "who": "player",
+            "text": "{nom}."
+          }
+        },
+        {
+          "say": {
+            "who": "victor_contrat",
+            "text": "{nom}. Superbe. Très vendeur. Je t'appelle. Ne signe rien avec une laverie d'ici là."
+          }
+        },
+        {
+          "narration": "Il te tend une carte de visite en papier épais, gaufré, doré. Elle ne sent pas la lessive. Quelque part, une machine numéro 4 tremble."
+        },
+        {
+          "title": {
+            "text": "FIN DU CHAPITRE 3",
+            "subtitle": "Première scène"
+          }
+        },
+        {
+          "title": {
+            "text": "À SUIVRE",
+            "subtitle": "Chapitre 4 · Le buzz"
+          }
+        },
+        {
+          "fade": true
+        },
+        {
+          "despawn": "victor_contrat"
+        },
+        {
+          "despawn": "maman"
+        },
+        {
+          "despawn": "gege"
+        },
+        {
+          "fade": false
+        }
+      ]
+    },
+    {
+      "id": "ch4_intro",
+      "steps": [
+        {
+          "title": {
+            "text": "CHAPITRE 4",
+            "subtitle": "Le buzz"
+          }
+        },
+        {
+          "narration": "Trois semaines après le Transfo. Ton téléphone vibre. Puis il vibre encore. Puis il ne s'arrête plus. Il chauffe. Il sent un peu le brûlé."
+        },
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Sur goslo radio : « Un refrain du quartier tourne partout depuis ce matin. On ne sait pas encore qui le chante. On sait qu'un chat danse dessus. »"
+        },
+        {
+          "camera": {
+            "x": 3,
+            "y": 12
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Petit ! Regarde tes notifs ! Non, attends. Assieds-toi d'abord. Non, debout. Non, regarde, c'est tout."
+          }
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "appel_victor",
+      "steps": [
+        {
+          "narration": "Ton téléphone sonne. Numéro masqué. Personne n'appelle plus avec un numéro masqué, à part les huissiers et les directeurs artistiques."
+        },
+        {
+          "say": {
+            "who": "victor_contrat",
+            "text": "{nom} ! Victor. Hexagone Music. Deux millions de vues, c'est énorme. Bon, c'est surtout le chat. Mais on va faire des grandes choses. Ensemble. Avec le chat, si besoin."
+          }
+        },
+        {
+          "say": {
+            "who": "victor_contrat",
+            "text": "Je t'envoie le contrat. Je suis garé sur le boulevard. Je ne bouge pas. Enfin, je bouge un peu si un agent arrive."
+          }
+        },
+        {
+          "camera": {
+            "x": 15,
+            "y": 8
+          }
+        },
+        {
+          "exclaim": "victor_contrat"
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "ch4_outro",
+      "steps": [
+        {
+          "fade": true
+        },
+        {
+          "place": {
+            "who": "player",
+            "x": 14,
+            "y": 8,
+            "facing": "right"
+          }
+        },
+        {
+          "place": {
+            "who": "victor_contrat",
+            "x": 15,
+            "y": 8,
+            "facing": "left"
+          }
+        },
+        {
+          "fade": false
+        },
+        {
+          "narration": "Le contrat est signé. Victor range le stylo en or dans une pochette en cuir. La pochette coûte plus cher que ton premier clip."
+        },
+        {
+          "say": {
+            "who": "victor_contrat",
+            "text": "Bienvenue chez Hexagone, {nom}. Première réunion lundi : on parle de ton image. Viens avec ton visage, on verra ce qu'on en fait."
+          }
+        },
+        {
+          "move": {
+            "who": "victor_contrat",
+            "x": 19,
+            "y": 8,
+            "facing": "right"
+          }
+        },
+        {
+          "despawn": "victor_contrat"
+        },
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Sur goslo radio : « Le petit du bloc signe en major. Le quartier est partagé entre la fierté et une question : est-ce qu'il dira encore bonjour ? »"
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Je pleure pas. C'est la lessive. Ça pique les yeux. Va, petit. Et dis bonjour."
+          }
+        },
+        {
+          "camera": {
+            "x": 16,
+            "y": 10
+          }
+        },
+        {
+          "narration": "Pendant ce temps, de l'autre côté de la rue, quelqu'un écoute ton son en boucle. Il ne rit pas du chat. Il prend des notes, dans un carnet relié en cuir."
+        },
+        {
+          "say": {
+            "who": "scalpel",
+            "text": "Rimes plates. Structure prévisible. Une métaphore sur un chat, déjà vue. … Intéressant. Très intéressant."
+          }
+        },
+        {
+          "camera_reset": true
+        },
+        {
+          "title": {
+            "text": "FIN DU CHAPITRE 4",
+            "subtitle": "Le buzz"
+          }
+        },
+        {
+          "title": {
+            "text": "À SUIVRE",
+            "subtitle": "Chapitre 5 · Le game"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch5_intro",
+      "steps": [
+        {
+          "title": {
+            "text": "CHAPITRE 5",
+            "subtitle": "Le game"
+          }
+        },
+        {
+          "narration": "Six mois chez Hexagone Music. Tu as un badge, un bureau partagé, et un tabouret. Le tabouret est à toi. C'est écrit dessus."
+        },
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Sur goslo radio : « Premier album en préparation pour le petit de la laverie. La question que tout le monde se pose : le chat sera-t-il en featuring ? »"
+        },
+        {
+          "camera": {
+            "x": 5,
+            "y": 5
+          }
+        },
+        {
+          "say": {
+            "who": "victor_contrat",
+            "text": "{nom} ! Le game, c'est simple : un single, une image, une semaine de sortie, et un ennemi. Le public adore les ennemis. On commence par l'image. Viens, j'ai un tableau blanc."
+          }
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "defi_scalpel",
+      "steps": [
+        {
+          "camera": {
+            "x": 16,
+            "y": 10
+          }
+        },
+        {
+          "exclaim": "scalpel"
+        },
+        {
+          "say": {
+            "who": "scalpel",
+            "text": "Demain. Dans la rue. Pas de beat, pas de DJ, pas de chat. Juste ta plume et la mienne. Apporte un stylo. Et une gomme."
+          }
+        },
+        {
+          "narration": "Dans tout le quartier, des gens qui n'ont pas ouvert un dictionnaire depuis le collège révisent leurs rimes en « -age »."
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "ch5_outro",
+      "steps": [
+        {
+          "fade": true
+        },
+        {
+          "place": {
+            "who": "player",
+            "x": 16,
+            "y": 11,
+            "facing": "up"
+          }
+        },
+        {
+          "fade": false
+        },
+        {
+          "narration": "La foule s'est dispersée. Il reste toi, Scalpel, et un stylo rouge qui a changé de main."
+        },
+        {
+          "say": {
+            "who": "scalpel",
+            "text": "Un conseil, gratuit : ne relis jamais tes chiffres. Relis tes textes. Les chiffres changent. Les textes, non."
+          }
+        },
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Sur goslo radio : « Le single du petit de la laverie est certifié disque d'or. Fred, ingé son, déclare : “C'est mon deuxième.” Il ne parle plus que de ça. »"
+        },
+        {
+          "camera": {
+            "x": 20,
+            "y": 5
+          }
+        },
+        {
+          "narration": "Tout en haut de la rue, devant une porte que personne n'ouvre jamais, quelqu'un regarde ton duel en replay. Pour la troisième fois."
+        },
+        {
+          "say": {
+            "who": "le_baron",
+            "text": "Le petit de la laverie, hein ? Qu'il monte. Le trône est au dernier étage. L'ascenseur est en panne. Je l'ai cassé moi-même, en 2009."
+          }
+        },
+        {
+          "exclaim": "le_baron"
+        },
+        {
+          "camera_reset": true
+        },
+        {
+          "title": {
+            "text": "FIN DU CHAPITRE 5",
+            "subtitle": "Le game"
+          }
+        },
+        {
+          "title": {
+            "text": "À SUIVRE",
+            "subtitle": "Chapitre 6 · Le trône"
+          }
+        }
+      ]
+    },
+    {
+      "id": "ch6_intro",
+      "steps": [
+        {
+          "title": {
+            "text": "CHAPITRE 6",
+            "subtitle": "Le trône"
+          }
+        },
+        {
+          "narration": "Un disque d'or, un duel gagné et un tabouret à ton nom chez Hexagone. Il ne reste qu'une marche. Elle est très haute."
+        },
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Sur goslo radio : « Le Baron règne sur le game depuis quinze ans. Ce matin, il a posté une story de quatre secondes : une photo de la laverie, avec un émoji qui rit. »"
+        },
+        {
+          "camera": {
+            "x": 2,
+            "y": 13
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Petit ! Victor est ici. Dans MA laverie. Il touche les machines. Viens vite, il a ouvert la 4."
+          }
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "baron_provoc",
+      "steps": [
+        {
+          "camera": {
+            "x": 20,
+            "y": 5
+          }
+        },
+        {
+          "exclaim": "le_baron"
+        },
+        {
+          "say": {
+            "who": "le_baron",
+            "text": "Le stagiaire de la laverie veut remplir le Dôme ? Qu'il passe me voir avant. Mon trône est en haut de la rue. Je ne descends pas. Les marches, c'est pour les autres."
+          }
+        },
+        {
+          "narration": "Sa story fait trois millions de vues en une heure. Le chat, lui, n'a rien posté. Il prépare quelque chose."
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "ch6_outro",
+      "steps": [
+        {
+          "fade": true
+        },
+        {
+          "place": {
+            "who": "player",
+            "x": 12,
+            "y": 8,
+            "facing": "down"
+          }
+        },
+        {
+          "place": {
+            "who": "maman",
+            "x": 11,
+            "y": 8,
+            "facing": "right"
+          }
+        },
+        {
+          "fade": false
+        },
+        {
+          "sound": "crowdCheer"
+        },
+        {
+          "narration": "Minuit passé. Le Dôme s'est vidé. Dans la rue, les gens chantent encore ton refrain, celui du chat. Il est devenu le tien."
+        },
+        {
+          "say": {
+            "who": "le_baron",
+            "text": "Tiens, le trône. Il est en carton, je l'ai acheté en 2009. Fais gaffe, il grince. Et tout le monde va vouloir s'asseoir dessus."
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Je pleure pas. C'est la lessive. Programme délicat."
+          }
+        },
+        {
+          "say": {
+            "who": "fred",
+            "text": "Troisième disque d'or. Enfin, le tien. Mais j'étais là. Je l'écrirai dans mes mémoires."
+          }
+        },
+        {
+          "say": {
+            "who": "scalpel",
+            "text": "Rime finale correcte. Je mets 17. Je n'ai jamais mis 17."
+          }
+        },
+        {
+          "say": {
+            "who": "maman",
+            "text": "C'était magnifique. J'ai tout filmé. En portrait. Et sinon… tu cherches toujours un vrai travail ?"
+          }
+        },
+        {
+          "say": {
+            "who": "player",
+            "text": "Non, maman."
+          }
+        },
+        {
+          "narration": "Quelque part sur un toit, un chat regarde la ville. Il a neuf vies. Tu n'en avais qu'une. Tu viens de la réussir."
+        },
+        {
+          "title": {
+            "text": "FIN",
+            "subtitle": "goslo records"
+          }
+        },
+        {
+          "title": {
+            "text": "MERCI D'AVOIR JOUÉ",
+            "subtitle": "{nom}, du bas du bloc jusqu'au trône"
+          }
+        },
+        {
+          "fade": true
+        }
+      ]
+    }
+  ],
+  "radio": [
+    {
+      "text": "Ce soir sur goslo radio : le Micro Ouvert. Ramène ton texte, Big Nono ramène les chips.",
+      "conditions": {
+        "max_chapter": 1,
+        "excluded_flags": [
+          "micro_ouvert_fait"
+        ]
+      }
+    },
+    {
+      "text": "Météo du rap : couvert sur la drill, éclaircies sur le boom bap, risque d'averses d'egotrip en soirée."
+    },
+    {
+      "text": "Kevlar Jr. reste invaincu au Ring des Mots : 31 victoires, 0 défaite, 1 ligne de vêtements.",
+      "conditions": {
+        "excluded_flags": [
+          "clash_gagne_kevlar_jr"
+        ]
+      }
+    },
+    {
+      "text": "Lil Sauge annonce un album « très bientôt ». Il l'annonce depuis trois ans."
+    },
+    {
+      "text": "On repasse le freestyle de {nom}, le petit du bloc. Le standard explose : trois appels, dont sa mère.",
+      "conditions": {
+        "required_flags": [
+          "micro_ouvert_reussi"
+        ]
+      }
+    },
+    {
+      "text": "Big Nono cherche toujours qui a mangé ses chips pendant le Micro Ouvert. L'enquête piétine.",
+      "conditions": {
+        "required_flags": [
+          "micro_ouvert_fait"
+        ]
+      }
+    },
+    {
+      "text": "SÉISME AU TERRAIN VAGUE : Kevlar Jr. tombe face à {nom} ! Sa marque sort déjà un t-shirt « J'ai perdu, et alors ? ».",
+      "conditions": {
+        "required_flags": [
+          "clash_gagne_kevlar_jr"
+        ]
+      }
+    },
+    {
+      "text": "Le Top goslo de la semaine : numéro 1, un morceau sur un chat. Le rap français va bien."
+    },
+    {
+      "text": "Rumeur : un label installé dans une laverie chercherait de nouveaux talents. Rumeur non confirmée, mais ça sent la lessive.",
+      "conditions": {
+        "required_flags": [
+          "micro_ouvert_fait"
+        ]
+      }
+    },
+    {
+      "text": "Vieux Mic Lucien a été aperçu sur son banc. Comme hier. Comme en 1994."
+    },
+    {
+      "text": "Rappel de goslo radio : le terrain vague n'est pas un studio. Merci de ne plus clasher après 22 h."
+    },
+    {
+      "text": "Le Ring des Mots cherche de nouveaux challengers. Le dernier se remet encore… de son ego.",
+      "conditions": {
+        "excluded_flags": [
+          "clash_gagne_kevlar_jr"
+        ]
+      }
+    },
+    {
+      "text": "Le Baron a posté une story, puis l'a supprimée. Le game entier est en sueur.",
+      "conditions": {
+        "min_chapter": 2
+      }
+    },
+    {
+      "text": "Quelqu'un a vu {nom} entrer à la laverie de goslo records. Signature imminente ? Momo refuse de commenter, il plie du linge.",
+      "conditions": {
+        "min_chapter": 2
+      }
+    },
+    {
+      "text": "Une laverie du quartier vient de déposer les statuts d'un label. Le greffe a demandé si c'était une blague. C'est un label.",
+      "conditions": {
+        "min_chapter": 2,
+        "excluded_flags": [
+          "signe_goslo"
+        ]
+      }
+    },
+    {
+      "text": "EXIL IMMÉDIAT À MIAMI : Lingot ne répond plus. Il poste des couchers de soleil et des factures.",
+      "conditions": {
+        "required_flags": [
+          "clash_gagne_lingot"
+        ]
+      }
+    },
+    {
+      "text": "Big Kliks annonce 40 millions de streams. Le fisc annonce 0 € de revenus déclarés. Les deux chiffres sont vrais.",
+      "conditions": {
+        "min_chapter": 2
+      }
+    },
+    {
+      "text": "Lil Croon sort un single. Les plateformes hésitent entre rap et RnB : il a été classé dans « Ambiance spa ».",
+      "conditions": {
+        "min_chapter": 2
+      }
+    },
+    {
+      "text": "Ce soir à la télé, « Le Grand Débat » : le rap rend-il les plantes agressives ? Avec un chroniqueur qui n'en a jamais écouté.",
+      "conditions": {
+        "min_chapter": 2,
+        "excluded_flags": [
+          "debat_gagne"
+        ]
+      }
+    },
+    {
+      "text": "Une superstar d'Atlanta aurait refusé un featuring avec un rappeur du quartier. Le quartier n'a jamais été aussi fier d'un refus.",
+      "conditions": {
+        "required_flags": [
+          "feat_us_refuse"
+        ]
+      }
+    },
+    {
+      "text": "Rappel : le tournage de clips sur les monuments nationaux est interdit. Oui, toi aussi. Surtout toi.",
+      "conditions": {
+        "required_flags": [
+          "clip_monument"
+        ]
+      }
+    },
+    {
+      "text": "Gestuel a donné une interview à goslo radio. Trois minutes de silence et de gestes. Meilleure audience de la semaine.",
+      "conditions": {
+        "min_chapter": 2
+      }
+    },
+    {
+      "text": "Avis de recherche : une citadine grise de 2001, trois portes. Si vous la voyez, ne la touchez pas. Elle a une aura.",
+      "conditions": {
+        "min_chapter": 2
+      }
+    },
+    {
+      "text": "Les rappeurs trop riches du quartier disparaissent un à un. Destination présumée : Miami. On ne leur reproche rien, on constate.",
+      "conditions": {
+        "min_stats": {
+          "argent": 70
+        }
+      }
+    },
+    {
+      "text": "Jean-Hubert Delamorale accuse le rap de la hausse du prix du beurre. Le beurre n'a pas souhaité réagir.",
+      "conditions": {
+        "min_chapter": 2
+      }
+    },
+    {
+      "text": "Premier concert du petit du bloc au Transfo. Il reste 297 places. Trois si on compte sa mère deux fois.",
+      "conditions": {
+        "min_chapter": 3,
+        "excluded_flags": [
+          "promo_faite"
+        ]
+      }
+    },
+    {
+      "text": "DJ Bobine affirme qu'une seule platine suffit. Les experts sont partagés. Les platines aussi.",
+      "conditions": {
+        "min_chapter": 3
+      }
+    },
+    {
+      "text": "Le Transfo annonce « COMPLET ». La billetterie précise que 300 spectateurs sont nés le même jour. Enquête en cours.",
+      "conditions": {
+        "required_flags": [
+          "billets_fantomes"
+        ]
+      }
+    },
+    {
+      "text": "Gégé, régisseur du Transfo, aurait souri. La rédaction n'a pas pu confirmer. Gégé non plus.",
+      "conditions": {
+        "required_flags": [
+          "concert_reussi"
+        ]
+      }
+    },
+    {
+      "text": "Rappel de la mairie : merci de ne pas vomir derrière la scène du Transfo. Il y a des toilettes. Elles sont même propres.",
+      "conditions": {
+        "min_chapter": 3
+      }
+    },
+    {
+      "text": "Un certain Kévin, porteur de crocs, raconte partout qu'il a eu un freestyle à son nom. Personne ne le croit. Il a la vidéo.",
+      "conditions": {
+        "required_flags": [
+          "concert_reussi"
+        ]
+      }
+    },
+    {
+      "text": "Hexagone Music recrute « de nouveaux talents authentiques ». Le mail précise : « authentiques mais vendeurs ».",
+      "conditions": {
+        "min_chapter": 3
+      }
+    },
+    {
+      "text": "Un chat devient la star d'un refrain du quartier. Ses représentants n'ont pas souhaité commenter. Ils ont miaulé.",
+      "conditions": {
+        "min_chapter": 4
+      }
+    },
+    {
+      "text": "Hexagone Music dit « discuter avec plusieurs talents du quartier ». Plusieurs, c'est un.",
+      "conditions": {
+        "min_chapter": 4
+      }
+    },
+    {
+      "text": "Kolosse annonce un live de revanche. Durée prévue : neuf heures. Batterie prévue : 12 %.",
+      "conditions": {
+        "required_flags": [
+          "kolosse_ko"
+        ]
+      }
+    },
+    {
+      "text": "Lil Sauge sort un feat sur un chat. La critique est divisée. Le chat, lui, est unanime.",
+      "conditions": {
+        "required_flags": [
+          "feat_sauge"
+        ]
+      }
+    },
+    {
+      "text": "Une berline noire est garée sur trois places boulevard du quartier depuis une semaine. La fourrière dit qu'elle « n'ose pas ».",
+      "conditions": {
+        "min_chapter": 4,
+        "excluded_flags": [
+          "contrat_signe"
+        ]
+      }
+    },
+    {
+      "text": "Signature en major pour un rappeur du quartier. Une laverie locale annonce une machine neuve. Coïncidence, selon la laverie.",
+      "conditions": {
+        "required_flags": [
+          "contrat_signe"
+        ]
+      }
+    },
+    {
+      "text": "Hexagone Music teste trois images pour un même artiste. L'algorithme hésite. Le stagiaire aussi.",
+      "conditions": {
+        "min_chapter": 5
+      }
+    },
+    {
+      "text": "Un rappeur du quartier aperçu en cagoule au mois d'août. Météo France recommande de boire beaucoup d'eau.",
+      "conditions": {
+        "required_flags": [
+          "image_cagoule"
+        ]
+      }
+    },
+    {
+      "text": "Numéro 1 au Kazakhstan pour un single français. L'ambassade du Kazakhstan dit « ne pas être au courant ».",
+      "conditions": {
+        "required_flags": [
+          "faux_streams"
+        ],
+        "min_chapter": 5
+      }
+    },
+    {
+      "text": "Le Conteur annule la saison 2 de sa série. Il promet un spin-off. Personne n'a demandé de spin-off.",
+      "conditions": {
+        "required_flags": [
+          "conteur_ch5"
+        ]
+      }
+    },
+    {
+      "text": "Duel à la plume en pleine rue : la bibliothèque municipale signale une rupture de stock de dictionnaires de rimes.",
+      "conditions": {
+        "required_flags": [
+          "duel_lance"
+        ]
+      }
+    },
+    {
+      "text": "Scalpel aurait donné son stylo rouge. Les experts parlent d'un « passage de témoin ». Scalpel parle d'un « prêt ».",
+      "conditions": {
+        "required_flags": [
+          "scalpel_battu"
+        ]
+      }
+    },
+    {
+      "text": "Le Dôme affiche complet en onze minutes. La laverie du quartier annonce une soirée de diffusion, avec lessive offerte.",
+      "conditions": {
+        "required_flags": [
+          "dome_annonce"
+        ]
+      }
+    },
+    {
+      "text": "Le Baron poste une story de quatre secondes. Les experts l'analysent depuis six heures. Elle montre une laverie.",
+      "conditions": {
+        "min_chapter": 6
+      }
+    },
+    {
+      "text": "Scalpel aperçu sans son stylo rouge. Ses proches sont inquiets. Lui dit qu'il « a fait un placement ».",
+      "conditions": {
+        "required_flags": [
+          "allie_scalpel"
+        ]
+      }
+    },
+    {
+      "text": "DJ Bobine passe à deux platines. Le milieu du DJing parle d'une « trahison idéologique ».",
+      "conditions": {
+        "required_flags": [
+          "equipe_prete"
+        ]
+      }
+    },
+    {
+      "text": "Le Baron tombe en pleine rue. Il se relève, remet ses lunettes, et déclare : « Enfin quelqu'un. »",
+      "conditions": {
+        "required_flags": [
+          "baron_tombe"
+        ]
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "la_mythique",
+      "name": "La Mythique",
+      "description": "Citadine grise de 2001, trois portes, un seul enjoliveur, autoradio cassette. Personne ne sait d'où elle vient. Quand elle se gare devant un clash, le public se tait.",
+      "clash_bonus": {
+        "presence": 2
+      }
+    },
+    {
+      "id": "perceuse",
+      "name": "La perceuse de Fred",
+      "description": "Une perceuse sans fil, 18 V. Fred a dit « un jour, elle te servira ». Elle remplace ta technique secrète.",
+      "secret": {
+        "name": "La Perceuse",
+        "line": "Tu sors une perceuse. Silence total. Tu la fais vrombir deux fois et tu lâches : « Toi, tu vas rien percer… à part des murs. » Le public s'effondre. L'ambulance est appelée pour ton adversaire. Par précaution."
+      }
+    },
+    {
+      "id": "stylo_rouge",
+      "name": "Le stylo rouge de Scalpel",
+      "description": "Un stylo plume rouge, capuchon mordillé. Scalpel a corrigé des centaines de couplets avec. +2 en Punchline, et une nouvelle technique secrète.",
+      "clash_bonus": {
+        "punchline": 2
+      },
+      "secret": {
+        "name": "L'Annotation",
+        "line": "Tu sors le stylo rouge et tu corriges le dernier couplet de ton adversaire, en direct : trois fautes, deux rimes pauvres, une métaphore volée. Le public compte les points à voix haute."
+      }
+    }
+  ],
+  "concerts": [
+    {
+      "id": "premier_concert",
+      "venue": "Le Transfo · 300 places",
+      "intro": "Le rideau s'ouvre. DJ Bobine lance la prod, 2 % trop vite. Les notes tombent en rythme : tape PUNCH, FLOW ou HYPE quand elles touchent la ligne.",
+      "start_hype": 35,
+      "pass_hype": 65,
+      "songs": [
+        {
+          "title": "En bas du bloc",
+          "bpm": 88,
+          "bars": 6,
+          "density": 0.25,
+          "interlude": {
+            "text": "Fin du premier morceau. Silence gêné. Quelqu'un au fond tousse. Ta mère lève sa pancarte : « JE SUIS SA MÈRE ».",
+            "options": [
+              {
+                "label": "« Faites du bruit pour ma mère ! »",
+                "hype": 10,
+                "reaction": "La salle applaudit ta mère. Elle salue comme une star. Elle l'est un peu, ce soir."
+              },
+              {
+                "label": "Raconter l'histoire de la machine numéro 4 de la laverie",
+                "hype": 4,
+                "reaction": "Personne n'a compris, mais Momo pleure au fond. Ça a ému trois personnes. Et une machine."
+              },
+              {
+                "label": "« Qui connaît les paroles ? » (personne ne les connaît)",
+                "hype": -8,
+                "reaction": "Silence total. Un verre tombe au bar. DJ Bobine relance la prod pour couvrir le malaise."
+              }
+            ]
+          }
+        },
+        {
+          "title": "Le prix du beurre",
+          "bpm": 96,
+          "bars": 7,
+          "density": 0.45,
+          "interlude": {
+            "text": "Un spectateur tend son téléphone et crie : « FAIS UN FREESTYLE SUR MOI ! » Il s'appelle Kévin. Il porte des crocs.",
+            "options": [
+              {
+                "label": "Freestyler sur Kévin et ses crocs",
+                "hype": 12,
+                "reaction": "Seize mesures sur Kévin. La salle hurle. Kévin pleure de bonheur. Ses crocs aussi, un peu."
+              },
+              {
+                "label": "Lui faire signer un contrat chez goslo sur un ticket de caisse",
+                "hype": 6,
+                "reaction": "Momo a sorti un ticket de la poche. Kévin a signé. goslo records a un nouvel artiste. Personne ne sait ce qu'il fait."
+              },
+              {
+                "label": "L'ignorer et enchaîner",
+                "hype": -4,
+                "reaction": "Kévin a crié « TRAÎTRE ». Une partie de la salle était de son côté. Les crocs ont une communauté."
+              }
+            ]
+          }
+        },
+        {
+          "title": "La perceuse",
+          "bpm": 104,
+          "bars": 8,
+          "density": 0.6
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 14,
+          "credibilite": 10,
+          "argent": 12
+        },
+        "xp": {
+          "scene": 60
+        },
+        "relations": {
+          "gege": 15,
+          "maman": 10
+        },
+        "set_flags": [
+          "concert_reussi"
+        ],
+        "consequence": "Le dernier son résonne. 300 personnes crient ton nom. Gégé a souri. Une seconde. Les techniciens ont pris une photo."
+      },
+      "lose": {
+        "effects": {
+          "mental": -8,
+          "argent": 4
+        },
+        "consequence": "La moitié de la salle a fini au bar. Gégé t'a dit « on refait quand tu veux ». Venant de lui, c'est presque un câlin. La scène t'attend pour une revanche."
+      }
+    },
+    {
+      "id": "le_dome",
+      "venue": "Le Dôme · 6 000 places",
+      "start_hype": 25,
+      "pass_hype": 75,
+      "intro": "6 000 personnes. Deux platines. Un DJ qui doute. Les notes tombent plus vite qu'au Transfo : tape PUNCH, FLOW ou HYPE pile sur la ligne.",
+      "songs": [
+        {
+          "title": "Entre deux tours",
+          "bpm": 92,
+          "bars": 6,
+          "density": 0.35,
+          "interlude": {
+            "text": "Fin du premier morceau. Au premier rang : ta mère, Momo, Fred avec son disque d'or sous le bras, et Kévin, en crocs dorés.",
+            "options": [
+              {
+                "label": "« Faites du bruit pour la laverie ! »",
+                "hype": 10,
+                "reaction": "6 000 personnes acclament une laverie. Momo s'effondre de bonheur dans les bras de Fred."
+              },
+              {
+                "label": "Montrer le disque d'or de Fred à la foule",
+                "hype": 6,
+                "reaction": "Fred lève son disque de 2009. Le Dôme l'applaudit. Fred ne s'en remettra jamais."
+              },
+              {
+                "label": "Demander où sont les toilettes",
+                "hype": -8,
+                "reaction": "Un technicien te montre la direction. 6 000 personnes regardent dans la même direction. Malaise."
+              }
+            ]
+          }
+        },
+        {
+          "title": "Neuf vies",
+          "bpm": 98,
+          "bars": 7,
+          "density": 0.5,
+          "interlude": {
+            "text": "Un chat surgit sur la scène. Personne ne sait comment il est entré. La sécurité non plus.",
+            "options": [
+              {
+                "label": "Le laisser danser",
+                "hype": 12,
+                "reaction": "6 000 téléphones filment le chat. Le chat fait le show. Tu as l'habitude, maintenant."
+              },
+              {
+                "label": "Le présenter comme ton featuring surprise",
+                "hype": 8,
+                "reaction": "Le chat salue. Enfin, il se lèche la patte. Le public décide que c'est un salut."
+              },
+              {
+                "label": "Appeler la sécurité",
+                "hype": -10,
+                "reaction": "Huées. On ne touche pas au chat. Jamais."
+              }
+            ]
+          }
+        },
+        {
+          "title": "Pied-de-biche",
+          "bpm": 102,
+          "bars": 7,
+          "density": 0.55,
+          "interlude": {
+            "text": "Le Baron monte sur scène. Le Dôme retient son souffle. Il te tend un micro, sans un mot.",
+            "options": [
+              {
+                "label": "Lui proposer un couplet ensemble",
+                "hype": 14,
+                "reaction": "Il accepte. Quinze ans d'expérience et toi, sur le même beat. Le Dôme devient fou. Momo doit s'asseoir."
+              },
+              {
+                "label": "Lui rendre son micro et finir seul",
+                "hype": 8,
+                "reaction": "« Respect. » Il redescend. Le Dôme scande ton nom. Il le scande aussi, discrètement."
+              },
+              {
+                "label": "Paniquer et lui laisser le morceau",
+                "hype": -10,
+                "reaction": "Le Baron fait ton morceau. Mieux que toi. Le Dôme ne sait plus pour qui il est venu."
+              }
+            ]
+          }
+        },
+        {
+          "title": "Le trône (en carton)",
+          "bpm": 108,
+          "bars": 8,
+          "density": 0.65
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 15,
+          "credibilite": 10,
+          "argent": 20
+        },
+        "xp": {
+          "scene": 80
+        },
+        "relations": {
+          "gege": 10,
+          "maman": 10,
+          "momo": 10
+        },
+        "set_flags": [
+          "dome_reussi"
+        ],
+        "consequence": "Le dernier son résonne sous le dôme. 6 000 personnes chantent ton refrain, celui du chat, devenu le tien. DJ Bobine a joué à 100 %. Pour la première fois de sa vie."
+      },
+      "lose": {
+        "effects": {
+          "mental": -8
+        },
+        "consequence": "La moitié du Dôme est partie avant le rappel. Gégé te tape sur l'épaule : « On refait. Demain. Même heure. » Le Dôme t'attend pour une revanche."
+      }
+    }
+  ],
+  "negotiations": [
+    {
+      "id": "contrat_hexagone",
+      "opponent": "victor_contrat",
+      "title": "Contrat Hexagone Music",
+      "intro": "Bon. Je te préviens : c'est un contrat standard. Très standard. Le plus standard de tous les contrats. Tu pars à 8 % de royalties, c'est déjà énorme. Pour nous. On attaque ?",
+      "start_royalties": 8,
+      "target_royalties": 18,
+      "start_patience": 60,
+      "walkout": "Victor range son stylo en or. « Je t'appelle. » Il remonte dans sa berline. Il te laisse l'addition du déca.",
+      "clauses": [
+        {
+          "text": "Durée. L'Artiste s'engage pour sept albums ou quatre-vingt-dix-neuf ans, selon ce qui arrive en dernier.",
+          "pitch": "Standard. Tout le monde signe ça. Même mon chien a signé ça. Il est très heureux.",
+          "options": [
+            {
+              "label": "Trois albums. Pas un de plus.",
+              "royalties": 3,
+              "patience": -12,
+              "reaction": "Il écrit « trois » et dessine un petit cercueil à côté. « D'accord. Trois. »"
+            },
+            {
+              "label": "99 ans, ça me laisse le temps.",
+              "royalties": -1,
+              "patience": 10,
+              "reaction": "Il sourit comme un requin qui vient d'apprendre qu'il est en vacances."
+            },
+            {
+              "label": "Je peux appeler ma mère ?",
+              "royalties": 1,
+              "patience": -4,
+              "reaction": "Ta mère, au téléphone : « Demande s'il y a une mutuelle. » Victor rit. Puis il voit que tu ne ris pas. Il ajoute une ligne."
+            }
+          ]
+        },
+        {
+          "text": "Image. Le Label peut modifier le nom de scène, le style, la coiffure et l'enfance de l'Artiste.",
+          "pitch": "On pensait à un nouveau nom. Plus vendeur. « {nom} », c'est bien, mais « Lil {nom} », c'est mieux. Ou « {nom} Lessive ». Pour le côté authentique.",
+          "options": [
+            {
+              "label": "Mon nom, on n'y touche pas.",
+              "royalties": 3,
+              "patience": -10,
+              "reaction": "Il raye « Lil ». À regret. Il garde le stylo levé une seconde de trop."
+            },
+            {
+              "label": "Changez tout, sauf la coiffure.",
+              "royalties": 0,
+              "patience": 6,
+              "reaction": "« Parfait. On garde la coiffure. » Tu n'as jamais eu aussi peur pour ton enfance."
+            },
+            {
+              "label": "Je veux un droit de regard sur VOTRE coiffure.",
+              "royalties": 4,
+              "patience": -16,
+              "reaction": "Il touche ses cheveux. Il est vexé. Il accepte. Il est toujours vexé."
+            }
+          ]
+        },
+        {
+          "text": "Avance. 3 000 € versés en bons d'achat Hexagone Music, valables uniquement en boutique Hexagone Music (fermée).",
+          "pitch": "De l'argent, mais en mieux. C'est comme de l'argent, sauf que c'est des bons.",
+          "options": [
+            {
+              "label": "Je veux du vrai argent.",
+              "royalties": 3,
+              "patience": -12,
+              "reaction": "« Du vrai argent. » Il le répète lentement, comme une langue morte. Puis il raye « bons »."
+            },
+            {
+              "label": "Les bons, c'est parfait.",
+              "royalties": -2,
+              "patience": 12,
+              "reaction": "Tu as maintenant 3 000 € pour une boutique fermée. Victor applaudit. Doucement. Pour ne pas te réveiller."
+            },
+            {
+              "label": "L'avance en vrai argent, ET les droits sur le merch.",
+              "royalties": 6,
+              "patience": -15,
+              "reaction": "Il fait un calcul sur son téléphone. Puis sur un deuxième téléphone. Puis il soupire : « … D'accord. »",
+              "requires": {
+                "skills": {
+                  "business": 3
+                }
+              }
+            }
+          ]
+        },
+        {
+          "text": "Réseaux. L'Artiste publie quatre contenus par jour, dont deux danses, et répond à tous les commentaires en moins de huit minutes.",
+          "pitch": "Aujourd'hui, un artiste, c'est 20 % de musique et 80 % de danse. Je n'ai pas inventé les chiffres. Si, je les ai inventés. Mais ils sont vrais.",
+          "options": [
+            {
+              "label": "Zéro danse.",
+              "royalties": 2,
+              "patience": -8,
+              "reaction": "« Zéro. » Il note « zéro », puis écrit « une ? » à côté au crayon, très petit."
+            },
+            {
+              "label": "Deux danses, mais je choisis la musique.",
+              "royalties": 2,
+              "patience": -3,
+              "reaction": "« Tu choisis la musique. » Tu choisis ta musique. Il réalise trop tard que c'était évident."
+            },
+            {
+              "label": "Je danse si toi tu danses.",
+              "royalties": 0,
+              "patience": 15,
+              "reaction": "Victor danse. Trente secondes, sur le trottoir, devant la berline. C'est terrible. Il est soulagé. Vous ne reparlerez jamais de ce moment."
+            }
+          ]
+        },
+        {
+          "text": "Featurings. Le Label choisit les featurings de l'Artiste, y compris avec des artistes en hologramme.",
+          "pitch": "On a un hologramme qui marche très fort en ce moment. Il ne parle pas, mais il a une énorme présence.",
+          "options": [
+            {
+              "label": "Je choisis mes feats.",
+              "royalties": 3,
+              "patience": -12,
+              "reaction": "Il soupire. L'hologramme, quelque part, s'éteint de tristesse."
+            },
+            {
+              "label": "Momo, de goslo records, prend 2 % sur tout.",
+              "royalties": 5,
+              "patience": -5,
+              "reaction": "« La laverie ? » « La laverie. » Il ajoute une ligne. Momo aura 2 % et une machine neuve. Quelque part, la machine 4 se met à essorer de joie.",
+              "requires": {
+                "relations": {
+                  "momo": 65
+                }
+              }
+            },
+            {
+              "label": "Un hologramme, c'est cool en vrai.",
+              "royalties": -1,
+              "patience": 8,
+              "reaction": "Ton premier feat sera avec quelqu'un qui n'existe pas. C'est quand même plus fiable que Lil Sauge."
+            }
+          ]
+        },
+        {
+          "text": "Litiges. En cas de désaccord, l'Artiste reconnaît que le Label a raison.",
+          "pitch": "C'est une formalité. On n'a jamais eu de désaccord. Les artistes qui n'étaient pas d'accord, on ne les a plus revus. Je veux dire : ils sont partis vers d'autres projets.",
+          "options": [
+            {
+              "label": "Je raye l'article. Au stylo.",
+              "royalties": 4,
+              "patience": -20,
+              "reaction": "Tu raies l'article avec SON stylo en or. Il regarde le stylo. Il te regarde. Il range le stylo."
+            },
+            {
+              "label": "Je propose un juge neutre : ma mère.",
+              "royalties": 2,
+              "patience": -6,
+              "reaction": "Il l'a vue au concert, avec sa pancarte. Il refuse poliment, et te donne deux points pour ne plus jamais en parler."
+            },
+            {
+              "label": "Ça me paraît juste.",
+              "royalties": -3,
+              "patience": 10,
+              "reaction": "« Ça me paraît juste. » Tu entends ta mère hurler « NON » depuis l'autre bout de la ville."
+            }
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "argent": 25,
+          "streams": 8,
+          "credibilite": -2
+        },
+        "xp": {
+          "business": 40
+        },
+        "relations": {
+          "victor_contrat": 10
+        },
+        "set_flags": [
+          "contrat_signe"
+        ],
+        "consequence": "Signé. Un vrai contrat, avec des vrais chiffres, du bon côté de la virgule. Victor te serre la main un peu trop longtemps. Dans le quartier, on dit que t'as vendu ton âme. Tu réponds que tu l'as louée. À un bon prix."
+      },
+      "lose": {
+        "effects": {
+          "mental": -5
+        },
+        "consequence": "Pas de contrat aujourd'hui. Victor dit qu'il « reste ouvert à la discussion ». Il est toujours garé sur le boulevard, sur trois places. Retourne lui parler quand tu veux."
+      }
+    }
+  ],
+  "writings": [
+    {
+      "id": "session_single",
+      "partner": "fred",
+      "title": "Le single · prise 1",
+      "duel": false,
+      "start_score": 40,
+      "pass_score": 70,
+      "timeout_penalty": 8,
+      "intro": "Fred lance le beat, croise les bras et regarde le plafond. « Quatre couplets. Je t'écoute. J'ai mixé un disque d'or en 2009, je sais quand ça rime. »",
+      "rounds": [
+        {
+          "setup": "J'viens d'en bas, j'ai grandi entre deux tours et un parking,",
+          "time": 9,
+          "options": [
+            {
+              "line": "maintenant j'monte, et j'compte bien finir en haut du building.",
+              "score": 18,
+              "reaction": "Fred hoche la tête. « Classique. Mais propre. Comme mon disque d'or. »"
+            },
+            {
+              "line": "maintenant j'ai des baskets neuves et un vieux smoking.",
+              "score": 8,
+              "reaction": "Ça rime. C'est tout ce qu'on peut en dire. Fred écrit « smoking ??? » dans la marge."
+            },
+            {
+              "line": "maintenant j'ai un bureau, avec des stores.",
+              "score": -6,
+              "reaction": "Fred coupe le son. « Stores. Ça rime avec quoi, stores ? » Avec rien, Fred."
+            }
+          ]
+        },
+        {
+          "setup": "Le quartier m'a appris la patience et la débrouille,",
+          "time": 9,
+          "options": [
+            {
+              "line": "j'rentrais jamais bredouille, même avec le ventre qui gargouille.",
+              "score": 16,
+              "reaction": "Fred hoche la tête deux fois. C'est son maximum depuis 2009."
+            },
+            {
+              "line": "j'écris mes textes la nuit, à la lumière d'une grenouille.",
+              "score": 4,
+              "reaction": "Une grenouille lumineuse ? Fred demande si c'est une image. Tu dis oui. Ce n'en est pas une."
+            },
+            {
+              "line": "et ma mère m'a appris à faire des crêpes.",
+              "score": -8,
+              "reaction": "Fred : « C'est mignon. Ça rime pas. Mais c'est mignon. Ta mère va adorer. »"
+            }
+          ]
+        },
+        {
+          "setup": "Un chat a fait danser la France sur mon refrain,",
+          "time": 9,
+          "options": [
+            {
+              "line": "lui, il a neuf vies ; moi, une seule, alors j'la vis sans frein.",
+              "score": 20,
+              "reaction": "Fred sort son téléphone et filme. Il n'a jamais filmé personne. Même pas en 2009.",
+              "requires": {
+                "skills": {
+                  "plume": 4
+                }
+              }
+            },
+            {
+              "line": "j'lui dois tout, sauf le loyer : lui, il dort sur un coussin.",
+              "score": 10,
+              "reaction": "Fred sourit. Il cache son sourire derrière la console. Trop tard, tu l'as vu."
+            },
+            {
+              "line": "maintenant on m'reconnaît dans le métro, dans le train.",
+              "score": 6,
+              "reaction": "Fred : « Dans le train. D'accord. » Il souligne « train ». Tu ne sais pas si c'est bon signe."
+            },
+            {
+              "line": "le chat s'appelle Michel, il a un compte Instagram.",
+              "score": -8,
+              "reaction": "Fred : « Michel ? » Toi : « Michel. » Le micro est coupé pendant cinq minutes."
+            }
+          ]
+        },
+        {
+          "setup": "Ils disaient que j'percerais jamais, que j'étais trop banal,",
+          "time": 9,
+          "options": [
+            {
+              "line": "aujourd'hui j'passe en boucle, même dans le hall de l'hôpital.",
+              "score": 12,
+              "reaction": "Fred : « Sombre. Efficace. » Il augmente la réverb, ému."
+            },
+            {
+              "line": "aujourd'hui j'ai un single, et c'est déjà pas mal.",
+              "score": 10,
+              "reaction": "« Pas mal. » Ça devient le titre du single. Personne ne sait comment. Victor adore."
+            },
+            {
+              "line": "aujourd'hui j'ai des plantes vertes et un animal.",
+              "score": -4,
+              "reaction": "Fred éteint la lumière du studio. Il la rallume. « On reprend. Mentalement. »"
+            }
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 6,
+          "credibilite": 4
+        },
+        "xp": {
+          "plume": 40
+        },
+        "relations": {
+          "fred": 8
+        },
+        "set_flags": [
+          "single_ecrit"
+        ],
+        "consequence": "Fred appuie sur STOP, retire son casque et dit : « C'est le single. » Puis : « Il est presque aussi bon que mon disque d'or. » Venant de lui, c'est une déclaration d'amour."
+      },
+      "lose": {
+        "effects": {
+          "mental": -4
+        },
+        "consequence": "Fred soupire, rembobine, et efface tout. « On la refait. Reviens quand t'auras dormi. Et mangé. Et lu un livre. » Retourne au Bunker quand tu veux."
+      }
+    },
+    {
+      "id": "duel_scalpel",
+      "partner": "scalpel",
+      "title": "Duel à la plume · sans beat",
+      "duel": true,
+      "boss": true,
+      "start_score": 50,
+      "pass_score": 60,
+      "timeout_penalty": 10,
+      "intro": "Scalpel retire ses gants. Il a des gants. « Pas de beat, pas de DJ, pas de chat. Cinq couplets. J'attaque, tu réponds. Si tu ne rimes pas, je corrige. Gratuitement. »",
+      "rounds": [
+        {
+          "attack": {
+            "line": "Ton seul tube, c'est un chat qui l'a fait décoller. Lui, il a eu la gloire ; toi, t'as eu le droit de le regarder.",
+            "damage": 8
+          },
+          "setup": "Le chat a neuf vies, moi j'en ai qu'une : j'la joue à fond,",
+          "time": 8,
+          "options": [
+            {
+              "line": "toi t'as la plume d'un notaire et le charisme d'un plafond.",
+              "score": 14,
+              "reaction": "« OUHHH. » La rue se lève. Scalpel lève les yeux… vers le plafond, par réflexe. Erreur fatale."
+            },
+            {
+              "line": "toi tu cisèles en costard, bien au chaud dans ton salon.",
+              "score": 12,
+              "reaction": "Rires dans la rue. Scalpel ajuste sa cravate. Elle était déjà droite."
+            },
+            {
+              "line": "j'ai pas trop d'idées, là, mais j'te réponds quand même, bon.",
+              "score": 2,
+              "reaction": "Ça rime, techniquement. Le public attend la suite. Il n'y a pas de suite."
+            }
+          ]
+        },
+        {
+          "attack": {
+            "line": "Je cisèle chaque syllabe, toi tu tapes au hasard. Ton stylo a la tremblote, et ton flow est en retard.",
+            "damage": 10
+          },
+          "setup": "T'es chirurgien des rimes, t'as la blouse et les gants,",
+          "time": 8,
+          "options": [
+            {
+              "line": "mais tu dissèques des textes qui ont jamais perdu de sang.",
+              "score": 14,
+              "reaction": "Silence. Puis un « OHHH » qui fait trembler les vitres. Quelqu'un filme. Quelqu'un pleure."
+            },
+            {
+              "line": "toi t'as fait médecine, moi j'ai fait la rue, c'est différent.",
+              "score": 8,
+              "reaction": "Le public hoche la tête. C'est juste… vrai. Scalpel note « différent » dans la marge : rime facile."
+            },
+            {
+              "line": "et moi j'ai des baskets neuves, elles sont toutes blanches.",
+              "score": -6,
+              "reaction": "« Blanches » et « gants ». Scalpel sourit. Il ne sourit jamais. Très mauvais signe."
+            }
+          ]
+        },
+        {
+          "attack": {
+            "line": "T'as signé chez Hexagone, félicitations pour ta cage. Ils t'ont acheté la voix, bientôt ils t'achètent le visage.",
+            "damage": 10
+          },
+          "setup": "J'ai signé, c'est vrai, mais j'ai négocié chaque page,",
+          "time": 8,
+          "options": [
+            {
+              "line": "toi, personne t'a jamais acheté, et t'appelles ça du courage.",
+              "score": 14,
+              "reaction": "Le public fait « OUHHH ». Scalpel écrit quelque chose dans son carnet. Sa main tremble un peu."
+            },
+            {
+              "line": "ma voix, j'la vends pas : j'la loue, comme un garage.",
+              "score": 12,
+              "reaction": "Le public rit. Quelque part, Victor Contrat se sent visé. Il a raison."
+            },
+            {
+              "line": "même la page « Divers (suite) », c'était un sacré voyage.",
+              "score": 6,
+              "reaction": "Rires. Scalpel aussi, malgré lui. Ça compte un peu."
+            },
+            {
+              "line": "et Momo m'a donné quarante jetons pour faire mon ménage.",
+              "score": -6,
+              "reaction": "Le public ne comprend pas. Momo, au premier rang, applaudit très fort. Seul."
+            }
+          ]
+        },
+        {
+          "attack": {
+            "line": "Tu rimes avec tes tripes, moi je rime avec ma tête. Tes punchlines sont des pétards, les miennes des baïonnettes.",
+            "damage": 12
+          },
+          "setup": "Tu rimes avec ta tête, moi j'rime avec mon bloc,",
+          "time": 8,
+          "options": [
+            {
+              "line": "ta plume, c'est un bistouri ; la mienne, un pied-de-biche : toc, toc.",
+              "score": 22,
+              "reaction": "« Toc, toc. » Toute la rue répond « Qui est là ? ». Scalpel cherche une rime en « -oc ». Il n'en trouve aucune. Il se tait.",
+              "requires": {
+                "skills": {
+                  "plume": 5
+                }
+              }
+            },
+            {
+              "line": "toi t'as la science du mot, moi j'ai la science du choc.",
+              "score": 16,
+              "reaction": "Le silence. Puis l'explosion. Big Nono, au fond, a renversé ses chips."
+            },
+            {
+              "line": "ta plume est en or massif, la mienne est taillée dans le roc.",
+              "score": 10,
+              "reaction": "Solide. Comme le roc, justement. Le public hoche la tête, respectueusement."
+            },
+            {
+              "line": "j'sais plus ce que j'voulais dire… attends, j'relis mon bloc.",
+              "score": -8,
+              "reaction": "Tu relis ton carnet en direct. Moment de flottement. Un passant relance la conversation sur la météo, par pitié."
+            }
+          ]
+        },
+        {
+          "attack": {
+            "line": "Dernière incision, petit : retourne à ta laverie. Moi je laisse une œuvre, toi tu laisses un chat qui rit.",
+            "damage": 12
+          },
+          "setup": "La laverie m'a lavé de mes doutes, essoré mes soucis,",
+          "time": 8,
+          "options": [
+            {
+              "line": "toi t'écris pour l'éternité ; moi, j'écris pour ceux d'ici.",
+              "score": 16,
+              "reaction": "La rue scande « D'ICI ! D'ICI ! ». Scalpel range son stylo. Doucement. Respectueusement."
+            },
+            {
+              "line": "range ton bistouri, docteur : la séance est finie. Merci.",
+              "score": 12,
+              "reaction": "Tu tends la main. Il la serre. Le public ne sait pas s'il doit applaudir ou pleurer. Il fait les deux."
+            },
+            {
+              "line": "et le chat te passe le bonjour, il est très gentil, lui aussi.",
+              "score": 4,
+              "reaction": "Rires. Scalpel hausse un sourcil. Le chat, quelque part, approuve."
+            }
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "credibilite": 14,
+          "streams": 8
+        },
+        "xp": {
+          "plume": 60
+        },
+        "relations": {
+          "scalpel": 10
+        },
+        "set_flags": [
+          "scalpel_battu",
+          "clash_gagne_scalpel"
+        ],
+        "consequence": "Scalpel referme son carnet relié en cuir. « Ta plume est mal taillée. Mais c'est une plume. » Il te tend son stylo rouge. Dans la rue, personne n'ose applaudir trop fort. Puis tout le monde applaudit trop fort."
+      },
+      "lose": {
+        "effects": {
+          "mental": -7
+        },
+        "consequence": "Scalpel corrige ton dernier couplet au stylo rouge, à voix haute, et te rend la copie. « 9 sur 20. Revenez quand vous voulez. » Il te vouvoie. C'est pire. Retourne le voir quand tu seras prêt."
+      }
+    }
+  ]
+}

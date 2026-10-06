@@ -1,0 +1,835 @@
+{
+  "cast": [
+    {
+      "id": "momo",
+      "name": "Momo",
+      "role": "Patron de goslo records",
+      "bio": "Dirige le label depuis l'arrière-boutique d'une laverie. Pleure à chaque signature. Paye parfois en jetons.",
+      "start_relation": 55,
+      "look": {
+        "skin": "#a8724a",
+        "hair": "#2a2a2a",
+        "top": "#3e7a8c",
+        "bottom": "#3a3a44",
+        "shoes": "#d8d8d8",
+        "accent": "#f2f2f2",
+        "hair_style": "bald",
+        "beard": true
+      }
+    },
+    {
+      "id": "fred",
+      "name": "Fred",
+      "role": "Ingé son du Bunker",
+      "bio": "A mixé un disque d'or en 2009. Te le rappelle toutes les quatre minutes.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#7a5a3a",
+        "top": "#4a4a52",
+        "bottom": "#2f4a7a",
+        "shoes": "#3a3a44",
+        "accent": "#ff4d2e",
+        "headphones": true,
+        "beard": true
+      }
+    },
+    {
+      "id": "karim",
+      "name": "Karim Deux-Fois",
+      "role": "Manager",
+      "bio": "Prend 40 % parce qu'il « compte deux fois ». Connaît beaucoup de monde, surtout des créanciers.",
+      "start_relation": 45,
+      "look": {
+        "skin": "#c68642",
+        "hair": "#141414",
+        "top": "#5a2a2a",
+        "bottom": "#1a1a1f",
+        "shoes": "#6b4a2e",
+        "accent": "#e8c547",
+        "chain": true,
+        "glasses": true
+      }
+    },
+    {
+      "id": "yanis",
+      "name": "Yanis Tracklist",
+      "role": "Chroniqueur · « Le Débrief »",
+      "bio": "Connaît la date de sortie de chaque album depuis 1991. Son top de fin d'année fait trembler le game. Bien vu par lui, il te dit où frapper avant un clash.",
+      "start_relation": 40,
+      "look": {
+        "skin": "#c68642",
+        "hair": "#141414",
+        "top": "#1f2a44",
+        "bottom": "#2a2a33",
+        "shoes": "#e8e8e8",
+        "accent": "#8fa3c7",
+        "glasses": true,
+        "headphones": true,
+        "beard": true
+      }
+    },
+    {
+      "id": "big_nono",
+      "name": "Big Nono",
+      "role": "Animateur · goslo radio",
+      "bio": "Présente le Micro Ouvert de goslo radio depuis quinze ans. A entendu dix mille freestyles et mangé autant de paquets de chips. Ne rit jamais, sauf quand c'est vraiment bon.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#141414",
+        "top": "#2b2b33",
+        "bottom": "#3a3a44",
+        "shoes": "#e8e8e8",
+        "accent": "#ffd27a",
+        "hair_style": "bald",
+        "headphones": true,
+        "beard": true
+      }
+    },
+    {
+      "id": "le_baron",
+      "name": "Le Baron",
+      "role": "Le patron du game",
+      "bio": "Self-made, son propre label, quinze ans au sommet. Clashe la moitié du game en story pendant que l'autre moitié attend son tour.",
+      "start_relation": 30,
+      "clash": {
+        "stats": {
+          "punchline": 8,
+          "flow": 7,
+          "presence": 9,
+          "story": 10
+        },
+        "weakness": "punchline",
+        "resistance": "story",
+        "taunts": [
+          "T'es qui, toi ? Un stagiaire ?",
+          "J'ai des plaques plus vieilles que ta carrière.",
+          "Retourne à ta laverie, petit."
+        ]
+      },
+      "look": {
+        "skin": "#5a3825",
+        "hair": "#0f0f12",
+        "top": "#111114",
+        "bottom": "#111114",
+        "shoes": "#f2f2f2",
+        "accent": "#e8c547",
+        "hair_style": "bald",
+        "glasses": true,
+        "chain": true,
+        "beard": true
+      },
+      "secret": {
+        "name": "Le Mur de Platine",
+        "line": "Le Baron fait défiler son mur de disques de platine pendant quatre minutes, en silence. Tu remets en question tous tes choix de vie."
+      }
+    },
+    {
+      "id": "kolosse",
+      "name": "Kolosse",
+      "role": "Le colosse du quartier",
+      "bio": "Deux mètres, une voix de basse, et une passion pour les défis en live qu'il n'a jamais terminés. Sa batterie de téléphone non plus.",
+      "start_relation": 45,
+      "clash": {
+        "stats": {
+          "punchline": 5,
+          "flow": 7,
+          "presence": 9,
+          "story": 6
+        },
+        "weakness": "story",
+        "resistance": "presence",
+        "taunts": [
+          "Défi en live, ce soir. Si j'ai du réseau.",
+          "Je fais 200 pompes avant le petit-déj. Enfin, j'en parle.",
+          "T'as pas la carrure, frère."
+        ]
+      },
+      "look": {
+        "skin": "#5a3825",
+        "hair": "#0f0f12",
+        "top": "#b5261e",
+        "bottom": "#1a1a1f",
+        "shoes": "#f2f2f2",
+        "accent": "#e8c547",
+        "hair_style": "short",
+        "chain": true,
+        "beard": true
+      },
+      "secret": {
+        "name": "Le Live Interminable",
+        "line": "Kolosse lance un live de 6 heures pour « régler ça ». Tu t'endors à la 40e minute. Le public aussi. Il gagne aux points."
+      }
+    },
+    {
+      "id": "le_conteur",
+      "name": "Le Conteur",
+      "role": "Le vétéran des récits",
+      "bio": "Raconte la rue comme un roman depuis vingt ans. Sort ses diss tracks en épisodes, comme une série.",
+      "start_relation": 50,
+      "clash": {
+        "stats": {
+          "punchline": 8,
+          "flow": 6,
+          "presence": 5,
+          "story": 6
+        },
+        "weakness": "presence",
+        "resistance": "punchline",
+        "taunts": [
+          "Épisode 4. Tu ne verras pas la saison 2.",
+          "J'écrivais déjà quand tu portais des couches.",
+          "Laisse-moi te raconter ta propre chute."
+        ]
+      },
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#3a3a3a",
+        "top": "#5b4636",
+        "bottom": "#2a2a33",
+        "shoes": "#3a2a1e",
+        "accent": "#c8a165",
+        "hat": "cap",
+        "beard": true
+      },
+      "secret": {
+        "name": "L'Épisode Final",
+        "line": "Le Conteur lance l'épisode final : quatorze minutes, trois rebondissements, et ta mère en featuring surprise."
+      }
+    },
+    {
+      "id": "tenebre",
+      "name": "Ténèbre",
+      "role": "Le poète sombre",
+      "bio": "Enregistre à 4h du matin, lumières éteintes. Répond aux interviews par des silences. Ses fans les analysent.",
+      "start_relation": 40,
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#0f0f12",
+        "top": "#0d0d10",
+        "bottom": "#0d0d10",
+        "shoes": "#0d0d10",
+        "accent": "#3a3a44",
+        "hat": "hood"
+      }
+    },
+    {
+      "id": "orphee",
+      "name": "Orphée",
+      "role": "Le prodige du collectif",
+      "bio": "Références littéraires, salles pleines, disparitions de deux ans. Revient toujours avec un album surprise au pire moment pour toi.",
+      "start_relation": 50,
+      "clash": {
+        "stats": {
+          "punchline": 8,
+          "flow": 8,
+          "presence": 7,
+          "story": 3
+        },
+        "weakness": "story",
+        "resistance": "flow",
+        "taunts": [
+          "J'ai lu des livres plus épais que ta discographie.",
+          "Je pars deux ans et tu n'as toujours pas avancé.",
+          "Même ma ponctuation rappe mieux que toi."
+        ]
+      },
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#3b2a1e",
+        "top": "#2e4a3a",
+        "bottom": "#d8cfb8",
+        "shoes": "#f2f2f2",
+        "accent": "#e8c547",
+        "hair_style": "long",
+        "hat": "beanie"
+      },
+      "secret": {
+        "name": "La Disparition",
+        "line": "Orphée supprime tous ses réseaux en plein clash. Le suspense est tel que tu oublies ton propre couplet."
+      }
+    },
+    {
+      "id": "scalpel",
+      "name": "Scalpel",
+      "role": "Le technicien",
+      "bio": "Costume impeccable, voix posée, punchlines chirurgicales. Ne crie jamais. Te découpe en une rime et retourne boire son thé.",
+      "start_relation": 45,
+      "clash": {
+        "stats": {
+          "punchline": 10,
+          "flow": 9,
+          "presence": 5,
+          "story": 4
+        },
+        "weakness": "presence",
+        "resistance": "punchline",
+        "taunts": [
+          "Incision propre. Tu ne sentiras rien.",
+          "Ta rime est bancale. Je te la corrige gratuitement.",
+          "Je ne clashe pas. Je fais de la chirurgie."
+        ]
+      },
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#141414",
+        "top": "#6b6b75",
+        "bottom": "#6b6b75",
+        "shoes": "#141418",
+        "accent": "#f2f2f2",
+        "hair_style": "short",
+        "glasses": true
+      },
+      "secret": {
+        "name": "Incision Sans Anesthésie",
+        "line": "Scalpel relit ton dernier texte au stylo rouge, à voix haute, rime par rime. L'autopsie dure deux minutes."
+      }
+    },
+    {
+      "id": "lil_sauge",
+      "name": "Lil Sauge",
+      "role": "Le rival de ta génération",
+      "bio": "Arrivé en même temps que toi. Tout ce que tu refuses, il l'accepte. Ça lui réussit, et c'est agaçant.",
+      "start_relation": 45,
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 4,
+          "presence": 4,
+          "story": 6
+        },
+        "weakness": "punchline",
+        "resistance": "story",
+        "taunts": [
+          "Intermittent du flow !",
+          "Mes stories font plus de vues que tes albums.",
+          "Rappelle-moi ton blaze ?"
+        ]
+      },
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#c8b23a",
+        "top": "#7a3fb0",
+        "bottom": "#1a1a1f",
+        "shoes": "#f2f2f2",
+        "accent": "#7fe0a0",
+        "hair_style": "puff",
+        "chain": true
+      },
+      "secret": {
+        "name": "Le Refrain Sifflé",
+        "line": "Lil Sauge siffle son tube de l'été. Toute la salle reprend. Tu le siffles aussi, contre ta volonté."
+      }
+    },
+    {
+      "id": "kevlar_jr",
+      "name": "Kevlar Jr.",
+      "role": "Champion de battle",
+      "bio": "19 ans, invaincu au Ring des Mots, déjà une ligne de vêtements.",
+      "start_relation": 50,
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 4,
+          "presence": 3,
+          "story": 2
+        },
+        "weakness": "story",
+        "resistance": "punchline",
+        "taunts": [
+          "Invaincu. Note-le.",
+          "Ton couplet, je le mets dans ma ligne de vêtements : en solde.",
+          "Le Ring, c'est ma maison."
+        ]
+      },
+      "look": {
+        "skin": "#c68642",
+        "hair": "#141414",
+        "top": "#ff4d2e",
+        "bottom": "#2a2a33",
+        "shoes": "#f2f2f2",
+        "accent": "#f2f2f2",
+        "hat": "cap"
+      },
+      "secret": {
+        "name": "Le Défilé de Mode",
+        "line": "Kevlar Jr. présente sa nouvelle collection en plein battle. Le public applaudit, puis achète des hoodies."
+      }
+    },
+    {
+      "id": "ptit_wifi",
+      "name": "P'tit Wifi",
+      "role": "La nouvelle génération",
+      "bio": "17 ans, deux millions d'abonnés, pense que le rap a commencé en 2020.",
+      "start_relation": 50,
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 4,
+          "presence": 5,
+          "story": 8
+        },
+        "weakness": "punchline",
+        "resistance": "story",
+        "taunts": [
+          "Rappeur de daron !",
+          "C'est quoi un CD ?",
+          "Mes abonnés vont te ratio."
+        ]
+      },
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#e8c547",
+        "top": "#3fa0e0",
+        "bottom": "#e8e8e8",
+        "shoes": "#ff4d2e",
+        "accent": "#f2f2f2",
+        "hair_style": "puff",
+        "headphones": true
+      },
+      "secret": {
+        "name": "Le Ratio Supersonique",
+        "line": "P'tit Wifi lance un live : deux millions de viewers spamment des émojis clown sur ta tête."
+      }
+    },
+    {
+      "id": "lucien",
+      "name": "Vieux Mic Lucien",
+      "role": "Légende de l'underground",
+      "bio": "Rappe depuis les années 90. N'a pas de réseaux. T'appelle sur un fixe.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#5a3825",
+        "hair": "#d8d8d8",
+        "top": "#5b4636",
+        "bottom": "#3a3a44",
+        "shoes": "#3a2a1e",
+        "accent": "#c8a165",
+        "hat": "beanie",
+        "beard": true
+      }
+    },
+    {
+      "id": "clara_soleil",
+      "name": "Clara Soleil",
+      "role": "Chanteuse de variété",
+      "bio": "Tubes de l'été, chèques épais, refrains qui collent au cerveau comme du sable mouillé.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#e8c547",
+        "top": "#f2a0b8",
+        "bottom": "#f2f2f2",
+        "shoes": "#f2a0b8",
+        "accent": "#e8c547",
+        "hair_style": "long",
+        "glasses": true
+      }
+    },
+    {
+      "id": "hater_anonyme",
+      "name": "Hater anonyme",
+      "role": "Commentateur professionnel",
+      "bio": "Pseudo : user8812. Photo de profil : un œuf. Avis sur tout.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#3a3a3a",
+        "top": "#2a2a33",
+        "bottom": "#2a2a33",
+        "shoes": "#3a3a44",
+        "accent": "#6b6b75",
+        "hat": "hood"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 1,
+          "presence": 1,
+          "story": 4
+        },
+        "weakness": "presence",
+        "resistance": "story",
+        "taunts": [
+          "Ratio.",
+          "C'était mieux avant.",
+          "Qui t'écoute sérieux ?"
+        ]
+      },
+      "wild": true,
+      "secret": {
+        "name": "Le Pavé en Commentaire",
+        "line": "Le Hater lit à voix haute son commentaire de 4 000 caractères. Trois fautes par ligne. Aucune virgule."
+      }
+    },
+    {
+      "id": "fan_collant",
+      "name": "Fan trop collant",
+      "role": "Ton plus grand fan, hélas",
+      "bio": "Connaît tes paroles mieux que toi et te le fait savoir.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#b5261e",
+        "top": "#e8c547",
+        "bottom": "#2f4a7a",
+        "shoes": "#f2f2f2",
+        "accent": "#ff4d2e",
+        "hair_style": "puff"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 1,
+          "flow": 3,
+          "presence": 4,
+          "story": 2
+        },
+        "weakness": "punchline",
+        "resistance": "presence",
+        "taunts": [
+          "Tu peux signer mon front ?",
+          "Fais le morceau de 2019 !",
+          "Je t'aime trop frère !!"
+        ]
+      },
+      "wild": true,
+      "secret": {
+        "name": "Le Câlin Interminable",
+        "line": "Le Fan te prend dans ses bras et refuse de lâcher. Il commence à chanter ton morceau de 2019, faux."
+      }
+    },
+    {
+      "id": "beatmaker_relou",
+      "name": "Beatmaker relou",
+      "role": "A « une prod de fou » pour toi",
+      "bio": "Sa clé USB contient 4 000 prods. Toutes « de fou ».",
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#141414",
+        "top": "#2e4a3a",
+        "bottom": "#1a1a1f",
+        "shoes": "#e8e8e8",
+        "accent": "#7fe0a0",
+        "headphones": true,
+        "hat": "cap"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 4,
+          "presence": 2,
+          "story": 2
+        },
+        "weakness": "story",
+        "resistance": "flow",
+        "taunts": [
+          "Écoute juste 30 secondes.",
+          "C'est un type beat de toi, mais en mieux.",
+          "Ma prod > ta carrière."
+        ]
+      },
+      "wild": true,
+      "secret": {
+        "name": "La Clé USB Maudite",
+        "line": "Il branche sa clé USB sur la sono et lance ses 4 000 prods en même temps. Les enceintes demandent pitié."
+      }
+    },
+    {
+      "id": "influenceur_trottinette",
+      "name": "Influenceur en trottinette",
+      "role": "12 000 abonnés, 0 freins",
+      "bio": "Filme tout, comprend peu, roule sur le trottoir.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#e8c547",
+        "top": "#f2f2f2",
+        "bottom": "#d8cfb8",
+        "shoes": "#f2f2f2",
+        "accent": "#3fa0e0",
+        "glasses": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 1,
+          "flow": 2,
+          "presence": 3,
+          "story": 5
+        },
+        "weakness": "punchline",
+        "resistance": "story",
+        "taunts": [
+          "Abonne-toi !",
+          "On fait un TikTok ?",
+          "Code promo GOSLO10."
+        ]
+      },
+      "wild": true,
+      "secret": {
+        "name": "Le Code Promo Fatal",
+        "line": "L'Influenceur crie « CODE GOSLO10 » dans un mégaphone. La foule se retourne vers lui pour acheter des gourdes."
+      }
+    },
+    {
+      "id": "rappeur_soiree",
+      "name": "Rappeur de soirée",
+      "role": "Freestyle dès la deuxième bière",
+      "bio": "Rappe sur toutes les prods, surtout celles qui ne sont pas les siennes.",
+      "look": {
+        "skin": "#c68642",
+        "hair": "#141414",
+        "top": "#b5261e",
+        "bottom": "#2a2a33",
+        "shoes": "#e8e8e8",
+        "accent": "#e8c547",
+        "hat": "beanie"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 3,
+          "presence": 3,
+          "story": 1
+        },
+        "weakness": "story",
+        "resistance": "punchline",
+        "taunts": [
+          "Donne le mic !",
+          "J'ai une rime avec ton blaze.",
+          "Yo yo yo, check."
+        ]
+      },
+      "wild": true,
+      "secret": {
+        "name": "Le Micro Arraché",
+        "line": "Il t'arrache le micro et rappe ton propre couplet. En mieux. C'est la pire chose qui te soit arrivée cette année."
+      }
+    },
+    {
+      "id": "big_kliks",
+      "name": "Big Kliks",
+      "role": "4 millions d'abonnés, 12 likes",
+      "bio": "Ses streams viennent tous du même village, à 4 h du matin. Il appelle ça « une fanbase très matinale ».",
+      "start_relation": 45,
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#141414",
+        "top": "#3fa0e0",
+        "bottom": "#1a1a1f",
+        "shoes": "#f2f2f2",
+        "accent": "#7fe0a0",
+        "hat": "cap",
+        "glasses": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 3,
+          "presence": 4,
+          "story": 7
+        },
+        "weakness": "punchline",
+        "resistance": "story",
+        "taunts": [
+          "J'ai plus de vues que toi. Elles sont où ? Secret.",
+          "Mes fans sont partout. Surtout dans un village.",
+          "Like, abonne-toi, perds."
+        ]
+      },
+      "secret": {
+        "name": "Le Ratio Acheté",
+        "line": "Big Kliks déverse deux millions de vues achetées sur ta tête. Elles arrivent toutes en même temps, du même village, à 4 h du matin. Le public est impressionné. Puis il réfléchit."
+      }
+    },
+    {
+      "id": "lingot",
+      "name": "Lingot",
+      "role": "Rappeur bling-bling insupportable",
+      "bio": "Trois chaînes en or, une montre à chaque poignet, des lunettes de soleil à 23 h. Parle de ses bijoux à la troisième personne.",
+      "start_relation": 35,
+      "look": {
+        "skin": "#c68642",
+        "hair": "#141414",
+        "top": "#16161a",
+        "bottom": "#e8c547",
+        "shoes": "#e8c547",
+        "accent": "#e8c547",
+        "hair_style": "short",
+        "glasses": true,
+        "chain": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 5,
+          "presence": 6,
+          "story": 5
+        },
+        "weakness": "punchline",
+        "resistance": "presence",
+        "taunts": [
+          "Ma chaîne coûte plus cher que ton quartier.",
+          "Tu rappes en survêt ? Courageux.",
+          "Je brille, toi tu clignotes."
+        ]
+      },
+      "secret": {
+        "name": "La Facture",
+        "line": "Lingot lit à voix haute le prix de chacun de ses bijoux. Ça dure onze minutes. Le public s'endort. Toi aussi, presque."
+      }
+    },
+    {
+      "id": "lil_croon",
+      "name": "Lil Croon",
+      "role": "Rappeur sous autotune (ou chanteur ? personne ne sait)",
+      "bio": "Met de l'autotune sur sa voix, sur la prod et sur son répondeur. Les plateformes le classent dans « Ambiance spa ».",
+      "start_relation": 55,
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#141414",
+        "top": "#f2a0b8",
+        "bottom": "#e8e8e8",
+        "shoes": "#f2f2f2",
+        "accent": "#8fa3c7",
+        "hair_style": "puff",
+        "headphones": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 6,
+          "presence": 5,
+          "story": 3
+        },
+        "weakness": "punchline",
+        "resistance": "flow",
+        "taunts": [
+          "Bébé-é-é, t'es pas prê-ê-êt.",
+          "Je rappe ? Je chante ? Moi-ê-ême je sais pas.",
+          "Ooh yeah, ratio-o-o."
+        ]
+      },
+      "secret": {
+        "name": "L'Autotune Infini",
+        "line": "Lil Croon pousse l'autotune à 100 %. Il ne rappe plus, il ne chante plus : il bipe, comme un micro-ondes amoureux. Le public pleure sans savoir pourquoi."
+      }
+    },
+    {
+      "id": "gestuel",
+      "name": "Gestuel",
+      "role": "Ne communique qu'avec les mains",
+      "bio": "N'a jamais prononcé un mot en interview. Ses gestes sont analysés par trois forums. Aucun n'est d'accord.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#3b2a1e",
+        "top": "#2e4a3a",
+        "bottom": "#23232a",
+        "shoes": "#e8e8e8",
+        "accent": "#f2f2f2",
+        "hat": "beanie"
+      }
+    },
+    {
+      "id": "big_deal",
+      "name": "Big Deal",
+      "role": "Superstar américaine",
+      "bio": "Atlanta. Quatorze trophées, trois jets privés, zéro featuring avec la France. Ne se lève pas avant 15 h.",
+      "start_relation": 20,
+      "look": {
+        "skin": "#5a3825",
+        "hair": "#0f0f12",
+        "top": "#f2f2f2",
+        "bottom": "#16161a",
+        "shoes": "#e8c547",
+        "accent": "#e8c547",
+        "hair_style": "bald",
+        "glasses": true,
+        "chain": true,
+        "beard": true
+      }
+    },
+    {
+      "id": "delamorale",
+      "name": "Jean-Hubert Delamorale",
+      "role": "Chroniqueur télé · « Le Grand Débat »",
+      "bio": "N'a jamais écouté un album de rap en entier. Écrit pourtant sur le sujet depuis 1998. Accuse le rap de la hausse du prix du beurre.",
+      "start_relation": 10,
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#9a9aa3",
+        "top": "#2f3a5a",
+        "bottom": "#2a2a33",
+        "shoes": "#3a2a1e",
+        "accent": "#b5261e",
+        "hair_style": "short",
+        "glasses": true
+      }
+    },
+    {
+      "id": "dj_bobine",
+      "name": "DJ Bobine",
+      "role": "DJ avec une seule platine",
+      "bio": "Possède une platine, un câble jack et une confiance inébranlable. Joue tout 2 % trop vite « pour l'énergie ».",
+      "start_relation": 50,
+      "look": {
+        "skin": "#c68642",
+        "hair": "#141414",
+        "top": "#2e4a3a",
+        "bottom": "#23232a",
+        "shoes": "#e8e8e8",
+        "accent": "#7fe0a0",
+        "hair_style": "puff",
+        "headphones": true
+      }
+    },
+    {
+      "id": "gege",
+      "name": "Gégé",
+      "role": "Régisseur du Transfo",
+      "bio": "31 ans de métier. N'a jamais souri pendant une balance. Dit « un, deux » comme d'autres disent des prières.",
+      "start_relation": 40,
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#9a9aa3",
+        "top": "#16161a",
+        "bottom": "#2f4a7a",
+        "shoes": "#3a2a1e",
+        "accent": "#e8c547",
+        "hair_style": "bald",
+        "beard": true,
+        "headphones": true
+      }
+    },
+    {
+      "id": "maman",
+      "name": "Ta mère",
+      "role": "Fan numéro 1 (autoproclamée)",
+      "bio": "Vient à tous tes concerts avec une pancarte. Demande quand même quand tu trouves un vrai travail.",
+      "start_relation": 90,
+      "look": {
+        "skin": "#a8724a",
+        "hair": "#3b2a1e",
+        "top": "#b5261e",
+        "bottom": "#2a2a33",
+        "shoes": "#3a2a1e",
+        "accent": "#f2a0b8",
+        "hair_style": "long",
+        "glasses": true
+      }
+    },
+    {
+      "id": "victor_contrat",
+      "name": "Victor Contrat",
+      "role": "Directeur artistique · Hexagone Music",
+      "bio": "Costume trop cher, baskets trop neuves. Dit « on va faire des grandes choses » avant même de connaître ton nom.",
+      "start_relation": 40,
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#3b2a1e",
+        "top": "#2f3a5a",
+        "bottom": "#2f3a5a",
+        "shoes": "#f2f2f2",
+        "accent": "#e8e8e8",
+        "hair_style": "short",
+        "glasses": true
+      }
+    }
+  ]
+}

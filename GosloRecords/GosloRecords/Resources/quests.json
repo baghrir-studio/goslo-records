@@ -1,0 +1,310 @@
+{
+  "quests": [
+    {
+      "id": "premier_contrat",
+      "title": "Le premier contrat",
+      "description": "Personne ne te connaît. Il faut que ça change.",
+      "steps": [
+        {
+          "label": "Faire ton premier freestyle à la radio",
+          "location": "media",
+          "conditions": {
+            "required_flags": [
+              "freestyle_fait"
+            ]
+          }
+        },
+        {
+          "label": "Signer avec un label",
+          "location": "label",
+          "conditions": {
+            "required_flags": [
+              "sous_contrat"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "argent": 10
+        },
+        "xp": {
+          "business": 30
+        },
+        "text": "Tu as un contrat. Tu as aussi des obligations. Bienvenue dans le game."
+      }
+    },
+    {
+      "id": "premier_projet",
+      "title": "Premier projet",
+      "description": "Un rappeur sans projet, c'est un influenceur.",
+      "steps": [
+        {
+          "label": "Sortir un projet",
+          "location": "chez_toi",
+          "conditions": {
+            "min_counters": {
+              "projets": 1
+            }
+          }
+        },
+        {
+          "label": "Monter sur scène",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "premier_concert"
+            ]
+          }
+        },
+        {
+          "label": "Atteindre 40 en streams",
+          "location": "reseaux",
+          "conditions": {
+            "min_stats": {
+              "streams": 40
+            }
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "scene": 40
+        },
+        "text": "Tu n'es plus « un mec qui rappe ». Tu es un rappeur."
+      }
+    },
+    {
+      "id": "disque_or",
+      "title": "La plaque",
+      "description": "Un disque d'or, à accrocher au-dessus du canapé de ta mère.",
+      "conditions": {
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "steps": [
+        {
+          "label": "Atteindre 55 en streams",
+          "location": "reseaux",
+          "conditions": {
+            "min_stats": {
+              "streams": 55
+            }
+          }
+        },
+        {
+          "label": "Décrocher un disque d'or",
+          "location": "label",
+          "conditions": {
+            "min_counters": {
+              "disques_or": 1
+            }
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "argent": 15,
+          "mental": 5
+        },
+        "text": "Ta mère a acheté un clou spécial pour l'accrocher."
+      }
+    },
+    {
+      "id": "plume_or",
+      "title": "La plume d'or",
+      "description": "Être reconnu par ceux qui écoutent vraiment les textes.",
+      "conditions": {
+        "min_year": 2
+      },
+      "steps": [
+        {
+          "label": "Passer au Débrief de Yanis Tracklist",
+          "location": "media",
+          "conditions": {
+            "required_flags": [
+              "debrief_invite"
+            ]
+          }
+        },
+        {
+          "label": "Atteindre Plume niveau 5",
+          "location": "chez_toi",
+          "conditions": {
+            "min_skills": {
+              "plume": 5
+            }
+          }
+        },
+        {
+          "label": "Tenir la cadence sur un feat avec Scalpel",
+          "location": "studio",
+          "conditions": {
+            "required_flags": [
+              "feat_scalpel"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 12
+        },
+        "xp": {
+          "plume": 40
+        },
+        "text": "Yanis t'a classé dans son top « plumes de la décennie ». Entre deux légendes. Tu as fait une capture."
+      }
+    },
+    {
+      "id": "laverie",
+      "title": "Fidèle à la laverie",
+      "description": "goslo records t'a donné ta chance. À toi de rendre la pareille.",
+      "conditions": {
+        "required_flags": [
+          "signe_goslo"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Poser sur la compile goslo",
+          "location": "label",
+          "conditions": {
+            "required_flags": [
+              "compile_goslo"
+            ]
+          }
+        },
+        {
+          "label": "Refuser de quitter goslo",
+          "location": "label",
+          "conditions": {
+            "required_flags": [
+              "fidele_goslo"
+            ]
+          }
+        },
+        {
+          "label": "Monter sur scène pour les 10 ans de goslo",
+          "location": "label",
+          "conditions": {
+            "required_flags": [
+              "goslo_dix_ans"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "mental": 10,
+          "credibilite": 8
+        },
+        "text": "Momo a fait graver ton nom sur la machine numéro 4. C'est le plus grand honneur du label."
+      }
+    },
+    {
+      "id": "grande_scene",
+      "title": "Remplir une grande salle",
+      "description": "Passer des bars aux salles où l'on voit le public jusqu'au fond.",
+      "conditions": {
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "steps": [
+        {
+          "label": "Faire une tournée complète",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "tournee_complete"
+            ]
+          }
+        },
+        {
+          "label": "Atteindre Scène niveau 4",
+          "location": "scene",
+          "conditions": {
+            "min_skills": {
+              "scene": 4
+            }
+          }
+        },
+        {
+          "label": "Remplir une salle de 5 000 places",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "grande_salle"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "argent": 15,
+          "streams": 8
+        },
+        "text": "5 000 personnes ont chanté ton refrain. Ton refrain parle de ta solitude. L'ironie ne t'échappe pas."
+      }
+    },
+    {
+      "id": "trone",
+      "title": "Le trône",
+      "description": "Le Baron règne sur le game depuis quinze ans. Quelqu'un doit le faire descendre.",
+      "conditions": {
+        "min_year": 2
+      },
+      "steps": [
+        {
+          "label": "Attirer l'attention du Baron",
+          "location": "reseaux",
+          "conditions": {
+            "required_flags": [
+              "baron_contact"
+            ]
+          }
+        },
+        {
+          "label": "Gagner ton premier clash",
+          "location": "quartier",
+          "conditions": {
+            "min_counters": {
+              "clashs_gagnes": 1
+            }
+          }
+        },
+        {
+          "label": "Atteindre 55 en streams et 50 en respect",
+          "location": "media",
+          "conditions": {
+            "min_stats": {
+              "streams": 55,
+              "credibilite": 50
+            }
+          }
+        },
+        {
+          "label": "Battre le Baron en clash",
+          "location": "reseaux",
+          "conditions": {
+            "required_flags": [
+              "clash_gagne_le_baron"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "streams": 15,
+          "credibilite": 10
+        },
+        "text": "Le trône est à toi. Il grince un peu. Personne ne te l'avait dit."
+      }
+    }
+  ]
+}
