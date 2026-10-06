@@ -822,7 +822,7 @@
     {
       "id": "buzz_tiktok",
       "title": "La danse virale",
-      "text": "12 secondes de ton morceau le plus triste sont devenues une danse virale. Des gens se filment en mimant une vague. Sur un morceau sur le deuil.",
+      "text": "12 secondes de ton morceau le plus triste sont devenues une danse virale. Des gens se filment en mimant une vague. Sur un morceau qui parle de deuil.",
       "location": "reseaux",
       "weight": 10,
       "unique": true,
@@ -2912,7 +2912,7 @@
           "relations": {
             "big_kliks": -15
           },
-          "consequence": "Big Kliks a perdu 3,9 millions d'abonnés en une nuit. Il lui en reste 12. Ce sont des vrais. Il les remercie un par un."
+          "consequence": "Big Kliks a perdu 3 999 988 abonnés en une nuit. Il lui en reste 12. Ce sont des vrais. Il les remercie un par un."
         }
       ]
     },

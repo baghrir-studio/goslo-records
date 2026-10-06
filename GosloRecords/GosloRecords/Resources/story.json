@@ -979,7 +979,7 @@
       "location": "media",
       "npc": "delamorale",
       "weight": 0,
-      "text": "Devant goslo radio, une équipe de télé t'attend et t'embarque sur le plateau du « Grand Débat ». Thème du soir : « Le rap : fléau ou catastrophe ? ». Jean-Hubert Delamorale a préparé un dossier de quarante pages. Il n'a pas écouté ta mixtape.",
+      "text": "Devant goslo radio, une équipe de télé t'attend et t'embarque sur le plateau du « Grand Débat ». Thème du soir : « Le rap : fléau ou catastrophe ? » Jean-Hubert Delamorale a préparé un dossier de quarante pages. Il n'a pas écouté ta mixtape.",
       "choices": [
         {
           "label": "Monter sur le plateau",
@@ -2003,7 +2003,7 @@
               "set_flags": [
                 "baron_tombe"
               ],
-              "consequence": "Le Baron retire ses lunettes. C'est la première fois qu'on voit ses yeux depuis 2009. « Bien joué, petit. » La rue explose. Quelque part, un chat applaudit avec ses pattes."
+              "consequence": "Le Baron retire ses lunettes. C'est la première fois qu'on voit ses yeux depuis des années. « Bien joué, petit. » La rue explose. Quelque part, un chat applaudit avec ses pattes."
             },
             "lose": {
               "effects": {
@@ -2043,7 +2043,7 @@
             },
             "opponent_power": 1.2
           },
-          "consequence": "Tu lui récites son premier couplet, de 2009. Il hausse un sourcil. « Intéressant. Ça va pas t'aider. »"
+          "consequence": "Tu lui récites son tout premier couplet, celui d'avant les lunettes. Il hausse un sourcil. « Intéressant. Ça va pas t'aider. »"
         },
         {
           "label": "Pas encore",
@@ -2073,7 +2073,7 @@
             "big_nono": 5
           },
           "interview": "face_a_face",
-          "consequence": "Il regarde le paquet. Il regarde toi. Il prend une chip. Ça ne change rien, mais il a apprécié."
+          "consequence": "Il regarde le paquet. Puis il te regarde. Il prend une chip. Ça ne change rien, mais il a apprécié."
         }
       ]
     },
@@ -2207,7 +2207,7 @@
           "micro_ouvert_reussi",
           "freestyle_fait"
         ],
-        "consequence": "Big Nono : « Le petit du bloc. Retenez ce nom. » goslo radio va repasser ton passage toute la semaine."
+        "consequence": "Big Nono : « Le petit du bloc. Retenez ce nom. » goslo radio va rediffuser ton passage toute la semaine."
       },
       "lose": {
         "effects": {
@@ -2378,7 +2378,7 @@
             {
               "label": "Mal. Le trône grince.",
               "hype": 18,
-              "reaction": "Big Nono rit. Il ne rit jamais, sauf quand c'est vraiment bon. Il repose ses chips."
+              "reaction": "Big Nono rit. Il ne rit jamais, sauf quand c'est vraiment bon."
             },
             {
               "label": "Comme un bébé : je me réveille toutes les deux heures en pleurant.",
@@ -2443,7 +2443,7 @@
             {
               "label": "Euh… bonjour monsieur le Baron, j'adore votre travail.",
               "hype": -10,
-              "reaction": "Le standard raccroche, par pitié. Le Baron, lui, rit encore."
+              "reaction": "Big Nono coupe la ligne, par pitié. On entend encore le Baron rire."
             }
           ]
         },
@@ -2464,7 +2464,7 @@
             {
               "label": "Quel chat ?",
               "hype": -6,
-              "reaction": "Big Nono pose ses chips. « Ne fais jamais ça. » Le quartier entier est d'accord."
+              "reaction": "Big Nono se fige. « Ne fais jamais ça. » Le quartier entier est d'accord."
             }
           ]
         },
@@ -3337,7 +3337,7 @@
         {
           "say": {
             "who": "le_baron",
-            "text": "Le petit de la laverie, hein ? Qu'il monte. Le trône est au dernier étage. L'ascenseur est en panne. Je l'ai cassé moi-même, en 2009."
+            "text": "Le petit de la laverie, hein ? Qu'il monte. Le trône est au dernier étage. L'ascenseur est en panne. Je l'ai cassé moi-même, le jour où je suis monté."
           }
         },
         {
@@ -3455,7 +3455,7 @@
         {
           "say": {
             "who": "le_baron",
-            "text": "Tiens, le trône. Il est en carton, je l'ai acheté en 2009. Fais gaffe, il grince. Et tout le monde va vouloir s'asseoir dessus."
+            "text": "Tiens, le trône. Il est en carton. Il l'a toujours été. Fais gaffe, il grince. Et tout le monde va vouloir s'asseoir dessus."
           }
         },
         {
@@ -3754,7 +3754,7 @@
       }
     },
     {
-      "text": "Une berline noire est garée sur trois places boulevard du quartier depuis une semaine. La fourrière dit qu'elle « n'ose pas ».",
+      "text": "Une berline noire est garée sur trois places, sur le boulevard du quartier, depuis une semaine. La fourrière dit qu'elle « n'ose pas ».",
       "conditions": {
         "min_chapter": 4,
         "excluded_flags": [
@@ -4108,7 +4108,7 @@
       "start_royalties": 8,
       "target_royalties": 18,
       "start_patience": 60,
-      "walkout": "Victor range son stylo en or. « Je t'appelle. » Il remonte dans sa berline. Il te laisse l'addition du déca.",
+      "walkout": "Victor range son stylo en or. « Je t'appelle. » Il remonte dans sa berline. Il ne t'appellera pas. Enfin, pas cette semaine.",
       "clauses": [
         {
           "text": "Durée. L'Artiste s'engage pour sept albums ou quatre-vingt-dix-neuf ans, selon ce qui arrive en dernier.",
@@ -4379,7 +4379,7 @@
           "time": 9,
           "options": [
             {
-              "line": "aujourd'hui c'est mon refrain qu'ils chantent en boucle dans leur hall.",
+              "line": "aujourd'hui mon refrain tourne en boucle, du bloc jusqu'au festival.",
               "score": 12,
               "reaction": "Fred : « Revanche. Efficace. » Il augmente la réverb, ému."
             },
@@ -4559,7 +4559,7 @@
               "reaction": "La rue scande « D'ICI ! D'ICI ! ». Scalpel range son stylo. Doucement. Respectueusement."
             },
             {
-              "line": "range ton bistouri, docteur : la séance est finie. Merci.",
+              "line": "range ton bistouri, docteur : la séance est finie, merci.",
               "score": 12,
               "reaction": "Tu tends la main. Il la serre. Le public ne sait pas s'il doit applaudir ou pleurer. Il fait les deux."
             },
