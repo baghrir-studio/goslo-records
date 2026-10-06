@@ -91,7 +91,7 @@ final class EventsDataTests: XCTestCase {
         settable.formUnion(world.story.writings.flatMap { $0.win.setFlags + $0.lose.setFlags })
         settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap(\.clash).flatMap { $0.win.setFlags + $0.lose.setFlags } })
         settable.formUnion((1...world.story.chapters.count).map { "chapitre_\($0)" })
-        settable.formUnion(events.flatMap { $0.choices.compactMap { $0.clash.map { "clash_gagne_\($0.opponent)" } } })
+        settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap { $0.clash.map { "clash_gagne_\($0.opponent)" } } })
         settable.formUnion(world.quests.map { "quete_\($0.id)" })
 
         var required: [(String, String)] = events.flatMap { e in e.conditions.requiredFlags.map { (e.id, $0) } }
@@ -99,6 +99,7 @@ final class EventsDataTests: XCTestCase {
             required += quest.conditions.requiredFlags.map { (quest.id, $0) }
             required += quest.steps.flatMap { $0.conditions.requiredFlags.map { (quest.id, $0) } }
         }
+        required += world.story.techniques.flatMap { t in t.unlock.requiredFlags.map { (t.id, $0) } }
         for (owner, flag) in required {
             XCTAssertTrue(settable.contains(flag), "\(owner) requiert « \(flag) », qu'aucun choix ne pose")
         }

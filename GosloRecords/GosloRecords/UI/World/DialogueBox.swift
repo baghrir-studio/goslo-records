@@ -300,6 +300,7 @@ struct ConsequenceBox: View {
         }
         + outcome.levelUps.map { ("\($0.label.uppercased()) NIV. \(state.skills.level($0)) ↑", true) }
         + outcome.gainedItems.map { ("OBJET : \($0.uppercased())", true) }
+        + outcome.unlockedTechniques.map { ("TECHNIQUE : \($0.uppercased())", true) }
     }
 }
 

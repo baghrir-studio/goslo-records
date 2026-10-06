@@ -225,8 +225,49 @@ struct CarnetView: View {
 
     // MARK: Objets
 
+    /// Secret techniques: the one used in clashes is highlighted, tap another to equip it.
+    @ViewBuilder
+    private var techniques: some View {
+        let current = model.state ?? state
+        let equipped = model.engine.playerSecret(in: current)
+        Text("TECHNIQUES SECRÈTES").font(.mono(11, weight: .bold)).foregroundStyle(Theme.muted)
+        ForEach(model.engine.availableTechniques(in: current)) { technique in
+            let isOn = technique.secret == equipped
+            Button {
+                model.equipTechnique(technique.id)
+            } label: {
+                HStack(spacing: 10) {
+                    Image(systemName: technique.secret.prop ?? "star.fill")
+                        .font(.system(size: 18, weight: .bold))
+                        .frame(width: 28)
+                        .foregroundStyle(isOn ? Color(red: 1, green: 0.85, blue: 0.3) : Theme.muted)
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(technique.secret.name.uppercased()).font(.display(20))
+                        Text(technique.secret.line).font(.system(size: 13)).foregroundStyle(Theme.text.opacity(0.75))
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer(minLength: 0)
+                    Text(isOn ? "ÉQUIPÉE" : "ÉQUIPER")
+                        .font(.mono(10, weight: .bold))
+                        .foregroundStyle(isOn ? Theme.background : Theme.text)
+                        .padding(.horizontal, 8).padding(.vertical, 5)
+                        .background(isOn ? Theme.accent : Color.clear)
+                        .overlay(Rectangle().stroke(isOn ? Theme.accent : Theme.line, lineWidth: 1))
+                }
+                .padding(.vertical, 6)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityAddTraits(isOn ? .isSelected : [])
+        }
+        Text("Les boss battus en laissent d'autres. Toutes frappent aussi fort : choisis celle qui te fait rire.")
+            .font(.system(size: 12)).foregroundStyle(Theme.muted)
+        Rectangle().fill(Theme.line).frame(height: 1).padding(.bottom, 8)
+    }
+
     @ViewBuilder
     private var items: some View {
+        techniques
         let owned = model.engine.ownedItems(in: state)
         if owned.isEmpty {
             Text("Aucun objet. Les objets mythiques se méritent. Ou s'empruntent à un cousin.")

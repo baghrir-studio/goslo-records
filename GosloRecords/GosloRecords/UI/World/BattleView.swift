@@ -252,7 +252,8 @@ struct BattleView: View {
         await say("Oh non. \(opponentName.uppercased()) déclenche sa TECHNIQUE SECRÈTE… Tapote vite pour la contrer !", hold: 0)
         SoundEngine.shared.play(.secretRiser)
         withAnimation(.easeOut(duration: 0.3)) {
-            cinematic = SecretCinematic(name: pending.secret.name, byPlayer: false, look: opponent?.look ?? CharacterLook())
+            cinematic = SecretCinematic(name: pending.secret.name, byPlayer: false, look: opponent?.look ?? CharacterLook(),
+                                        prop: pending.secret.prop)
         }
         try? await Task.sleep(for: .milliseconds(1400))
         withAnimation(.easeIn(duration: 0.2)) { cinematic = nil }
@@ -385,7 +386,8 @@ struct BattleView: View {
             SoundEngine.shared.play(.secretRiser)
             withAnimation(.easeOut(duration: 0.3)) {
                 cinematic = SecretCinematic(name: secret.name, byPlayer: entry.byPlayer,
-                                            look: entry.byPlayer ? state.rapper.look : (opponent?.look ?? CharacterLook()))
+                                            look: entry.byPlayer ? state.rapper.look : (opponent?.look ?? CharacterLook()),
+                                            prop: secret.prop)
             }
             try? await Task.sleep(for: .milliseconds(2200))
             withAnimation(.easeIn(duration: 0.2)) { cinematic = nil }
@@ -747,6 +749,31 @@ private struct SecretCinematic: Equatable {
     let name: String
     let byPlayer: Bool
     let look: CharacterLook
+    /// SF Symbol raining down behind the character (techniques won along the story).
+    var prop: String? = nil
+}
+
+/// Props falling across the screen, slightly rotating: the gag of the technique.
+private struct PropRain: View {
+    let symbol: String
+    @State private var fallen = false
+
+    var body: some View {
+        GeometryReader { geo in
+            ForEach(0..<14, id: \.self) { index in
+                let x = geo.size.width * (CGFloat(index) + 0.5) / 14
+                let delay = Double((index * 7) % 5) * 0.12
+                Image(systemName: symbol)
+                    .font(.system(size: CGFloat(22 + (index * 5) % 18), weight: .bold))
+                    .foregroundStyle(index % 3 == 0 ? Theme.accent : Color(red: 1, green: 0.85, blue: 0.3))
+                    .rotationEffect(.degrees(fallen ? Double((index % 2 == 0 ? 1 : -1) * 160) : 0))
+                    .position(x: x, y: fallen ? geo.size.height + 40 : -40)
+                    .animation(.easeIn(duration: 1.6).delay(delay), value: fallen)
+            }
+        }
+        .allowsHitTesting(false)
+        .onAppear { fallen = true }
+    }
 }
 
 /// Full-screen overlay: radiating rays, giant character, technique name.
@@ -768,6 +795,8 @@ private struct SecretCinematicView: View {
                 }
             }
             .rotationEffect(.degrees(spin ? 40 : 0))
+
+            if let prop = cinematic.prop { PropRain(symbol: prop) }
 
             PixelImage(CharacterSprite.image(cinematic.look, facing: .down, frame: shown ? 1 : 0), width: 190)
                 .scaleEffect(shown ? 1 : 0.3)

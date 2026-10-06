@@ -582,6 +582,14 @@ final class AppModel {
         return clash
     }
 
+    /// Notebook: picks the secret technique used in clashes.
+    func equipTechnique(_ id: String) {
+        guard var current = state else { return }
+        engine.equipTechnique(id, in: &current)
+        state = current
+        persist()
+    }
+
     /// The player tapped against a boss's technique: it lands, softened.
     @discardableResult
     func counterSecret(taps: Int) -> ClashState? {

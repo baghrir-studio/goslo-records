@@ -367,6 +367,46 @@ final class StoryTests: XCTestCase {
         XCTAssertLessThan(middle, debat.passHype, "le boss ne doit pas se gagner avec des réponses moyennes")
     }
 
+    // MARK: Unlockable techniques
+
+    func testTechniquesDataIsConsistent() {
+        let techniques = world.story.techniques
+        XCTAssertEqual(techniques.count, 6, "une technique par boss avant le chapitre 5")
+        XCTAssertEqual(Set(techniques.map(\.id)).count, techniques.count)
+        for technique in techniques {
+            XCTAssertFalse(technique.secret.name.isEmpty, technique.id)
+            XCTAssertFalse(technique.secret.line.isEmpty, technique.id)
+            XCTAssertFalse(technique.secret.prop?.isEmpty ?? true, "\(technique.id) : pas d'animation")
+            XCTAssertFalse(technique.unlock.requiredFlags.isEmpty, "\(technique.id) se débloquerait dès le début")
+            XCTAssertNotEqual(technique.id, GameEngine.styleTechniqueId)
+            XCTAssertNil(world.story.item(technique.id), "\(technique.id) : même id qu'un objet")
+        }
+    }
+
+    func testBeatingABossUnlocksAndEquipsItsTechnique() throws {
+        var state = engine.newGame(rapper: Rapper(name: "T", city: .paris, style: .drill))
+        state.pendingCinematic = nil
+        XCTAssertEqual(engine.playerSecret(in: state), Style.drill.secret)
+        state.flags.insert("clash_gagne_kevlar_jr")
+        // Any action announces it.
+        let event = try engine.visit(.chezToi, in: &state, using: &rng)
+        let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.followUp == nil && $0.skipTurns == 0 })
+        guard case .outcome(let outcome) = try engine.resolve(choiceAt: choice, in: &state) else { return XCTFail() }
+        XCTAssertEqual(outcome.unlockedTechniques, ["Le Défilé Retourné"])
+        XCTAssertEqual(engine.playerSecret(in: state).name, "Le Défilé Retourné")
+        // Announced once only.
+        let again = try engine.visit(.chezToi, in: &state, using: &rng)
+        let next = try XCTUnwrap(again.choices.firstIndex { $0.isAvailable(in: state) && $0.followUp == nil && $0.skipTurns == 0 })
+        guard case .outcome(let second) = try engine.resolve(choiceAt: next, in: &state) else { return XCTFail() }
+        XCTAssertTrue(second.unlockedTechniques.isEmpty)
+        // The notebook can switch back to the style's technique, but not to a locked one.
+        engine.equipTechnique(GameEngine.styleTechniqueId, in: &state)
+        XCTAssertEqual(engine.playerSecret(in: state), Style.drill.secret)
+        engine.equipTechnique("clause_police_sept", in: &state)
+        XCTAssertEqual(engine.playerSecret(in: state), Style.drill.secret)
+        XCTAssertEqual(engine.availableTechniques(in: state).map(\.id), [GameEngine.styleTechniqueId, "defile_retourne"])
+    }
+
     #if DEBUG
     // MARK: Debug shortcuts
 

@@ -12,6 +12,8 @@ struct TurnOutcome: Equatable {
     var completedObjectives: [String] = []
     /// Items received (names).
     var gainedItems: [String] = []
+    /// Secret techniques unlocked by this action (names).
+    var unlockedTechniques: [String] = []
     /// Finished clash, if the action was one.
     var clash: ClashState?
     /// Finished interview, if the action was one.
@@ -65,6 +67,12 @@ enum GameEngineError: Error, Equatable {
     case noWriting
     case writingNotOver
     case gameOver
+}
+
+/// A secret technique the player can equip (style, item or unlocked), keyed by where it comes from.
+struct EquippableTechnique: Equatable, Identifiable {
+    let id: String
+    let secret: SecretTechnique
 }
 
 /// Pure game rules: map, encounters, choices, clashes, quests, endings.
@@ -303,6 +311,8 @@ struct GameEngine {
         for id in choice.giveItems where !state.items.contains(id) {
             state.items.insert(id)
             outcome.gainedItems.append(story.item(id)?.name ?? id)
+            // A new item with a technique gets equipped right away.
+            if story.item(id)?.secret != nil { state.equippedTechnique = id }
         }
         let visitXP = state.currentLocation?.visitXP ?? [:]
         outcome.add(levelUps: state.skills.gain(visitXP.merging(choice.xp, uniquingKeysWith: +)))
@@ -707,9 +717,37 @@ struct GameEngine {
         story.items.filter { state.items.contains($0.id) }
     }
 
-    /// The secret technique: the last owned item that has one, otherwise the style's.
+    /// The secret technique: the one picked in the notebook, otherwise the last owned item that has one,
+    /// otherwise the style's.
     func playerSecret(in state: GameState) -> SecretTechnique {
-        ownedItems(in: state).last { $0.secret != nil }?.secret ?? state.rapper.style.secret
+        if let id = state.equippedTechnique, let chosen = availableTechniques(in: state).first(where: { $0.id == id }) {
+            return chosen.secret
+        }
+        return ownedItems(in: state).last { $0.secret != nil }?.secret ?? state.rapper.style.secret
+    }
+
+    /// Techniques the player can equip: the style's, those of owned items, and those unlocked so far.
+    func availableTechniques(in state: GameState) -> [EquippableTechnique] {
+        [EquippableTechnique(id: GameEngine.styleTechniqueId, secret: state.rapper.style.secret)]
+            + ownedItems(in: state).compactMap { item in item.secret.map { EquippableTechnique(id: item.id, secret: $0) } }
+            + story.techniques.filter { $0.unlock.isSatisfied(by: state) }.map { EquippableTechnique(id: $0.id, secret: $0.secret) }
+    }
+
+    static let styleTechniqueId = "style"
+
+    func equipTechnique(_ id: String, in state: inout GameState) {
+        guard availableTechniques(in: state).contains(where: { $0.id == id }) else { return }
+        state.equippedTechnique = id
+    }
+
+    /// Announces (and equips) techniques whose unlock conditions just came true.
+    private func applyTechniqueUnlocks(_ outcome: inout TurnOutcome, in state: inout GameState) {
+        for technique in story.techniques
+        where !state.knownTechniques.contains(technique.id) && technique.unlock.isSatisfied(by: state) {
+            state.knownTechniques.insert(technique.id)
+            state.equippedTechnique = technique.id
+            outcome.unlockedTechniques.append(technique.secret.name)
+        }
     }
 
     /// Bonus levels from items for a move.
@@ -804,6 +842,7 @@ struct GameEngine {
         var outcome = outcome
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
+        applyTechniqueUnlocks(&outcome, in: &state)
 
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {

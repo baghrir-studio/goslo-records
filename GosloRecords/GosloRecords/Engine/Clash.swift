@@ -139,6 +139,8 @@ enum ClashImpact: String, Codable {
 struct SecretTechnique: Codable, Equatable {
     let name: String
     let line: String
+    /// SF Symbol raining down during its cinematic (optional).
+    var prop: String? = nil
 }
 
 struct ClashLogEntry: Codable, Equatable, Identifiable {

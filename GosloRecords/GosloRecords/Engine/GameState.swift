@@ -59,6 +59,10 @@ struct GameState: Codable, Equatable {
     var seenCinematics: Set<String> = []
     /// Collected items (ids from story.json).
     var items: Set<String> = []
+    /// Secret technique picked in the notebook: "style", an item id or a technique id (nil = automatic).
+    var equippedTechnique: String?
+    /// Unlocked techniques already announced to the player.
+    var knownTechniques: Set<String> = []
 
     init(rapper: Rapper, stats: Stats? = nil) {
         self.rapper = rapper
@@ -70,7 +74,7 @@ struct GameState: Codable, Equatable {
         case id, startedAt, rapper, stats, counters, skills, flags, relations, metCast, turn, actionsLeft
         case seenUniqueEvents, recentEvents, pendingFollowUp, currentEventId, currentLocation, clash, interview, concert, negotiation, writing
         case questProgress, completedQuests, ending, position, facing, stepsSinceWild, challengedThisSemester
-        case chapter, objectiveIndex, pendingCinematic, seenCinematics, items
+        case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -110,6 +114,8 @@ struct GameState: Codable, Equatable {
         pendingCinematic = try c.decodeIfPresent(String.self, forKey: .pendingCinematic)
         seenCinematics = try c.decodeIfPresent(Set<String>.self, forKey: .seenCinematics) ?? []
         items = try c.decodeIfPresent(Set<String>.self, forKey: .items) ?? []
+        equippedTechnique = try c.decodeIfPresent(String.self, forKey: .equippedTechnique)
+        knownTechniques = try c.decodeIfPresent(Set<String>.self, forKey: .knownTechniques) ?? []
     }
 
     /// Year 1 to 10.

@@ -4599,5 +4599,85 @@
         "consequence": "Scalpel corrige ton dernier couplet au stylo rouge, à voix haute, et te rend la copie. « 9 sur 20. Revenez quand vous voulez. » Il te vouvoie. C'est pire. Retourne le voir quand tu seras prêt."
       }
     }
+  ],
+  "techniques": [
+    {
+      "id": "defile_retourne",
+      "secret": {
+        "name": "Le Défilé Retourné",
+        "line": "Tu enfiles un hoodie de la collection de Kevlar Jr., à l'envers, étiquette au vent. Le public le trouve plus stylé que l'original. La collection est en rupture de stock.",
+        "prop": "tshirt.fill"
+      },
+      "unlock": {
+        "required_flags": [
+          "clash_gagne_kevlar_jr"
+        ]
+      }
+    },
+    {
+      "id": "fausse_gourmette",
+      "secret": {
+        "name": "La Fausse Gourmette",
+        "line": "Tu sors une gourmette en plastique doré et tu la fais briller sous les projecteurs. Ton adversaire, ébloui, perd le fil. Elle t'a coûté 3 €.",
+        "prop": "sparkles"
+      },
+      "unlock": {
+        "required_flags": [
+          "clash_gagne_lingot"
+        ]
+      }
+    },
+    {
+      "id": "dossier_quarante_pages",
+      "secret": {
+        "name": "Le Dossier de Quarante Pages",
+        "line": "Tu ouvres un dossier de quarante pages et tu n'en lis qu'une ligne : la bonne. Ton adversaire demande une suspension de séance.",
+        "prop": "doc.text.fill"
+      },
+      "unlock": {
+        "required_flags": [
+          "debat_gagne"
+        ]
+      }
+    },
+    {
+      "id": "pancarte_maman",
+      "secret": {
+        "name": "La Pancarte de Maman",
+        "line": "Ta mère lève sa pancarte au premier rang. Toute la salle scande ton nom. Ton adversaire applaudit aussi, par réflexe.",
+        "prop": "heart.fill"
+      },
+      "unlock": {
+        "required_flags": [
+          "concert_reussi"
+        ]
+      }
+    },
+    {
+      "id": "batterie_un_pour_cent",
+      "secret": {
+        "name": "La Batterie à 1 %",
+        "line": "Tu lances un live et tu le coupes pile quand ton adversaire allait répondre. « Problème technique. » Personne n'est surpris.",
+        "prop": "battery.0percent"
+      },
+      "unlock": {
+        "required_flags": [
+          "kolosse_ko"
+        ]
+      }
+    },
+    {
+      "id": "clause_police_sept",
+      "secret": {
+        "name": "La Clause en Police 7",
+        "line": "Tu tends un contrat à ton adversaire. Il signe sans lire. Clause 12 : il te cède ses punchlines pour quatre-vingt-dix-neuf ans.",
+        "prop": "signature"
+      },
+      "unlock": {
+        "required_flags": [
+          "contrat_signe"
+        ]
+      }
+    }
   ]
 }
