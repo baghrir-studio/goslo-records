@@ -1,0 +1,22 @@
+# Runs the game engine's XCTest suite on Linux for every pull request and every push to main,
+# then a quick story-pacing simulation. The iOS interface itself still needs Xcode on a Mac.
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  moteur:
+    name: Moteur et données (Linux)
+    runs-on: ubuntu-latest
+    container: swift:6.0-jammy
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tests XCTest (moteur, données, son)
+        run: Tools/PacingSim/run-tests.sh
+      - name: Simulation du rythme (500 carrières par profil)
+        working-directory: Tools/PacingSim
+        run: swift run -c release PacingSim 500

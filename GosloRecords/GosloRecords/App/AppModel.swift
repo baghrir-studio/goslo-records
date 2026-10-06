@@ -179,6 +179,28 @@ final class AppModel {
         route = .game
     }
 
+    #if DEBUG
+    enum DebugAction {
+        case chapter(Int)
+        case lastSemester
+        case maxOut
+    }
+
+    /// Debug builds only (menu "…" in the HUD): jumps around the story to test it quickly.
+    func debug(_ action: DebugAction) {
+        guard var current = state, canMove else { return }
+        switch action {
+        case .chapter(let number): engine.debugJump(toChapter: number, in: &current)
+        case .lastSemester: engine.debugLastSemester(in: &current)
+        case .maxOut: engine.debugMaxOut(in: &current)
+        }
+        state = current
+        enterWorld()
+        persist()
+        Task { await playPendingCinematic() }
+    }
+    #endif
+
     /// Leaves the game (autosaved).
     func leaveGame() {
         if finishedRecord != nil {

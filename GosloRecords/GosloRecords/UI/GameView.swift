@@ -140,6 +140,18 @@ struct GameView: View {
                 hudButton(systemImage: "book.closed.fill", label: "Carnet") { showCarnet = true }
                 Menu {
                     SoundToggles()
+                    #if DEBUG
+                    Section("Debug") {
+                        Menu("Aller au chapitre…") {
+                            ForEach(model.engine.story.chapters.map(\.number), id: \.self) { number in
+                                Button("Chapitre \(number)") { model.debug(.chapter(number)) }
+                            }
+                        }
+                        Button("Dernier semestre (prolongation)") { model.debug(.lastSemester) }
+                        Button("Stats et compétences au max") { model.debug(.maxOut) }
+                    }
+                    .disabled(!model.canMove)
+                    #endif
                     Button("Retour à l'accueil (sauvegardé)") { model.leaveGame() }
                 } label: {
                     Image(systemName: "ellipsis")

@@ -329,4 +329,45 @@ final class StoryTests: XCTestCase {
             .reduce(debat.startHype, +)
         XCTAssertLessThan(middle, debat.passHype, "le boss ne doit pas se gagner avec des réponses moyennes")
     }
+
+    #if DEBUG
+    // MARK: Debug shortcuts
+
+    func testDebugJumpLandsOnAPlayableChapter() throws {
+        let map = try XCTUnwrap(world.map)
+        for chapter in world.story.chapters where chapter.number > 1 {
+            var state = engine.newGame(rapper: Rapper(name: "Dbg", city: .lyon, style: .trap))
+            engine.debugJump(toChapter: chapter.number, in: &state)
+            XCTAssertEqual(state.pendingCinematic, chapter.intro)
+            if let intro = chapter.intro { engine.cinematicFinished(intro, in: &state) }
+            let objective = try XCTUnwrap(engine.currentObjective(in: state))
+            XCTAssertEqual(objective.id, chapter.objectives.first?.id)
+            let trigger = try XCTUnwrap(objective.trigger, "chapitre \(chapter.number)")
+            let event: GameEvent?
+            if let npc = trigger.npc {
+                XCTAssertTrue(map.forChapter(chapter.number, flags: state.flags).npcs.contains { $0.id == npc },
+                              "chapitre \(chapter.number) : \(npc) absent de la carte")
+                event = try engine.talk(to: npc, in: &state, using: &rng)
+            } else {
+                let location = try XCTUnwrap(trigger.location)
+                XCTAssertTrue(engine.isUnlocked(location, in: state), "chapitre \(chapter.number) : \(location) fermé")
+                event = try engine.visit(location, in: &state, using: &rng)
+            }
+            XCTAssertEqual(event?.id, objective.event, "chapitre \(chapter.number)")
+            XCTAssertFalse(state.isOver)
+        }
+    }
+
+    func testDebugLastSemesterShowsTheOvertime() throws {
+        var state = engine.newGame(rapper: Rapper(name: "Dbg", city: .lyon, style: .trap))
+        state.pendingCinematic = nil
+        engine.debugLastSemester(in: &state)
+        let event = try engine.visit(.chezToi, in: &state, using: &rng)
+        let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.skipTurns == 0 && $0.followUp == nil })
+        _ = try engine.resolve(choiceAt: choice, in: &state)
+        XCTAssertTrue(state.isOvertime)
+        XCTAssertEqual(state.periodLabel, "PROLONGATION")
+        XCTAssertFalse(state.isOver)
+    }
+    #endif
 }
