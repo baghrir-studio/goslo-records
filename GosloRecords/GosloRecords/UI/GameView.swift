@@ -153,6 +153,11 @@ struct GameView: View {
                         }
                         Button("Dernier semestre (prolongation)") { model.debug(.lastSemester) }
                         Button("Stats et compétences au max") { model.debug(.maxOut) }
+                        Menu("Lancer un mini-jeu…") {
+                            Button("Punchliner") { model.debug(.event("punchliner_fred")) }
+                            Button("Fuir la foule") { model.debug(.event("fuite_fans")) }
+                            Button("Cale la platine") { model.debug(.event("platine_bobine")) }
+                        }
                     }
                     .disabled(!model.canMove)
                     #endif

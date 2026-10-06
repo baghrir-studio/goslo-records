@@ -195,6 +195,8 @@ final class AppModel {
         case chapter(Int)
         case lastSemester
         case maxOut
+        /// Shows this event's card right away (e.g. a mini-game), without spending an action.
+        case event(String)
     }
 
     /// Debug builds only (menu "…" in the HUD): jumps around the story to test it quickly.
@@ -204,6 +206,13 @@ final class AppModel {
         case .chapter(let number): engine.debugJump(toChapter: number, in: &current)
         case .lastSemester: engine.debugLastSemester(in: &current)
         case .maxOut: engine.debugMaxOut(in: &current)
+        case .event(let id):
+            guard let event = engine.event(withId: id) else { return }
+            current.currentEventId = id
+            state = current
+            phase = .encounter(event)
+            persist()
+            return
         }
         state = current
         enterWorld()
