@@ -73,6 +73,8 @@ enum GameEngineError: Error, Equatable {
     case minigameNotOver
     case gameOver
     case districtLocked(District)
+    case freestyleUsed
+    case albumNotReady
 }
 
 /// A secret technique the player can equip (style, item or unlocked), keyed by where it comes from.
@@ -870,6 +872,26 @@ struct GameEngine {
         return clash
     }
 
+    /// Freestyle (once per clash): `rhymes` chained against the clock hit the opponent, who answers as usual.
+    func clashFreestyle<R: RandomNumberGenerator>(rhymes: Int, in state: inout GameState, using rng: inout R) throws -> ClashState {
+        guard var clash = state.clash else { throw GameEngineError.noClash }
+        guard !clash.isOver else { return clash }
+        guard !clash.freestyleUsed else { throw GameEngineError.freestyleUsed }
+        if clash.pendingCounter != nil {
+            ClashEngine.resolveCounter(&clash, taps: 0)
+            state.clash = clash
+            if clash.isOver { return clash }
+        }
+        guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
+            throw GameEngineError.noClash
+        }
+        ClashEngine.playRound(&clash, playerMove: .punchline, playerFreestyle: rhymes, playerLevel: clashLevels(for: clash, in: state),
+                              opponent: profile.scaled(by: clash.levelBonus), opponentName: opponent.name,
+                              opponentSecret: opponent.secret, callbacks: callbacks(for: clash, in: state), using: &rng)
+        state.clash = clash
+        return clash
+    }
+
     /// Triggers the player's secret technique (gauge full, once per clash), charged in rhythm at `charge` (0…1).
     /// Without a charge it hits at its base power.
     func clashSecret<R: RandomNumberGenerator>(charge: Double? = nil, in state: inout GameState, using rng: inout R) throws -> ClashState {
@@ -1060,6 +1082,7 @@ struct GameEngine {
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
             outcome.add(state.stats.apply(GameEngine.upkeep(for: state.stats)))
+            outcome.add(sellAlbums(in: &state))
             let limit = turnLimit(in: state)
             if !isInEpilogue(state) { state.turn = min(state.turn + 1, limit) }
             state.actionsLeft = GameState.actionsPerTurn

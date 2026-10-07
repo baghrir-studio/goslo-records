@@ -422,6 +422,14 @@ final class AppModel {
             try? await Task.sleep(for: .milliseconds(1300))
             withAnimation(.easeOut(duration: 0.45)) { transition = nil }
             busy = false
+            // First time here: the district's welcome scene.
+            if var welcomed = state, let event = engine.arrivalEvent(in: &welcomed) {
+                try? await Task.sleep(for: .milliseconds(450))
+                state = welcomed
+                source = event.npc.map { .npc($0) } ?? .bench
+                phase = .encounter(event)
+                persist()
+            }
         }
     }
 
@@ -640,6 +648,31 @@ final class AppModel {
         guard let clash = try? engine.clashMove(move, in: &current, using: &rng) else { return nil }
         state = current
         publishDeltas(from: before, to: current.stats)
+        phase = .clash(clash)
+        persist()
+        return clash
+    }
+
+    /// Releases an album from the notebook.
+    @discardableResult
+    func releaseAlbum(title: String, trackIds: [String], cover: AlbumCover) -> Album? {
+        guard var current = state else { return nil }
+        let before = current.stats
+        guard let album = try? engine.releaseAlbum(title: title, trackIds: trackIds, cover: cover, in: &current) else { return nil }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.levelUp)
+        Haptics.shared.play(.victory)
+        persist()
+        return album
+    }
+
+    /// Freestyle: the rhymes chained in the overlay.
+    @discardableResult
+    func clashFreestyle(rhymes: Int) -> ClashState? {
+        guard var current = state, case .clash = phase else { return nil }
+        guard let clash = try? engine.clashFreestyle(rhymes: rhymes, in: &current, using: &rng) else { return nil }
+        state = current
         phase = .clash(clash)
         persist()
         return clash

@@ -11,6 +11,7 @@ struct CarnetView: View {
         case contacts = "Contacts"
         case competences = "Skills"
         case objets = "Objets"
+        case album = "Album"
     }
 
     @State private var tab: Tab = .quetes
@@ -56,6 +57,7 @@ struct CarnetView: View {
                     case .contacts: contacts
                     case .competences: skills
                     case .objets: items
+                    case .album: AlbumSection(state: model.state ?? state)
                     }
                 }
                 .padding(.horizontal, Theme.gutter)

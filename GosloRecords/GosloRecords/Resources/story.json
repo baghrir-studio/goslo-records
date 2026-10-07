@@ -2217,6 +2217,130 @@
           "consequence": "Un dernier freestyle, pas pour toi : pour eux. Yanis coupe le micro et dit, hors antenne : « Ça, c'est {un patron|une patronne}. »"
         }
       ]
+    },
+    {
+      "id": "arrivee_centre",
+      "title": "Centre-ville",
+      "location": "quartier",
+      "npc": "diva_decibel",
+      "weight": 0,
+      "text": "Tu sors du métro dans les lumières du centre. Sur la place, autour de la fontaine, un cypher : une enceinte, trente personnes en cercle, et Diva Décibel qui tient le micro comme un trophée. Elle te voit arriver. « Une tête du Bloc ? Prouve que tu sais tenir une mesure ici. »",
+      "choices": [
+        {
+          "label": "Entrer dans le cypher",
+          "clash": {
+            "opponent": "diva_decibel",
+            "rounds": 4,
+            "win": {
+              "effects": {
+                "credibilite": 8,
+                "streams": 6
+              },
+              "consequence": "Le cercle s'ouvre devant toi. Diva Décibel tend la main : « OK. Le centre-ville t'a vu. » Trois personnes filment déjà ta sortie."
+            },
+            "lose": {
+              "effects": {
+                "mental": -3
+              },
+              "consequence": "Diva Décibel tient sa dernière note quinze secondes. La fontaine elle-même semble applaudir. « Reviens quand le centre te connaîtra. »"
+            }
+          },
+          "consequence": "Le cercle se resserre. L'enceinte crache le beat. À toi."
+        },
+        {
+          "label": "Écouter, et noter les meilleures rimes",
+          "effects": {
+            "mental": 2
+          },
+          "xp": {
+            "plume": 40
+          },
+          "consequence": "Tu remplis deux pages de ton carnet. Le centre-ville rappe plus vite, plus fort, plus brillant. Tu rentreras avec des idées."
+        },
+        {
+          "label": "Distribuer tes stickers autour de la fontaine",
+          "effects": {
+            "streams": 4,
+            "credibilite": -1
+          },
+          "xp": {
+            "business": 30
+          },
+          "consequence": "Ton nom est collé sur chaque lampadaire de la place. Un agent municipal en décolle un, le lit, et le garde."
+        }
+      ]
+    },
+    {
+      "id": "arrivee_hauts",
+      "title": "Les Hauts",
+      "location": "quartier",
+      "weight": 0,
+      "text": "Les Hauts. Des tours de verre si hautes que les nuages passent au milieu. Un assistant de maison de disques en costume te barre la route, tablette à la main. « Vous êtes l'artiste du Bloc ? On parle beaucoup de vous au 34e étage. Un café ? »",
+      "choices": [
+        {
+          "label": "Monter au 34e étage",
+          "effects": {
+            "argent": 6,
+            "credibilite": -2
+          },
+          "xp": {
+            "business": 40
+          },
+          "consequence": "Café à 9 €, fauteuil en cuir, trois personnes qui disent « organique » toutes les deux phrases. Tu repars avec une carte de visite et un tote bag."
+        },
+        {
+          "label": "« Je bois mon café au Bloc. »",
+          "effects": {
+            "credibilite": 5,
+            "mental": 2
+          },
+          "consequence": "Il note ta réponse sur sa tablette, l'air impressionné. Tu viens peut-être de devenir une légende du 34e étage."
+        },
+        {
+          "label": "Lui demander le code du wifi",
+          "effects": {
+            "streams": 3
+          },
+          "xp": {
+            "flow": 25
+          },
+          "consequence": "Mot de passe : « Organique2024 ». Tu postes trois stories depuis le hall. Les Hauts te découvrent."
+        }
+      ]
+    },
+    {
+      "id": "arrivee_dome",
+      "title": "Le Dôme",
+      "location": "quartier",
+      "weight": 0,
+      "text": "Le Dôme. Vingt mille sièges vides sous une coupole d'argent. Une porte de service est restée ouverte. Personne. Juste toi, la scène au loin, et l'écho de tes pas.",
+      "choices": [
+        {
+          "label": "Monter sur scène et rapper pour les sièges vides",
+          "effects": {
+            "mental": 6
+          },
+          "xp": {
+            "scene": 45
+          },
+          "consequence": "Ta voix fait le tour de la coupole et revient trois secondes plus tard. Tu l'entends comme le public l'entendra. Bientôt."
+        },
+        {
+          "label": "Prendre une photo depuis le milieu de la scène",
+          "effects": {
+            "streams": 6
+          },
+          "consequence": "« Bientôt ici. » Douze mille likes. Le Baron a liké aussi. Puis a retiré son like. Puis l'a remis."
+        },
+        {
+          "label": "Toucher le sol de la scène et repartir",
+          "effects": {
+            "mental": 3,
+            "credibilite": 3
+          },
+          "consequence": "Le sol est froid, lisse, et vibre encore du dernier concert. Tu sors sans un bruit. Le Dôme saura te reconnaître."
+        }
+      ]
     }
   ],
   "interviews": [

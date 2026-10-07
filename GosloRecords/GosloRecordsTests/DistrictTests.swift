@@ -93,3 +93,31 @@ final class DistrictTests: XCTestCase {
         XCTAssertEqual(state.position, world.map?.arrival)
     }
 }
+
+extension DistrictTests {
+    func testEachDistrictWelcomesYouOnce() throws {
+        var state = game(chapter: 6)
+        XCTAssertNil(engine.arrivalEvent(in: &state), "pas de scène d'arrivée au Bloc")
+        for district in District.allCases where district != .bloc {
+            try engine.travel(to: district, in: &state)
+            let event = try XCTUnwrap(engine.arrivalEvent(in: &state), "\(district)")
+            XCTAssertEqual(event.id, GameEngine.arrivalEventId(district))
+            XCTAssertEqual(state.currentEventId, event.id)
+            let actions = state.actionsLeft
+            _ = try engine.resolve(choiceAt: 1, in: &state)
+            XCTAssertEqual(state.actionsLeft, actions, "l'arrivée ne coûte pas d'action")
+            try engine.travel(to: .bloc, in: &state)
+            try engine.travel(to: district, in: &state)
+            XCTAssertNil(engine.arrivalEvent(in: &state), "\(district) : une seule fois")
+        }
+    }
+
+    func testCentreWelcomeIsAStreetCypher() throws {
+        var state = game(chapter: 3)
+        try engine.travel(to: .centre, in: &state)
+        _ = try XCTUnwrap(engine.arrivalEvent(in: &state))
+        let resolution = try engine.resolve(choiceAt: 0, in: &state)
+        guard case .clash(let clash) = resolution else { return XCTFail("le cypher lance un clash") }
+        XCTAssertEqual(clash.opponentId, "diva_decibel")
+    }
+}

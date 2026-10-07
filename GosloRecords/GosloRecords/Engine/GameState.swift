@@ -37,6 +37,8 @@ struct GameState: Codable, Equatable {
     var smallTalk: [String: Int] = [:]
     /// The player's best punchlines, oldest first: the titles of their tracks, quoted back by the cast.
     var hooks: [String] = []
+    /// Albums released, in order (sales keep coming in for a few semesters).
+    var albums: [Album] = []
     var pendingFollowUp: String?
     /// Event shown and awaiting a choice (kept so a resume shows the same card).
     var currentEventId: String?
@@ -90,7 +92,7 @@ struct GameState: Codable, Equatable {
         case minigame
         case questProgress, completedQuests, ending, position, facing, district, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
-        case seenEvents, talkedAt, smallTalk, hooks
+        case seenEvents, talkedAt, smallTalk, hooks, albums
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -139,6 +141,7 @@ struct GameState: Codable, Equatable {
         talkedAt = try c.decodeIfPresent([String: String].self, forKey: .talkedAt) ?? [:]
         smallTalk = try c.decodeIfPresent([String: Int].self, forKey: .smallTalk) ?? [:]
         hooks = try c.decodeIfPresent([String].self, forKey: .hooks) ?? []
+        albums = try c.decodeIfPresent([Album].self, forKey: .albums) ?? []
     }
 
     /// Year 1 to 10.
