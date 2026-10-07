@@ -301,7 +301,7 @@ enum ClashEngine {
                                                     playerSecret: SecretTechnique? = nil,
                                                     playerLevel: (Skill) -> Int, opponent: ClashProfile,
                                                     opponentName: String, opponentSecret: SecretTechnique? = nil,
-                                                    using rng: inout R) {
+                                                    callbacks: [String] = [], using rng: inout R) {
         guard !state.isOver else { return }
 
         if let secret = playerSecret, state.playerSecretReady {
@@ -348,7 +348,8 @@ enum ClashEngine {
                 state.log.append(ClashLogEntry(id: state.log.count, byPlayer: false, move: move, damage: opponentDamage,
                                                impact: opponentImpact,
                                                line: ClashLines.opponent(move, impact: opponentImpact, name: opponentName,
-                                                                         taunts: opponent.taunts, using: &rng)))
+                                                                         taunts: opponent.taunts, callbacks: callbacks,
+                                                                         using: &rng)))
             }
         }
         state.round += 1
@@ -420,9 +421,13 @@ enum ClashLines {
     }
 
     static func opponent<R: RandomNumberGenerator>(_ move: ClashMove, impact: ClashImpact, name: String,
-                                                   taunts: [String], using rng: inout R) -> String {
+                                                   taunts: [String], callbacks: [String] = [], using rng: inout R) -> String {
         if impact == .miss {
             return "\(name) bafouille son couplet. Quelqu'un tousse dans la salle."
+        }
+        // They did their homework: your own lines and your story, thrown back at you.
+        if !callbacks.isEmpty, Int.random(in: 0..<100, using: &rng) < 35 {
+            return "\(name) : « \(callbacks.randomElement(using: &rng)!) »"
         }
         if !taunts.isEmpty, Int.random(in: 0..<100, using: &rng) < 45 {
             return "\(name) : « \(taunts.randomElement(using: &rng)!) »"

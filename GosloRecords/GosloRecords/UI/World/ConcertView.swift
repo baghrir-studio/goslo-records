@@ -131,7 +131,8 @@ struct ConcertView: View {
         if let data {
             VStack(spacing: 8) {
                 header(data)
-                CrowdView(hype: Double(liveHype), bpm: song?.bpm ?? 90, look: state.rapper.look, quip: quip)
+                CrowdView(hype: Double(liveHype), bpm: song?.bpm ?? 90, look: state.rapper.look, quip: quip,
+                          guests: model.engine.concertGuests(concert.id, in: state).map(\.look))
                     .frame(height: 150)
                 HypeMeter(hype: liveHype, pass: data.passHype, combo: stage == .playing ? liveCombo : 0)
                     .padding(.horizontal, 14)
@@ -522,6 +523,8 @@ private struct CrowdView: View {
     let bpm: Double
     let look: CharacterLook
     let quip: String?
+    /// The people you met, in the front row (seen from behind, jumping with the crowd).
+    var guests: [CharacterLook] = []
 
     var body: some View {
         GeometryReader { geo in
@@ -564,6 +567,13 @@ private struct CrowdView: View {
                     }
                 }
                 .padding(.bottom, -4)
+                HStack(spacing: 2) {
+                    ForEach(Array(guests.enumerated()), id: \.offset) { index, guest in
+                        let jump = hype / 100 * 10 * abs(sin(t / beat * .pi + Double(index) * 1.3))
+                        SpriteView(look: guest, facing: .up, frame: Int(t / beat + Double(index)) % 2 == 0 ? 1 : 2, size: 34)
+                            .offset(y: 14 - CGFloat(jump))
+                    }
+                }
             }
             .overlay(alignment: .topLeading) {
                 if let quip {

@@ -49,6 +49,11 @@ struct MinigameView: View {
 private struct MinigameResult: View {
     @Environment(AppModel.self) private var model
     let minigame: MinigameState
+    @State private var listening = false
+
+    private var track: PlayerTrack? {
+        model.state.flatMap { model.engine.track(for: minigame, rapper: $0.rapper) }
+    }
 
     var body: some View {
         let score = model.engine.minigameScore(minigame)
@@ -71,8 +76,20 @@ private struct MinigameResult: View {
                 }
             }
             Spacer(minLength: 0)
+            if track != nil {
+                Button("▶ Écouter ton son") { listening = true }
+                    .font(.mono(14, weight: .heavy))
+                    .foregroundStyle(Theme.accent)
+                    .frame(maxWidth: .infinity, minHeight: 48)
+                    .overlay(Rectangle().stroke(Theme.accent, lineWidth: 2))
+            }
             Button("Continuer") { model.finishMinigame() }
                 .buttonStyle(PrimaryButtonStyle())
+        }
+        .fullScreenCover(isPresented: $listening) {
+            if let track, let rapper = model.state?.rapper {
+                TrackView(track: track, look: rapper.look, artist: rapper.name)
+            }
         }
     }
 }

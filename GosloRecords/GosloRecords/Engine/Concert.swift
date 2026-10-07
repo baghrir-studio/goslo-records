@@ -281,9 +281,11 @@ struct ConcertGroove: Equatable {
     /// i – VI – III – VII, as semitones from the root.
     static let progression = [0, 8, 3, 10]
 
-    static func make(for song: ConcertSong, seed: UInt64) -> ConcertGroove {
+    /// `style` forces the style (the player's own track); otherwise the seed picks it.
+    static func make(for song: ConcertSong, seed: UInt64, style forced: Style? = nil) -> ConcertGroove {
         var rng = SeededGenerator(seed: seed ^ 0x9E37_79B9_7F4A_7C15)
-        let style = Style.allCases[Int.random(in: 0..<Style.allCases.count, using: &rng)]
+        let picked = Style.allCases[Int.random(in: 0..<Style.allCases.count, using: &rng)]
+        let style = forced ?? picked
         let root = [45, 48, 50, 43, 47][Int.random(in: 0..<5, using: &rng)]
         let rhythms: [[Int]] = switch style {
         case .boomBap: [[0, 4, 6, 10, 12], [0, 2, 6, 8, 12, 14]]
