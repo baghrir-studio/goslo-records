@@ -55,10 +55,12 @@ enum TileKind: Character, CaseIterable {
     case bench = "B"
     case lamp = "L"
     case water = "W"
+    /// Metro entrance: stepping on it opens the metro map.
+    case metro = "M"
 
     var isWalkable: Bool {
         switch self {
-        case .asphalt, .sidewalk, .grass, .crosswalk, .door: true
+        case .asphalt, .sidewalk, .grass, .crosswalk, .door, .metro: true
         default: false
         }
     }
@@ -125,6 +127,11 @@ struct WorldMap: Codable, Equatable {
     let spawn: TilePoint
     let doors: [MapDoor]
     let npcs: [MapNPC]
+    /// Metro entrance (a `TileKind.metro` tile), if the district has one.
+    var metro: TilePoint? = nil
+
+    /// Where you come out of the metro (just below the entrance), or the spawn point.
+    var arrival: TilePoint { metro?.moved(.down) ?? spawn }
 
     var width: Int { rows.map(\.count).max() ?? 0 }
     var height: Int { rows.count }
@@ -153,7 +160,7 @@ struct WorldMap: Codable, Equatable {
     func forChapter(_ chapter: Int, flags: Set<String> = []) -> WorldMap {
         WorldMap(rows: rows, spawn: spawn, doors: doors, npcs: npcs.filter { npc in
             npc.fromChapter <= chapter && !(npc.hiddenIf.map(flags.contains) ?? false)
-        })
+        }, metro: metro)
     }
 
     /// Symbols that aren't part of TileKind (used to validate the data).

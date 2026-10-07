@@ -1,5 +1,5 @@
 # Runs the game engine's XCTest suite on Linux for every pull request and every push to main,
-# then a quick story-pacing simulation. The iOS interface itself still needs Xcode on a Mac.
+# then a quick story-pacing simulation, and compiles the whole iOS app on a Mac runner.
 name: Tests
 
 on:
@@ -20,3 +20,23 @@ jobs:
       - name: Simulation du rythme (500 carrières par profil)
         working-directory: Tools/PacingSim
         run: swift run -c release PacingSim 500
+
+  app:
+    name: Compilation de l'app iOS
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode le plus récent
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      # Same compiler as the archive on the Mac: interface errors show up here, before any build to TestFlight.
+      - name: Compiler (simulateur, sans signature)
+        run: |
+          set +e
+          xcodebuild -project GosloRecords/GosloRecords.xcodeproj -scheme GosloRecords -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build > build.log 2>&1
+          status=$?
+          grep -E "error:|BUILD (SUCCEEDED|FAILED)" build.log || tail -40 build.log
+          exit $status

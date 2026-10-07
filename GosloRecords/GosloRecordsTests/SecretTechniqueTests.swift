@@ -93,7 +93,40 @@ final class SecretTechniqueTests: XCTestCase {
         }
         for style in Style.allCases {
             XCTAssertFalse(style.secret.name.isEmpty)
+            XCTAssertNotNil(style.secret.fx, "\(style) n'a pas d'animation propre")
         }
+    }
+
+    func testEveryTechniqueHasItsOwnAnimation() throws {
+        let world = try EventLoader.loadWorld(bundle: Bundle(for: AppModel.self))
+        for member in world.cast {
+            if let secret = member.secret { XCTAssertNotNil(secret.fx, "\(member.id) : animation manquante") }
+        }
+        let won = world.story.items.compactMap(\.secret) + world.story.techniques.map(\.secret)
+        XCTAssertFalse(won.isEmpty)
+        for secret in won { XCTAssertNotNil(secret.fx, "\(secret.name) : animation manquante") }
+        // Every animation is used somewhere.
+        let used = Set(world.cast.compactMap { $0.secret?.effect } + won.map(\.effect) + Style.allCases.map(\.secret.effect))
+        XCTAssertEqual(used, Set(SecretFX.allCases))
+    }
+
+    func testRhythmChargeScalesTheTechnique() throws {
+        XCTAssertLessThan(ClashState.secretPower(charge: 0), 1)
+        XCTAssertGreaterThan(ClashState.secretPower(charge: 1), 1)
+        XCTAssertEqual(ClashState.secretPower(charge: 2), ClashState.chargePower.upperBound)
+
+        func hit(charge: Double?) throws -> ClashLogEntry {
+            var (engine, state) = try setup()
+            state.clash!.playerMeter = ClashState.secretThreshold
+            var seeded = SeededGenerator(seed: 5)
+            let clash = try engine.clashSecret(charge: charge, in: &state, using: &seeded)
+            return try XCTUnwrap(clash.log.first { $0.byPlayer })
+        }
+        let weak = try hit(charge: 0), base = try hit(charge: nil), perfect = try hit(charge: 1)
+        XCTAssertLessThan(weak.damage, base.damage)
+        XCTAssertGreaterThan(perfect.damage, base.damage)
+        XCTAssertEqual(perfect.charge, 1)
+        XCTAssertNil(base.charge)
     }
 
     // MARK: Countering a boss's technique

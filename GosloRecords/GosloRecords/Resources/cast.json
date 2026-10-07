@@ -147,7 +147,9 @@
       },
       "secret": {
         "name": "Le Mur de Platine",
-        "line": "Le Baron fait défiler son mur de disques de platine pendant quatre minutes, en silence. Tu remets en question tous tes choix de vie."
+        "line": "Le Baron fait défiler son mur de disques de platine pendant quatre minutes, en silence. Tu remets en question tous tes choix de vie.",
+        "fx": "spotlight",
+        "prop": "opticaldisc.fill"
       },
       "idle": [
         "Le trône ne se visite pas. Il se prend. Et tu n'es pas encore assez {grand|grande} pour la chaise.",
@@ -190,7 +192,8 @@
       },
       "secret": {
         "name": "Le Live Interminable",
-        "line": "Kolosse lance un live de 6 heures pour « régler ça ». Tu t'endors à la 40e minute. Le public aussi. Il gagne aux points."
+        "line": "Kolosse lance un live de 6 heures pour « régler ça ». Tu t'endors à la 40e minute. Le public aussi. Il gagne aux points.",
+        "fx": "emojis"
       },
       "idle": [
         "Défi du jour : rester silencieux une heure. Ça fait quatre minutes. C'est dur.",
@@ -231,7 +234,8 @@
       },
       "secret": {
         "name": "L'Épisode Final",
-        "line": "Le Conteur lance l'épisode final : quatorze minutes, trois rebondissements, et ta mère en featuring surprise."
+        "line": "Le Conteur lance l'épisode final : quatorze minutes, trois rebondissements, et ta mère en featuring surprise.",
+        "fx": "spotlight"
       },
       "idle": [
         "Le prochain épisode de ma saga sort quand il sort. Comme toi.",
@@ -293,7 +297,8 @@
       },
       "secret": {
         "name": "La Disparition",
-        "line": "Orphée supprime tous ses réseaux en plein clash. Le suspense est tel que tu oublies ton propre couplet."
+        "line": "Orphée supprime tous ses réseaux en plein clash. Le suspense est tel que tu oublies ton propre couplet.",
+        "fx": "glitch"
       },
       "idle": [
         "Comme disait un poète, « le silence aussi est une rime ». Tu sauras laquelle.",
@@ -335,7 +340,8 @@
       },
       "secret": {
         "name": "Incision Sans Anesthésie",
-        "line": "Scalpel relit ton dernier texte au stylo rouge, à voix haute, rime par rime. L'autopsie dure deux minutes."
+        "line": "Scalpel relit ton dernier texte au stylo rouge, à voix haute, rime par rime. L'autopsie dure deux minutes.",
+        "fx": "redpen"
       },
       "idle": [
         "J'ai corrigé ton dernier couplet dans ma tête. Il reste deux fautes. Je te les dirai sur scène.",
@@ -376,7 +382,9 @@
       },
       "secret": {
         "name": "Le Refrain Sifflé",
-        "line": "Lil Sauge siffle son tube de l'été. Toute la salle reprend. Tu le siffles aussi, contre ta volonté."
+        "line": "Lil Sauge siffle son tube de l'été. Toute la salle reprend. Tu le siffles aussi, contre ta volonté.",
+        "fx": "emojis",
+        "prop": "music.note"
       },
       "idle": [
         "La marque d'eau gazeuse m'a renvoyé un carton. J'en ai fait un TikTok. Trois millions de vues.",
@@ -416,7 +424,9 @@
       },
       "secret": {
         "name": "Le Défilé de Mode",
-        "line": "Kevlar Jr. présente sa nouvelle collection en plein battle. Le public applaudit, puis achète des hoodies."
+        "line": "Kevlar Jr. présente sa nouvelle collection en plein battle. Le public applaudit, puis achète des hoodies.",
+        "fx": "spotlight",
+        "prop": "tshirt.fill"
       },
       "idle": [
         "Invaincu au Ring des Mots. Reviens quand t'auras envie de perdre en public.",
@@ -457,7 +467,8 @@
       },
       "secret": {
         "name": "Le Ratio Supersonique",
-        "line": "P'tit Wifi lance un live : deux millions de viewers spamment des émojis clown sur ta tête."
+        "line": "P'tit Wifi lance un live : deux millions de viewers spamment des émojis clown sur ta tête.",
+        "fx": "emojis"
       },
       "idle": [
         "Le rap a commencé en 2020. Avant, c'était de la musique de grands-parents.",
@@ -540,7 +551,8 @@
       "wild": true,
       "secret": {
         "name": "Le Pavé en Commentaire",
-        "line": "Le Hater lit à voix haute son commentaire de 4 000 caractères. Trois fautes par ligne. Aucune virgule."
+        "line": "Le Hater lit à voix haute son commentaire de 4 000 caractères. Trois fautes par ligne. Aucune virgule.",
+        "fx": "glitch"
       }
     },
     {
@@ -575,7 +587,9 @@
       "wild": true,
       "secret": {
         "name": "Le Câlin Interminable",
-        "line": "Le Fan te prend dans ses bras et refuse de lâcher. Il commence à chanter ton morceau de 2019, faux."
+        "line": "Le Fan te prend dans ses bras et refuse de lâcher. Il commence à chanter ton morceau de 2019, faux.",
+        "fx": "emojis",
+        "prop": "heart.fill"
       }
     },
     {
@@ -611,7 +625,8 @@
       "wild": true,
       "secret": {
         "name": "La Clé USB Maudite",
-        "line": "Il branche sa clé USB sur la sono et lance ses 4 000 prods en même temps. Les enceintes demandent pitié."
+        "line": "Il branche sa clé USB sur la sono et lance ses 4 000 prods en même temps. Les enceintes demandent pitié.",
+        "fx": "bass"
       }
     },
     {
@@ -646,7 +661,9 @@
       "wild": true,
       "secret": {
         "name": "Le Code Promo Fatal",
-        "line": "L'Influenceur crie « CODE GOSLO10 » dans un mégaphone. La foule se retourne vers lui pour acheter des gourdes."
+        "line": "L'Influenceur crie « CODE GOSLO10 » dans un mégaphone. La foule se retourne vers lui pour acheter des gourdes.",
+        "fx": "emojis",
+        "prop": "tag.fill"
       }
     },
     {
@@ -681,7 +698,8 @@
       "wild": true,
       "secret": {
         "name": "Le Micro Arraché",
-        "line": "Il t'arrache le micro et rappe ton propre couplet. En mieux. C'est la pire chose qui te soit arrivée cette année."
+        "line": "Il t'arrache le micro et rappe ton propre couplet. En mieux. C'est la pire chose qui te soit arrivée cette année.",
+        "fx": "vinyl"
       }
     },
     {
@@ -717,7 +735,8 @@
       },
       "secret": {
         "name": "Le Ratio Acheté",
-        "line": "Big Kliks déverse deux millions de vues achetées sur ta tête. Elles arrivent toutes en même temps, du même village, à 4 h du matin. Le public est impressionné. Puis il réfléchit."
+        "line": "Big Kliks déverse deux millions de vues achetées sur ta tête. Elles arrivent toutes en même temps, du même village, à 4 h du matin. Le public est impressionné. Puis il réfléchit.",
+        "fx": "emojis"
       },
       "idle": [
         "Quatre millions d'abonnés, tous du même village. Une fanbase très soudée.",
@@ -759,7 +778,8 @@
       },
       "secret": {
         "name": "La Facture",
-        "line": "Lingot lit à voix haute le prix de chacun de ses bijoux. Ça dure onze minutes. Le public s'endort. Toi aussi, presque."
+        "line": "Lingot lit à voix haute le prix de chacun de ses bijoux. Ça dure onze minutes. Le public s'endort. Toi aussi, presque.",
+        "fx": "redpen"
       },
       "idle": [
         "Trois chaînes, deux montres, et toujours pas l'heure pour toi.",
@@ -800,7 +820,8 @@
       },
       "secret": {
         "name": "L'Autotune Infini",
-        "line": "Lil Croon pousse l'autotune à 100 %. Il ne rappe plus, il ne chante plus : il bipe, comme un micro-ondes amoureux. Le public pleure sans savoir pourquoi."
+        "line": "Lil Croon pousse l'autotune à 100 %. Il ne rappe plus, il ne chante plus : il bipe, comme un micro-ondes amoureux. Le public pleure sans savoir pourquoi.",
+        "fx": "adlib"
       },
       "idle": [
         "Je mets de l'autotune sur ma voix, même pour dire bonjour. Bonjouuuur.",
@@ -1016,7 +1037,8 @@
       },
       "secret": {
         "name": "Le Freestyle Infini",
-        "line": "Saphir improvise sur tout : tes chaussures, ton passé, la météo de demain. Huit minutes sans respirer. Le public oublie que tu existes."
+        "line": "Saphir improvise sur tout : tes chaussures, ton passé, la météo de demain. Huit minutes sans respirer. Le public oublie que tu existes.",
+        "fx": "adlib"
       },
       "idle": [
         "Donne-moi un thème. Non, pas celui-là. Si, celui-là. Trop tard, j'ai déjà rappé dessus.",
@@ -1059,7 +1081,8 @@
       },
       "secret": {
         "name": "Le Débit Interdit",
-        "line": "Nitro Nina lâche 400 mots en douze secondes. Le DJ coupe le son par sécurité. Elle continue sans, et c'est encore trop rapide."
+        "line": "Nitro Nina lâche 400 mots en douze secondes. Le DJ coupe le son par sécurité. Elle continue sans, et c'est encore trop rapide.",
+        "fx": "bass"
       },
       "idle": [
         "Pas-le-temps-je-suis-en-retard-sur-mon-propre-couplet.",
@@ -1102,7 +1125,8 @@
       },
       "secret": {
         "name": "La Dictée Piège",
-        "line": "Madame Rature te dicte ton propre couplet à l'envers, avec les accords du participe passé. Tu sèches. Elle ramasse les copies."
+        "line": "Madame Rature te dicte ton propre couplet à l'envers, avec les accords du participe passé. Tu sèches. Elle ramasse les copies.",
+        "fx": "redpen"
       },
       "idle": [
         "J'ai trente-deux copies à corriger et un battle à 22 h. Les deux finiront au stylo rouge.",
@@ -1146,7 +1170,8 @@
       },
       "secret": {
         "name": "Le Contre-Ut",
-        "line": "Diva Décibel tient une note pendant vingt secondes. Les vitres tremblent, un chien répond au loin, ton micro abandonne."
+        "line": "Diva Décibel tient une note pendant vingt secondes. Les vitres tremblent, un chien répond au loin, ton micro abandonne.",
+        "fx": "bass"
       },
       "idle": [
         "Je fais mes vocalises. Si tu entends une alarme, c'est moi. Ou une alarme.",

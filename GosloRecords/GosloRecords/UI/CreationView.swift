@@ -39,20 +39,25 @@ struct CreationView: View {
             }
             .padding(.horizontal, Theme.gutter)
 
+            // Pinned above the options: every change shows on the character without scrolling back up.
+            HStack(alignment: .bottom) {
+                Text(gender == .rappeuse ? "Crée ta\nrappeuse" : "Crée ton\nrappeur")
+                    .font(.display(44))
+                    .lineSpacing(-8)
+                Spacer()
+                WalkingSprite(look: draft.look, size: 104)
+                    .id(draft.look)
+                    .transition(.scale.combined(with: .opacity))
+            }
+            .animation(.spring(response: 0.35, dampingFraction: 0.6), value: style)
+            .animation(.spring(response: 0.35, dampingFraction: 0.6), value: draft.look)
+            .padding(.horizontal, Theme.gutter)
+            .padding(.bottom, 10)
+            .background(Theme.background)
+            .overlay(alignment: .bottom) { Rectangle().fill(Theme.line).frame(height: 1) }
+
             ScrollView {
                 VStack(alignment: .leading, spacing: 32) {
-                    HStack(alignment: .bottom) {
-                        Text(gender == .rappeuse ? "Crée ta\nrappeuse" : "Crée ton\nrappeur")
-                            .font(.display(52))
-                            .lineSpacing(-8)
-                        Spacer()
-                        WalkingSprite(look: draft.look, size: 110)
-                            .id(draft.look)
-                            .transition(.scale.combined(with: .opacity))
-                    }
-                    .animation(.spring(response: 0.35, dampingFraction: 0.6), value: style)
-                    .animation(.spring(response: 0.35, dampingFraction: 0.6), value: draft.look)
-
                     nameSection
                     skinSection
                     lookSection
@@ -60,6 +65,7 @@ struct CreationView: View {
                     styleSection
                 }
                 .padding(.horizontal, Theme.gutter)
+                .padding(.top, 20)
                 .padding(.bottom, 24)
             }
             .scrollDismissesKeyboard(.interactively)

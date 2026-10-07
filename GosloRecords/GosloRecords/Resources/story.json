@@ -4217,7 +4217,8 @@
       "description": "Une perceuse sans fil, 18 V. Fred a dit « un jour, elle te servira ». Elle remplace ta technique secrète.",
       "secret": {
         "name": "La Perceuse",
-        "line": "Tu sors une perceuse. Silence total. Tu la fais vrombir deux fois et tu lâches : « Toi, tu vas rien percer… à part des murs. » Le public s'effondre. L'ambulance est appelée pour ton adversaire. Par précaution."
+        "line": "Tu sors une perceuse. Silence total. Tu la fais vrombir deux fois et tu lâches : « Toi, tu vas rien percer… à part des murs. » Le public s'effondre. L'ambulance est appelée pour ton adversaire. Par précaution.",
+        "fx": "bass"
       }
     },
     {
@@ -4229,7 +4230,8 @@
       },
       "secret": {
         "name": "L'Annotation",
-        "line": "Tu sors le stylo rouge et tu corriges le dernier couplet de ton adversaire, en direct : trois fautes, deux rimes pauvres, une métaphore volée. Le public compte les points à voix haute."
+        "line": "Tu sors le stylo rouge et tu corriges le dernier couplet de ton adversaire, en direct : trois fautes, deux rimes pauvres, une métaphore volée. Le public compte les points à voix haute.",
+        "fx": "redpen"
       }
     }
   ],
@@ -4948,7 +4950,8 @@
       "secret": {
         "name": "Le Défilé Retourné",
         "line": "Tu enfiles un hoodie de la collection de Kevlar Jr., à l'envers, étiquette au vent. Le public le trouve plus stylé que l'original. La collection est en rupture de stock.",
-        "prop": "tshirt.fill"
+        "prop": "tshirt.fill",
+        "fx": "spotlight"
       },
       "unlock": {
         "required_flags": [
@@ -4961,7 +4964,8 @@
       "secret": {
         "name": "La Fausse Gourmette",
         "line": "Tu sors une gourmette en plastique doré et tu la fais briller sous les projecteurs. Ton adversaire, ébloui, perd le fil. Elle t'a coûté 3 €.",
-        "prop": "sparkles"
+        "prop": "sparkles",
+        "fx": "spotlight"
       },
       "unlock": {
         "required_flags": [
@@ -4974,7 +4978,8 @@
       "secret": {
         "name": "Le Dossier de Quarante Pages",
         "line": "Tu ouvres un dossier de quarante pages et tu n'en lis qu'une ligne : la bonne. Ton adversaire demande une suspension de séance.",
-        "prop": "doc.text.fill"
+        "prop": "doc.text.fill",
+        "fx": "rays"
       },
       "unlock": {
         "required_flags": [
@@ -4987,7 +4992,8 @@
       "secret": {
         "name": "La Pancarte de Maman",
         "line": "Ta mère lève sa pancarte au premier rang. Toute la salle scande ton nom. Ton adversaire applaudit aussi, par réflexe.",
-        "prop": "heart.fill"
+        "prop": "heart.fill",
+        "fx": "emojis"
       },
       "unlock": {
         "required_flags": [
@@ -5000,7 +5006,8 @@
       "secret": {
         "name": "La Batterie à 1 %",
         "line": "Tu lances un live et tu le coupes pile quand ton adversaire allait répondre. « Problème technique. » Personne n'est surpris.",
-        "prop": "battery.0percent"
+        "prop": "battery.0percent",
+        "fx": "glitch"
       },
       "unlock": {
         "required_flags": [
@@ -5013,7 +5020,8 @@
       "secret": {
         "name": "La Clause en Police 7",
         "line": "Tu tends un contrat à ton adversaire. Il signe sans lire. Clause 12 : il te cède ses punchlines pour quatre-vingt-dix-neuf ans.",
-        "prop": "signature"
+        "prop": "signature",
+        "fx": "redpen"
       },
       "unlock": {
         "required_flags": [

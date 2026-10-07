@@ -243,15 +243,19 @@ struct World {
     var events: [GameEvent]
     var cast: [CastMember]
     var quests: [Quest]
+    /// Le Bloc, the starting district.
     var map: WorldMap?
+    /// The districts that open later (districts.json).
+    var districts: [District: WorldMap]
     var story: Story
 
     init(events: [GameEvent], cast: [CastMember] = [], quests: [Quest] = [], map: WorldMap? = nil,
-         story: Story = Story()) {
+         districts: [District: WorldMap] = [:], story: Story = Story()) {
         self.events = events
         self.cast = cast
         self.quests = quests
         self.map = map
+        self.districts = districts
         self.story = story
     }
 }

@@ -30,8 +30,12 @@ final class StoryTests: XCTestCase {
                     XCTAssertNotNil(objective.trigger, "\(objective.id) a un événement mais pas de déclencheur")
                 }
                 if let npc = objective.trigger?.npc {
-                    XCTAssertTrue(map.forChapter(chapter.number).npcs.contains { $0.id == npc },
-                                  "\(objective.id) : \(npc) n'est pas sur la carte au chapitre \(chapter.number)")
+                    XCTAssertNotNil(world.district(ofNPC: npc, chapter: chapter.number),
+                                    "\(objective.id) : \(npc) n'est dans aucun quartier ouvert au chapitre \(chapter.number)")
+                }
+                if let location = objective.trigger?.location, location != .reseaux, location != .quartier {
+                    XCTAssertFalse(world.districts(with: location, chapter: chapter.number).isEmpty,
+                                   "\(objective.id) : pas de porte \(location) ouverte au chapitre \(chapter.number)")
                 }
                 if let cinematic = objective.cinematic {
                     XCTAssertTrue(cinematics.contains(cinematic), "\(objective.id) : cinématique inconnue")
@@ -446,7 +450,6 @@ final class StoryTests: XCTestCase {
     // MARK: Debug shortcuts
 
     func testDebugJumpLandsOnAPlayableChapter() throws {
-        let map = try XCTUnwrap(world.map)
         for chapter in world.story.chapters where chapter.number > 1 {
             var state = engine.newGame(rapper: Rapper(name: "Dbg", city: .lyon, style: .trap))
             engine.debugJump(toChapter: chapter.number, in: &state)
@@ -457,8 +460,8 @@ final class StoryTests: XCTestCase {
             let trigger = try XCTUnwrap(objective.trigger, "chapitre \(chapter.number)")
             let event: GameEvent?
             if let npc = trigger.npc {
-                XCTAssertTrue(map.forChapter(chapter.number, flags: state.flags).npcs.contains { $0.id == npc },
-                              "chapitre \(chapter.number) : \(npc) absent de la carte")
+                XCTAssertNotNil(world.district(ofNPC: npc, chapter: chapter.number, flags: state.flags),
+                                "chapitre \(chapter.number) : \(npc) absent des quartiers ouverts")
                 event = try engine.talk(to: npc, in: &state, using: &rng)
             } else {
                 let location = try XCTUnwrap(trigger.location)

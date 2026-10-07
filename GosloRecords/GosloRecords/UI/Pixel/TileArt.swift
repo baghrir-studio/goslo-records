@@ -53,15 +53,16 @@ extension Location {
 enum TileArt {
     static let size = 16
 
-    static func mapImage(_ map: WorldMap, city: City) -> UIImage {
-        PixelCache.image("map-\(city.rawValue)-\(map.rows.hashValue)") {
-            let theme = CityTheme.forCity(city)
+    static func mapImage(_ map: WorldMap, city: City, district: District = .bloc) -> UIImage {
+        PixelCache.image("map-\(city.rawValue)-\(district.rawValue)-\(map.rows.hashValue)") {
+            let theme = CityTheme.forCity(city).adapted(to: district)
             let canvas = PixelCanvas(width: map.width * size, height: map.height * size)
             for y in 0..<map.height {
                 for x in 0..<map.width {
                     canvas.stamp(tile(at: TilePoint(x: x, y: y), on: map, theme: theme), at: x * size, y * size)
                 }
             }
+            if district == .dome { dome(on: canvas, map: map) }
             for door in map.doors { storefront(door.location, at: TilePoint(x: door.x, y: door.y), on: canvas, map: map) }
             if let landmark = theme.landmark { draw(landmark, on: canvas, map: map, theme: theme) }
             return canvas.makeImage()
@@ -108,6 +109,19 @@ enum TileArt {
             } else {
                 c.fill(3, 1, 12, 1, neon)
                 c.fill(2, 2, 13, 2, neon.shaded(0.45))
+            }
+        case .metro:
+            // Metro entrance: steps going down under a blue frame, the big white M above.
+            facade(c, p, t)
+            let blue = PixelColor(hex: "#1f5ac8")
+            c.fill(2, 3, 13, 15, blue)
+            c.fill(4, 6, 11, 15, NightPalette.door)
+            for (row, inset) in [(9, 0), (11, 1), (13, 2), (15, 3)] {
+                c.fill(4 + inset, row, 11 - inset, row, NightPalette.metal.shaded(1.2))
+            }
+            c.fill(3, 0, 12, 4, PixelColor(hex: "#f0eee8"))
+            for (x, y0, y1) in [(5, 1, 3), (6, 1, 1), (7, 2, 2), (8, 2, 2), (9, 1, 1), (10, 1, 3)] {
+                c.fill(x, y0, x, y1, blue)
             }
         case .roof:
             c.fill(0, 0, 15, 15, t.roof)
@@ -323,6 +337,42 @@ enum TileArt {
         case .quartier, .reseaux:
             break
         }
+    }
+
+    /// Le Dôme: a huge silver dome over the arena's roof, ribs, and a ring of lights at its base.
+    private static func dome(on c: PixelCanvas, map: WorldMap) {
+        // The arena is the big roof at the top of the map.
+        var top: [TilePoint] = []
+        for y in 0..<min(4, map.height) {
+            for x in 0..<map.width where map.tile(at: TilePoint(x: x, y: y)) == .roof { top.append(TilePoint(x: x, y: y)) }
+        }
+        guard let minX = top.map(\.x).min(), let maxX = top.map(\.x).max(), let minY = top.map(\.y).min(),
+              let maxY = top.map(\.y).max() else { return }
+        let left = minX * size, right = (maxX + 1) * size - 1
+        let base = (maxY + 1) * size - 1, height = (maxY - minY + 1) * size + 6
+        let cx = Double(left + right) / 2, rx = Double(right - left) / 2, ry = Double(height)
+        let light = PixelColor(hex: "#d8dce4"), mid = PixelColor(hex: "#a8aeba"), shadow = PixelColor(hex: "#7a808c")
+        for py in (base - height)...base {
+            for px in left...right {
+                let dx = (Double(px) - cx) / rx, dy = Double(base - py) / ry
+                guard dx * dx + dy * dy <= 1 else { continue }
+                // Lit from the upper left; ribs follow the curve.
+                var color = dx < -0.2 ? light : (dx < 0.45 ? mid : shadow)
+                let rib = Int((asin(max(-1, min(1, dx))) * 6).rounded(.down))
+                let nextRib = Int((asin(max(-1, min(1, dx + 1 / rx))) * 6).rounded(.down))
+                if rib != nextRib { color = color.shaded(0.75) }
+                if dx * dx + dy * dy > 0.93 { color = PixelColor(hex: "#5a606c") }
+                c.dot(px, py, color)
+            }
+        }
+        // A ring of lights at the base, and a beacon on top.
+        for px in stride(from: left + 4, through: right - 4, by: 6) {
+            c.dot(px, base - 3, NightPalette.lampLight)
+            c.dot(px, base - 2, NightPalette.lampLight.shaded(0.6))
+        }
+        let peak = base - height
+        c.fill(Int(cx) - 1, peak - 6, Int(cx), peak, NightPalette.metal)
+        c.fill(Int(cx) - 1, peak - 8, Int(cx), peak - 7, PixelColor(hex: "#ff2a1a"))
     }
 
     // MARK: Landmarks

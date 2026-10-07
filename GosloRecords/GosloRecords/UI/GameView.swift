@@ -59,7 +59,8 @@ struct GameView: View {
                             if model.phase == .overworld {
                                 VStack(alignment: .leading, spacing: 6) {
                                     if let chapter = model.chapter {
-                                        ObjectiveBanner(chapter: chapter, objective: model.objective)
+                                        ObjectiveBanner(chapter: chapter, objective: model.objective,
+                                                        elsewhere: model.objectiveDistrict)
                                     }
                                     if let headline = model.radioHeadline {
                                         RadioTicker(text: headline)
@@ -240,6 +241,10 @@ struct GameView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         case .consequence(_, let outcome):
             ConsequenceBox(outcome: outcome, state: state)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+        case .metro:
+            MetroMapView(current: state.district, open: model.engine.openDistricts(in: state),
+                         objective: model.objectiveDistrict) { model.travel(to: $0) } close: { model.closeMetro() }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         case .clash, .interview, .concert, .negotiation, .writing, .minigame, .cinematic:
             EmptyView()

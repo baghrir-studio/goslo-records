@@ -1,0 +1,183 @@
+{
+  "centre": {
+    "rows": [
+      "TTTTTTTTTTTTTTTTTTTTTTTT",
+      "TRRRRRRRRRR==RRRRRRRRRRT",
+      "TRRRRRRRRRR==RRRRRRRRRRT",
+      "T##########==##########T",
+      "T####D#####==##########T",
+      "T=L==================L=T",
+      "T.....++........++.....T",
+      "T.....++........++.....T",
+      "T======================T",
+      "T=L====WWWWWWWW====L===T",
+      "T==B===WWWWWWWW===B====T",
+      "T======WWWWWWWW========T",
+      "T======================T",
+      "TRRRRR=====FFFFFFFFFFF=T",
+      "T#####=====F\"\"\"\"\"\"\"\"\"\"=T",
+      "T##M##=====F\"\"\"\"\"\"\"\"\"\"=T",
+      "T======================T",
+      "TTTTTTTTTTTTTTTTTTTTTTTT"
+    ],
+    "spawn": {
+      "x": 3,
+      "y": 16
+    },
+    "metro": {
+      "x": 3,
+      "y": 15
+    },
+    "doors": [
+      {
+        "x": 5,
+        "y": 4,
+        "location": "scene"
+      }
+    ],
+    "npcs": [
+      {
+        "id": "dj_bobine",
+        "x": 9,
+        "y": 12,
+        "facing": "up",
+        "from_chapter": 3
+      },
+      {
+        "id": "diva_decibel",
+        "x": 8,
+        "y": 5,
+        "facing": "down"
+      },
+      {
+        "id": "lil_croon",
+        "x": 16,
+        "y": 10,
+        "facing": "left"
+      },
+      {
+        "id": "gestuel",
+        "x": 20,
+        "y": 12,
+        "facing": "down"
+      }
+    ]
+  },
+  "hauts": {
+    "rows": [
+      "TTTTTTTTTTTTTTTTTTTTTTTT",
+      "TRRRRRR=RRRRRRRR=RRRRRRT",
+      "TRRRRRR=RRRRRRRR=RRRRRRT",
+      "T######=RRRRRRRR=######T",
+      "T######=########=######T",
+      "T######=####D###=######T",
+      "T==L=======L==========LT",
+      "T......................T",
+      "T........++............T",
+      "T........++............T",
+      "T======================T",
+      "TRRRRR==RRRRRRRRRR==RRRT",
+      "T#####==##########==###T",
+      "T##M##==##########==###T",
+      "T======================T",
+      "T==B=====L=====B=====L=T",
+      "TTTTTTTTTTTTTTTTTTTTTTTT"
+    ],
+    "spawn": {
+      "x": 3,
+      "y": 14
+    },
+    "metro": {
+      "x": 3,
+      "y": 13
+    },
+    "doors": [
+      {
+        "x": 12,
+        "y": 5,
+        "location": "media"
+      }
+    ],
+    "npcs": [
+      {
+        "id": "victor_contrat",
+        "x": 14,
+        "y": 6,
+        "facing": "down",
+        "from_chapter": 4,
+        "hidden_if": "contrat_signe"
+      },
+      {
+        "id": "victor_contrat",
+        "x": 6,
+        "y": 10,
+        "facing": "down",
+        "from_chapter": 5
+      },
+      {
+        "id": "kolosse",
+        "x": 2,
+        "y": 8,
+        "facing": "right",
+        "sight": 4
+      },
+      {
+        "id": "scalpel",
+        "x": 21,
+        "y": 7,
+        "facing": "left",
+        "sight": 3
+      },
+      {
+        "id": "le_conteur",
+        "x": 19,
+        "y": 14,
+        "facing": "left"
+      }
+    ]
+  },
+  "dome": {
+    "rows": [
+      "TTTTTTTTTTTTTTTTTTTTTTTT",
+      "TTTRRRRRRRRRRRRRRRRRRTTT",
+      "TTRRRRRRRRRRRRRRRRRRRRTT",
+      "TTRRRRRRRRRRRRRRRRRRRRTT",
+      "TT####################TT",
+      "TT#########D##########TT",
+      "T======================T",
+      "T==L====L======L====L==T",
+      "T======================T",
+      "T..........++..........T",
+      "T..........++..........T",
+      "T======================T",
+      "T==B===RRRRRR=====B====T",
+      "T======##M###==========T",
+      "T======================T",
+      "TTTTTTTTTTTTTTTTTTTTTTTT"
+    ],
+    "spawn": {
+      "x": 9,
+      "y": 14
+    },
+    "metro": {
+      "x": 9,
+      "y": 13
+    },
+    "doors": [
+      {
+        "x": 11,
+        "y": 5,
+        "location": "scene"
+      }
+    ],
+    "npcs": [
+      {
+        "id": "le_baron",
+        "x": 16,
+        "y": 6,
+        "facing": "left",
+        "sight": 3
+      }
+    ]
+  }
+}

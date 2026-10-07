@@ -111,6 +111,8 @@ private struct TitleCard: View {
 struct ObjectiveBanner: View {
     let chapter: Chapter
     let objective: Objective?
+    /// The objective is in another district: say which (take the metro).
+    var elsewhere: District? = nil
     @State private var expanded = false
 
     var body: some View {
@@ -128,6 +130,11 @@ struct ObjectiveBanner: View {
                     .font(.system(size: 13, weight: .bold))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.leading)
+                if let elsewhere {
+                    Text("Ⓜ︎ \(elsewhere.name.uppercased()) · PRENDS LE MÉTRO")
+                        .font(.system(size: 9, weight: .heavy, design: .monospaced))
+                        .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                }
                 if expanded, let hint = objective?.hint, !hint.isEmpty {
                     Text(hint)
                         .font(.system(size: 11))

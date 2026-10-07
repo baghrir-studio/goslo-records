@@ -21,16 +21,20 @@ struct WorldView: View {
                 PixelImage(TileArt.skyline(city: state.rapper.city, width: map.width), width: CGFloat(map.width) * tile,
                            height: skyHeight)
                     .offset(y: -skyHeight)
-                PixelImage(TileArt.mapImage(map, city: state.rapper.city), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
+                PixelImage(TileArt.mapImage(map, city: state.rapper.city, district: state.district), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
 
                 LampGlows(map: map)
                 FameMarks(map: map, look: state.rapper.look, posters: model.engine.fame(in: state) * 2,
                           fresco: model.engine.hasFresco(in: state))
 
                 ForEach(map.doors, id: \.location) { door in
-                    DoorSign(location: door.location, hasQuest: markers.contains(door.location),
-                             isObjective: objectiveDoor == door.location)
+                    DoorSign(location: door.location, name: door.location.name(in: state.district),
+                             hasQuest: markers.contains(door.location), isObjective: objectiveDoor == door.location)
                         .position(x: (CGFloat(door.x) + 0.5) * tile, y: CGFloat(door.y) * tile - 2)
+                }
+                if let metro = map.metro {
+                    MetroSign(isObjective: model.objectiveDistrict != nil)
+                        .position(x: (CGFloat(metro.x) + 0.5) * tile, y: CGFloat(metro.y) * tile - 2)
                 }
 
                 if markers.contains(.quartier) {
@@ -46,9 +50,9 @@ struct WorldView: View {
                 }
 
                 // Rare scenery on the main road (rows 6–7): drawn above the people on the sidewalk behind it.
-                PassingPoliceCar(map: map, avoidRow: state.rapper.city == .casablanca ? OverworldRules.parkedTaxi.first?.y : nil)
+                PassingPoliceCar(map: map, avoidRow: taxiParked ? OverworldRules.parkedTaxi.first?.y : nil)
                     .zIndex(7.7)
-                if state.rapper.city == .casablanca {
+                if taxiParked {
                     ParkedTaxi()
                         .frame(width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile, alignment: .topLeading)
                         .zIndex(Double(OverworldRules.parkedTaxi[0].y) + 0.6)
@@ -77,6 +81,9 @@ struct WorldView: View {
         }
         .background(Color(red: 0.05, green: 0.05, blue: 0.06))
     }
+
+    /// Casablanca's petit taxi waits on Le Bloc's main road.
+    private var taxiParked: Bool { state.rapper.city == .casablanca && state.district == .bloc }
 
     private var benches: [TilePoint] {
         (0..<map.height).flatMap { y in
@@ -191,13 +198,14 @@ private struct LampGlows: View {
 
 private struct DoorSign: View {
     let location: Location
+    let name: String
     let hasQuest: Bool
     var isObjective = false
 
     var body: some View {
         VStack(spacing: 2) {
             if isObjective { ObjectiveMarker() } else if hasQuest { QuestMarker() }
-            Text(location.name.uppercased())
+            Text(name.uppercased())
                 .font(.system(size: 8, weight: .heavy, design: .monospaced))
                 .foregroundStyle(.white)
                 .lineLimit(1)
@@ -293,8 +301,9 @@ private struct FameMarks: View {
         (0..<map.height).flatMap { y in
             (0..<map.width).compactMap { x -> TilePoint? in
                 let point = TilePoint(x: x, y: y), below = map.tile(at: point.moved(.down))
-                guard map.tile(at: point) == .wall, below != .wall, below != .door,
-                      !map.doors.contains(where: { $0.y == y && abs($0.x - x) <= 2 }) else { return nil }
+                guard map.tile(at: point) == .wall, below != .wall, below != .door, below != .metro,
+                      !map.doors.contains(where: { $0.y == y && abs($0.x - x) <= 2 }),
+                      !(map.metro.map { $0.y == y && abs($0.x - x) <= 2 } ?? false) else { return nil }
                 return point
             }
         }
@@ -332,5 +341,38 @@ private struct FameMarks: View {
         .frame(width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile, alignment: .topLeading)
         .allowsHitTesting(false)
         .accessibilityHidden(true)
+    }
+}
+
+/// The metro entrance's sign (marked when the objective is in another district).
+private struct MetroSign: View {
+    let isObjective: Bool
+
+    var body: some View {
+        VStack(spacing: 2) {
+            if isObjective { ObjectiveMarker() }
+            Text("Ⓜ︎ MÉTRO")
+                .font(.system(size: 8, weight: .heavy, design: .monospaced))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .fixedSize()
+                .padding(.horizontal, 4)
+                .padding(.vertical, 2)
+                .background(Color(red: 0.1, green: 0.35, blue: 0.75))
+                .overlay(Rectangle().stroke(Color.white, lineWidth: 1))
+        }
+        .allowsHitTesting(false)
+    }
+}
+
+extension Location {
+    /// The sign over the door: the same place can wear another name in another district.
+    func name(in district: District) -> String {
+        switch (self, district) {
+        case (.scene, .dome): "Le Dôme"
+        case (.scene, .centre): "Le Transfo"
+        case (.media, .hauts): "La Tour goslo"
+        default: name
+        }
     }
 }

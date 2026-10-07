@@ -120,3 +120,37 @@ struct CityTheme {
         return t
     }
 }
+
+extension CityTheme {
+    /// Each district's own look, over the city's: cobbled shopping streets downtown, glass towers in
+    /// Les Hauts, the arena's silver and purple at Le Dôme. Snow and trees stay the city's.
+    func adapted(to district: District) -> CityTheme {
+        var t = self
+        switch district {
+        case .bloc:
+            break
+        case .centre:
+            if t.pavement == .slabs { t.pavement = .cobbles }
+            t.sidewalk = t.sidewalk.shaded(1.15)
+            t.sidewalkLine = t.sidewalkLine.shaded(1.15)
+            t.shutters = t.shutters ?? PixelColor(hex: "#6a3a5a")
+        case .hauts:
+            // Glass and steel.
+            t.facade = .stone
+            t.wall = PixelColor(hex: "#34465c"); t.wallLine = PixelColor(hex: "#2a384a")
+            t.roof = PixelColor(hex: "#1e2530"); t.roofEdge = PixelColor(hex: "#4a5a70"); t.roofShadow = PixelColor(hex: "#151a22")
+            t.shutters = nil
+            t.outdoorStairs = false
+            t.pavement = .slabs
+            t.sidewalk = PixelColor(hex: "#50545e"); t.sidewalkLine = PixelColor(hex: "#454852")
+        case .dome:
+            t.wall = PixelColor(hex: "#3a2f45"); t.wallLine = PixelColor(hex: "#2e2538")
+            t.roof = PixelColor(hex: "#3a3f4a"); t.roofEdge = PixelColor(hex: "#5a606c"); t.roofShadow = PixelColor(hex: "#262a32")
+            t.shutters = nil
+            t.outdoorStairs = false
+            t.pavement = .slabs
+            t.sidewalk = PixelColor(hex: "#4a4452"); t.sidewalkLine = PixelColor(hex: "#3e3946")
+        }
+        return t
+    }
+}

@@ -154,8 +154,8 @@ final class OverworldTests: XCTestCase {
 
     func testEveryoneOnTheMapHasSmallTalk() throws {
         let world = try EventLoader.loadWorld(bundle: Bundle(for: AppModel.self))
-        let map = try XCTUnwrap(world.map)
-        for npc in Set(map.npcs.map(\.id)) {
+        let npcs = District.allCases.compactMap { world.map(for: $0) }.flatMap(\.npcs)
+        for npc in Set(npcs.map(\.id)) {
             let member = try XCTUnwrap(world.cast.first { $0.id == npc }, npc)
             XCTAssertGreaterThanOrEqual(member.idle.count, 3, "\(npc) : au moins trois répliques d'attente")
         }
@@ -235,40 +235,57 @@ final class OverworldTests: XCTestCase {
 
     func testRealMapIsValid() throws {
         let world = try EventLoader.loadWorld(bundle: Bundle(for: AppModel.self))
-        let realMap = try XCTUnwrap(world.map)
         let castIds = Set(world.cast.map(\.id))
+        XCTAssertEqual(Set(world.districts.keys), Set(District.allCases).subtracting([.bloc]), "un plan par quartier")
 
-        XCTAssertTrue(realMap.unknownSymbols.isEmpty, "symboles inconnus : \(realMap.unknownSymbols)")
-        XCTAssertEqual(Set(realMap.rows.map(\.count)).count, 1, "toutes les lignes doivent avoir la même largeur")
-        XCTAssertTrue(OverworldRules.canStep(to: realMap.spawn, on: realMap), "le point de départ doit être praticable")
+        for district in District.allCases {
+            let realMap = try XCTUnwrap(world.map(for: district), "\(district)")
+            let name = district.rawValue
+            XCTAssertTrue(realMap.unknownSymbols.isEmpty, "\(name) : symboles inconnus \(realMap.unknownSymbols)")
+            XCTAssertEqual(Set(realMap.rows.map(\.count)).count, 1, "\(name) : toutes les lignes doivent avoir la même largeur")
+            XCTAssertTrue(OverworldRules.canStep(to: realMap.spawn, on: realMap), "\(name) : le point de départ doit être praticable")
 
-        let reachable = OverworldRules.reachable(from: realMap.spawn, on: realMap)
-        for door in realMap.doors {
-            XCTAssertEqual(realMap.tile(at: door.point), .door, "\(door.location) n'est pas sur une porte")
-            XCTAssertTrue(reachable.contains(door.point), "\(door.location) est inaccessible")
-        }
-        for location in [Location.studio, .label, .media, .scene, .chezToi] {
-            XCTAssertNotNil(realMap.door(for: location), "pas de porte pour \(location)")
-        }
-        var seen = Set<TilePoint>()
-        for npc in realMap.npcs {
-            XCTAssertTrue(castIds.contains(npc.id), "personnage inconnu sur la carte : \(npc.id)")
-            XCTAssertTrue(realMap.tile(at: npc.point).isWalkable, "\(npc.id) est dans un mur")
-            XCTAssertTrue(seen.insert(npc.point).inserted, "deux personnages sur la même case")
-            if npc.sight > 0 {
-                XCTAssertNotNil(world.cast.first { $0.id == npc.id }?.clash, "\(npc.id) guette mais ne peut pas clasher")
+            // Every district has a metro, and you come out of it on your feet.
+            let metro = try XCTUnwrap(realMap.metro, "\(name) : pas de métro")
+            XCTAssertEqual(realMap.tile(at: metro), .metro, "\(name) : le métro n'est pas sur une bouche de métro")
+            XCTAssertTrue(OverworldRules.canStep(to: realMap.arrival, on: realMap), "\(name) : sortie du métro bloquée")
+            let reachable = OverworldRules.reachable(from: realMap.arrival, on: realMap)
+            XCTAssertTrue(reachable.contains(metro), "\(name) : métro inaccessible")
+            XCTAssertTrue(reachable.contains(realMap.spawn), "\(name) : point de départ coupé du métro")
+
+            for door in realMap.doors {
+                XCTAssertEqual(realMap.tile(at: door.point), .door, "\(name) : \(door.location) n'est pas sur une porte")
+                XCTAssertTrue(reachable.contains(door.point), "\(name) : \(door.location) est inaccessible")
             }
-        }
-        let benchReachable = Direction.allCases.contains { direction in
-            (0..<realMap.height).contains { y in
-                (0..<realMap.width).contains { x in
-                    realMap.tile(at: TilePoint(x: x, y: y)) == .bench
-                        && reachable.contains(TilePoint(x: x, y: y).moved(direction))
+            var seen = Set<TilePoint>()
+            for npc in realMap.npcs {
+                XCTAssertTrue(castIds.contains(npc.id), "\(name) : personnage inconnu sur la carte : \(npc.id)")
+                XCTAssertTrue(realMap.tile(at: npc.point).isWalkable, "\(name) : \(npc.id) est dans un mur")
+                XCTAssertTrue(seen.insert(npc.point).inserted, "\(name) : deux personnages sur la même case")
+                XCTAssertNotEqual(npc.point, realMap.arrival, "\(name) : \(npc.id) bloque la sortie du métro")
+                if npc.sight > 0 {
+                    XCTAssertNotNil(world.cast.first { $0.id == npc.id }?.clash, "\(npc.id) guette mais ne peut pas clasher")
+                    XCTAssertFalse(OverworldRules.lineOfSight(of: npc, on: realMap).contains(realMap.arrival),
+                                   "\(name) : \(npc.id) te tombe dessus à la sortie du métro")
                 }
             }
+            let benchReachable = (0..<realMap.height).contains { y in
+                (0..<realMap.width).contains { x in
+                    realMap.tile(at: TilePoint(x: x, y: y)) == .bench
+                        && Direction.allCases.contains { reachable.contains(TilePoint(x: x, y: y).moved($0)) }
+                }
+            }
+            XCTAssertTrue(benchReachable, "\(name) : aucun banc accessible pour le quartier")
         }
-        XCTAssertTrue(benchReachable, "aucun banc accessible pour le quartier")
-        XCTAssertTrue(reachable.contains { realMap.tile(at: $0).isWildZone }, "le terrain vague est inaccessible")
+
+        let bloc = try XCTUnwrap(world.map)
+        XCTAssertTrue(OverworldRules.reachable(from: bloc.spawn, on: bloc).contains { bloc.tile(at: $0).isWildZone },
+                      "le terrain vague est inaccessible")
+        for location in [Location.studio, .label, .media, .chezToi] {
+            XCTAssertNotNil(bloc.door(for: location), "pas de porte pour \(location) au Bloc")
+        }
+        XCTAssertFalse(world.districts(with: .scene, chapter: 3).isEmpty, "la scène ouvre avec le centre-ville")
+        XCTAssertEqual(world.districts(with: .scene, chapter: 6).last, .dome, "le Dôme a sa scène")
     }
 
     func testCastLooksAreValid() throws {
