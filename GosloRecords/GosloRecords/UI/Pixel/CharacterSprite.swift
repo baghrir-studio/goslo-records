@@ -20,7 +20,7 @@ enum CharacterSprite {
     }
 
     private struct Palette {
-        let skin, hair, top, topShade, bottom, bottomShade, shoes, accent, accentShade: PixelColor
+        let skin, hair, hairShade, top, topShade, bottom, bottomShade, shoes, accent, accentShade: PixelColor
         let eye = PixelColor(hex: "#141418")
         let lens = PixelColor(hex: "#1a1a22")
         let gear = PixelColor(hex: "#2a2a30")
@@ -28,6 +28,7 @@ enum CharacterSprite {
         init(_ look: CharacterLook) {
             skin = PixelColor(hex: look.skin)
             hair = PixelColor(hex: look.hair)
+            hairShade = hair.shaded(0.7)
             top = PixelColor(hex: look.top)
             topShade = top.shaded(0.75)
             bottom = PixelColor(hex: look.bottom)
