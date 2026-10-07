@@ -220,6 +220,36 @@
       "y": 5,
       "facing": "down",
       "from_chapter": 5
+    },
+    {
+      "id": "saphir",
+      "x": 8,
+      "y": 13,
+      "facing": "up",
+      "sight": 3,
+      "from_chapter": 2
+    },
+    {
+      "id": "nitro_nina",
+      "x": 16,
+      "y": 5,
+      "facing": "down",
+      "sight": 2,
+      "from_chapter": 2
+    },
+    {
+      "id": "madame_rature",
+      "x": 17,
+      "y": 13,
+      "facing": "left",
+      "from_chapter": 2
+    },
+    {
+      "id": "diva_decibel",
+      "x": 19,
+      "y": 13,
+      "facing": "down",
+      "from_chapter": 2
     }
   ]
 }

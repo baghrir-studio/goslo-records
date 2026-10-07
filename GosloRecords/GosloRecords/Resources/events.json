@@ -4094,6 +4094,332 @@
           "consequence": "Le show est reporté. Le public t'envoie des photos de bonhommes de neige. Certains te ressemblent."
         }
       ]
+    },
+    {
+      "id": "saphir_defi",
+      "title": "Le micro ouvert de Saphir",
+      "location": "quartier",
+      "npc": "saphir",
+      "weight": 8,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Saphir freestyle sur le banc, un cercle autour d'elle. Elle te voit, s'arrête au milieu d'une rime et te tend le micro : « Six ans que personne ne me bat ici. Tu veux tenter, ou tu regardes ? »",
+      "choices": [
+        {
+          "label": "Prendre le micro",
+          "clash": {
+            "opponent": "saphir",
+            "win": {
+              "effects": {
+                "credibilite": 9,
+                "streams": 4
+              },
+              "consequence": "Saphir te rend le micro, lentement. « Six ans, et c'est toi. » Elle sourit pour de vrai. Le cercle n'en revient pas."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -3
+              },
+              "consequence": "Saphir a freestylé sur tes baskets, ta coupe et ton silence. Le cercle applaudit. « Reviens jeudi. On recommence. »"
+            }
+          },
+          "consequence": "Le cercle se resserre. Quelqu'un lance un beat sur une enceinte."
+        },
+        {
+          "label": "Regarder, et apprendre",
+          "effects": {
+            "mental": 3
+          },
+          "xp": {
+            "flow": 30
+          },
+          "relations": {
+            "saphir": 8
+          },
+          "consequence": "Tu regardes une heure entière. Elle ne répète jamais une rime. En rentrant, tu essaies dans le miroir. Le miroir est poli."
+        }
+      ]
+    },
+    {
+      "id": "saphir_secret",
+      "title": "Le carnet vide",
+      "location": "quartier",
+      "npc": "saphir",
+      "weight": 6,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Saphir t'avoue un secret : elle n'a jamais écrit un seul couplet. « Tout est là-dedans. Mais un jour, faudra bien un album. Et un album, ça s'écrit. Tu m'apprends ? »",
+      "choices": [
+        {
+          "label": "Lui prêter ton carnet",
+          "effects": {
+            "credibilite": 4
+          },
+          "relations": {
+            "saphir": 15
+          },
+          "xp": {
+            "plume": 20
+          },
+          "consequence": "Elle remplit trois pages en dix minutes. Puis elle les rature toutes. « Écrire, c'est freestyler avec un témoin. » Elle garde le carnet. Tu en rachèteras un."
+        },
+        {
+          "label": "« Reste en impro, c'est ta force »",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "saphir": 5
+          },
+          "consequence": "Elle hoche la tête. Son premier album sortira en live, enregistré d'une seule prise. Il s'appellera « Sans brouillon »."
+        }
+      ]
+    },
+    {
+      "id": "nina_defi",
+      "title": "Nitro Nina a pas le temps",
+      "location": "quartier",
+      "npc": "nitro_nina",
+      "weight": 8,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Nitro Nina te barre la route, écouteurs aux oreilles. « Toi-t'es-{celui|celle}-de-la-radio-on-clashe-maintenant-j'ai-un-train-dans-quatre-minutes. » Il te faut deux secondes pour comprendre.",
+      "choices": [
+        {
+          "label": "Accepter, vite",
+          "clash": {
+            "opponent": "nitro_nina",
+            "win": {
+              "effects": {
+                "credibilite": 8,
+                "streams": 5
+              },
+              "consequence": "Nitro Nina s'arrête net. Elle n'avait jamais été coupée. « Pas mal. Lentement, mais pas mal. » Elle rate son train. Elle s'en fiche."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -3
+              },
+              "consequence": "Tu n'as pas fini ta première rime qu'elle a fini la sienne, puis la tienne. Elle prend son train. Le public, lui, applaudit encore."
+            }
+          },
+          "consequence": "Elle lance un chrono sur son téléphone. Trois minutes cinquante."
+        },
+        {
+          "label": "« Lentement, s'il te plaît »",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "nitro_nina": -3
+          },
+          "consequence": "Elle répète. Plus vite. Tu comprends le mot « train ». Elle est déjà partie."
+        }
+      ]
+    },
+    {
+      "id": "nina_soustitres",
+      "title": "Les sous-titres",
+      "location": "reseaux",
+      "npc": "nitro_nina",
+      "weight": 6,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Nitro Nina t'envoie un vocal de quatre secondes. Il contient un couplet entier. Puis un message : « Tu-peux-écrire-mes-sous-titres ? Personne-arrive-à-suivre. »",
+      "choices": [
+        {
+          "label": "Écrire ses sous-titres (une nuit entière)",
+          "effects": {
+            "credibilite": 3,
+            "mental": -2
+          },
+          "relations": {
+            "nitro_nina": 15
+          },
+          "xp": {
+            "flow": 25
+          },
+          "consequence": "Il te faut six heures pour un couplet de quarante secondes. Le clip sort. Les commentaires : « ENFIN on comprend ». Elle te crédite. En tout petit, mais vite."
+        },
+        {
+          "label": "« Ralentis, plutôt »",
+          "effects": {
+            "credibilite": 2
+          },
+          "relations": {
+            "nitro_nina": -5
+          },
+          "consequence": "Elle essaie. Son morceau le plus lent fait 190 mots par minute. Elle appelle ça « sa ballade »."
+        }
+      ]
+    },
+    {
+      "id": "rature_atelier",
+      "title": "L'atelier de Madame Rature",
+      "location": "quartier",
+      "npc": "madame_rature",
+      "weight": 7,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Madame Rature corrige des copies sur un banc, stylo rouge à la main. « Ah, toi. J'ai lu ton dernier couplet. Trois fautes d'accord, une rime pauvre, mais une idée. Assieds-toi. »",
+      "choices": [
+        {
+          "label": "Suivre son atelier d'écriture",
+          "effects": {
+            "credibilite": 3
+          },
+          "xp": {
+            "plume": 35
+          },
+          "relations": {
+            "madame_rature": 8
+          },
+          "consequence": "Une heure de participe passé. Tu ressors avec 11 sur 20. Elle dit que c'est la meilleure note de l'année. Tu la crois presque."
+        },
+        {
+          "label": "La défier en battle",
+          "clash": {
+            "opponent": "madame_rature",
+            "win": {
+              "effects": {
+                "credibilite": 9
+              },
+              "consequence": "Madame Rature pose son stylo. Elle te note : 16 sur 20. Le quartier n'a jamais vu ça. Elle encadre la copie."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -3,
+                "mental": -2
+              },
+              "consequence": "Elle te rend ta copie, en direct, devant tout le monde : 7 sur 20, « peut mieux faire ». Le pire, c'est qu'elle a raison."
+            }
+          },
+          "consequence": "Elle range ses copies. « Sortez une feuille. »"
+        }
+      ]
+    },
+    {
+      "id": "rature_dictee",
+      "title": "La dictée du quartier",
+      "location": "quartier",
+      "npc": "madame_rature",
+      "weight": 5,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Madame Rature organise une dictée géante sur la place. Le texte : un couplet de Scalpel, sans les fautes. Kolosse s'est inscrit. Lingot aussi. Tout le quartier regarde.",
+      "choices": [
+        {
+          "label": "Participer",
+          "effects": {
+            "credibilite": 5,
+            "mental": 2
+          },
+          "xp": {
+            "plume": 25
+          },
+          "relations": {
+            "madame_rature": 10
+          },
+          "consequence": "Tu finis deuxième, derrière une dame de 82 ans. Kolosse a écrit son nom en majuscules et rien d'autre. Lingot a écrit « or » partout."
+        },
+        {
+          "label": "Encourager depuis le banc",
+          "effects": {
+            "mental": 4
+          },
+          "consequence": "Tu applaudis chaque accord réussi. Scalpel, venu incognito, a fait une faute. Personne ne doit le savoir."
+        }
+      ]
+    },
+    {
+      "id": "diva_feat",
+      "title": "Le refrain de Diva Décibel",
+      "location": "quartier",
+      "npc": "diva_decibel",
+      "weight": 8,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Diva Décibel chante tes paroles devant la boulangerie, un ton au-dessus. Les vitres vibrent. « Ton morceau, il lui manque un refrain. Le mien. On le fait ensemble, ou on règle ça en clash ? »",
+      "choices": [
+        {
+          "label": "Faire le feat",
+          "effects": {
+            "streams": 8,
+            "argent": 2
+          },
+          "relations": {
+            "diva_decibel": 12
+          },
+          "counters": {
+            "featurings": 1
+          },
+          "consequence": "Son refrain tient douze secondes sans respirer. Le morceau passe à la radio, puis dans les mariages, puis dans les ascenseurs. Tu es partout."
+        },
+        {
+          "label": "Régler ça en clash",
+          "clash": {
+            "opponent": "diva_decibel",
+            "win": {
+              "effects": {
+                "credibilite": 8,
+                "streams": 4
+              },
+              "consequence": "Diva Décibel s'arrête au milieu d'une note. C'est la première fois. « T'as un truc, toi. » Elle te propose le feat quand même."
+            },
+            "lose": {
+              "effects": {
+                "credibilite": -3
+              },
+              "consequence": "Elle tient la dernière note pendant que tu cherches ta rime. Une alarme de voiture se déclenche. Le public crie avec elle."
+            }
+          },
+          "consequence": "Elle s'échauffe en trois vocalises. Un pigeon s'envole."
+        }
+      ]
+    },
+    {
+      "id": "diva_chuchote",
+      "title": "Diva Décibel chuchote",
+      "location": "quartier",
+      "npc": "diva_decibel",
+      "weight": 5,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Diva Décibel a un secret à te confier. Elle essaie de chuchoter. Trois fenêtres s'ouvrent dans la rue. « JE CROIS QUE JE SUIS AMOUREUSE DU BEATMAKER RELOU. »",
+      "choices": [
+        {
+          "label": "L'aider à lui écrire un message",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "diva_decibel": 10
+          },
+          "consequence": "Vous écrivez un message de quatre lignes. Elle le lui chante, finalement, depuis le trottoir. Il répond par une prod « de fou ». Elle est de fou, pour une fois."
+        },
+        {
+          "label": "Lui conseiller d'attendre",
+          "effects": {
+            "mental": 1
+          },
+          "relations": {
+            "diva_decibel": -2
+          },
+          "consequence": "Elle attend. Douze secondes. Puis elle chante sa déclaration au mégaphone. Tout le quartier connaît maintenant la fin de l'histoire."
+        }
+      ]
     }
   ]
 }
