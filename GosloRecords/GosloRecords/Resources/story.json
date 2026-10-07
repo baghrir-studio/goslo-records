@@ -2652,7 +2652,52 @@
           }
         },
         {
-          "narration": "{ville}, 23 h 47. En bas du bloc, rien ne bouge. À part toi."
+          "narration": "Paris, 23 h 47. Le périph' ronronne au loin, la tour Eiffel scintille pour personne. En bas du bloc, rien ne bouge. À part toi.",
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
+          "narration": "Marseille, 23 h 47. Le mistral fait claquer les volets, et là-haut, la basilique veille sur la ville. En bas du bloc, rien ne bouge. À part toi.",
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "narration": "Lyon, 23 h 47. La basilique brille sur sa colline, la Saône coule sans un bruit. En bas du bloc, rien ne bouge. À part toi.",
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "narration": "Toulouse, 23 h 47. Les briques roses ont gardé la chaleur de la journée. En bas du bloc, rien ne bouge. À part toi.",
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "narration": "Lille, 23 h 47. Il bruine, évidemment. La friterie du coin vient de baisser son rideau. En bas du bloc, rien ne bouge. À part toi.",
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "narration": "Bruxelles, 23 h 47. Il pleut, une fois. Au loin, l'Atomium brille comme un vieux disque rayé. En bas du bloc, rien ne bouge. À part toi.",
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "narration": "Montréal, 23 h 47. Moins quinze dehors, la neige craque sous les bottes. En bas du bloc, rien ne bouge. À part toi.",
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "narration": "Casablanca, 23 h 47. L'Atlantique gronde derrière la corniche, un petit taxi rouge attend un client qui ne vient pas. En bas du bloc, rien ne bouge. À part toi.",
+          "cities": [
+            "Casablanca"
+          ]
         },
         {
           "narration": "Zéro abonné. Un carnet à spirale. Et une certitude : un jour, tout le quartier connaîtra ton nom."
@@ -2681,6 +2726,78 @@
             "who": "player",
             "text": "Alors j'écrirai des trucs qui les font arrêter de scroller."
           }
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Ici, y a un rappeur par cage d'escalier. Pour qu'on te remarque, faut un concept."
+          },
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Ici, même le poissonnier rappe. Pour sortir du lot, faut un concept."
+          },
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Ici, les gens écoutent jusqu'au bout avant d'applaudir. T'as pas le temps pour ça. Faut un concept."
+          },
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Ici, il fait trop beau pour lire un carnet. Les gens sont en terrasse. Faut un concept."
+          },
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Ici, il pleut huit mois sur douze, les gens vivent sur leur téléphone. Faut un concept."
+          },
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Ici, on a déjà la frite et la BD. Pour exister, faut un concept, une fois."
+          },
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Ici, il fait moins quinze. Personne enlève ses gants pour applaudir. Faut un concept."
+          },
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Ici, même les petits taxis ont plus de flow que toi, khoya. Faut un concept."
+          },
+          "cities": [
+            "Casablanca"
+          ]
         },
         {
           "say": {
@@ -4910,164 +5027,85 @@
       "id": "punchliner_carnet",
       "kind": "punchliner",
       "title": "Punchliner · le carnet",
-      "intro": "Ton premier texte, trois couplets. Le début de chaque phrase est écrit. Choisis les mots qui la terminent, dans l'ordre, et fais rimer la fin. Le chrono tourne, comme sur un vrai beat.",
+      "intro": "Ton premier texte, trois couplets. Le début de chaque phrase est écrit : choisis la fin qui claque, et qui rime. Le chrono tourne, comme sur un vrai beat.",
       "pass_score": 0.3,
       "rounds": [
         {
           "setup": "En bas du bloc, l'ascenseur est en panne depuis l'hiver,",
           "lead": "moi je monte quand même",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "à",
-                "la",
-                "force",
-                "des",
-                "vers"
-              ],
+              "text": "à la force des vers",
               "score": 10,
               "reaction": "« À la force des vers. » Tu relis la phrase trois fois. Tu as un peu envie de la crier dans la cage d'escalier."
             },
             {
-              "words": [
-                "avec",
-                "mon",
-                "carnet",
-                "ouvert"
-              ],
-              "score": 8,
+              "text": "avec mon carnet ouvert",
+              "score": 6,
               "reaction": "Simple, juste. On voit la scène : toi, sept étages, et le carnet qui ne se ferme jamais."
             },
             {
-              "words": [
-                "et",
-                "je",
-                "vise",
-                "l'univers"
-              ],
-              "score": 6,
-              "reaction": "Ambitieux pour quelqu'un qui n'a pas d'ascenseur. Mais ça rime, et ça a du cœur."
+              "text": "et je vise l'univers",
+              "score": 3,
+              "reaction": "Ambitieux pour quelqu'un qui n'a pas d'ascenseur. Ça rime, c'est déjà ça."
+            },
+            {
+              "text": "par l'escalier, à pied",
+              "score": 0,
+              "reaction": "C'est vrai. C'est même exactement ce qui se passe. Mais ça ne rime avec rien, et le carnet le sait."
             }
-          ],
-          "decoys": [
-            "escalier",
-            "clés",
-            "pied",
-            "fer",
-            "voisin",
-            "courrier",
-            "lumière"
-          ],
-          "rhymes": [
-            "vers",
-            "ouvert",
-            "l'univers",
-            "fer",
-            "lumière"
           ]
         },
         {
           "setup": "Ma mère me demande quand je trouve un vrai travail,",
           "lead": "je lui réponds :",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "je",
-                "rappe",
-                "pour",
-                "qu'on",
-                "se",
-                "taille"
-              ],
+              "text": "« je rappe pour qu'on se taille »",
               "score": 10,
               "reaction": "Derrière la porte, ta mère : « Se tailler où ? » Puis, plus bas : « …c'est pas mal, quand même. »"
             },
             {
-              "words": [
-                "le",
-                "jour",
-                "où",
-                "j'aurai",
-                "ma",
-                "médaille"
-              ],
-              "score": 8,
+              "text": "« le jour où j'ai ma médaille »",
+              "score": 6,
               "reaction": "Ta mère ne dit rien. Elle repasse ton t-shirt pour demain. C'est sa façon de dire oui."
             },
             {
-              "words": [
-                "après",
-                "cette",
-                "bataille"
-              ],
-              "score": 6,
+              "text": "« après cette bataille »",
+              "score": 3,
               "reaction": "« Quelle bataille ? Tu vas au lit. » Le combat est reporté à demain."
+            },
+            {
+              "text": "« lundi, promis »",
+              "score": 0,
+              "reaction": "Ta mère note « lundi » sur le calendrier du frigo, au feutre indélébile. Ça ne rime pas, et maintenant c'est un rendez-vous."
             }
-          ],
-          "decoys": [
-            "CDI",
-            "lundi",
-            "patron",
-            "paille",
-            "vaisselle"
-          ],
-          "rhymes": [
-            "taille",
-            "médaille",
-            "bataille",
-            "paille"
           ]
         },
         {
           "setup": "Le bloc dort encore, mais bientôt il saura mon nom,",
           "lead": "ce soir j'écris",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "seize",
-                "mesures",
-                "qui",
-                "frappent",
-                "au",
-                "plafond"
-              ],
+              "text": "seize mesures qui frappent au plafond",
               "score": 10,
               "reaction": "Le voisin du dessus tape au plafond. Tu le prends comme une ovation."
             },
             {
-              "words": [
-                "comme",
-                "un",
-                "futur",
-                "champion"
-              ],
-              "score": 8,
+              "text": "comme un futur champion",
+              "score": 6,
               "reaction": "Tu l'écris en majuscules. Puis tu le soulignes. Deux fois."
             },
             {
-              "words": [
-                "à",
-                "la",
-                "lueur",
-                "du",
-                "néon"
-              ],
-              "score": 6,
+              "text": "à la lueur du néon",
+              "score": 3,
               "reaction": "Le néon de la cuisine clignote, comme pour applaudir. Ou pour mourir. Les deux, sûrement."
+            },
+            {
+              "text": "tout doucement, pour pas déranger",
+              "score": 0,
+              "reaction": "Très poli. Trop poli. Le rap a besoin d'un peu plus de bruit, et d'une rime."
             }
-          ],
-          "decoys": [
-            "filtre",
-            "chien",
-            "refrain",
-            "million",
-            "danse"
-          ],
-          "rhymes": [
-            "plafond",
-            "champion",
-            "néon",
-            "million"
           ]
         }
       ],
@@ -5101,175 +5139,85 @@
       "id": "punchliner_bunker",
       "kind": "punchliner",
       "title": "Punchliner · au Bunker",
-      "intro": "Fred a collé vingt mots sur la console. « Je te donne le début, tu finis la phrase. Trois couplets. Si ça rime pas, je te raconte 2009. »",
+      "intro": "Fred a collé quatre fins de phrase sur la console, au ruban adhésif. « Je te donne le début, tu choisis la fin. Trois couplets. Si ça rime pas, je te raconte 2009. »",
       "pass_score": 0.5,
       "rounds": [
         {
           "setup": "J'ai grandi dans l'ombre, entre deux machines à laver,",
           "lead": "aujourd'hui je brille,",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "même",
-                "Momo",
-                "est",
-                "épaté"
-              ],
+              "text": "essoré, mais jamais délavé",
               "score": 10,
-              "reaction": "Momo, qui passait par là, en lâche son panier de linge. Fred applaudit avec une seule main."
+              "reaction": "« Jamais délavé. » Momo, qui passait par là, en lâche son panier de linge. Fred applaudit avec une seule main : l'autre tient sa tasse depuis 2009."
             },
             {
-              "words": [
-                "comme",
-                "un",
-                "jeton",
-                "usé"
-              ],
-              "score": 8,
+              "text": "comme un jeton usé",
+              "score": 6,
               "reaction": "Amer, mais juste. Fred hoche la tête, lentement, comme en 2009."
             },
             {
-              "words": [
-                "et",
-                "mon",
-                "linge",
-                "est",
-                "lavé"
-              ],
-              "score": 6,
-              "reaction": "Propre. Littéralement. Fred dit que c'est « une rime de lessive », et c'est un compliment."
+              "text": "et mon linge est lavé",
+              "score": 3,
+              "reaction": "Propre. Littéralement. Fred dit que c'est « une rime de lessive », et ce n'est pas un compliment."
+            },
+            {
+              "text": "grâce à l'adoucissant",
+              "score": 0,
+              "reaction": "Fred te regarde longtemps. « L'adoucissant. » Il ne le note nulle part."
             }
-          ],
-          "decoys": [
-            "essoré",
-            "frigo",
-            "baskets",
-            "Fred",
-            "2009",
-            "toujours",
-            "payé",
-            "chaussette"
-          ],
-          "rhymes": [
-            "épaté",
-            "usé",
-            "lavé",
-            "essoré",
-            "payé"
           ]
         },
         {
           "setup": "Fred me parle de son disque d'or depuis ce matin,",
           "lead": "moi je vise le platine,",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "lui",
-                "polit",
-                "le",
-                "sien"
-              ],
+              "text": "lui, il polit le sien",
               "score": 10,
-              "reaction": "« Lui polit le sien. » Fred fait semblant de ne pas comprendre. Il a très bien compris."
+              "reaction": "« Lui, il polit le sien. » Fred fait semblant de ne pas comprendre. Il a très bien compris."
             },
             {
-              "words": [
-                "pas",
-                "le",
-                "même",
-                "destin"
-              ],
+              "text": "on n'a pas le même destin",
               "score": 6,
               "reaction": "Correct. Fred note « destin » sur un bout de ruban adhésif et le colle sur la console."
             },
             {
-              "words": [
-                "et",
-                "lui",
-                "fait",
-                "le",
-                "malin"
-              ],
-              "score": 6,
-              "reaction": "Ça rime, ça pique. Fred, vexé, te répond en rimant aussi. Mal."
+              "text": "comme un vrai gamin",
+              "score": 3,
+              "reaction": "Fred sourit. « Gamin. » Il le dit avec tendresse, ce qui est pire."
             },
             {
-              "words": [
-                "comme",
-                "un",
-                "vrai",
-                "gamin"
-              ],
-              "score": 4,
-              "reaction": "Fred sourit. « Gamin. » Il le dit avec tendresse, ce qui est pire."
+              "text": "et peut-être le bronze",
+              "score": 0,
+              "reaction": "« Le bronze ? » Fred éclate de rire. « Même en 2009, personne ne visait le bronze. »"
             }
-          ],
-          "decoys": [
-            "chips",
-            "laverie",
-            "câble",
-            "écureuil",
-            "pitch",
-            "matin"
-          ],
-          "rhymes": [
-            "sien",
-            "destin",
-            "malin",
-            "gamin",
-            "matin"
           ]
         },
         {
           "setup": "Scalpel corrige mes rimes au stylo rouge,",
           "lead": "mais sur scène,",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "c'est",
-                "moi",
-                "qui",
-                "bouge"
-              ],
+              "text": "il rature, et moi la salle bouge",
               "score": 10,
               "reaction": "Fred se lève de son siège. Il ne se lève jamais. Même pas pour 2009."
             },
             {
-              "words": [
-                "toute",
-                "la",
-                "salle",
-                "bouge"
-              ],
-              "score": 8,
-              "reaction": "Fred tape du pied en rythme. La console tremble. Un mot tombe : « courge »."
+              "text": "toute la salle bouge",
+              "score": 6,
+              "reaction": "Fred tape du pied en rythme. La console tremble. Un bout de ruban tombe : « courge »."
             },
             {
-              "words": [
-                "ma",
-                "mère",
-                "voit",
-                "rouge"
-              ],
-              "score": 6,
+              "text": "ma mère voit rouge",
+              "score": 3,
               "reaction": "Fred rit. « Ta mère, elle voit rouge ? » Elle, de loin, confirme par message."
+            },
+            {
+              "text": "j'ai un peu le trac",
+              "score": 0,
+              "reaction": "Honnête. Fred te tape sur l'épaule. « Le trac, ça rime pas. » Il a raison."
             }
-          ],
-          "decoys": [
-            "courge",
-            "thé",
-            "cravate",
-            "gomme",
-            "Victor",
-            "contrat",
-            "lessive",
-            "bloc",
-            "chat"
-          ],
-          "rhymes": [
-            "bouge",
-            "rouge",
-            "courge"
           ]
         }
       ],
@@ -5297,170 +5245,85 @@
       "id": "punchliner_banc",
       "kind": "punchliner",
       "title": "Punchliner · au banc",
-      "intro": "Vingt mots en vrac au feutre sur un carton, une phrase à finir. Le perdant offre les chips. Trois gamins t'attendent, très sérieux.",
+      "intro": "Quatre fins de phrase au feutre sur un carton, une seule qui tue. Le perdant offre les chips. Trois gamins t'attendent, très sérieux.",
       "pass_score": 0.5,
       "rounds": [
         {
           "setup": "Kolosse annonce un live, il promet la guerre,",
           "lead": "mais sa batterie lâche",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "avant",
-                "le",
-                "premier",
-                "vers"
-              ],
+              "text": "avant le premier vers",
               "score": 10,
               "reaction": "Le banc explose. Le plus petit tombe du banc. Il se relève en criant « le premier vers ! »."
             },
             {
-              "words": [
-                "et",
-                "ça",
-                "le",
-                "désespère"
-              ],
-              "score": 8,
+              "text": "et ça le désespère",
+              "score": 6,
               "reaction": "Ça rime, ça pique. Un gamin fait « ouh » tout bas, par respect."
             },
             {
-              "words": [
-                "il",
-                "finit",
-                "par",
-                "terre"
-              ],
-              "score": 6,
-              "reaction": "Simple et efficace. Kolosse, au loin, se sent visé sans savoir pourquoi."
+              "text": "il finit par terre",
+              "score": 3,
+              "reaction": "Simple. Kolosse, au loin, se sent visé sans savoir pourquoi."
+            },
+            {
+              "text": "à onze pour cent",
+              "score": 0,
+              "reaction": "Les gamins se regardent. C'est vrai, mais ce n'est pas une rime : c'est un niveau de batterie."
             }
-          ],
-          "decoys": [
-            "chargeur",
-            "pompes",
-            "verre",
-            "câble",
-            "réseau",
-            "trottoir",
-            "spectateurs",
-            "colère",
-            "11 %"
-          ],
-          "rhymes": [
-            "vers",
-            "désespère",
-            "terre",
-            "verre",
-            "colère",
-            "guerre"
           ]
         },
         {
           "setup": "Lingot porte trois chaînes et deux montres en or,",
           "lead": "il brille tellement",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "que",
-                "même",
-                "le",
-                "soleil",
-                "dort"
-              ],
+              "text": "que même le soleil dort",
               "score": 10,
               "reaction": "« Même le soleil dort. » Un gamin l'écrit au feutre sur le carton. C'est gravé."
             },
             {
-              "words": [
-                "qu'on",
-                "le",
-                "voit",
-                "de",
-                "dehors"
-              ],
-              "score": 8,
+              "text": "qu'on le voit de dehors",
+              "score": 6,
               "reaction": "Correct. Lingot, s'il passait, prendrait ça pour un compliment."
             },
             {
-              "words": [
-                "qu'il",
-                "s'éblouit",
-                "encore"
-              ],
-              "score": 6,
-              "reaction": "Le banc rit. Quelque part, Lingot se regarde dans une cuillère."
+              "text": "qu'il s'éblouit encore",
+              "score": 3,
+              "reaction": "Le banc rit poliment. Quelque part, Lingot se regarde dans une cuillère."
+            },
+            {
+              "text": "qu'il a mal au cou",
+              "score": 0,
+              "reaction": "Le plus petit hoche la tête : « C'est vrai que trois chaînes, ça doit tirer. » Personne ne rit. Ça ne rime pas."
             }
-          ],
-          "decoys": [
-            "gourmette",
-            "facture",
-            "lunettes",
-            "carats",
-            "décor",
-            "Miami",
-            "impôts",
-            "fort"
-          ],
-          "rhymes": [
-            "dort",
-            "dehors",
-            "encore",
-            "décor",
-            "fort"
           ]
         },
         {
           "setup": "Le Baron dit que le trône lui appartient,",
           "lead": "j'ai vérifié le trône :",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "en",
-                "carton",
-                "et",
-                "ça",
-                "tient"
-              ],
+              "text": "en carton, mais il tient",
               "score": 10,
               "reaction": "Silence. Puis tout le banc se lève. Ça, c'est une punchline de trône."
             },
             {
-              "words": [
-                "il",
-                "grince",
-                "pour",
-                "un",
-                "rien"
-              ],
-              "score": 8,
+              "text": "il grince pour un rien",
+              "score": 6,
               "reaction": "« Il grince pour un rien. » Le banc grince aussi, en signe d'approbation."
             },
             {
-              "words": [
-                "il",
-                "est",
-                "à",
-                "moi",
-                "demain"
-              ],
-              "score": 6,
+              "text": "il sera à moi demain",
+              "score": 3,
               "reaction": "Ambitieux. Les gamins notent la date, au cas où."
+            },
+            {
+              "text": "il est très confortable",
+              "score": 0,
+              "reaction": "« Très confortable » ? Les gamins te dévisagent. Tu viens de faire la pub du Baron."
             }
-          ],
-          "decoys": [
-            "velours",
-            "couronne",
-            "lunettes",
-            "escalier",
-            "bien",
-            "chien"
-          ],
-          "rhymes": [
-            "tient",
-            "rien",
-            "demain",
-            "bien",
-            "chien"
           ]
         }
       ],
@@ -5670,113 +5533,59 @@
       "id": "punchliner_zanga",
       "kind": "punchliner",
       "title": "Feat avec Zanga",
-      "intro": "Studio de Casa, 2 h du matin. Zanga pose le premier vers. Toi, tu finis la phrase, en mélangeant ses mots et les tiens. Deux couplets, et le feat est dans la boîte.",
+      "intro": "Studio de Casa, 2 h du matin. Zanga pose le premier vers. Toi, tu choisis la fin de la phrase. Deux couplets, et le feat est dans la boîte.",
       "pass_score": 0.5,
       "rounds": [
         {
           "setup": "On se capte à Casa, entre deux petits taxis rouges,",
           "lead": "Zanga me dit :",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "wakha",
-                "khoya",
-                "ici",
-                "tout",
-                "bouge"
-              ],
+              "text": "« wakha khoya, ici tout bouge »",
               "score": 10,
               "reaction": "« Wakha khoya ! » Zanga tape dans la vitre de la cabine. L'ingé son hoche la tête sans lever les yeux. C'est validé."
             },
             {
-              "words": [
-                "mets",
-                "le",
-                "son",
-                "que",
-                "ça",
-                "bouge"
-              ],
-              "score": 8,
+              "text": "« monte le son, que ça bouge »",
+              "score": 6,
               "reaction": "Zanga monte le son lui-même. Le voisin du dessous monte le sien. C'est une conversation."
             },
             {
-              "words": [
-                "le",
-                "taxi",
-                "est",
-                "rouge"
-              ],
-              "score": 6,
+              "text": "« le taxi est rouge »",
+              "score": 3,
               "reaction": "« C'est vrai, il est rouge. » Zanga rit. Il te laisse une deuxième chance, par politesse."
+            },
+            {
+              "text": "« t'as l'heure ? »",
+              "score": 0,
+              "reaction": "Zanga regarde sa montre. « 2 h 12. » Puis il te regarde. « C'était pas une vraie question, khoya. »"
             }
-          ],
-          "decoys": [
-            "bezzaf",
-            "safi",
-            "drari",
-            "zwin",
-            "mdina",
-            "minuit",
-            "Atlantique"
-          ],
-          "rhymes": [
-            "bouge",
-            "rouge"
           ]
         },
         {
           "setup": "Il rappe en darija, moi je réponds en français,",
           "lead": "ensemble",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "c'est",
-                "zwin",
-                "comme",
-                "jamais"
-              ],
+              "text": "c'est zwin comme jamais",
               "score": 10,
               "reaction": "« Zwin comme jamais. » Zanga l'écrit au marqueur sur le mur du studio. Le propriétaire ne dira rien : il chante aussi."
             },
             {
-              "words": [
-                "on",
-                "vise",
-                "le",
-                "sommet"
-              ],
-              "score": 8,
+              "text": "on vise le sommet",
+              "score": 6,
               "reaction": "Simple, efficace. Zanga lève le poing vers le plafond, qui est bas. Il se cogne. Ça reste dans la prise."
             },
             {
-              "words": [
-                "on",
-                "sonne",
-                "vrai"
-              ],
-              "score": 6,
+              "text": "on sonne vrai",
+              "score": 3,
               "reaction": "Correct. Zanga dit « safi », ce qui veut dire « ça suffit ». Avec le sourire, heureusement."
+            },
+            {
+              "text": "il nous faut un traducteur",
+              "score": 0,
+              "reaction": "Zanga rit tellement qu'il doit sortir de la cabine. « Un traducteur. » Il le répète toute la nuit."
             }
-          ],
-          "decoys": [
-            "khoya",
-            "safi",
-            "wakha",
-            "drari",
-            "palais",
-            "frais",
-            "Casa",
-            "taxi",
-            "nuit",
-            "bloc"
-          ],
-          "rhymes": [
-            "sommet",
-            "jamais",
-            "vrai",
-            "palais",
-            "frais"
           ]
         }
       ],
@@ -5842,108 +5651,53 @@
         {
           "setup": "Je me perds dans les traboules, je retrouve mon flow,",
           "lead": "chaque passage",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "me",
-                "renvoie",
-                "l'écho"
-              ],
+              "text": "me renvoie l'écho",
               "score": 10,
               "reaction": "L'écho répète ta fin de phrase trois fois. Un touriste applaudit. Il croyait que ça faisait partie de la visite."
             },
             {
-              "words": [
-                "mène",
-                "plus",
-                "haut"
-              ],
-              "score": 8,
+              "text": "me mène plus haut",
+              "score": 6,
               "reaction": "Ça monte, comme la ville. Tes mollets, eux, n'ont pas validé."
             },
             {
-              "words": [
-                "devient",
-                "un",
-                "studio"
-              ],
-              "score": 6,
+              "text": "devient un studio",
+              "score": 3,
               "reaction": "Correct. Un habitant ouvre sa fenêtre pour mieux entendre. Ou pour te demander de baisser."
+            },
+            {
+              "text": "a une porte fermée",
+              "score": 0,
+              "reaction": "Une porte fermée, en effet. Tu tires la poignée. Ça ne rime pas, et ça ne s'ouvre pas."
             }
-          ],
-          "decoys": [
-            "pente",
-            "escalier",
-            "colline",
-            "soie",
-            "rivière",
-            "pont",
-            "brouillard",
-            "bravo",
-            "chaud",
-            "vieux",
-            "nuit"
-          ],
-          "rhymes": [
-            "l'écho",
-            "haut",
-            "studio",
-            "bravo",
-            "chaud"
           ]
         },
         {
           "setup": "Ici on monte les pentes à pied, sans se plaindre,",
           "lead": "mes rimes aussi",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "sont",
-                "dures",
-                "à",
-                "atteindre"
-              ],
+              "text": "sont dures à atteindre",
               "score": 10,
               "reaction": "Le groupe de touristes arrive au moment exact. Le guide te prend en photo pour sa prochaine brochure."
             },
             {
-              "words": [
-                "n'ont",
-                "rien",
-                "à",
-                "craindre"
-              ],
-              "score": 8,
+              "text": "n'ont rien à craindre",
+              "score": 6,
               "reaction": "Solide. Une dame te tend une bouteille d'eau. La montée, c'est pour tout le monde."
             },
             {
-              "words": [
-                "refusent",
-                "de",
-                "s'éteindre"
-              ],
-              "score": 6,
+              "text": "refusent de s'éteindre",
+              "score": 3,
               "reaction": "Ça tient. L'écho, fatigué, ne répète que la moitié."
+            },
+            {
+              "text": "ont mal aux mollets",
+              "score": 0,
+              "reaction": "La phrase la plus vraie de la journée. Elle ne rime pas. L'écho refuse de la répéter."
             }
-          ],
-          "decoys": [
-            "peindre",
-            "feindre",
-            "colline",
-            "souffle",
-            "mollets",
-            "sommet",
-            "traboule",
-            "lumière",
-            "fatigue",
-            "marche"
-          ],
-          "rhymes": [
-            "atteindre",
-            "craindre",
-            "s'éteindre",
-            "peindre",
-            "feindre"
           ]
         }
       ],
@@ -6038,107 +5792,53 @@
         {
           "setup": "Septante couplets écrits dans une friterie,",
           "lead": "une fois",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "la",
-                "sauce",
-                "a",
-                "tout",
-                "dit"
-              ],
+              "text": "la sauce a tout dit",
               "score": 10,
               "reaction": "Le patron de la friterie pose sa louche et applaudit. Il ne pose jamais sa louche."
             },
             {
-              "words": [
-                "c'est",
-                "du",
-                "génie"
-              ],
-              "score": 8,
+              "text": "c'est du génie",
+              "score": 6,
               "reaction": "« Du génie, une fois. » Le caméraman rit tellement que le plan est flou. On le garde."
             },
             {
-              "words": [
-                "j'ai",
-                "mangé",
-                "puis",
-                "fini"
-              ],
-              "score": 6,
+              "text": "j'ai mangé, j'ai fini",
+              "score": 3,
               "reaction": "Honnête. Le patron te ressert un cornet, par solidarité."
+            },
+            {
+              "text": "avec de la mayonnaise",
+              "score": 0,
+              "reaction": "Le patron approuve la mayonnaise. Le caméraman, lui, attend toujours la rime."
             }
-          ],
-          "decoys": [
-            "nonante",
-            "dikke",
-            "cornet",
-            "mayo",
-            "pluie",
-            "merci",
-            "aussi",
-            "brol"
-          ],
-          "rhymes": [
-            "dit",
-            "génie",
-            "fini",
-            "pluie",
-            "merci",
-            "aussi"
           ]
         },
         {
           "setup": "Il pleut sur la ville, mais le public est là,",
           "lead": "nonante personnes",
-          "answers": [
+          "endings": [
             {
-              "words": [
-                "et",
-                "personne",
-                "ne",
-                "s'en",
-                "va"
-              ],
+              "text": "et personne ne s'en va",
               "score": 10,
               "reaction": "Personne ne part, malgré l'averse. Le patron distribue des cornets comme des parapluies."
             },
             {
-              "words": [
-                "crient",
-                "mon",
-                "nom",
-                "déjà"
-              ],
-              "score": 8,
+              "text": "crient mon nom déjà",
+              "score": 6,
               "reaction": "Ils crient ton nom, la bouche pleine. C'est la plus belle ovation de ta vie, et la plus grasse."
             },
             {
-              "words": [
-                "chantent",
-                "comme",
-                "ça"
-              ],
-              "score": 6,
+              "text": "chantent comme ça",
+              "score": 3,
               "reaction": "Correct. Ils chantent, en effet. Comme ça."
+            },
+            {
+              "text": "et trois parapluies",
+              "score": 0,
+              "reaction": "Le compte est juste. Nonante personnes, trois parapluies. C'est un recensement, pas une punchline."
             }
-          ],
-          "decoys": [
-            "septante",
-            "parapluie",
-            "dikke",
-            "brol",
-            "frites",
-            "cornet",
-            "voilà",
-            "pluie"
-          ],
-          "rhymes": [
-            "va",
-            "déjà",
-            "ça",
-            "voilà"
           ]
         }
       ],

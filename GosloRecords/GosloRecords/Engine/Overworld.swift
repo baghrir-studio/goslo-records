@@ -178,6 +178,13 @@ enum OverworldRules {
         map.tile(at: point).isWalkable && map.npc(at: point) == nil
     }
 
+    /// Casablanca: a petit taxi parked at the curb of the main road, waiting for a fare. Nobody walks through it.
+    static let parkedTaxi = [TilePoint(x: 15, y: 7), TilePoint(x: 16, y: 7)]
+
+    static func blockedByScenery(_ point: TilePoint, in city: City) -> Bool {
+        city == .casablanca && parkedTaxi.contains(point)
+    }
+
     static func interaction(from point: TilePoint, facing: Direction, on map: WorldMap) -> Interaction {
         let front = point.moved(facing)
         if let npc = map.npc(at: front) { return .npc(npc) }

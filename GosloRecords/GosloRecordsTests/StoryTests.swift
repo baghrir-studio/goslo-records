@@ -80,6 +80,20 @@ final class StoryTests: XCTestCase {
 
     // MARK: Full chapter 1, played by the engine
 
+    func testPrologueOpensDifferentlyInEachCity() throws {
+        let prologue = try XCTUnwrap(world.story.cinematic("prologue"))
+        var openings = Set<String>()
+        for city in City.allCases {
+            let steps = prologue.steps.filter { $0.plays(for: city) }
+            let cityLines = steps.filter { $0.cities != nil }
+            XCTAssertEqual(cityLines.count, 2, "\(city) : une narration et une réplique propres à la ville")
+            let opening = try XCTUnwrap(steps.compactMap(\.narration).first, "\(city)")
+            XCTAssertTrue(opening.hasPrefix(city.rawValue), "\(city) : la scène s'ouvre sur le nom de la ville")
+            openings.insert(opening)
+        }
+        XCTAssertEqual(openings.count, City.allCases.count)
+    }
+
     func testChapterOnePlaythrough() throws {
         let engine = engine
         var state = engine.newGame(rapper: Rapper(name: "Kiki", city: .marseille, style: .boomBap))
@@ -95,8 +109,8 @@ final class StoryTests: XCTestCase {
         guard case .minigame = try engine.resolve(choiceAt: 0, in: &state) else { return XCTFail("pas de Punchliner") }
         XCTAssertEqual(state.minigame?.id, "punchliner_carnet")
         while let current = engine.punchlinerRound(in: state) {
-            let best = try XCTUnwrap(current.round.answers.max { $0.score < $1.score })
-            _ = try engine.dropPunchline(best.words, in: &state)
+            let endings = current.round.endings
+            _ = try engine.dropPunchline(endings.indices.max { endings[$0].score < endings[$1].score }, in: &state)
         }
         let first = try engine.finishMinigame(in: &state)
         XCTAssertEqual(first.completedObjectives, ["Écris ton premier texte"])
@@ -167,7 +181,7 @@ final class StoryTests: XCTestCase {
         _ = try engine.visit(.chezToi, in: &state, using: &rng)
         guard case .minigame = try engine.resolve(choiceAt: 0, in: &state) else { return XCTFail("pas de Punchliner") }
         while engine.punchlinerRound(in: state) != nil {
-            _ = try engine.dropPunchline([], in: &state)
+            _ = try engine.dropPunchline(nil, in: &state)
         }
         let outcome = try engine.finishMinigame(in: &state)
         XCTAssertEqual(engine.minigameScore(try XCTUnwrap(outcome.minigame)), 0)

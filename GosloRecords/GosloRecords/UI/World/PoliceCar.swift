@@ -5,6 +5,8 @@ import SwiftUI
 struct PassingPoliceCar: View {
     @Environment(AppModel.self) private var model
     let map: WorldMap
+    /// A lane with something parked on it: the car takes the other one.
+    var avoidRow: Int? = nil
 
     /// Seconds between two passes (picked at random), and how long one takes.
     static let interval = 70.0...140.0
@@ -51,7 +53,8 @@ struct PassingPoliceCar: View {
             try? await Task.sleep(for: .seconds(Double.random(in: Self.interval)))
             // Only while the player is walking around: never during a card, a clash or a cinematic.
             guard model.phase == .overworld, !model.letterbox else { continue }
-            let rightward = Bool.random()
+            var rightward = Bool.random()
+            if (rightward ? bottom : top) == avoidRow { rightward.toggle() }
             run = Run(row: rightward ? bottom : top, rightward: rightward)
             SoundEngine.shared.play(.siren)
             withAnimation(.linear(duration: Self.crossing)) { run?.progress = 1 }
@@ -101,60 +104,23 @@ enum PoliceCarArt {
     }
 }
 
-/// Casablanca scenery: red petits taxis drive along the main road, often, in both directions.
-struct PassingTaxi: View {
-    @Environment(AppModel.self) private var model
-    let map: WorldMap
-
-    static let interval = 12.0...30.0
-    static let crossing = 3.6
-
-    private struct Run: Equatable {
-        let row: Int
-        let rightward: Bool
-        var progress: CGFloat = 0
-    }
-
-    @State private var run: Run?
-
-    private var lanes: [Int] {
-        (0..<map.height).filter { y in
-            (1..<(map.width - 1)).allSatisfy {
-                let tile = map.tile(at: TilePoint(x: $0, y: y))
-                return tile == .asphalt || tile == .crosswalk
-            }
-        }
-    }
+/// Casablanca scenery: a red petit taxi parked at the curb (`OverworldRules.parkedTaxi`), engine idling.
+struct ParkedTaxi: View {
+    @State private var idle = false
 
     var body: some View {
         let tile = WorldView.tile
-        ZStack(alignment: .topLeading) {
-            if let run {
-                let travel = CGFloat(map.width + 4) * tile
-                let x = -2 * tile + travel * (run.rightward ? run.progress : 1 - run.progress)
-                PixelImage(TaxiArt.image(facingRight: run.rightward), width: tile * 1.5)
-                    .position(x: x, y: (CGFloat(run.row) + 0.45) * tile)
+        let spots = OverworldRules.parkedTaxi
+        let x = (CGFloat(spots.map(\.x).reduce(0, +)) / CGFloat(spots.count) + 0.5) * tile
+        let y = (CGFloat(spots[0].y) + 0.55) * tile
+        PixelImage(TaxiArt.image(facingRight: false), width: tile * 1.6)
+            .offset(y: idle ? -0.6 : 0)
+            .position(x: x, y: y)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+            .onAppear {
+                withAnimation(.easeInOut(duration: 0.18).repeatForever(autoreverses: true)) { idle = true }
             }
-        }
-        .frame(width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile, alignment: .topLeading)
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
-        .task { await drive() }
-    }
-
-    private func drive() async {
-        guard let top = lanes.first, let bottom = lanes.last else { return }
-        try? await Task.sleep(for: .seconds(3))
-        while !Task.isCancelled {
-            if model.phase == .overworld, !model.letterbox {
-                let rightward = Bool.random()
-                run = Run(row: rightward ? bottom : top, rightward: rightward)
-                withAnimation(.linear(duration: Self.crossing)) { run?.progress = 1 }
-                try? await Task.sleep(for: .seconds(Self.crossing))
-                run = nil
-            }
-            try? await Task.sleep(for: .seconds(Double.random(in: Self.interval)))
-        }
     }
 }
 

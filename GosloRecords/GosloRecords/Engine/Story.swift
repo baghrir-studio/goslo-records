@@ -183,10 +183,17 @@ struct CinematicStep: Codable, Equatable {
     var wait: Double?
     /// Name of a SoundEffect.
     var sound: String?
+    /// Only plays for players from these cities (nil = everyone). Not an action: not counted in `fieldCount`.
+    var cities: [City]?
 
     enum CodingKeys: String, CodingKey {
-        case narration, say, title, move, place, despawn, face, exclaim, camera, fade, wait, sound
+        case narration, say, title, move, place, despawn, face, exclaim, camera, fade, wait, sound, cities
         case cameraReset = "camera_reset"
+    }
+
+    func plays(for city: City?) -> Bool {
+        guard let cities, let city else { return true }
+        return cities.contains(city)
     }
 
     init(narration: String? = nil, say: Line? = nil, title: Title? = nil, move: Placement? = nil,

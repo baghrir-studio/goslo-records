@@ -29,8 +29,8 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
   secret techniques (a rumble that builds over the cinematic) and the mic drop. Switch: menu « … » → Vibrations.
 - **Unlockable techniques** (`story.json` → `techniques`): each boss beaten before chapter 5 leaves a funny
   technique (same damage, its own gag and falling props). The notebook (Objets tab) picks the one to use.
-- **Mini-games** (`story.json` → `minigames`, started by an event choice `"minigame": id`): Punchliner (finish
-  punchlines with 20 word tiles), Fuir la foule (run to the door through a crowd) and Cale la platine (stop DJ
+- **Mini-games** (`story.json` → `minigames`, started by an event choice `"minigame": id`): Punchliner (pick the
+  ending of the line among four: the punchline, a decent line, a weak rhyme, a flop), Fuir la foule (run to the door through a crowd) and Cale la platine (stop DJ
   Bobine's pitch on 100 %). Repeatable encounters with small rewards; rules in `Engine/Minigames.swift`.
 - **Look**: hair, hair colour, hat, glasses, beard, chain and headphones can be picked at creation
   (nil = the style's look).

@@ -92,64 +92,47 @@ struct MinigameState: Codable, Equatable {
 
 // MARK: - Punchliner
 
-/// One punchline to finish: the first line, the start of the second, and 20 word tiles.
+/// One punchline to finish: the first line, the start of the second, and four endings to pick from.
 struct PunchlinerRound: Codable, Equatable {
     let setup: String
-    /// Start of the second line; the player's words follow.
+    /// Start of the second line; the chosen ending follows.
     let lead: String
-    /// Endings worth points (exact word sequences).
-    let answers: [PunchlinerAnswer]
-    /// Extra tiles, so there are 20 in all.
-    let decoys: [String]
-    /// Last words that at least rhyme with the setup.
-    let rhymes: [String]
-
-    /// Every tile, each word once.
-    var words: [String] {
-        var seen = Set<String>()
-        return (answers.flatMap(\.words) + decoys).filter { seen.insert($0).inserted }
-    }
+    /// The endings on offer: the punchline, a decent line, a weak rhyme, and a flop that doesn't rhyme.
+    let endings: [PunchlinerAnswer]
 }
 
 struct PunchlinerAnswer: Codable, Equatable {
-    let words: [String]
+    let text: String
     let score: Int
     let reaction: String
 }
 
 enum PunchlinerEngine {
-    static let tileCount = 20
-    static let maxWords = 6
-    /// Points when the line only rhymes.
-    static let rhymeScore = 2
+    static let endingCount = 4
+    static let bestScore = 10
 
-    /// The tiles of a round, shuffled the same way every time (stable per minigame and round).
-    static func tiles(for round: PunchlinerRound, seed: UInt64) -> [String] {
+    /// The order the endings are shown in, the same every time (stable per minigame and round).
+    static func order(for round: PunchlinerRound, seed: UInt64) -> [Int] {
         var rng = SeededGenerator(seed: seed)
-        return round.words.shuffled(using: &rng)
+        return Array(round.endings.indices).shuffled(using: &rng)
     }
 
     static func seed(_ minigameId: String, round: Int) -> UInt64 {
         ConcertEngine.seed(minigameId, song: round)
     }
 
-    /// Points and reaction for the words the player lined up (empty = time ran out).
-    static func judge(_ words: [String], in round: PunchlinerRound) -> (points: Int, reaction: String) {
-        if words.isEmpty {
+    /// Points and reaction for the chosen ending (nil = time ran out).
+    static func judge(_ choice: Int?, in round: PunchlinerRound) -> (points: Int, reaction: String) {
+        guard let choice, round.endings.indices.contains(choice) else {
             return (0, "Trou noir. Le beat continue sans toi, poliment.")
         }
-        if let answer = round.answers.first(where: { $0.words == words }) {
-            return (answer.score, answer.reaction)
-        }
-        if let last = words.last, round.rhymes.contains(last) {
-            return (rhymeScore, "Ça rime, au moins. Le reste de la phrase cherche encore son chemin.")
-        }
-        return (0, "Silence gêné. Quelqu'un tousse. Même le beat hésite.")
+        let ending = round.endings[choice]
+        return (ending.score, ending.reaction)
     }
 
     /// Best possible total, to turn points into a 0…1 score.
     static func maxPoints(_ minigame: Minigame) -> Int {
-        minigame.rounds.map { $0.answers.map(\.score).max() ?? 0 }.reduce(0, +)
+        minigame.rounds.map { $0.endings.map(\.score).max() ?? 0 }.reduce(0, +)
     }
 }
 
