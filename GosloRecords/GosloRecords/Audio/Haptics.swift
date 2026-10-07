@@ -33,7 +33,7 @@ final class Haptics {
     func setEnabled(_ on: Bool) {
         enabled = on
         UserDefaults.standard.set(on, forKey: Haptics.enabledKey)
-        if !on { engine?.stop() }
+        if !on { engine?.stop(completionHandler: nil) }
     }
 
     func play(_ pattern: Pattern) {
@@ -52,7 +52,7 @@ final class Haptics {
         guard let engine = try? CHHapticEngine() else { return nil }
         engine.playsHapticsOnly = true
         engine.isAutoShutdownEnabled = true
-        engine.resetHandler = { [weak engine] in try? engine?.start() }
+        engine.resetHandler = { [weak engine] in _ = try? engine?.start() }
         do { try engine.start() } catch { return nil }
         self.engine = engine
         return engine
