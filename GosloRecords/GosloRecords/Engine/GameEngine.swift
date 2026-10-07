@@ -796,7 +796,7 @@ struct GameEngine {
             let cost = min(ClashState.storyCredCost, max(0, state.stats.credibilite - 1))
             state.stats.apply([.credibilite: -cost])
         }
-        let level = clashLevels(in: state)
+        let level = clashLevels(for: clash, in: state)
         ClashEngine.playRound(&clash, playerMove: move, playerLevel: level,
                               opponent: profile.scaled(by: clash.levelBonus), opponentName: opponent.name,
                               opponentSecret: opponent.secret, using: &rng)
@@ -817,7 +817,7 @@ struct GameEngine {
         guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
             throw GameEngineError.noClash
         }
-        let level = clashLevels(in: state)
+        let level = clashLevels(for: clash, in: state)
         ClashEngine.playRound(&clash, playerMove: .presence, playerSecret: playerSecret(in: state),
                               playerLevel: level, opponent: profile.scaled(by: clash.levelBonus),
                               opponentName: opponent.name, opponentSecret: opponent.secret, using: &rng)
@@ -914,6 +914,21 @@ struct GameEngine {
     static let wildXP = (win: 25, lose: 8)
 
     /// Applies the result of a finished clash.
+    /// Levels gained against a boss per lost clash, up to `maxBossExperience`.
+    static let maxBossExperience = 2
+
+    /// Extra levels against this opponent: losing to a boss teaches you their game.
+    func bossExperience(against opponentId: String, in state: GameState) -> Int {
+        min(GameEngine.maxBossExperience, state.bossLosses[opponentId, default: 0])
+    }
+
+    /// Clash levels for the running clash, boss experience included.
+    func clashLevels(for clash: ClashState, in state: GameState) -> (Skill) -> Int {
+        let base = clashLevels(in: state)
+        let bonus = clash.isBoss ? bossExperience(against: clash.opponentId, in: state) : 0
+        return { skill in min(Skills.maxLevel, base(skill) + bonus) }
+    }
+
     func finishClash(in state: inout GameState) throws -> TurnOutcome {
         guard let clash = state.clash else { throw GameEngineError.noClash }
         guard clash.isOver else { throw GameEngineError.clashNotOver }
@@ -934,6 +949,14 @@ struct GameEngine {
         let applied = state.changeRelation(clash.opponentId, by: penalty)
         if applied != 0 { outcome.relationChanges[clash.opponentId] = applied }
         outcome.add(levelUps: state.skills.gain(won ? [.plume: 20, .flow: 20] : [.plume: 10]))
+        if !won && clash.isBoss {
+            let before = bossExperience(against: clash.opponentId, in: state)
+            state.bossLosses[clash.opponentId, default: 0] += 1
+            if bossExperience(against: clash.opponentId, in: state) > before {
+                let name = castMember(clash.opponentId)?.name ?? "ce boss"
+                outcome.consequence += " Tu as appris de ta défaite : +1 niveau contre \(name) au prochain clash."
+            }
+        }
 
         state.clash = nil
         return finishAction(outcome, in: &state)

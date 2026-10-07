@@ -62,6 +62,7 @@ enum TileArt {
                     canvas.stamp(tile(at: TilePoint(x: x, y: y), on: map, theme: theme), at: x * size, y * size)
                 }
             }
+            if let landmark = theme.landmark { draw(landmark, on: canvas, map: map, theme: theme) }
             return canvas.makeImage()
         }
     }
@@ -152,7 +153,11 @@ enum TileArt {
                 let x = noise.next(12), y = noise.next(15)
                 c.fill(x, y, x + 3, y, t.ripple)
             }
-            if t.boats, p.x % 7 == 3 {
+            if t.landmark == .harbour {
+                // Quay bollards and moorings along the edge.
+                if above != .water { c.fill(0, 0, 15, 2, PixelColor(hex: "#8a8070")); c.fill(3, 1, 4, 3, PixelColor(hex: "#3a3630")) }
+            }
+            if t.boats, p.x % (t.landmark == .harbour ? 2 : 7) == (t.landmark == .harbour ? 1 : 3) {
                 // A small boat, hull and mast.
                 c.fill(3, 9, 12, 11, PixelColor(hex: "#e8e4dc")); c.fill(4, 12, 11, 12, PixelColor(hex: "#b8b2a8"))
                 c.fill(7, 3, 7, 8, NightPalette.wood); c.fill(8, 4, 10, 7, PixelColor(hex: "#d8d4cc"))
@@ -160,6 +165,59 @@ enum TileArt {
             if above != .water { c.fill(0, 0, 15, 1, NightPalette.curb) }
         }
         return c
+    }
+
+    // MARK: Landmarks
+
+    /// Drawn once over the finished map, above the rooftops (never over a door or a walkable tile).
+    private static func draw(_ landmark: CityTheme.Landmark, on c: PixelCanvas, map: WorldMap, theme t: CityTheme) {
+        switch landmark {
+        case .harbour:
+            // Masts above the boats, a few with a furled sail: the old harbour at night.
+            guard let row = map.rows.firstIndex(where: { $0.contains("W") }) else { return }
+            let y = row * size
+            for x in stride(from: 1 * size + 7, to: (map.width - 1) * size, by: 2 * size) {
+                c.fill(x, y - 10, x, y + 8, PixelColor(hex: "#c8c0b0"))
+                if (x / size) % 3 == 1 { c.fill(x + 1, y - 8, x + 4, y - 2, PixelColor(hex: "#e8e4dc")) }
+                c.dot(x, y - 11, NightPalette.lampLight)
+            }
+        case .ironTower:
+            // Over the top-right block: a solid lattice silhouette, three platforms, dark iron. No light show.
+            let cx = (map.width - 4) * size, top = 0, base = 3 * size - 2
+            let iron = PixelColor(hex: "#1c1c24"), edge = PixelColor(hex: "#6e6e82")
+            func half(_ y: Int) -> Int {
+                let progress = Double(y - top) / Double(base - top)
+                return Int(1.5 + pow(progress, 2.4) * 17)
+            }
+            for y in top...base {
+                let h = half(y)
+                c.fill(cx - h, y, cx + h, y, iron)
+                c.dot(cx - h, y, edge); c.dot(cx + h, y, edge)
+                // Lattice: small gaps that let the roof show through.
+                if h > 3, y % 4 == 2 {
+                    for x in stride(from: cx - h + 2, to: cx + h - 1, by: 3) { c.dot(x, y, t.roof) }
+                }
+            }
+            // The arch between the legs.
+            for y in (base - 9)...base {
+                let h = half(y), opening = max(0, h - 6) * (y - base + 10) / 10
+                if opening > 0 { c.fill(cx - opening, y, cx + opening, y, t.roof) }
+            }
+            for y in [top + 14, top + 27] { let h = half(y) + 2; c.fill(cx - h, y, cx + h, y + 1, edge) }
+            c.fill(cx, top, cx, top + 3, edge)
+        case .minaret:
+            // Over the top-left block: a square tower, a tile band, a lantern and a small dome.
+            let cx = 3 * size, top = 2, base = 3 * size - 4
+            let wall = PixelColor(hex: "#d8d0c0"), shade = PixelColor(hex: "#b0a898"), green = PixelColor(hex: "#1f7a6a")
+            c.fill(cx - 6, top + 10, cx + 6, base, wall)
+            c.fill(cx + 4, top + 10, cx + 6, base, shade)
+            for y in stride(from: top + 16, to: base - 4, by: 8) {
+                c.fill(cx - 3, y, cx - 1, y + 4, green); c.fill(cx + 1, y, cx + 3, y + 4, green)
+            }
+            c.fill(cx - 7, top + 8, cx + 7, top + 9, green)
+            c.fill(cx - 4, top + 3, cx + 4, top + 7, wall); c.fill(cx - 2, top + 4, cx + 2, top + 6, NightPalette.lampLight)
+            c.fill(cx - 3, top + 1, cx + 3, top + 2, green); c.fill(cx, 0, cx, top, PixelColor(hex: "#c8b070"))
+        }
     }
 
     private static func asphalt(_ c: PixelCanvas, _ noise: inout PixelNoise) {

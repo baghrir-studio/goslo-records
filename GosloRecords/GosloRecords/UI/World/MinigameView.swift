@@ -87,6 +87,9 @@ private struct PunchlinerBoard: View {
     @State private var picked: [String] = []
     @State private var reaction: String?
     @State private var deadline = Date().addingTimeInterval(PunchlinerBoard.seconds)
+    /// Time left when the app went to the background: the clock waits for the player.
+    @State private var pausedLeft: TimeInterval?
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         if let current = model.state.flatMap({ model.engine.punchlinerRound(in: $0) }) {
@@ -100,7 +103,7 @@ private struct PunchlinerBoard: View {
                             Text("\(Int(left.rounded(.up))) s")
                                 .font(.mono(13, weight: .bold))
                                 .foregroundStyle(left < 5 ? Theme.accent : Theme.text)
-                                .onChange(of: left == 0) { _, timedOut in if timedOut { drop() } }
+                                .onChange(of: left == 0) { _, timedOut in if timedOut && pausedLeft == nil { drop() } }
                         }
                     }
                 }
@@ -156,6 +159,14 @@ private struct PunchlinerBoard: View {
                 }
             }
             .sensoryFeedback(.selection, trigger: picked)
+            .onChange(of: scenePhase) { _, phase in
+                if phase != .active, pausedLeft == nil, reaction == nil {
+                    pausedLeft = max(0, deadline.timeIntervalSinceNow)
+                } else if phase == .active, let left = pausedLeft {
+                    deadline = Date().addingTimeInterval(left)
+                    pausedLeft = nil
+                }
+            }
         } else {
             // Last line dropped: the result screen takes over once the reaction has been read.
             if let reaction {

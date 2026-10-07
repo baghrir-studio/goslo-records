@@ -17,9 +17,12 @@ struct CreationView: View {
     @FocusState private var nameFocused: Bool
 
     private var draft: Rapper {
-        Rapper(name: trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
+        Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
                hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones)
     }
+
+    /// Name used when the player leaves the field empty (the field's placeholder).
+    static let defaultName = "MC Personne"
 
     private var trimmedName: String {
         name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -62,8 +65,6 @@ struct CreationView: View {
                 model.startCareer(draft)
             }
             .buttonStyle(PrimaryButtonStyle())
-            .disabled(trimmedName.isEmpty)
-            .opacity(trimmedName.isEmpty ? 0.35 : 1)
             .padding(.horizontal, Theme.gutter)
             .padding(.vertical, 12)
         }
@@ -72,7 +73,7 @@ struct CreationView: View {
     private var nameSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             Kicker(text: "Blaze")
-            TextField("", text: $name, prompt: Text("MC Personne").foregroundStyle(Theme.faint))
+            TextField("", text: $name, prompt: Text(CreationView.defaultName).foregroundStyle(Theme.faint))
                 .font(.display(36))
                 .textInputAutocapitalization(.words)
                 .autocorrectionDisabled()

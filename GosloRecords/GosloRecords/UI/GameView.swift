@@ -4,6 +4,7 @@ import SwiftUI
 struct GameView: View {
     @Environment(AppModel.self) private var model
     @State private var showCarnet = false
+    @State private var showCalibration = false
 
     var body: some View {
         if let state = model.state, let map = model.map {
@@ -88,6 +89,9 @@ struct GameView: View {
             .animation(.easeOut(duration: 0.25), value: model.phase)
             .animation(.easeInOut(duration: 0.3), value: model.interior)
             .sensoryFeedback(.impact(weight: .light), trigger: model.deltaToken)
+            .sheet(isPresented: $showCalibration) {
+                CalibrationView().presentationBackground(Theme.background)
+            }
             .sheet(isPresented: $showCarnet) {
                 CarnetView(state: state)
                     .environment(model)
@@ -161,6 +165,7 @@ struct GameView: View {
                 hudButton(systemImage: "book.closed.fill", label: "Carnet") { showCarnet = true }
                 Menu {
                     SoundToggles()
+                    Button("Régler le timing des concerts") { showCalibration = true }
                     #if DEBUG
                     Section("Debug") {
                         Menu("Aller au chapitre…") {

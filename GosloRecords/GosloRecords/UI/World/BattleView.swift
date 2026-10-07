@@ -44,6 +44,7 @@ struct BattleView: View {
     @State private var counterLeft: CGFloat = 1
 
     private var opponent: CastMember? { model.engine.castMember(clash.opponentId) }
+    private var counterStyle: CounterStyle { opponent?.clash?.counter ?? .mash }
     private var opponentName: String { opponent?.name ?? "???" }
     private var opponentLevel: Int { opponent?.clash?.scaled(by: clash.levelBonus).level ?? 1 }
     private var playerLevel: Int {
@@ -143,13 +144,22 @@ struct BattleView: View {
         }
         .overlay {
             if stage == .counter {
-                CounterOverlay(taps: counterTaps, timeLeft: counterLeft)
-                    .contentShape(Rectangle())
-                    .gesture(DragGesture(minimumDistance: 0).onEnded { _ in
-                        counterTaps += 1
-                        SoundEngine.shared.play(.tap)
-                    })
-                    .transition(.opacity)
+                switch counterStyle {
+                case .mash:
+                    CounterOverlay(taps: counterTaps, timeLeft: counterLeft)
+                        .contentShape(Rectangle())
+                        .gesture(DragGesture(minimumDistance: 0).onEnded { _ in
+                            counterTaps += 1
+                            SoundEngine.shared.play(.tap)
+                        })
+                        .transition(.opacity)
+                case .pen:
+                    PenCounterOverlay(timeLeft: counterLeft) { counterTaps = ClashState.counterEquivalentTaps(score: $0) }
+                        .transition(.opacity)
+                case .beat:
+                    BeatCounterOverlay(timeLeft: counterLeft) { counterTaps = ClashState.counterEquivalentTaps(score: $0) }
+                        .transition(.opacity)
+                }
             }
         }
         .onAppear(perform: intro)
@@ -176,12 +186,17 @@ struct BattleView: View {
                         .font(.system(size: 11, weight: .bold, design: .monospaced))
                         .foregroundStyle(Theme.accent)
                 }
+                if clash.isBoss, case let bonus = model.engine.bossExperience(against: clash.opponentId, in: state), bonus > 0 {
+                    Text("TU CONNAIS SON JEU : +\(bonus) \(bonus > 1 ? "NIVEAUX" : "NIVEAU")")
+                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                }
                 if clash.playerSecretReady {
                     SecretButton(technique: model.engine.playerSecret(in: state)) { play(.secret) }
                         .transition(.scale(scale: 0.6).combined(with: .opacity))
                 }
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
-                    let levels = model.engine.clashLevels(in: state)
+                    let levels = model.engine.clashLevels(for: clash, in: state)
                     ForEach(ClashMove.allCases) { move in
                         MoveButton(move: move, level: levels(move.skill)) { play(.move(move)) }
                     }
@@ -249,7 +264,12 @@ struct BattleView: View {
 
     /// The boss announces its technique, the player taps as fast as they can, then it lands (softened).
     private func runCounter(_ pending: PendingCounter) async {
-        await say("Oh non. \(opponentName.uppercased()) déclenche sa TECHNIQUE SECRÈTE… Tapote vite pour la contrer !", hold: 0)
+        let instruction = switch counterStyle {
+        case .mash: "Tapote vite pour la contrer !"
+        case .pen: "Touche les mots barrés en rouge, et rien d'autre !"
+        case .beat: "Tape quand l'anneau touche la cible !"
+        }
+        await say("Oh non. \(opponentName.uppercased()) déclenche sa TECHNIQUE SECRÈTE… \(instruction)", hold: 0)
         SoundEngine.shared.play(.secretRiser)
         withAnimation(.easeOut(duration: 0.3)) {
             cinematic = SecretCinematic(name: pending.secret.name, byPlayer: false, look: opponent?.look ?? CharacterLook(),
@@ -260,7 +280,7 @@ struct BattleView: View {
 
         counterTaps = 0
         counterLeft = 1
-        message = "TAPOTE ! TAPOTE ! TAPOTE !"
+        message = counterStyle == .mash ? "TAPOTE ! TAPOTE ! TAPOTE !" : "CONTRE !"
         withAnimation(.easeOut(duration: 0.15)) { stage = .counter }
         withAnimation(.linear(duration: ClashState.counterSeconds)) { counterLeft = 0 }
         try? await Task.sleep(for: .seconds(ClashState.counterSeconds))
@@ -859,5 +879,134 @@ private struct SecretButton: View {
             withAnimation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) { glow = true }
         }
         .sensoryFeedback(.success, trigger: glow)
+    }
+}
+
+// MARK: - Boss-specific counters
+
+/// Scalpel's counter: three words of your couplet are struck in red. Tap them, and only them.
+private struct PenCounterOverlay: View {
+    let timeLeft: CGFloat
+    let onScore: (Double) -> Void
+
+    static let words = ["rime", "bitume", "flow", "carnet", "punch", "ego", "beat", "bloc", "refrain"]
+    @State private var marked: Set<String> = Set(PenCounterOverlay.words.shuffled().prefix(3))
+    @State private var found: Set<String> = []
+    @State private var wrong: Set<String> = []
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.7)
+            VStack(spacing: 16) {
+                Text(found.count == marked.count ? "CORRIGÉ !" : "STYLO ROUGE")
+                    .font(.display(44))
+                    .foregroundStyle(found.count == marked.count ? Color(red: 1, green: 0.85, blue: 0.3) : .white)
+                    .shadow(color: Theme.accent, radius: 0, x: 3, y: 3)
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 3), spacing: 8) {
+                    ForEach(PenCounterOverlay.words, id: \.self) { word in
+                        let isMarked = marked.contains(word)
+                        Button {
+                            guard !found.contains(word), !wrong.contains(word) else { return }
+                            if isMarked { found.insert(word) } else { wrong.insert(word) }
+                            SoundEngine.shared.play(.tap)
+                            onScore(Double(found.count - wrong.count) / Double(marked.count))
+                        } label: {
+                            Text(word)
+                                .font(.system(size: 16, weight: .heavy, design: .monospaced))
+                                .strikethrough(isMarked, color: Color(red: 0.9, green: 0.1, blue: 0.1))
+                                .foregroundStyle(found.contains(word) ? Color(red: 1, green: 0.85, blue: 0.3)
+                                                 : wrong.contains(word) ? Theme.muted : .white)
+                                .frame(maxWidth: .infinity, minHeight: 48)
+                                .background(Color.white.opacity(found.contains(word) ? 0.18 : 0.06))
+                                .overlay(Rectangle().stroke(isMarked ? Color(red: 0.9, green: 0.1, blue: 0.1) : Color.white.opacity(0.3),
+                                                            lineWidth: isMarked ? 2 : 1))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                GeometryReader { geo in
+                    Rectangle().fill(Color.white.opacity(0.7)).frame(width: geo.size.width * timeLeft)
+                }
+                .frame(height: 4)
+            }
+            .frame(maxWidth: 320)
+            .padding(.horizontal, 16)
+        }
+        .ignoresSafeArea()
+        .sensoryFeedback(.selection, trigger: found)
+    }
+}
+
+/// Kolosse and the Baron: a ring closes in on the target every beat. Tap when it lands.
+private struct BeatCounterOverlay: View {
+    let timeLeft: CGFloat
+    let onScore: (Double) -> Void
+
+    static let period = 0.8
+    static let hitsNeeded = 3
+    static let target: CGFloat = 46
+    static let tolerance: CGFloat = 13
+
+    @State private var start = Date()
+    @State private var hits = 0
+    @State private var lastCycle = -1
+    @State private var flash = false
+
+    private func radius(at date: Date) -> CGFloat {
+        let phase = date.timeIntervalSince(start).truncatingRemainder(dividingBy: Self.period) / Self.period
+        return 130 - CGFloat(phase) * 110
+    }
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.7)
+            VStack(spacing: 20) {
+                Text(hits >= Self.hitsNeeded ? "PARÉ !" : "SUR LE TEMPS")
+                    .font(.display(44))
+                    .foregroundStyle(hits >= Self.hitsNeeded ? Color(red: 1, green: 0.85, blue: 0.3) : .white)
+                    .shadow(color: Theme.accent, radius: 0, x: 3, y: 3)
+                TimelineView(.animation) { context in
+                    let r = radius(at: context.date)
+                    ZStack {
+                        Circle().stroke(Color.white.opacity(0.35), lineWidth: Self.tolerance * 2)
+                            .frame(width: Self.target * 2, height: Self.target * 2)
+                        Circle().stroke(flash ? Color(red: 1, green: 0.85, blue: 0.3) : Theme.accent, lineWidth: 5)
+                            .frame(width: r * 2, height: r * 2)
+                    }
+                    .frame(width: 260, height: 260)
+                }
+                HStack(spacing: 8) {
+                    ForEach(0..<Self.hitsNeeded, id: \.self) { index in
+                        Rectangle().fill(index < hits ? Theme.accent : Color.white.opacity(0.2)).frame(width: 40, height: 10)
+                    }
+                }
+                GeometryReader { geo in
+                    Rectangle().fill(Color.white.opacity(0.7)).frame(width: geo.size.width * timeLeft)
+                }
+                .frame(height: 4)
+                .frame(maxWidth: 280)
+            }
+        }
+        .ignoresSafeArea()
+        .contentShape(Rectangle())
+        .gesture(DragGesture(minimumDistance: 0).onEnded { _ in tap() })
+        .sensoryFeedback(.impact(weight: .medium), trigger: hits)
+        .onAppear { start = Date() }
+    }
+
+    private func tap() {
+        let now = Date()
+        let cycle = Int(now.timeIntervalSince(start) / Self.period)
+        guard cycle != lastCycle, hits < Self.hitsNeeded else { return }
+        lastCycle = cycle
+        if abs(radius(at: now) - Self.target) <= Self.tolerance {
+            hits += 1
+            SoundEngine.shared.play(.concertHit)
+            flash = true
+            Task { try? await Task.sleep(for: .milliseconds(150)); flash = false }
+            onScore(Double(hits) / Double(Self.hitsNeeded))
+        } else {
+            SoundEngine.shared.play(.tap)
+        }
     }
 }

@@ -6,6 +6,8 @@ struct CityTheme {
     enum Facade { case bricks, plaster, stone }
     enum Pavement { case slabs, cobbles, zellige }
     enum Tree { case round, plane, palm, pine }
+    /// A city landmark seen over the rooftops, or the harbour on the water's edge.
+    enum Landmark { case ironTower, minaret, harbour }
 
     var facade: Facade = .bricks
     var wall = NightPalette.brick
@@ -34,6 +36,7 @@ struct CityTheme {
     var shutters: PixelColor?
     /// Small boats on the water.
     var boats = false
+    var landmark: Landmark?
 
     static func forCity(_ city: City) -> CityTheme {
         var t = CityTheme()
@@ -44,6 +47,8 @@ struct CityTheme {
             t.wall = PixelColor(hex: "#6e6658"); t.wallLine = PixelColor(hex: "#5a5348")
             t.roof = PixelColor(hex: "#3c4654"); t.roofEdge = PixelColor(hex: "#56637a"); t.roofShadow = PixelColor(hex: "#2a313c")
             t.tree = .plane
+            // An iron tower in the distance: the plain structure, no light show.
+            t.landmark = .ironTower
         case .marseille:
             // Ochre plaster, terracotta tiles, the harbour.
             t.facade = .plaster
@@ -56,6 +61,8 @@ struct CityTheme {
             t.tree = .pine; t.leaf = PixelColor(hex: "#1f4a2a"); t.leafLight = PixelColor(hex: "#2f6a36")
             t.water = PixelColor(hex: "#1a4a78"); t.ripple = PixelColor(hex: "#3a7ab0")
             t.boats = true
+            // The old harbour: a stone quay, moorings and a forest of masts.
+            t.landmark = .harbour
         case .lyon:
             // Old-town pinks and oranges, cobbles.
             t.facade = .plaster
@@ -107,6 +114,8 @@ struct CityTheme {
             t.tree = .palm; t.leaf = PixelColor(hex: "#2a5a2a"); t.leafLight = PixelColor(hex: "#3f7a36")
             t.water = PixelColor(hex: "#1a3f6a"); t.ripple = PixelColor(hex: "#4a80b8")
             t.boats = true
+            // A generic Moroccan-style minaret in the distance (not a copy of any real building).
+            t.landmark = .minaret
         }
         return t
     }

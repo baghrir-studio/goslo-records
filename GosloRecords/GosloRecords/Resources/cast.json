@@ -105,7 +105,8 @@
           "T'es qui, toi ? Un stagiaire ?",
           "J'ai des plaques plus vieilles que ta carrière.",
           "Retourne à ta laverie, petit."
-        ]
+        ],
+        "counter": "beat"
       },
       "look": {
         "skin": "#5a3825",
@@ -143,7 +144,8 @@
           "Défi en live, ce soir. Si j'ai du réseau.",
           "Je fais 200 pompes avant le petit-déj. Enfin, j'en parle.",
           "T'as pas la carrure, frère."
-        ]
+        ],
+        "counter": "beat"
       },
       "look": {
         "skin": "#5a3825",
@@ -268,7 +270,8 @@
           "Incision propre. Tu ne sentiras rien.",
           "Ta rime est bancale. Je te la corrige gratuitement.",
           "Je ne clashe pas. Je fais de la chirurgie."
-        ]
+        ],
+        "counter": "pen"
       },
       "look": {
         "skin": "#8d5524",

@@ -254,6 +254,17 @@ struct EventChoice: Codable, Equatable {
         minigame = try c.decodeIfPresent(String.self, forKey: .minigame)
     }
 
+    /// Effects at or above this size show as a big dot.
+    static let bigEffect = 6
+
+    /// Reigns-style hint: which stats this choice moves (1 = a little, 2 = a lot), never in which direction.
+    var statHints: [(kind: StatKind, size: Int)] {
+        StatKind.allCases.compactMap { kind in
+            guard let value = effects[kind], value != 0 else { return nil }
+            return (kind, abs(value) >= EventChoice.bigEffect ? 2 : 1)
+        }
+    }
+
     func isAvailable(in state: GameState) -> Bool {
         requires?.isMet(by: state) ?? true
     }
