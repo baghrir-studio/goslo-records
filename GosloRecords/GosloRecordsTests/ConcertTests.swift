@@ -32,6 +32,26 @@ final class ConcertTests: XCTestCase {
         XCTAssertEqual(Set(chart.map(\.id)).count, chart.count)
     }
 
+    func testEveryNoteSitsOnASoundOfItsLane() {
+        for (index, bpm) in [88.0, 96, 104, 108].enumerated() {
+            let song = ConcertSong(title: "t", bpm: bpm, bars: 8, density: 0.6)
+            let seed = ConcertEngine.seed("le_dome", song: index)
+            let groove = ConcertGroove.make(for: song, seed: seed)
+            for note in ConcertEngine.chart(for: song, seed: seed) {
+                let sixteenths = ((note.time / song.beat - Double(ConcertEngine.countInBeats)) * 4).rounded()
+                let bar = Int(sixteenths) / 16, step = sixteenths - Double(bar * 16)
+                let sounds = groove.hits(bar: bar).filter { abs($0.step - step) < 0.001 }
+                XCTAssertTrue(sounds.contains { ConcertGroove.lane(of: $0.part) == note.lane },
+                              "\(groove.style) : note sans son sur la piste \(note.lane), mesure \(bar)")
+            }
+        }
+    }
+
+    func testSongsComeInSeveralStyles() {
+        let styles = Set((0..<12).map { ConcertGroove.make(for: ConcertSong(title: "t"), seed: ConcertEngine.seed("x", song: $0)).style })
+        XCTAssertGreaterThanOrEqual(styles.count, 3)
+    }
+
     func testDensityAddsNotes() {
         let sparse = ConcertEngine.chart(for: ConcertSong(title: "a", bars: 16, density: 0), seed: 1)
         let dense = ConcertEngine.chart(for: ConcertSong(title: "a", bars: 16, density: 1), seed: 1)

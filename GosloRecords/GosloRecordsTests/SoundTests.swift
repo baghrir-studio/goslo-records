@@ -23,6 +23,16 @@ final class SoundTests: XCTestCase {
         }
     }
 
+    func testConcertSongsRenderWholeAndClean() {
+        let song = ConcertSong(title: "t", bpm: 96, bars: 6, density: 0.5)
+        for index in 0..<4 {
+            let samples = ConcertMix.render(song, seed: ConcertEngine.seed("premier_concert", song: index))
+            XCTAssertEqual(samples.count, Synth.count(song.duration), "le morceau dure exactement le temps des notes")
+            assertClean(samples, "concert \(index)")
+            XCTAssertGreaterThan(rms(samples), 0.05, "concert \(index) quasi muet")
+        }
+    }
+
     func testRenderingIsDeterministic() {
         XCTAssertEqual(SoundEffect.hit.render(), SoundEffect.hit.render())
         XCTAssertEqual(SoundTrack.drill.render(), SoundTrack.drill.render())

@@ -179,22 +179,30 @@ enum ConcertEngine {
             &+ UInt64(song) &* 7919
     }
 
-    /// Notes of a song: always one on each downbeat, more on the other beats and off-beats with density.
+    /// Notes of a song, taken from its instrumental (`ConcertGroove`): kicks on the left lane, snares and claps in the
+    /// middle, the hook on the right. One note per eighth at most, always one on each downbeat (the kick), more with density.
+    /// A note only ever sits on a sound the player hears.
     static func chart(for song: ConcertSong, seed: UInt64) -> [ConcertNote] {
-        var rng = SeededGenerator(seed: seed)
+        let groove = ConcertGroove.make(for: song, seed: seed)
+        var rng = SeededGenerator(seed: seed &+ 1)
         var notes: [ConcertNote] = []
-        var previousLane = 1
+        var previousLane = 0
         for bar in 0..<song.bars {
-            for step in 0..<8 {
+            let hits = groove.hits(bar: bar)
+            for step in stride(from: 0, to: 16, by: 2) {
                 let isDownbeat = step == 0
-                let isBeat = step % 2 == 0
+                let isBeat = step % 4 == 0
                 let chance = isDownbeat ? 1.0 : (isBeat ? 0.25 + song.density * 0.6 : song.density * 0.45)
-                guard Double.random(in: 0..<1, using: &rng) < chance else { continue }
-                var lane = Int.random(in: 0..<lanes, using: &rng)
+                let roll = Double.random(in: 0..<1, using: &rng)
+                var lanes = Set(hits.filter { $0.step == Double(step) }.compactMap { ConcertGroove.lane(of: $0.part) }).sorted()
+                guard roll < chance, !lanes.isEmpty else { continue }
+                if isDownbeat, lanes.contains(0) { lanes = [0] }
                 // Quick off-beats stay on the same or a neighbour lane: playable with one thumb.
-                if !isBeat && abs(lane - previousLane) > 1 { lane = 1 }
+                let near = lanes.filter { abs($0 - previousLane) <= 1 }
+                if !isBeat, !near.isEmpty { lanes = near }
+                let lane = lanes[Int.random(in: 0..<lanes.count, using: &rng)]
                 previousLane = lane
-                let beats = Double(countInBeats + bar * 4) + Double(step) * 0.5
+                let beats = Double(countInBeats + bar * 4) + Double(step) / 4
                 notes.append(ConcertNote(id: notes.count, time: beats * song.beat, lane: lane))
             }
         }
@@ -221,5 +229,146 @@ enum ConcertEngine {
 
     static func apply(_ judgments: [ConcertJudgment], to state: inout ConcertState) {
         for judgment in judgments { apply(judgment, to: &state) }
+    }
+}
+
+// MARK: - Concert instrumentals
+
+/// The instrumental of a concert song, decided once from its seed: a style, a minor key, and what plays on each
+/// sixteenth of each bar. The audio (`ConcertMix`) and the notes to tap (`ConcertEngine.chart`) both come from it,
+/// so the game is always in time with the music.
+struct ConcertGroove: Equatable {
+    enum Style: String, CaseIterable {
+        case boomBap, trap, afro, drill
+    }
+
+    enum Part: Equatable {
+        case kick, snare, hat, openHat, bass, chord, lead
+    }
+
+    struct Hit: Equatable {
+        /// Sixteenths from the start of the bar (fractions for hi-hat rolls).
+        let step: Double
+        let part: Part
+        /// MIDI note (bass, lead) or chord root.
+        var note = 0
+        /// Length in beats (bass, chord, lead).
+        var length = 0.25
+        var gain = 1.0
+        /// Bass only: slides up from this note.
+        var slideFrom: Int?
+    }
+
+    let style: Style
+    /// Root of the minor key (MIDI, octave 3).
+    let root: Int
+    let bars: Int
+    let bpm: Double
+    /// The hook: two bars of (step, scale degree), repeated, varied on every fourth bar.
+    let hook: [[(step: Int, degree: Int)]]
+
+    static func == (lhs: ConcertGroove, rhs: ConcertGroove) -> Bool {
+        lhs.style == rhs.style && lhs.root == rhs.root && lhs.bars == rhs.bars && lhs.bpm == rhs.bpm
+            && lhs.hook.map { $0.map(\.step) } == rhs.hook.map { $0.map(\.step) }
+            && lhs.hook.map { $0.map(\.degree) } == rhs.hook.map { $0.map(\.degree) }
+    }
+
+    /// Off-beat swing (boom bap only), as a fraction of a sixteenth.
+    var swing: Double { style == .boomBap ? 0.14 : 0 }
+
+    /// Minor pentatonic, two octaves.
+    static let scale = [0, 3, 5, 7, 10, 12, 15, 17, 19, 22]
+    /// i – VI – III – VII, as semitones from the root.
+    static let progression = [0, 8, 3, 10]
+
+    static func make(for song: ConcertSong, seed: UInt64) -> ConcertGroove {
+        var rng = SeededGenerator(seed: seed ^ 0x9E37_79B9_7F4A_7C15)
+        let style = Style.allCases[Int.random(in: 0..<Style.allCases.count, using: &rng)]
+        let root = [45, 48, 50, 43, 47][Int.random(in: 0..<5, using: &rng)]
+        let rhythms: [[Int]] = switch style {
+        case .boomBap: [[0, 4, 6, 10, 12], [0, 2, 6, 8, 12, 14]]
+        case .trap: [[0, 2, 4, 6, 8, 10, 12, 14], [0, 2, 4, 6, 8, 10, 12, 14]]
+        case .afro: [[0, 4, 6, 10, 12, 14], [2, 6, 8, 12, 14]]
+        case .drill: [[0, 6, 8, 12], [0, 4, 10, 12, 14]]
+        }
+        // A melodic walk on the pentatonic: small steps, the odd leap, ending each phrase on the root or the fifth.
+        var degree = 5
+        let hook = rhythms.enumerated().map { bar, steps in
+            steps.enumerated().map { index, step -> (step: Int, degree: Int) in
+                if bar == 1 && index == steps.count - 1 {
+                    degree = Bool.random(using: &rng) ? 5 : 3
+                } else {
+                    degree = min(max(degree + [-2, -1, -1, 1, 1, 2, 3][Int.random(in: 0..<7, using: &rng)], 0), scale.count - 1)
+                }
+                return (step, degree)
+            }
+        }
+        return ConcertGroove(style: style, root: root, bars: song.bars, bpm: song.bpm, hook: hook)
+    }
+
+    /// Lane of the notes a part produces (nil = heard, not played).
+    static func lane(of part: Part) -> Int? {
+        switch part {
+        case .kick: 0
+        case .snare: 1
+        case .lead: 2
+        case .hat, .openHat, .bass, .chord: nil
+        }
+    }
+
+    /// Everything that plays in a bar.
+    func hits(bar: Int) -> [Hit] {
+        let b = bar % 2 == 1
+        let turnaround = bar % 4 == 3
+        let chordRoot = root + ConcertGroove.progression[bar % 4] - (ConcertGroove.progression[bar % 4] > 7 ? 12 : 0)
+        var hits: [Hit] = []
+        func add(_ part: Part, _ steps: [Double], gain: Double = 1) {
+            hits += steps.map { Hit(step: $0, part: part, gain: gain) }
+        }
+        switch style {
+        case .boomBap:
+            add(.kick, b ? [0, 3, 8, 10] : [0, 7, 10])
+            add(.snare, [4, 12])
+            if b { add(.snare, [15], gain: 0.35) }
+            add(.hat, stride(from: 0.0, to: 16, by: 2).map { $0 }, gain: 0.8)
+            add(.openHat, [14], gain: 0.6)
+            hits.append(Hit(step: 0, part: .bass, note: chordRoot - 12, length: 1.5))
+            hits.append(Hit(step: 10, part: .bass, note: chordRoot - 12, length: 0.7))
+            hits.append(Hit(step: 0, part: .chord, note: chordRoot, length: 2.5, gain: 0.8))
+        case .trap:
+            add(.kick, b ? [0, 3, 10, 13] : [0, 6, 10])
+            add(.snare, [8])
+            if turnaround { add(.snare, [14], gain: 0.6) }
+            add(.hat, stride(from: 0.0, to: 12, by: 2).map { $0 })
+            let roll: [Double] = b ? stride(from: 12.0, to: 16, by: 0.5).map { $0 } : stride(from: 12.0, to: 16, by: 4.0 / 3).map { $0 }
+            add(.hat, roll, gain: 0.8)
+            add(.openHat, [6], gain: 0.5)
+            hits.append(Hit(step: 0, part: .bass, note: chordRoot - 12, length: 2))
+            hits.append(Hit(step: 10, part: .bass, note: chordRoot - 5, length: 1, slideFrom: chordRoot - 12))
+        case .afro:
+            add(.kick, [0, 4, 8, 12])
+            add(.snare, b ? [6, 10, 14] : [6, 14], gain: 0.8)
+            add(.hat, stride(from: 0.0, to: 16, by: 1).map { $0 }, gain: 0.45)
+            add(.openHat, [2, 10], gain: 0.4)
+            for (step, offset) in [(0, 0), (3, 0), (6, 7), (10, 0), (12, 5)] {
+                hits.append(Hit(step: Double(step), part: .bass, note: chordRoot - 12 + offset, length: 0.6))
+            }
+            for step in [2.0, 6, 10, 14] { hits.append(Hit(step: step, part: .chord, note: chordRoot, length: 0.4, gain: 0.6)) }
+        case .drill:
+            add(.kick, b ? [0, 3, 11] : [0, 11])
+            add(.snare, b ? [8, 14] : [8])
+            add(.hat, [0, 3, 6, 8, 10, 13, 14], gain: 0.85)
+            hits.append(Hit(step: 0, part: .bass, note: chordRoot - 12, length: 1.4, slideFrom: chordRoot - 10))
+            hits.append(Hit(step: 6, part: .bass, note: chordRoot - 9, length: 1, slideFrom: chordRoot - 12))
+            hits.append(Hit(step: 11, part: .bass, note: chordRoot - 14, length: 1.2, slideFrom: chordRoot - 9))
+            hits.append(Hit(step: 0, part: .chord, note: chordRoot, length: 4, gain: 0.5))
+        }
+        // The hook, an octave up; the turnaround bar answers with the phrase shifted up.
+        for (step, degree) in hook[bar % 2] {
+            let lift = turnaround ? 2 : 0
+            let note = root + 12 + ConcertGroove.scale[min(degree + lift, ConcertGroove.scale.count - 1)]
+            hits.append(Hit(step: Double(step), part: .lead, note: note, length: style == .drill ? 0.75 : 0.4))
+        }
+        return hits
     }
 }

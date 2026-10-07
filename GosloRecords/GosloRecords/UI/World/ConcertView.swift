@@ -29,8 +29,9 @@ final class ConcertRunner {
 
     var elapsed: Double { running ? Date().timeIntervalSince(start) : 0 }
 
-    func play() {
-        start = Date()
+    /// Starts the song: its instrumental plays whole, and the clock starts with the sound.
+    func play(samples: [Float]) {
+        start = SoundEngine.shared.playSong(samples)
         running = true
         lastHalfBeat = -1
         task = Task { [weak self] in
@@ -44,26 +45,19 @@ final class ConcertRunner {
     func stop() {
         running = false
         task?.cancel()
+        SoundEngine.shared.stopSong()
     }
 
     private func tick() {
         let t = elapsed
-        // The beat: kick on 1 and 3, snare on 2 and 4, hi-hat on every half-beat.
+        guard t >= 0 else { return }  // The song starts a hair after `play`.
+        // The music is one buffer (`ConcertMix`); the phone only pulses with it: strong beats and back beats.
         let halfBeat = Int(t / (song.beat / 2))
         if halfBeat != lastHalfBeat {
             lastHalfBeat = halfBeat
-            if halfBeat < (ConcertEngine.countInBeats + song.bars * 4) * 2 {
+            if halfBeat < (ConcertEngine.countInBeats + song.bars * 4) * 2, halfBeat % 2 == 0 {
                 let beatInBar = (halfBeat / 2) % 4
-                if halfBeat % 2 == 0 {
-                    if halfBeat / 2 < ConcertEngine.countInBeats {
-                        SoundEngine.shared.play(.concertHit)
-                        Haptics.shared.play(.snare)
-                    } else {
-                        SoundEngine.shared.play(beatInBar % 2 == 0 ? .concertKick : .concertSnare)
-                        Haptics.shared.play(beatInBar % 2 == 0 ? .kick : .snare)
-                    }
-                }
-                if halfBeat / 2 >= ConcertEngine.countInBeats { SoundEngine.shared.play(.concertHat) }
+                Haptics.shared.play(halfBeat / 2 < ConcertEngine.countInBeats || beatInBar % 2 == 1 ? .snare : .kick)
             }
         }
         for note in notes where judged[note.id] == nil && t - note.time > goodWindow {
@@ -316,8 +310,13 @@ struct ConcertView: View {
         missStreak = 0
         quip = nil
         withAnimation { stage = .playing }
-        new.play()
-        watchQuips(new)
+        let seed = ConcertEngine.seed(concert.id, song: concert.songIndex)
+        Task {
+            let samples = await Task.detached(priority: .userInitiated) { ConcertMix.render(song, seed: seed) }.value
+            guard runner === new else { return }  // Left the concert while the song was being prepared.
+            new.play(samples: samples)
+            watchQuips(new)
+        }
     }
 
     /// The crowd reacts to streaks.
