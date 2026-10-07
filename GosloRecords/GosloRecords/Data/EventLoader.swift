@@ -52,6 +52,11 @@ enum EventLoader {
         try decode(WorldMap.self, from: data, name: "map")
     }
 
+    /// districts.json: one map per district, keyed by district ("centre", "hauts", "dome").
+    static func loadDistricts(from data: Data) throws -> [District: WorldMap] {
+        try decode([District: WorldMap].self, from: data, name: "districts")
+    }
+
     static func loadStory(from data: Data) throws -> Story {
         try decode(Story.self, from: data, name: "story")
     }
@@ -62,6 +67,7 @@ enum EventLoader {
             cast: try loadCast(from: bundledData("cast", bundle: bundle)),
             quests: try loadQuests(from: bundledData("quests", bundle: bundle)),
             map: try loadMap(from: bundledData("map", bundle: bundle)),
+            districts: try loadDistricts(from: bundledData("districts", bundle: bundle)),
             story: try loadStory(from: bundledData("story", bundle: bundle))
         )
     }

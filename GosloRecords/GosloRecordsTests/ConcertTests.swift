@@ -154,8 +154,8 @@ final class ConcertTests: XCTestCase {
         _ = try engine.resolve(choiceAt: 0, in: &state)
 
         refill()
-        XCTAssertTrue(try XCTUnwrap(world.map).forChapter(3).npcs.contains { $0.id == "dj_bobine" })
-        XCTAssertFalse(try XCTUnwrap(world.map).forChapter(2).npcs.contains { $0.id == "dj_bobine" })
+        XCTAssertEqual(world.district(ofNPC: "dj_bobine", chapter: 3), .centre, "DJ Bobine mixe en centre-ville")
+        XCTAssertNil(world.district(ofNPC: "dj_bobine", chapter: 2))
         XCTAssertEqual(try engine.talk(to: "dj_bobine", in: &state, using: &rng)?.id, "story_dj")
         _ = try engine.resolve(choiceAt: 0, in: &state)
 

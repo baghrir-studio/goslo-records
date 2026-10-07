@@ -136,7 +136,7 @@ final class WritingTests: XCTestCase {
         state.stats = Stats(streams: 55, credibilite: 55, argent: 50, mental: 70)
         state.skills.gain(Dictionary(uniqueKeysWithValues: Skill.allCases.map { ($0, 260) }))
         func refill() { if state.actionsLeft == 0 { state.actionsLeft = GameState.actionsPerTurn } }
-        let map = try XCTUnwrap(world.map).forChapter(5, flags: state.flags)
+        let map = try XCTUnwrap(world.map(for: .hauts)).forChapter(5, flags: state.flags)
         XCTAssertEqual(map.npcs.filter { $0.id == "victor_contrat" }.count, 1, "Victor revient, une seule fois")
 
         XCTAssertEqual(engine.currentObjective(in: state)?.id, "image")

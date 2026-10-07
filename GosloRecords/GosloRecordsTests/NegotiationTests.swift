@@ -191,9 +191,9 @@ final class NegotiationTests: XCTestCase {
         state.stats = Stats(streams: 50, credibilite: 55, argent: 40, mental: 70)
         state.skills.gain(Dictionary(uniqueKeysWithValues: Skill.allCases.map { ($0, 200) }))
         func refill() { if state.actionsLeft == 0 { state.actionsLeft = GameState.actionsPerTurn } }
-        let map = try XCTUnwrap(world.map)
-        XCTAssertTrue(map.forChapter(4).npcs.contains { $0.id == "victor_contrat" })
-        XCTAssertFalse(map.forChapter(3).npcs.contains { $0.id == "victor_contrat" })
+        let map = try XCTUnwrap(world.map(for: .hauts))
+        XCTAssertEqual(world.district(ofNPC: "victor_contrat", chapter: 4), .hauts, "Victor attend dans les Hauts")
+        XCTAssertNil(world.district(ofNPC: "victor_contrat", chapter: 3))
 
         XCTAssertEqual(engine.currentObjective(in: state)?.id, "buzz")
         XCTAssertEqual(try engine.visit(.reseaux, in: &state, using: &rng).id, "story_buzz")

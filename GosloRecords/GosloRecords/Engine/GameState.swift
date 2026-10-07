@@ -55,6 +55,8 @@ struct GameState: Codable, Equatable {
     /// Position on the map (nil = spawn point).
     var position: TilePoint?
     var facing: Direction = .down
+    /// District the player is in (`position` is on its map).
+    var district: District = .bloc
     var stepsSinceWild = 0
     /// Rivals who already challenged you this semester.
     var challengedThisSemester: Set<String> = []
@@ -86,7 +88,7 @@ struct GameState: Codable, Equatable {
         case id, startedAt, rapper, stats, counters, skills, flags, relations, metCast, turn, actionsLeft
         case seenUniqueEvents, recentEvents, pendingFollowUp, currentEventId, currentLocation, clash, interview, concert, negotiation, writing
         case minigame
-        case questProgress, completedQuests, ending, position, facing, stepsSinceWild, challengedThisSemester
+        case questProgress, completedQuests, ending, position, facing, district, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
         case seenEvents, talkedAt, smallTalk, hooks
     }
@@ -122,6 +124,7 @@ struct GameState: Codable, Equatable {
         ending = try c.decodeIfPresent(Ending.self, forKey: .ending)
         position = try c.decodeIfPresent(TilePoint.self, forKey: .position)
         facing = try c.decodeIfPresent(Direction.self, forKey: .facing) ?? .down
+        district = try c.decodeIfPresent(District.self, forKey: .district) ?? .bloc
         stepsSinceWild = try c.decodeIfPresent(Int.self, forKey: .stepsSinceWild) ?? 0
         challengedThisSemester = try c.decodeIfPresent(Set<String>.self, forKey: .challengedThisSemester) ?? []
         chapter = try c.decodeIfPresent(Int.self, forKey: .chapter) ?? 1

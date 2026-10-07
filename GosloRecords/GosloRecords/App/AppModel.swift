@@ -34,6 +34,8 @@ enum GamePhase: Equatable {
     case minigame(MinigameState)
     /// A scripted scene is playing.
     case cinematic
+    /// The metro map: pick a district.
+    case metro
 }
 
 /// What a cinematic shows at the bottom of the screen.
@@ -54,6 +56,8 @@ enum WorldTransition: Equatable {
     case fade
     case battle
     case semester(title: String, subtitle: String)
+    /// A metro ride to another district.
+    case metro(District)
 }
 
 /// Glue between the engine, persistence and the UI: current run, overworld, routing.
@@ -132,8 +136,14 @@ final class AppModel {
         }
     }
 
-    /// The neighbourhood as it is in the current chapter.
-    var map: WorldMap? { engine.world.map?.forChapter(state?.chapter ?? 1, flags: state?.flags ?? []) }
+    /// The district the player is in, as it is in the current chapter.
+    var map: WorldMap? {
+        if let state { return engine.currentMap(in: state) }
+        return engine.world.map?.forChapter(1)
+    }
+    var district: District { state?.district ?? .bloc }
+    /// Where the current objective is, when it's in another district (shown under the objective).
+    var objectiveDistrict: District? { state.flatMap { engine.objectiveDistrict(in: $0) } }
     var objective: Objective? { state.flatMap { engine.currentObjective(in: $0) } }
     var chapter: Chapter? { state.flatMap { engine.currentChapter(in: $0) } }
     var resumableRun: GameState? { state }
@@ -153,7 +163,7 @@ final class AppModel {
 
     func startCareer(_ rapper: Rapper) {
         var fresh = engine.newGame(rapper: rapper)
-        fresh.position = map?.spawn
+        fresh.position = engine.world.map?.spawn
         state = fresh
         finishedRecord = nil
         lastDeltas = [:]
@@ -287,7 +297,7 @@ final class AppModel {
             return
         }
         guard OverworldRules.canStep(to: target, on: map) else { return }
-        if let state, OverworldRules.blockedByScenery(target, in: state.rapper.city) { return }
+        if let state, state.district == .bloc, OverworldRules.blockedByScenery(target, in: state.rapper.city) { return }
 
         busy = true
         walkFrame = walkFrame == 1 ? 2 : 1
@@ -308,7 +318,10 @@ final class AppModel {
         stepsSinceSave += 1
         if stepsSinceSave >= 10 { persist() }
 
-        if let door = map.door(at: point) {
+        if map.metro == point {
+            heldDirection = nil
+            openMetro()
+        } else if let door = map.door(at: point) {
             heldDirection = nil
             await enter(door)
         } else if let rival = OverworldRules.spotter(of: point, on: map, canChallenge: { engine.canChallenge($0, in: current) }) {
@@ -361,6 +374,55 @@ final class AppModel {
         source = .phone
         phase = .encounter(event)
         persist()
+    }
+
+    // MARK: - Metro
+
+    /// Stepping on a metro entrance: the metro map, or closed gates while only Le Bloc is open.
+    private func openMetro() {
+        guard let current = state else { return }
+        sound.play(.door)
+        if engine.openDistricts(in: current).count < 2 {
+            phase = .dialogue(speaker: "Métro", lines: [
+                "Les grilles sont baissées. Une affiche : « Ligne fermée pour travaux. »",
+                "Quelqu'un a écrit au feutre en dessous : « Réouverture quand t'auras un vrai nom. »",
+            ])
+        } else {
+            phase = .metro
+        }
+    }
+
+    func closeMetro() {
+        guard phase == .metro else { return }
+        phase = .overworld
+    }
+
+    /// Rides to another district: the train crosses the screen, the district's card, then its station.
+    func travel(to district: District) {
+        guard phase == .metro, var current = state else { return }
+        guard district != current.district else {
+            phase = .overworld
+            return
+        }
+        guard (try? engine.travel(to: district, in: &current)) != nil else { return }
+        let arrived = current
+        busy = true
+        heldDirection = nil
+        Task {
+            sound.play(.wipe)
+            withAnimation(.easeIn(duration: 0.3)) { transition = .metro(district) }
+            try? await Task.sleep(for: .milliseconds(1100))
+            state = arrived
+            position = arrived.position ?? position
+            facing = .down
+            walkFrame = 0
+            resetNPCs()
+            phase = .overworld
+            persist()
+            try? await Task.sleep(for: .milliseconds(1300))
+            withAnimation(.easeOut(duration: 0.45)) { transition = nil }
+            busy = false
+        }
     }
 
     private func enter(_ door: MapDoor) async {
@@ -758,6 +820,13 @@ final class AppModel {
     private func play(_ cinematic: Cinematic) async {
         busy = true
         heldDirection = nil
+        if var current = state, engine.stageCinematic(cinematic, in: &current) {
+            // The scene happens in Le Bloc: back home first.
+            state = current
+            position = current.position ?? position
+            facing = current.facing
+            resetNPCs()
+        }
         phase = .cinematic
         withAnimation(.easeInOut(duration: 0.45)) { letterbox = true }
         try? await Task.sleep(for: .milliseconds(450))

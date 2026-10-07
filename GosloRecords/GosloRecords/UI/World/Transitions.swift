@@ -12,6 +12,8 @@ struct TransitionOverlay: View {
             BattleWipe()
         case .semester(let title, let subtitle):
             SemesterCard(title: title, subtitle: subtitle)
+        case .metro(let district):
+            MetroRide(district: district)
         }
     }
 }
@@ -115,5 +117,72 @@ struct InteriorView: View {
             }
         }
         .onAppear { withAnimation(.spring(response: 0.5, dampingFraction: 0.7).delay(0.15)) { bannerIn = true } }
+    }
+}
+
+/// A metro ride: the train rushes through the tunnel, then the district's name lands.
+private struct MetroRide: View {
+    let district: District
+    @State private var passing = false
+    @State private var named = false
+
+    var body: some View {
+        GeometryReader { geo in
+            let w = geo.size.width, h = geo.size.height
+            ZStack {
+                Color(red: 0.04, green: 0.04, blue: 0.06)
+                // Tunnel lights streaking past.
+                TimelineView(.animation) { context in
+                    let t = context.date.timeIntervalSinceReferenceDate
+                    ZStack {
+                        ForEach(0..<6, id: \.self) { index in
+                            let x = (1 - (t * 2.4 + Double(index) / 6).truncatingRemainder(dividingBy: 1)) * (w + 120) - 60
+                            Rectangle().fill(Color(red: 1, green: 0.85, blue: 0.5).opacity(0.5))
+                                .frame(width: 60, height: 4)
+                                .position(x: x, y: h * 0.3)
+                        }
+                    }
+                }
+                // The train: a long carriage with lit windows.
+                HStack(spacing: 0) {
+                    ForEach(0..<3, id: \.self) { _ in
+                        ZStack {
+                            Rectangle().fill(Color(red: 0.75, green: 0.78, blue: 0.82))
+                            HStack(spacing: 10) {
+                                ForEach(0..<5, id: \.self) { _ in
+                                    Rectangle().fill(Color(red: 1, green: 0.88, blue: 0.55)).frame(width: 34, height: 26)
+                                }
+                            }
+                            Rectangle().fill(Theme.accent).frame(height: 8).offset(y: 30)
+                        }
+                        .frame(width: 300, height: 90)
+                        .overlay(Rectangle().stroke(Color.black, lineWidth: 3))
+                    }
+                }
+                .position(x: passing ? -500 : w + 500, y: h * 0.5)
+
+                VStack(spacing: 10) {
+                    Text("Ⓜ︎ \(district.name.uppercased())")
+                        .font(.display(60))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.4)
+                        .foregroundStyle(.white)
+                        .shadow(color: Theme.accent, radius: 0, x: 4, y: 4)
+                    Rectangle().fill(Theme.accent).frame(width: named ? 140 : 0, height: 5)
+                    Text(district.tagline)
+                        .font(.system(size: 14, weight: .heavy, design: .monospaced))
+                        .multilineTextAlignment(.center)
+                        .foregroundStyle(.white.opacity(0.75))
+                }
+                .padding(.horizontal, 24)
+                .opacity(named ? 1 : 0)
+                .scaleEffect(named ? 1 : 1.3)
+            }
+        }
+        .ignoresSafeArea()
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.1)) { passing = true }
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.75).delay(1.0)) { named = true }
+        }
     }
 }

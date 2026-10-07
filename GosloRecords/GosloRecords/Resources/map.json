@@ -4,7 +4,7 @@
     "TRRRRRRT=RRRRR=RRRRRRRRT",
     "TRRRRRRT=RRRRR=RRRRRRRRT",
     "T######T=#####=########T",
-    "T##D###L=##D##=###D####T",
+    "T##D###L=##D##=###M####T",
     "T======================T",
     "T..........++..........T",
     "T..........++..........T",
@@ -39,11 +39,6 @@
       "location": "media"
     },
     {
-      "x": 18,
-      "y": 4,
-      "location": "scene"
-    },
-    {
       "x": 3,
       "y": 12,
       "location": "label"
@@ -76,26 +71,10 @@
       "from_chapter": 2
     },
     {
-      "id": "le_baron",
-      "x": 20,
-      "y": 5,
-      "facing": "left",
-      "sight": 3,
-      "from_chapter": 2
-    },
-    {
       "id": "clara_soleil",
       "x": 19,
       "y": 7,
       "facing": "up",
-      "from_chapter": 2
-    },
-    {
-      "id": "kolosse",
-      "x": 6,
-      "y": 7,
-      "facing": "right",
-      "sight": 4,
       "from_chapter": 2
     },
     {
@@ -123,21 +102,6 @@
       "x": 10,
       "y": 11,
       "facing": "right",
-      "from_chapter": 2
-    },
-    {
-      "id": "le_conteur",
-      "x": 12,
-      "y": 10,
-      "facing": "down",
-      "from_chapter": 2
-    },
-    {
-      "id": "scalpel",
-      "x": 16,
-      "y": 10,
-      "facing": "down",
-      "sight": 3,
       "from_chapter": 2
     },
     {
@@ -186,42 +150,6 @@
       "from_chapter": 2
     },
     {
-      "id": "lil_croon",
-      "x": 16,
-      "y": 12,
-      "facing": "down",
-      "from_chapter": 2
-    },
-    {
-      "id": "gestuel",
-      "x": 8,
-      "y": 9,
-      "facing": "down",
-      "from_chapter": 2
-    },
-    {
-      "id": "dj_bobine",
-      "x": 9,
-      "y": 11,
-      "facing": "up",
-      "from_chapter": 3
-    },
-    {
-      "id": "victor_contrat",
-      "x": 15,
-      "y": 8,
-      "facing": "down",
-      "from_chapter": 4,
-      "hidden_if": "contrat_signe"
-    },
-    {
-      "id": "victor_contrat",
-      "x": 5,
-      "y": 5,
-      "facing": "down",
-      "from_chapter": 5
-    },
-    {
       "id": "saphir",
       "x": 11,
       "y": 13,
@@ -243,13 +171,10 @@
       "y": 8,
       "facing": "up",
       "from_chapter": 2
-    },
-    {
-      "id": "diva_decibel",
-      "x": 22,
-      "y": 8,
-      "facing": "left",
-      "from_chapter": 2
     }
-  ]
+  ],
+  "metro": {
+    "x": 18,
+    "y": 4
+  }
 }

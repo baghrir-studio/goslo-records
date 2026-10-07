@@ -72,6 +72,7 @@ enum GameEngineError: Error, Equatable {
     case noMinigame
     case minigameNotOver
     case gameOver
+    case districtLocked(District)
 }
 
 /// A secret technique the player can equip (style, item or unlocked), keyed by where it comes from.
