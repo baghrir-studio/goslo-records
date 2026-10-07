@@ -116,3 +116,17 @@ extension GameEngine {
         return true
     }
 }
+
+extension GameEngine {
+    static func arrivalEventId(_ district: District) -> String { "arrivee_\(district.rawValue)" }
+
+    /// First time out of the metro in a district: its welcome scene (story.json), once, without spending an action.
+    func arrivalEvent(in state: inout GameState) -> GameEvent? {
+        let id = GameEngine.arrivalEventId(state.district)
+        guard state.district != .bloc, !state.seenUniqueEvents.contains(id), let event = event(withId: id),
+              state.currentEventId == nil, state.clash == nil, state.pendingFollowUp == nil, !state.isOver else { return nil }
+        state.seenUniqueEvents.insert(id)
+        state.currentEventId = id
+        return event
+    }
+}

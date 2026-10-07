@@ -422,6 +422,14 @@ final class AppModel {
             try? await Task.sleep(for: .milliseconds(1300))
             withAnimation(.easeOut(duration: 0.45)) { transition = nil }
             busy = false
+            // First time here: the district's welcome scene.
+            if var welcomed = state, let event = engine.arrivalEvent(in: &welcomed) {
+                try? await Task.sleep(for: .milliseconds(450))
+                state = welcomed
+                source = event.npc.map { .npc($0) } ?? .bench
+                phase = .encounter(event)
+                persist()
+            }
         }
     }
 
