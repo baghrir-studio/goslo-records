@@ -161,6 +161,19 @@ final class OverworldTests: XCTestCase {
         }
     }
 
+    func testNewLookOptionsAndOldSaves() throws {
+        let old = try JSONDecoder().decode(CharacterLook.self, from: Data(##"{"skin": "#c68642", "hair_style": "puff"}"##.utf8))
+        XCTAssertEqual(old.outfit, .hoodie, "une ancienne sauvegarde garde le sweat")
+        XCTAssertFalse(old.earrings)
+        let rapper = Rapper(name: "T", city: .lyon, style: .trap, hairStyle: .braids, hat: .bandana, outfit: .jersey, earrings: true)
+        XCTAssertEqual(rapper.look.hairStyle, .braids)
+        XCTAssertEqual(rapper.look.hat, .bandana)
+        XCTAssertEqual(rapper.look.outfit, .jersey)
+        XCTAssertTrue(rapper.look.earrings)
+        let saved = try JSONDecoder().decode(Rapper.self, from: JSONEncoder().encode(rapper))
+        XCTAssertEqual(saved.look, rapper.look)
+    }
+
     func testNeverSeenEventsComeFirst() {
         let a = GameEvent(id: "a", title: "", text: "", choices: [])
         let b = GameEvent(id: "b", title: "", text: "", choices: [])

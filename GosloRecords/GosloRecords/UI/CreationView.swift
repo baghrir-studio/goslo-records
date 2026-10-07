@@ -14,11 +14,13 @@ struct CreationView: View {
     @State private var beard: Bool?
     @State private var chain: Bool?
     @State private var headphones: Bool?
+    @State private var outfit: CharacterLook.Outfit?
+    @State private var earrings: Bool?
     @FocusState private var nameFocused: Bool
 
     private var draft: Rapper {
         Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
-               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones)
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings)
     }
 
     /// Name used when the player leaves the field empty (the field's placeholder).
@@ -134,11 +136,13 @@ struct CreationView: View {
             }
             ChoiceRow(options: CharacterLook.HairStyle.allCases, selected: look.hairStyle, label: \.label) { hairStyle = $0 }
             ChoiceRow(options: CharacterLook.Hat.allCases, selected: look.hat, label: \.label) { hat = $0 }
+            ChoiceRow(options: CharacterLook.Outfit.allCases, selected: look.outfit, label: \.label) { outfit = $0 }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 8)], spacing: 8) {
                 ToggleChip(title: "Lunettes", isOn: look.glasses) { glasses = !look.glasses }
                 ToggleChip(title: "Barbe", isOn: look.beard) { beard = !look.beard }
                 ToggleChip(title: "Chaîne", isOn: look.chain) { chain = !look.chain }
                 ToggleChip(title: "Casque", isOn: look.headphones) { headphones = !look.headphones }
+                ToggleChip(title: "Boucles", isOn: look.earrings) { earrings = !look.earrings }
             }
         }
         .animation(.easeOut(duration: 0.15), value: look)
@@ -226,6 +230,8 @@ private extension CharacterLook.HairStyle {
         case .long: "Longs"
         case .bald: "Rasé"
         case .puff: "Afro"
+        case .braids: "Tresses"
+        case .fade: "Dégradé"
         }
     }
 }
@@ -237,6 +243,19 @@ private extension CharacterLook.Hat {
         case .cap: "Casquette"
         case .beanie: "Bonnet"
         case .hood: "Capuche"
+        case .bucket: "Bob"
+        case .bandana: "Bandana"
+        }
+    }
+}
+
+private extension CharacterLook.Outfit {
+    var label: String {
+        switch self {
+        case .hoodie: "Sweat"
+        case .jacket: "Veste"
+        case .jersey: "Maillot"
+        case .puffer: "Doudoune"
         }
     }
 }

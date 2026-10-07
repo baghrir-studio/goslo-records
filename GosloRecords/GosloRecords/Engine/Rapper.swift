@@ -90,10 +90,15 @@ struct Rapper: Codable, Equatable {
     var beard: Bool?
     var chain: Bool?
     var headphones: Bool?
+    var outfit: CharacterLook.Outfit?
+    var earrings: Bool?
 
     init(name: String, city: City, style: Style, skinTone: Int = 2, hairColor: Int? = nil,
          hairStyle: CharacterLook.HairStyle? = nil, hat: CharacterLook.Hat? = nil, glasses: Bool? = nil,
-         beard: Bool? = nil, chain: Bool? = nil, headphones: Bool? = nil) {
+         beard: Bool? = nil, chain: Bool? = nil, headphones: Bool? = nil,
+         outfit: CharacterLook.Outfit? = nil, earrings: Bool? = nil) {
+        self.outfit = outfit
+        self.earrings = earrings
         self.name = name
         self.city = city
         self.style = style
@@ -120,5 +125,7 @@ struct Rapper: Codable, Equatable {
         beard = try c.decodeIfPresent(Bool.self, forKey: .beard)
         chain = try c.decodeIfPresent(Bool.self, forKey: .chain)
         headphones = try c.decodeIfPresent(Bool.self, forKey: .headphones)
+        outfit = try c.decodeIfPresent(CharacterLook.Outfit.self, forKey: .outfit)
+        earrings = try c.decodeIfPresent(Bool.self, forKey: .earrings)
     }
 }
