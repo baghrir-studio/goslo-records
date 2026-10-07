@@ -228,7 +228,7 @@ enum TileArt {
                 c.fill(x + 6, top - 1, x + 9, top - 1, mast)
                 c.fill(x + 7, top - 3, x + 8, top - 2, PixelColor(hex: "#ff2a1a"))
                 for (r, shade) in [(5, 1.0), (8, 0.7), (11, 0.45)] {
-                    for dy in -r / 2...r / 2 {
+                    for dy in (-r / 2)...(r / 2) {
                         c.dot(x + 7 - r, top + 4 + dy, location.neon.shaded(shade))
                         c.dot(x + 8 + r, top + 4 + dy, location.neon.shaded(shade))
                     }
