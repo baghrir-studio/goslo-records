@@ -653,6 +653,20 @@ final class AppModel {
         return clash
     }
 
+    /// Releases an album from the notebook.
+    @discardableResult
+    func releaseAlbum(title: String, trackIds: [String], cover: AlbumCover) -> Album? {
+        guard var current = state else { return nil }
+        let before = current.stats
+        guard let album = try? engine.releaseAlbum(title: title, trackIds: trackIds, cover: cover, in: &current) else { return nil }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.levelUp)
+        Haptics.shared.play(.victory)
+        persist()
+        return album
+    }
+
     /// Freestyle: the rhymes chained in the overlay.
     @discardableResult
     func clashFreestyle(rhymes: Int) -> ClashState? {

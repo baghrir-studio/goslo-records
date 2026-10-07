@@ -74,6 +74,7 @@ enum GameEngineError: Error, Equatable {
     case gameOver
     case districtLocked(District)
     case freestyleUsed
+    case albumNotReady
 }
 
 /// A secret technique the player can equip (style, item or unlocked), keyed by where it comes from.
@@ -1081,6 +1082,7 @@ struct GameEngine {
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
             outcome.add(state.stats.apply(GameEngine.upkeep(for: state.stats)))
+            outcome.add(sellAlbums(in: &state))
             let limit = turnLimit(in: state)
             if !isInEpilogue(state) { state.turn = min(state.turn + 1, limit) }
             state.actionsLeft = GameState.actionsPerTurn
