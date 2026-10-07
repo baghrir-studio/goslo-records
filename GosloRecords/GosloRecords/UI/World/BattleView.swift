@@ -472,7 +472,8 @@ struct BattleView: View {
     }
 
     /// Shows a line and waits long enough to read it. Tap: show it all, tap again: next.
-    private func say(_ text: String, hold: Double) async {
+    private func say(_ raw: String, hold: Double) async {
+        let text = TextTemplate.render(raw, for: state.rapper)
         message = text
         typed = false
         revealAll = false

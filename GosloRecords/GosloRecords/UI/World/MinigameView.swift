@@ -20,7 +20,7 @@ struct MinigameView: View {
                     .font(.display(28))
                     .foregroundStyle(Theme.text)
                 if !started && minigame.round == 0 && minigame.escaped == nil {
-                    Text(data.intro)
+                    Text(TextTemplate.render(data.intro, for: state.rapper))
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(Theme.text.opacity(0.85))
                         .fixedSize(horizontal: false, vertical: true)
@@ -70,7 +70,7 @@ private struct MinigameResult: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
                     ForEach(Array(minigame.log.enumerated()), id: \.offset) { _, line in
-                        Text("— \(line)").font(.system(size: 14)).foregroundStyle(Theme.text.opacity(0.85))
+                        Text("— \(model.state.map { TextTemplate.render(line, for: $0.rapper) } ?? line)").font(.system(size: 14)).foregroundStyle(Theme.text.opacity(0.85))
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -124,6 +124,11 @@ private struct PunchlinerBoard: View {
         model.state.flatMap { model.engine.punchlinerRound(in: $0) }
     }
 
+    /// Agrees the text with the player (rappeur or rappeuse).
+    private func r(_ text: String) -> String {
+        model.state.map { TextTemplate.render(text, for: $0.rapper) } ?? text
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let answered {
@@ -133,7 +138,7 @@ private struct PunchlinerBoard: View {
                     .font(.display(30))
                     .foregroundStyle(answered.ending.map { $0.score >= PunchlinerEngine.bestScore } == true
                                      ? Color(red: 1, green: 0.85, blue: 0.3) : Theme.accent)
-                Text(answered.reaction)
+                Text(r(answered.reaction))
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Theme.text.opacity(0.9))
                     .fixedSize(horizontal: false, vertical: true)
@@ -146,7 +151,7 @@ private struct PunchlinerBoard: View {
                 VStack(spacing: 8) {
                     ForEach(current.order, id: \.self) { index in
                         Button { drop(index) } label: {
-                            Text(current.round.endings[index].text)
+                            Text(r(current.round.endings[index].text))
                                 .font(.system(size: 16, weight: .bold))
                                 .multilineTextAlignment(.leading)
                                 .foregroundStyle(Theme.text)
@@ -192,11 +197,11 @@ private struct PunchlinerBoard: View {
 
     private func lines(_ round: PunchlinerRound, ending: String?) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(round.setup)
+            Text(r(round.setup))
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(Theme.text.opacity(0.75))
-            (Text(round.lead + " ").foregroundStyle(Theme.text)
-                + Text(ending ?? "…").foregroundStyle(Theme.accent))
+            (Text(r(round.lead) + " ").foregroundStyle(Theme.text)
+                + Text(r(ending ?? "…")).foregroundStyle(Theme.accent))
                 .font(.system(size: 20, weight: .heavy))
         }
         .fixedSize(horizontal: false, vertical: true)

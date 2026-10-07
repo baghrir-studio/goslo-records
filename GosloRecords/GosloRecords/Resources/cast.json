@@ -127,9 +127,9 @@
         "weakness": "punchline",
         "resistance": "story",
         "taunts": [
-          "T'es qui, toi ? Un stagiaire ?",
+          "T'es qui, toi ? {Un stagiaire|Une stagiaire} ?",
           "J'ai des plaques plus vieilles que ta carrière.",
-          "Retourne à ta laverie, petit."
+          "Retourne à ta laverie, {petit|petite}."
         ],
         "counter": "beat"
       },
@@ -150,7 +150,7 @@
         "line": "Le Baron fait défiler son mur de disques de platine pendant quatre minutes, en silence. Tu remets en question tous tes choix de vie."
       },
       "idle": [
-        "Le trône ne se visite pas. Il se prend. Et tu n'es pas encore assez grand pour la chaise.",
+        "Le trône ne se visite pas. Il se prend. Et tu n'es pas encore assez {grand|grande} pour la chaise.",
         "J'ai un live dans dix minutes. Je vais clasher quelqu'un. Peut-être toi, si t'insistes.",
         "Reviens quand on parlera de toi dans ma story. Pour l'instant, je t'ai même pas en sourdine."
       ]
@@ -173,7 +173,7 @@
         "taunts": [
           "Défi en live, ce soir. Si j'ai du réseau.",
           "Je fais 200 pompes avant le petit-déj. Enfin, j'en parle.",
-          "T'as pas la carrure, frère."
+          "T'as pas la carrure, {frère|ma sœur}."
         ],
         "counter": "beat"
       },
@@ -195,7 +195,7 @@
       "idle": [
         "Défi du jour : rester silencieux une heure. Ça fait quatre minutes. C'est dur.",
         "Mon live d'hier ? Batterie à 11 %. On en reparle pas.",
-        "Je t'ai à l'œil, petit. Enfin, j'ai l'œil sur tout le monde. Je suis grand."
+        "Je t'ai à l'œil, {petit|petite}. Enfin, j'ai l'œil sur tout le monde. Je suis grand."
       ]
     },
     {
@@ -569,7 +569,7 @@
         "taunts": [
           "Tu peux signer mon front ?",
           "Fais le morceau de 2019 !",
-          "Je t'aime trop, frère !!"
+          "Je t'aime trop, {frère|ma sœur} !!"
         ]
       },
       "wild": true,
@@ -793,7 +793,7 @@
         "weakness": "punchline",
         "resistance": "flow",
         "taunts": [
-          "Bébé-é-é, t'es pas prê-ê-êt.",
+          "Bébé-é-é, t'es pas {prê-ê-êt|prê-ê-ête}.",
           "Je rappe ? Je chante ? Moi-ê-ême je sais pas.",
           "Ooh yeah, ratio-o-o."
         ]
@@ -976,7 +976,7 @@
         "chain": true
       },
       "idle": [
-        "Wakha khoya, repasse ce soir. Casa dort pas avant 2 h.",
+        "Wakha {khoya|khti}, repasse ce soir. Casa dort pas avant 2 h.",
         "Le petit taxi rouge m'attend. Il m'attend toujours, c'est mon cousin.",
         "On se capte au studio. Ramène des rimes, je ramène le thé."
       ]

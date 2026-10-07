@@ -21,14 +21,14 @@ enum Ending: String, Codable, CaseIterable {
         switch self {
         case .burnOut: "Burn-out"
         case .retourAuTaf: "Retour au taf"
-        case .vendu: "Vendu"
-        case .oublie: "Oublié"
-        case .patronDeLabel: "Patron de label"
-        case .heritier: "Héritier du trône"
+        case .vendu: "{Vendu|Vendue}"
+        case .oublie: "{Oublié|Oubliée}"
+        case .patronDeLabel: "{Patron|Patronne} de label"
+        case .heritier: "{Héritier|Héritière} du trône"
         case .legende: "Légende"
         case .starCommerciale: "Star commerciale"
-        case .culteMaisFauche: "Culte mais fauché"
-        case .rentier: "Rentier du rap"
+        case .culteMaisFauche: "Culte mais {fauché|fauchée}"
+        case .rentier: "{Rentier|Rentière} du rap"
         case .sageDuGame: "Sage du game"
         case .carriereHonnete: "Carrière honnête"
         }
@@ -39,7 +39,7 @@ enum Ending: String, Codable, CaseIterable {
         case .burnOut:
             "Le corps a dit stop avant le label. Tu passes tes journées à regarder un mur. Le mur, au moins, ne te demande pas de single."
         case .retourAuTaf:
-            "Compte à zéro. Tu as repris un CDI en logistique. Tes collègues t'appellent « le rappeur » avec un ton que tu n'aimes pas."
+            "Compte à zéro. Tu as repris un CDI en logistique. Tes collègues t'appellent « {le rappeur|la rappeuse} » avec un ton que tu n'aimes pas."
         case .vendu:
             "Plus personne dans le milieu ne te respecte. Tu fais des jingles pour une enseigne de bricolage. Ils sont très efficaces."
         case .oublie:
@@ -53,7 +53,7 @@ enum Ending: String, Codable, CaseIterable {
         case .starCommerciale:
             "Disques, pubs, plateaux télé. Les puristes te méprisent depuis leurs 300 abonnés. Toi, tu méprises depuis ta piscine."
         case .culteMaisFauche:
-            "Respecté par tous les rappeurs, écouté par 4 000 personnes très investies. Ton loyer, lui, ne cite pas tes punchlines."
+            "{Respecté|Respectée} par tous les rappeurs, {écouté|écoutée} par 4 000 personnes très investies. Ton loyer, lui, ne cite pas tes punchlines."
         case .rentier:
             "Tu as compris avant les autres que le rap est un business. Tu parles plus de « ROI » que de rimes. Ça te va bien."
         case .sageDuGame:

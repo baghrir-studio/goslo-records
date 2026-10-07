@@ -407,7 +407,7 @@
         {
           "id": "conteur",
           "label": "Le Conteur sort un épisode sur toi",
-          "hint": "Le Conteur, au milieu de la rue. Il a écrit une série sur toi. Tu es le méchant. Va lui parler.",
+          "hint": "Le Conteur, au milieu de la rue. Il a écrit une série sur toi. Tu es {le méchant|la méchante}. Va lui parler.",
           "trigger": {
             "npc": "le_conteur"
           },
@@ -631,7 +631,7 @@
       "location": "quartier",
       "npc": "lucien",
       "weight": 0,
-      "text": "Vieux Mic Lucien est assis sur la place, comme tous les soirs depuis 1994. « Alors petit, il paraît que t'écris. Vas-y, fais-moi écouter. Doucement, j'ai plus mes oreilles de vingt ans. »",
+      "text": "Vieux Mic Lucien est assis sur la place, comme tous les soirs depuis 1994. « Alors {petit|petite}, il paraît que t'écris. Vas-y, fais-moi écouter. Doucement, j'ai plus mes oreilles de vingt ans. »",
       "choices": [
         {
           "label": "Lui rapper ton texte a cappella",
@@ -670,7 +670,7 @@
       "location": "media",
       "npc": "big_nono",
       "weight": 0,
-      "text": "Le studio de goslo radio : deux micros, un néon ON AIR qui grésille, et Big Nono, l'animateur, qui mange des chips au-dessus de la console. « Toi, c'est le petit de Lucien ? Installe-toi. Dans dix secondes, t'es en direct. »",
+      "text": "Le studio de goslo radio : deux micros, un néon ON AIR qui grésille, et Big Nono, l'animateur, qui mange des chips au-dessus de la console. « Toi, c'est {le petit|la petite} de Lucien ? Installe-toi. Dans dix secondes, t'es en direct. »",
       "choices": [
         {
           "label": "Rapper le texte de ton carnet",
@@ -717,7 +717,7 @@
                 "mental": -6,
                 "credibilite": -2
               },
-              "consequence": "Kevlar Jr. lève les bras. 32 victoires. « Reviens quand t'auras des punchlines, petit. » Tu reviendras. Parle-lui quand tu seras prêt."
+              "consequence": "Kevlar Jr. lève les bras. 32 victoires. « Reviens quand t'auras des punchlines, {petit|petite}. » Tu reviendras. Parle-lui quand tu seras {prêt|prête}."
             }
           },
           "consequence": "Le cercle se referme. Plus moyen de reculer."
@@ -754,7 +754,7 @@
           "clear_flags": [
             "independant"
           ],
-          "consequence": "Tu as signé. Clause 7 : « L'artiste s'engage à plier son linge lui-même. » C'est un label sérieux."
+          "consequence": "Tu as signé. Clause 7 : « L'artiste s'engage à plier son linge {lui-même|elle-même}. » C'est un label sérieux."
         },
         {
           "label": "Lire les petites lignes d'abord",
@@ -927,7 +927,7 @@
       "location": "quartier",
       "npc": "lingot",
       "weight": 0,
-      "text": "Lingot te barre la route. Trois chaînes, deux montres, des lunettes de soleil à 23 h. « Toi, t'es le petit de la radio ? Ma chaîne coûte plus cher que ton quartier. Et ma deuxième chaîne coûte plus cher que la première. »",
+      "text": "Lingot te barre la route. Trois chaînes, deux montres, des lunettes de soleil à 23 h. « Toi, t'es {le petit|la petite} de la radio ? Ma chaîne coûte plus cher que ton quartier. Et ma deuxième chaîne coûte plus cher que la première. »",
       "choices": [
         {
           "label": "Le clasher",
@@ -1183,7 +1183,7 @@
       "location": "reseaux",
       "npc": "big_kliks",
       "weight": 0,
-      "text": "300 places à vendre. 3 vendues : ta mère, ton cousin, et un certain « Jean-Hubert D. » qui a pris une place au fond, près de la sortie. Big Kliks t'écrit : « Frère, j'ai des billets fantômes. Ils se vendent tout seuls. »",
+      "text": "300 places à vendre. 3 vendues : ta mère, ton cousin, et un certain « Jean-Hubert D. » qui a pris une place au fond, près de la sortie. Big Kliks t'écrit : « {Frère|Ma sœur}, j'ai des billets fantômes. Ils se vendent tout seuls. »",
       "choices": [
         {
           "label": "Coller des affiches dans tout le quartier",
@@ -1385,7 +1385,7 @@
           "set_flags": [
             "sauge_ch4"
           ],
-          "consequence": "Il a signé le lendemain avec une marque d'eau gazeuse. Il te l'annonce en story. Il t'a identifié. Deux fois."
+          "consequence": "Il a signé le lendemain avec une marque d'eau gazeuse. Il te l'annonce en story. Il t'a {identifié|identifiée}. Deux fois."
         },
         {
           "label": "Le clasher, pour la forme",
@@ -1409,7 +1409,7 @@
               "consequence": "Lil Sauge a gagné, et il l'a déjà posté. Avec un filtre chat. Le chat a encore gagné."
             }
           },
-          "consequence": "Lil Sauge sort son téléphone et lance un live. « Les gars, il me clashe. Abonnez-vous. »"
+          "consequence": "Lil Sauge sort son téléphone et lance un live. « Les gars, {il|elle} me clashe. Abonnez-vous. »"
         }
       ]
     },
@@ -1442,7 +1442,7 @@
               "effects": {
                 "mental": -6
               },
-              "consequence": "Kolosse lève les bras devant la caméra. « Abonnez-vous ! » Puis sa batterie meurt. Tu as perdu contre un homme à 1 %. Retourne le voir quand tu seras prêt."
+              "consequence": "Kolosse lève les bras devant la caméra. « Abonnez-vous ! » Puis sa batterie meurt. Tu as perdu contre un homme à 1 %. Retourne le voir quand tu seras {prêt|prête}."
             }
           },
           "consequence": "Kolosse cale son téléphone contre une poubelle. « Bonsoir le live. On commence. Personne ne part. »"
@@ -1474,7 +1474,7 @@
               "effects": {
                 "mental": -6
               },
-              "consequence": "Il a gagné avec TON chargeur. Il le garde « en souvenir ». Retourne le voir quand tu seras prêt. Et achète un autre chargeur."
+              "consequence": "Il a gagné avec TON chargeur. Il le garde « en souvenir ». Retourne le voir quand tu seras {prêt|prête}. Et achète un autre chargeur."
             }
           },
           "consequence": "Kolosse branche ton chargeur. Il est ému. Il te prévient quand même : « Ça change rien. Je vais te détruire. Merci pour le chargeur. »"
@@ -1640,7 +1640,7 @@
           "consequence": "Le service marketing t'achète un survêt « authentique » à 380 €. Il est pré-usé. Par une machine. Momo est vexé : lui le faisait gratuitement."
         },
         {
-          "label": "Le rappeur concept : tu ne parles qu'en rimes",
+          "label": "{Le rappeur|La rappeuse} concept : tu ne parles qu'en rimes",
           "effects": {
             "mental": -3
           },
@@ -1731,7 +1731,7 @@
             "sortie_faite",
             "faux_streams"
           ],
-          "consequence": "Tu es numéro 1 au Kazakhstan. Tu n'as jamais été au Kazakhstan. Le Kazakhstan non plus ne t'a jamais vu. Yanis Tracklist a déjà remarqué."
+          "consequence": "Tu es numéro 1 au Kazakhstan. Tu n'as jamais été au Kazakhstan. Le Kazakhstan non plus ne t'a jamais {vu|vue}. Yanis Tracklist a déjà remarqué."
         }
       ]
     },
@@ -1741,7 +1741,7 @@
       "location": "quartier",
       "npc": "le_conteur",
       "weight": 0,
-      "text": "Le Conteur t'attend, une enceinte à la main. « J'ai sorti l'épisode 1 de ma nouvelle série : “Le petit de la laverie”. Tu es le méchant. L'épisode 2, on le fait en direct. Maintenant. »",
+      "text": "Le Conteur t'attend, une enceinte à la main. « J'ai sorti l'épisode 1 de ma nouvelle série : “{Le petit|La petite} de la laverie”. Tu es {le méchant|la méchante}. L'épisode 2, on le fait en direct. Maintenant. »",
       "choices": [
         {
           "label": "Clasher le Conteur, en direct",
@@ -1757,7 +1757,7 @@
               "set_flags": [
                 "conteur_ch5"
               ],
-              "consequence": "Le Conteur range son enceinte. « Changement de scénario. Dans l'épisode 3, tu deviens le héros. » Les fans crient au spoiler. Lui prend des notes."
+              "consequence": "Le Conteur range son enceinte. « Changement de scénario. Dans l'épisode 3, tu deviens {le héros|l'héroïne}. » Les fans crient au spoiler. Lui prend des notes."
             },
             "lose": {
               "effects": {
@@ -2068,7 +2068,7 @@
               "effects": {
                 "mental": -8
               },
-              "consequence": "Il connaît ses paroles mieux que toi. Évidemment. « Révise, petit. » Retourne le voir quand tu seras prêt."
+              "consequence": "Il connaît ses paroles mieux que toi. Évidemment. « Révise, {petit|petite}. » Retourne le voir quand tu seras {prêt|prête}."
             },
             "opponent_power": 1.2
           },
@@ -2214,7 +2214,7 @@
           "set_flags": [
             "label_lance"
           ],
-          "consequence": "Un dernier freestyle, pas pour toi : pour eux. Yanis coupe le micro et dit, hors antenne : « Ça, c'est un patron. »"
+          "consequence": "Un dernier freestyle, pas pour toi : pour eux. Yanis coupe le micro et dit, hors antenne : « Ça, c'est {un patron|une patronne}. »"
         }
       ]
     }
@@ -2325,7 +2325,7 @@
           "micro_ouvert_reussi",
           "freestyle_fait"
         ],
-        "consequence": "Big Nono : « Le petit du bloc. Retenez ce nom. » goslo radio va rediffuser ton passage toute la semaine."
+        "consequence": "Big Nono : « {Le petit|La petite} du bloc. Retenez ce nom. » goslo radio va rediffuser ton passage toute la semaine."
       },
       "lose": {
         "effects": {
@@ -2347,7 +2347,7 @@
       "host": "delamorale",
       "show": "Le Grand Débat · Télé",
       "boss": true,
-      "intro": "Jean-Hubert Delamorale ajuste ses lunettes. « Monsieur {nom}, merci d'être venu défendre l'indéfendable. » Le public du plateau a été choisi pour ne pas t'aimer.",
+      "intro": "Jean-Hubert Delamorale ajuste ses lunettes. « {Monsieur|Madame} {nom}, merci d'être {venu|venue} défendre l'indéfendable. » Le public du plateau a été choisi pour ne pas t'aimer.",
       "start_hype": 20,
       "pass_hype": 80,
       "timeout_penalty": 14,
@@ -2545,7 +2545,7 @@
           ]
         },
         {
-          "text": "Attention, appel au standard… C'est le Baron. Il dit : « Le petit a gagné un clash. Moi, j'ai gagné quinze ans. » Ta réponse ?",
+          "text": "Attention, appel au standard… C'est le Baron. Il dit : « {Le petit|La petite} a gagné un clash. Moi, j'ai gagné quinze ans. » Ta réponse ?",
           "time": 9,
           "answers": [
             {
@@ -2603,7 +2603,7 @@
             {
               "label": "Raccrocher en direct",
               "hype": -12,
-              "reaction": "Tu as raccroché au nez de ta mère en direct. Big Nono te regarde comme on regarde un homme perdu."
+              "reaction": "Tu as raccroché au nez de ta mère en direct. Big Nono te regarde comme on regarde {un homme perdu|une femme perdue}."
             }
           ]
         }
@@ -2718,7 +2718,7 @@
         {
           "say": {
             "who": "lil_sauge",
-            "text": "Encore sur ton carnet, {nom} ? Les gens lisent plus, frère. Ils scrollent."
+            "text": "Encore sur ton carnet, {nom} ? Les gens lisent plus, {frère|ma sœur}. Ils scrollent."
           }
         },
         {
@@ -2793,7 +2793,7 @@
         {
           "say": {
             "who": "lil_sauge",
-            "text": "Ici, même les petits taxis ont plus de flow que toi, khoya. Faut un concept."
+            "text": "Ici, même les petits taxis ont plus de flow que toi, {khoya|khti}. Faut un concept."
           },
           "cities": [
             "Casablanca"
@@ -3133,7 +3133,7 @@
         {
           "say": {
             "who": "momo",
-            "text": "Petit… on a reçu un mail. Une vraie salle. Avec une vraie scène. Et de vrais gens qui paient. Tu vas faire ton premier concert."
+            "text": "{Petit|Petite}… on a reçu un mail. Une vraie salle. Avec une vraie scène. Et de vrais gens qui paient. Tu vas faire ton premier concert."
           }
         },
         {
@@ -3168,7 +3168,7 @@
         {
           "say": {
             "who": "momo",
-            "text": "Trois semaines, petit. Il te faut une setlist, un DJ, une répète, et une salle pleine. Moi, je m'occupe du merch. J'ai imprimé des t-shirts. Ils sentent la lessive."
+            "text": "Trois semaines, {petit|petite}. Il te faut une setlist, un DJ, une répète, et une salle pleine. Moi, je m'occupe du merch. J'ai imprimé des t-shirts. Ils sentent la lessive."
           }
         },
         {
@@ -3233,7 +3233,7 @@
         {
           "say": {
             "who": "gege",
-            "text": "Pas mal, petit. Reviens quand tu veux. Mais préviens-moi pour l'écureuil à la platine."
+            "text": "Pas mal, {petit|petite}. Reviens quand tu veux. Mais préviens-moi pour l'écureuil à la platine."
           }
         },
         {
@@ -3332,7 +3332,7 @@
         {
           "say": {
             "who": "momo",
-            "text": "Petit ! Regarde tes notifs ! Non, attends. Assieds-toi d'abord. Non, debout. Non, regarde, c'est tout."
+            "text": "{Petit|Petite} ! Regarde tes notifs ! Non, attends. Assieds-toi d'abord. Non, debout. Non, regarde, c'est tout."
           }
         },
         {
@@ -3749,7 +3749,7 @@
         {
           "say": {
             "who": "momo",
-            "text": "Petit. Passe à la laverie, j'ai un truc à te donner. C'est pas du linge, promis."
+            "text": "{Petit|Petite}. Passe à la laverie, j'ai un truc à te donner. C'est pas du linge, promis."
           }
         },
         {
@@ -3811,7 +3811,7 @@
         {
           "say": {
             "who": "maman",
-            "text": "Donc maintenant, tu es patron ? Avec des employés, des fiches de paie ?"
+            "text": "Donc maintenant, tu es {patron|patronne} ? Avec des employés, des fiches de paie ?"
           }
         },
         {
@@ -4893,7 +4893,7 @@
         },
         {
           "attack": {
-            "line": "Dernière incision, petit : retourne à ta laverie. Moi je laisse une œuvre, toi tu laisses un chat qui rit.",
+            "line": "Dernière incision, {petit|petite} : retourne à ta laverie. Moi je laisse une œuvre, toi tu laisses un chat qui rit.",
             "damage": 12
           },
           "setup": "La laverie m'a lavé de mes doutes, essoré mes soucis,",
@@ -4938,7 +4938,7 @@
         "effects": {
           "mental": -7
         },
-        "consequence": "Scalpel corrige ton dernier couplet au stylo rouge, à voix haute, et te rend la copie. « 9 sur 20. Revenez quand vous voulez. » Il te vouvoie. C'est pire. Retourne le voir quand tu seras prêt."
+        "consequence": "Scalpel corrige ton dernier couplet au stylo rouge, à voix haute, et te rend la copie. « 9 sur 20. Revenez quand vous voulez. » Il te vouvoie. C'est pire. Retourne le voir quand tu seras {prêt|prête}."
       }
     }
   ],
@@ -5092,7 +5092,7 @@
               "reaction": "Le voisin du dessus tape au plafond. Tu le prends comme une ovation."
             },
             {
-              "text": "comme un futur champion",
+              "text": "comme {un futur champion|une future championne}",
               "score": 6,
               "reaction": "Tu l'écris en majuscules. Puis tu le soulignes. Deux fois."
             },
@@ -5497,7 +5497,7 @@
         "set_flags": [
           "auditions_faites"
         ],
-        "consequence": "Les contrats sont signés, les singles sortent, et ils font un bruit… discret. Tu apprends le métier de patron : c'est comme celui de rappeur, avec des factures en plus."
+        "consequence": "Les contrats sont signés, les singles sortent, et ils font un bruit… discret. Tu apprends le métier de {patron|patronne} : c'est comme celui de {rappeur|rappeuse}, avec des factures en plus."
       }
     },
     {
@@ -5541,9 +5541,9 @@
           "lead": "Zanga me dit :",
           "endings": [
             {
-              "text": "« wakha khoya, ici tout bouge »",
+              "text": "« wakha {khoya|khti}, ici tout bouge »",
               "score": 10,
-              "reaction": "« Wakha khoya ! » Zanga tape dans la vitre de la cabine. L'ingé son hoche la tête sans lever les yeux. C'est validé."
+              "reaction": "« Wakha {khoya|khti} ! » Zanga tape dans la vitre de la cabine. L'ingé son hoche la tête sans lever les yeux. C'est validé."
             },
             {
               "text": "« monte le son, que ça bouge »",
@@ -5558,7 +5558,7 @@
             {
               "text": "« t'as l'heure ? »",
               "score": 0,
-              "reaction": "Zanga regarde sa montre. « 2 h 12. » Puis il te regarde. « C'était pas une vraie question, khoya. »"
+              "reaction": "Zanga regarde sa montre. « 2 h 12. » Puis il te regarde. « C'était pas une vraie question, {khoya|khti}. »"
             }
           ]
         },
@@ -5609,7 +5609,7 @@
         "xp": {
           "plume": 10
         },
-        "consequence": "Zanga écoute la prise, longtemps. « Demain, khoya. On refait tout demain. » Il a raison."
+        "consequence": "Zanga écoute la prise, longtemps. « Demain, {khoya|khti}. On refait tout demain. » Il a raison."
       }
     },
     {

@@ -59,7 +59,7 @@ private struct HistoryRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(alignment: .firstTextBaseline) {
-                Text(record.ending.title.uppercased())
+                Text(TextTemplate.agree(record.ending.title, record.rapper.gender).uppercased())
                     .font(.display(24))
                     .foregroundStyle(record.ending.isPremature ? Theme.text : Theme.accent)
                 Spacer()

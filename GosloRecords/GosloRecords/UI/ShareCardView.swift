@@ -38,7 +38,7 @@ struct ShareCardView: View {
 
                 Rectangle().fill(Theme.accent).frame(width: 40, height: 4).padding(.vertical, 22)
 
-                Text(record.ending.title.uppercased())
+                Text(TextTemplate.agree(record.ending.title, record.rapper.gender).uppercased())
                     .font(.display(46))
                     .lineLimit(2)
                     .minimumScaleFactor(0.5)

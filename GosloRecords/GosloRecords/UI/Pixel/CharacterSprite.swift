@@ -93,6 +93,11 @@ enum CharacterSprite {
             c.fill(5, 5, 10, 5, p.lens)
             c.dot(6, 5, p.lens.shaded(1.8))
         }
+        if look.feminine {
+            c.dot(5, 4, p.eye)
+            c.dot(10, 4, p.eye)
+            c.fill(7, 7, 8, 7, PixelColor(hex: "#c0505a"))
+        }
         if look.earrings {
             c.dot(4, 6, PixelColor(hex: "#e8c547"))
             c.dot(11, 6, PixelColor(hex: "#e8c547"))
@@ -157,6 +162,12 @@ enum CharacterSprite {
                 c.fill(5, 1, 10, 2, p.hair)
                 c.dot(4, 3, p.hairShade)
                 c.dot(11, 3, p.hairShade)
+            case .bun:
+                c.fill(6, 0, 9, 0, p.hair)
+                c.fill(5, 1, 10, 1, p.hair)
+                c.fill(4, 2, 11, 2, p.hair)
+                c.dot(4, 3, p.hair)
+                c.dot(11, 3, p.hair)
             }
         }
         if look.headphones {
@@ -196,6 +207,7 @@ enum CharacterSprite {
             if look.hairStyle == .puff { c.fill(3, 0, 12, 4, p.hair) }
             if look.hairStyle == .long { c.fill(4, 2, 11, 9, p.hair) }
             if look.hairStyle == .fade { c.fill(5, 5, 10, 7, p.skin) }
+            if look.hairStyle == .bun { c.fill(6, 0, 9, 1, p.hair) }
             if look.hairStyle == .braids {
                 c.fill(4, 2, 11, 9, p.hair)
                 for x in [5, 7, 9] { c.fill(x, 3, x, 9, p.hairShade) }
@@ -289,6 +301,10 @@ enum CharacterSprite {
             case .fade:
                 c.fill(6, 1, 10, 2, p.hair)
                 c.dot(5, 3, p.hairShade)
+            case .bun:
+                c.fill(6, 1, 10, 2, p.hair)
+                c.fill(5, 0, 7, 1, p.hair)
+                c.fill(5, 2, 6, 5, p.hair)
             }
         }
         if look.headphones {

@@ -222,7 +222,7 @@
     {
       "id": "goslo_vs_major",
       "title": "goslo contre la major",
-      "text": "Hexagone Music veut racheter ton contrat chez goslo records. Momo t'appelle, la voix tremblante : « fais ce que t'as à faire, frère. Mais oublie pas d'où tu viens. »",
+      "text": "Hexagone Music veut racheter ton contrat chez goslo records. Momo t'appelle, la voix tremblante : « fais ce que t'as à faire, {frère|ma sœur}. Mais oublie pas d'où tu viens. »",
       "location": "label",
       "npc": "momo",
       "weight": 16,
@@ -354,7 +354,7 @@
             "credibilite": -3,
             "mental": 2
           },
-          "consequence": "Diffusée sur l'écran géant. Sans le son. On t'a vu articuler en silence pendant 40 secondes."
+          "consequence": "Diffusée sur l'écran géant. Sans le son. On t'a {vu|vue} articuler en silence pendant 40 secondes."
         },
         {
           "label": "Ne pas y aller",
@@ -510,7 +510,7 @@
     {
       "id": "feat_underground",
       "title": "L'invitation du vétéran",
-      "text": "Vieux Mic Lucien, légende de l'underground des années 90, t'invite sur son nouveau morceau. Il ne connaît pas les réseaux. Il t'a appelé sur un fixe.",
+      "text": "Vieux Mic Lucien, légende de l'underground des années 90, t'invite sur son nouveau morceau. Il ne connaît pas les réseaux. Il t'a {appelé|appelée} sur un fixe.",
       "location": "quartier",
       "npc": "lucien",
       "weight": 8,
@@ -716,7 +716,7 @@
     {
       "id": "nouvelle_generation",
       "title": "La nouvelle génération",
-      "text": "P'tit Wifi, 17 ans, a déclaré dans une interview que tu es « un rappeur de daron ». La vidéo fait 2 millions de vues.",
+      "text": "P'tit Wifi, 17 ans, a déclaré dans une interview que tu es « {un rappeur|une rappeuse} de daron ». La vidéo fait 2 millions de vues.",
       "location": "media",
       "npc": "ptit_wifi",
       "weight": 7,
@@ -907,7 +907,7 @@
           ]
         },
         {
-          "label": "Annuler, t'es pas prêt",
+          "label": "Annuler, t'es pas {prêt|prête}",
           "effects": {
             "credibilite": -6,
             "mental": 5,
@@ -985,7 +985,7 @@
           ],
           "skip_turns": 3,
           "follow_up": "retour_apres_pause",
-          "consequence": "Deux ans plus tard. Tu as appris la poterie. Les algorithmes t'ont oublié, mais toi, tu t'es retrouvé."
+          "consequence": "Deux ans plus tard. Tu as appris la poterie. Les algorithmes t'ont {oublié|oubliée}, mais toi, tu t'es {retrouvé|retrouvée}."
         },
         {
           "label": "Juste une semaine à la campagne",
@@ -1130,7 +1130,7 @@
             "streams": 5,
             "mental": -8
           },
-          "consequence": "La story a plus de vues que le morceau. On t'appelle « le rappeur qui pleure ». Il y a pire."
+          "consequence": "La story a plus de vues que le morceau. On t'appelle « {le rappeur|la rappeuse} qui pleure ». Il y a pire."
         }
       ]
     },
@@ -1283,7 +1283,7 @@
           "effects": {
             "credibilite": 3
           },
-          "consequence": "Le lion à lunettes t'a bloqué. C'est mieux comme ça."
+          "consequence": "Le lion à lunettes t'a {bloqué|bloquée}. C'est mieux comme ça."
         }
       ]
     },
@@ -1738,7 +1738,7 @@
           "effects": {
             "mental": 9
           },
-          "consequence": "Tu t'es réveillé en paix avec le monde. Le monde, lui, ne t'a pas attendu."
+          "consequence": "Tu t'es {réveillé|réveillée} en paix avec le monde. Le monde, lui, ne t'a pas attendu."
         },
         {
           "label": "Bosser ton flow sur des faces B",
@@ -1869,7 +1869,7 @@
           "set_flags": [
             "baron_contact"
           ],
-          "consequence": "Il a répondu « respect petit ». Tu as fait une capture. Tu l'as encadrée."
+          "consequence": "Il a répondu « respect {petit|petite} ». Tu as fait une capture. Tu l'as encadrée."
         },
         {
           "label": "Ne rien dire",
@@ -1983,7 +1983,7 @@
           "consequence": "Tu as répondu « Rendez-vous ». Le game retient son souffle."
         },
         {
-          "label": "Pas maintenant, t'es pas prêt",
+          "label": "Pas maintenant, t'es pas {prêt|prête}",
           "effects": {
             "credibilite": -6
           },
@@ -2171,7 +2171,7 @@
     {
       "id": "conteur_episode",
       "title": "Épisode 1",
-      "text": "Le Conteur vient de sortir « Épisode 1 », un diss track de 9 minutes. Tu es cité à 4:12, entre une métaphore sur les pigeons et un règlement de comptes de 2006.",
+      "text": "Le Conteur vient de sortir « Épisode 1 », un diss track de 9 minutes. Tu es {cité|citée} à 4:12, entre une métaphore sur les pigeons et un règlement de comptes de 2006.",
       "location": "media",
       "npc": "le_conteur",
       "weight": 9,
@@ -2202,7 +2202,7 @@
                 "credibilite": -6,
                 "mental": -6
               },
-              "consequence": "Épisode 2 est sorti. Puis 3. Puis 4. Tu es devenu un personnage secondaire de sa série."
+              "consequence": "Épisode 2 est sorti. Puis 3. Puis 4. Tu es {devenu|devenue} un personnage secondaire de sa série."
             }
           },
           "consequence": "Tu as appelé ton morceau « Saison 2 ». Le ton est donné."
@@ -2722,7 +2722,7 @@
           "relations": {
             "yanis": 10
           },
-          "consequence": "Il l'a réécouté en live. Il a dit « je l'ai peut-être sous-coté ». Tu es remonté à la 11e place."
+          "consequence": "Il l'a réécouté en live. Il a dit « je l'ai peut-être sous-coté ». Tu es {remonté|remontée} à la 11e place."
         },
         {
           "label": "Faire de la 14e place ton identité",
@@ -2884,7 +2884,7 @@
       "conditions": {
         "min_chapter": 2
       },
-      "text": "Big Kliks t'écrit : « Frère, j'ai un fournisseur. Un million de streams pour 200 balles. Ils viennent tous du même village, mais c'est des vrais gens. Enfin, des vrais téléphones. »",
+      "text": "Big Kliks t'écrit : « {Frère|Ma sœur}, j'ai un fournisseur. Un million de streams pour 200 balles. Ils viennent tous du même village, mais c'est des vrais gens. Enfin, des vrais téléphones. »",
       "choices": [
         {
           "label": "Acheter le pack « Starter »",
@@ -3142,7 +3142,7 @@
       "conditions": {
         "min_chapter": 3
       },
-      "text": "Un ado t'arrête dans la rue : « T'es pas le gars de la radio ? Tu peux me signer un truc ? » Il te tend un ticket de métro, un bras, et un paquet de chips.",
+      "text": "Un ado t'arrête dans la rue : « T'es pas {le gars|la meuf} de la radio ? Tu peux me signer un truc ? » Il te tend un ticket de métro, un bras, et un paquet de chips.",
       "choices": [
         {
           "label": "Signer le ticket de métro",
@@ -3585,7 +3585,7 @@
       "conditions": {
         "min_chapter": 5
       },
-      "text": "« Le Débrief » organise un débat : « Le petit de la laverie sait-il écrire ? » Yanis Tracklist a invité trois experts. L'un d'eux pense que tu es un chat.",
+      "text": "« Le Débrief » organise un débat : « {Le petit|La petite} de la laverie sait-il écrire ? » Yanis Tracklist a invité trois experts. L'un d'eux pense que tu es un chat.",
       "choices": [
         {
           "label": "Venir défendre ta plume en direct",
@@ -3716,7 +3716,7 @@
       "conditions": {
         "min_chapter": 6
       },
-      "text": "Momo a fabriqué une couronne en carton avec des boîtes de lessive. « Pour le jour où tu seras roi. » Elle sent la lavande.",
+      "text": "Momo a fabriqué une couronne en carton avec des boîtes de lessive. « Pour le jour où tu seras {roi|reine}. » Elle sent la lavande.",
       "choices": [
         {
           "label": "La porter tout de suite",
@@ -3797,7 +3797,7 @@
     {
       "id": "punchliner_banc",
       "title": "Punchliner au banc",
-      "text": "Sur le banc, trois gamins jouent au Punchliner : vingt mots en vrac sur un carton, une phrase à finir. Le perdant offre les chips. « Eh, le rappeur ! T'oses ? »",
+      "text": "Sur le banc, trois gamins jouent au Punchliner : vingt mots en vrac sur un carton, une phrase à finir. Le perdant offre les chips. « Eh, {le rappeur|la rappeuse} ! T'oses ? »",
       "location": "quartier",
       "weight": 6,
       "choices": [
@@ -3845,7 +3845,7 @@
     {
       "id": "platine_bobine",
       "title": "Bobine s'emballe",
-      "text": "DJ Bobine a installé sa platine sur le banc et poussé le pitch « pour l'énergie ». Le morceau ressemble à un dessin animé. « Cale-la à 100 %, si t'es si fort. »",
+      "text": "DJ Bobine a installé sa platine sur le banc et poussé le pitch « pour l'énergie ». Le morceau ressemble à un dessin animé. « Cale-la à 100 %, si t'es si {fort|forte}. »",
       "location": "quartier",
       "npc": "dj_bobine",
       "weight": 6,

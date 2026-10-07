@@ -29,7 +29,7 @@ enum HeroSprite {
     private struct Palette {
         let skin, skinShade, skinLight, hair, hairShade, hairLight: PixelColor
         let top, topShade, topLight, bottom, bottomShade, bottomLight: PixelColor
-        let shoes, shoesShade, sole, accent, accentShade, accentLight, mouth: PixelColor
+        let shoes, shoesShade, sole, accent, accentShade, accentLight, mouth, lips: PixelColor
         let eye = PixelColor(hex: "#141418")
         let white = PixelColor(hex: "#f2efe8")
         let lens = PixelColor(hex: "#1a1a22")
@@ -57,6 +57,8 @@ enum HeroSprite {
             accentShade = accent.shaded(0.7)
             accentLight = accent.shaded(1.25)
             mouth = skin.shaded(0.6)
+            lips = PixelColor(r: UInt8(min(255, Double(skin.r) * 0.75 + 70)), g: UInt8(Double(skin.g) * 0.45),
+                              b: UInt8(Double(skin.b) * 0.5))
         }
     }
 
@@ -99,6 +101,9 @@ enum HeroSprite {
                 c.dot(11, 28, .clear); c.dot(28, 28, .clear)
             case .short:
                 c.fill(13, 3, 26, 8, p.hair); c.fill(15, 2, 24, 2, p.hair); c.fill(23, 3, 26, 9, p.hairShade)
+            case .bun:
+                c.fill(13, 4, 26, 8, p.hair); c.ellipse(19.5, 3, 4.5, 3.5, p.hair); c.ellipse(21, 3.5, 2.5, 2, p.hairShade)
+                c.fill(17, 6, 22, 6, p.accent)  // Scrunchie.
             case .fade:
                 c.fill(13, 2, 26, 7, p.hair); c.fill(14, 1, 25, 1, p.hair); c.fill(12, 8, 27, 9, p.hair)
                 for y in [10, 11] {
@@ -166,7 +171,7 @@ enum HeroSprite {
         }
         // Torso: lit from the left.
         c.fill(11, 23, 28, 36, p.top)
-        c.fill(10, 24, 29, 26, p.top)
+        if !look.feminine { c.fill(10, 24, 29, 26, p.top) }  // Broad shoulders; slimmer when feminine.
         c.fill(26, 25, 28, 36, p.topShade)
         c.fill(11, 24, 12, 33, p.topLight)
         c.fill(12, 36, 27, 36, p.topShade)
@@ -263,6 +268,7 @@ enum HeroSprite {
         c.fill(13, 19, 26, 20, p.skin); c.fill(24, 19, 26, 20, p.skinShade)
         c.fill(11, 12, 11, 15, p.skin); c.fill(28, 12, 28, 15, p.skinShade)
         features(c, look, p, browLeft: 14, browRight: 25)
+        if look.feminine { feminineFace(c, p) }
         if look.beard {
             c.fill(12, 15, 13, 19, p.hair); c.fill(26, 15, 27, 19, p.hair)
             c.fill(13, 19, 26, 21, p.hair); c.fill(15, 20, 24, 22, p.hair)
@@ -285,6 +291,14 @@ enum HeroSprite {
         c.dot(17, 13, p.white); c.dot(23, 13, p.white)
         c.fill(19, 15, 19, 16, p.skinShade); c.dot(20, 17, p.skinShade)
         c.fill(18, 18, 21, 18, p.mouth)
+    }
+
+    /// Finer brows, lashes, lips, a touch of light on the cheeks.
+    private static func feminineFace(_ c: PixelCanvas, _ p: Palette) {
+        c.dot(14, 11, p.skin); c.dot(25, 11, p.skin)
+        c.dot(14, 13, p.eye); c.dot(25, 13, p.eye)
+        c.fill(18, 18, 21, 18, p.lips); c.fill(19, 19, 20, 19, p.lips.shaded(1.15))
+        c.dot(15, 16, p.skin.shaded(1.06)); c.dot(24, 16, p.skin.shaded(0.95))
     }
 
     private static func glasses(_ c: PixelCanvas, _ p: Palette) {
@@ -310,7 +324,7 @@ enum HeroSprite {
                 for y in stride(from: 10, to: 29, by: 3) { c.dot(x, y, p.hairShade) }
                 c.dot(x, 30, p.accent)
             }
-        case .short, .bald, .fade:
+        case .short, .bald, .fade, .bun:
             break
         }
     }
@@ -349,6 +363,7 @@ enum HeroSprite {
             c.fill(14, 8, 25, 21, p.skin)
             c.fill(24, 8, 25, 20, p.skinShade)
             features(c, look, p, browLeft: 15, browRight: 24)
+            if look.feminine { feminineFace(c, p) }
             if look.beard {
                 c.fill(14, 19, 25, 21, p.hair); c.fill(17, 17, 22, 17, p.hair); c.fill(18, 18, 21, 18, p.mouth)
             }
@@ -381,6 +396,11 @@ enum HeroSprite {
                 c.fill(13, 3, 26, 8, p.hair); c.fill(12, 5, 27, 9, p.hair); c.fill(15, 2, 24, 2, p.hair)
                 for x in [14, 17, 20, 23, 26] { c.fill(x, 3, x, 9, p.hairShade) }  // Cornrow parts.
                 c.fill(12, 9, 27, 9, p.hairShade)
+            case .bun:
+                c.ellipse(19.5, 2, 4.5, 3, p.hair); c.ellipse(21, 2.5, 2.5, 2, p.hairShade); c.ellipse(18.5, 1.5, 2, 1.2, p.hairLight)
+                c.fill(13, 4, 26, 8, p.hair); c.fill(12, 6, 27, 10, p.hair)
+                c.fill(12, 10, 12, 14, p.hair); c.fill(27, 10, 27, 14, p.hair)
+                c.fill(19, 5, 19, 8, p.hairShade); c.fill(23, 4, 26, 9, p.hairShade); c.fill(14, 5, 17, 6, p.hairLight)
             case .fade:
                 c.fill(13, 2, 26, 6, p.hair); c.fill(14, 1, 25, 1, p.hair)
                 c.fill(23, 2, 26, 6, p.hairShade); c.fill(15, 2, 18, 3, p.hairLight)

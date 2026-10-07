@@ -20,7 +20,8 @@ struct HomeView: View {
 
             HStack(spacing: -12) {
                 ForEach(Array(Style.allCases.enumerated()), id: \.offset) { index, style in
-                    WalkingSprite(look: Rapper(name: "", city: .paris, style: style, skinTone: [1, 3, 0, 4][index]).look,
+                    WalkingSprite(look: Rapper(name: "", city: .paris, style: style, skinTone: [1, 3, 0, 4][index],
+                                               gender: index % 2 == 1 ? .rappeuse : .rappeur).look,
                                   facing: .down, size: 64)
                 }
             }

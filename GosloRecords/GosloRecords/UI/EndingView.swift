@@ -26,9 +26,9 @@ struct EndingView: View {
                 VStack(alignment: .leading, spacing: 6) {
                     Kicker(text: record.ending.isPremature ? "Fin prématurée" : "Fin de carrière",
                            color: Theme.accent)
-                    Text(record.ending.title.uppercased())
+                    Text(TextTemplate.agree(record.ending.title, record.rapper.gender).uppercased())
                         .font(.display(54))
-                    Text(record.ending.description)
+                    Text(TextTemplate.agree(record.ending.description, record.rapper.gender))
                         .font(.system(size: 16))
                         .foregroundStyle(Theme.muted)
                         .fixedSize(horizontal: false, vertical: true)
@@ -47,8 +47,8 @@ struct EndingView: View {
                         let shareImage = Image(uiImage: image)
                         ShareLink(item: shareImage,
                                   subject: Text("Ma carrière sur goslo records"),
-                                  message: Text("\(record.rapper.name) — \(record.ending.title). @goslo_records"),
-                                  preview: SharePreview("\(record.rapper.name) — \(record.ending.title)", image: shareImage)) {
+                                  message: Text("\(record.rapper.name) — \(TextTemplate.agree(record.ending.title, record.rapper.gender)). @goslo_records"),
+                                  preview: SharePreview("\(record.rapper.name) — \(TextTemplate.agree(record.ending.title, record.rapper.gender))", image: shareImage)) {
                             Text("Partager")
                         }
                         .buttonStyle(PrimaryButtonStyle())
