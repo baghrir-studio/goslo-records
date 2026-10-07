@@ -96,3 +96,21 @@ Réponses suggérées : « Aucun » partout, sauf :
 - **Thèmes matures ou suggestifs : rares ou légers.** Le jeu évoque le burn-out et une séance chez la psy, sur un ton bienveillant.
 
 Apple calcule l'âge à partir de ces réponses. On peut s'attendre à 12+ ou 13+ selon la grille en vigueur.
+
+## Soumission à l'App Store (checklist)
+
+1. **Captures d'écran** (obligatoires) : iPhone 6,9 pouces, 1320 × 2868 (un iPhone 16 Pro Max ou 15 Pro Max ; sur le simulateur, ⌘S). Entre 3 et 10. Suggestions, dans l'ordre :
+   1. Un clash contre un boss, au moment de la technique secrète (la cinématique plein écran).
+   2. L'écran de création, avec un look bien chargé (tresses, maillot, chaîne).
+   3. Un concert, combo en cours.
+   4. Le quartier avec ses façades (et des affiches si les streams sont hauts).
+   5. Le Punchliner, verdict « PUNCHLINE ! » affiché.
+   6. « Ton son tourne », avec le karaoké.
+2. **URL d'assistance** (obligatoire) : une page avec un moyen de contact. La politique de confidentialité publiée peut servir, en y ajoutant une adresse e-mail.
+3. **Politique de confidentialité** : rendre publique la page indiquée plus haut et coller son lien.
+4. **Classification par âge**, **Confidentialité**, **Catégories**, **textes** : voir les sections plus haut.
+5. **Prix** : gratuit. **Disponibilité** : tous les pays francophones au minimum (France, Belgique, Suisse, Canada, Maroc…).
+6. **Build** : choisir le dernier build TestFlight dans la page de la version.
+7. **Informations pour la relecture** : « Jeu entièrement hors ligne, aucun compte, aucune donnée collectée. » Laisser vide la partie connexion.
+8. **Juridique** (rappel du README) : faire relire les personnages et les textes par un avocat avant la sortie publique.
+9. Cliquer **Soumettre pour vérification**. Apple répond en général en 24 à 48 heures.
