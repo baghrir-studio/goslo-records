@@ -583,11 +583,11 @@ final class AppModel {
         return clash
     }
 
-    /// Triggers the secret technique (gauge full).
+    /// Triggers the secret technique (gauge full), charged in rhythm at `charge` (0…1).
     @discardableResult
-    func clashSecret() -> ClashState? {
+    func clashSecret(charge: Double? = nil) -> ClashState? {
         guard var current = state, case .clash = phase else { return nil }
-        guard let clash = try? engine.clashSecret(in: &current, using: &rng) else { return nil }
+        guard let clash = try? engine.clashSecret(charge: charge, in: &current, using: &rng) else { return nil }
         state = current
         phase = .clash(clash)
         persist()

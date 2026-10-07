@@ -55,16 +55,16 @@ enum Style: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .boomBap:
             SecretTechnique(name: "Le Sample Interdit",
-                            line: "Tu lâches un sample de jazz de 1974 que personne n'a jamais déclaré. Trois avocats s'évanouissent au premier rang.")
+                            line: "Tu lâches un sample de jazz de 1974 que personne n'a jamais déclaré. Trois avocats s'évanouissent au premier rang.", fx: .vinyl)
         case .trap:
             SecretTechnique(name: "L'Ad-lib Infini",
-                            line: "Tu enchaînes 47 « skrrt » sans respirer. Un médecin dans le public commence à prendre des notes.")
+                            line: "Tu enchaînes 47 « skrrt » sans respirer. Un médecin dans le public commence à prendre des notes.", fx: .adlib)
         case .melancolique:
             SecretTechnique(name: "La Larme Unique",
-                            line: "Une seule larme coule sur ta joue, au ralenti, pile sur le drop. Même la sécurité pleure.")
+                            line: "Une seule larme coule sur ta joue, au ralenti, pile sur le drop. Même la sécurité pleure.", fx: .tear)
         case .drill:
             SecretTechnique(name: "La Glissade de 808",
-                            line: "Ta 808 glisse si bas que les vitres de la salle tremblent. Un voisin appelle la mairie.")
+                            line: "Ta 808 glisse si bas que les vitres de la salle tremblent. Un voisin appelle la mairie.", fx: .bass)
         }
     }
 

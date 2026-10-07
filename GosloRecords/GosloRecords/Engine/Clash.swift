@@ -135,12 +135,38 @@ enum ClashImpact: String, Codable {
     case miss
 }
 
+/// How a secret technique plays out on screen (its own animation and sound).
+enum SecretFX: String, Codable, CaseIterable {
+    /// Radiating rays (the default).
+    case rays
+    /// A sub-bass shockwave: rings, the whole screen shakes.
+    case bass
+    /// A giant record spins and scratches, the image rewinds.
+    case vinyl
+    /// Ad-libs fill the screen in echo.
+    case adlib
+    /// Slow motion in black and white, one tear in colour, silence, then the hit.
+    case tear
+    /// A live chat: reactions stream up the screen.
+    case emojis
+    /// The picture breaks up: colour split, flicker, the character vanishes and comes back.
+    case glitch
+    /// Red pen strokes slash across the screen.
+    case redpen
+    /// Stage spotlights sweep and lock on the character.
+    case spotlight
+}
+
 /// Secret technique: unlocked once enough damage has been dealt, usable once per clash.
 struct SecretTechnique: Codable, Equatable {
     let name: String
     let line: String
     /// SF Symbol raining down during its cinematic (optional).
     var prop: String? = nil
+    /// Its animation (rays when not set).
+    var fx: SecretFX? = nil
+
+    var effect: SecretFX { fx ?? .rays }
 }
 
 struct ClashLogEntry: Codable, Equatable, Identifiable {
@@ -155,6 +181,8 @@ struct ClashLogEntry: Codable, Equatable, Identifiable {
     var secret: SecretTechnique? = nil
     /// Share of a boss's technique the player countered by tapping (0…`ClashState.counterMaxReduction`).
     var countered: Double? = nil
+    /// How well the player charged their technique in rhythm (0…1).
+    var charge: Double? = nil
 }
 
 /// A boss's secret technique, waiting for the player to counter it (tap fast).
@@ -180,6 +208,14 @@ struct ClashState: Codable, Equatable {
     static let counterTaps = 16
     static let counterSeconds = 2.5
     static let counterMaxReduction = 0.75
+    /// Charging the player's technique: taps on the beat, from a weak to a crushing hit.
+    static let chargeBeats = 4
+    static let chargePower: ClosedRange<Double> = 0.8...1.3
+
+    /// Damage multiplier of a technique charged at `charge` (0…1).
+    static func secretPower(charge: Double) -> Double {
+        chargePower.lowerBound + (chargePower.upperBound - chargePower.lowerBound) * min(1, max(0, charge))
+    }
 
     let spec: ClashSpec
     /// Clash in the terrain vague: no action spent, rewards in XP.
@@ -298,7 +334,7 @@ enum ClashEngine {
     /// One round: the player hits (move or secret technique), then the opponent answers if still standing.
     /// The opponent triggers its own technique as soon as its gauge is full.
     static func playRound<R: RandomNumberGenerator>(_ state: inout ClashState, playerMove: ClashMove,
-                                                    playerSecret: SecretTechnique? = nil,
+                                                    playerSecret: SecretTechnique? = nil, playerCharge: Double? = nil,
                                                     playerLevel: (Skill) -> Int, opponent: ClashProfile,
                                                     opponentName: String, opponentSecret: SecretTechnique? = nil,
                                                     callbacks: [String] = [], using rng: inout R) {
@@ -306,12 +342,12 @@ enum ClashEngine {
 
         if let secret = playerSecret, state.playerSecretReady {
             let average = Skill.allCases.map(playerLevel).reduce(0, +) / Skill.allCases.count
-            let hit = secretDamage(level: average, using: &rng)
+            let hit = secretDamage(level: average, factor: playerCharge.map { ClashState.secretPower(charge: $0) } ?? 1, using: &rng)
             state.playerSecretUsed = true
             state.playerBoosted = false
             state.opponentHype = max(0, state.opponentHype - hit)
             state.log.append(ClashLogEntry(id: state.log.count, byPlayer: true, move: playerMove, damage: hit,
-                                           impact: .strong, line: secret.line, secret: secret))
+                                           impact: .strong, line: secret.line, secret: secret, charge: playerCharge))
         } else {
             let (playerDamage, playerImpact) = damage(move: playerMove, level: playerLevel(playerMove.skill),
                                                       boosted: state.playerBoosted,

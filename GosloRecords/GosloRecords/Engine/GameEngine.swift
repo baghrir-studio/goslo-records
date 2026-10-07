@@ -869,8 +869,9 @@ struct GameEngine {
         return clash
     }
 
-    /// Triggers the player's secret technique (gauge full, once per clash).
-    func clashSecret<R: RandomNumberGenerator>(in state: inout GameState, using rng: inout R) throws -> ClashState {
+    /// Triggers the player's secret technique (gauge full, once per clash), charged in rhythm at `charge` (0…1).
+    /// Without a charge it hits at its base power.
+    func clashSecret<R: RandomNumberGenerator>(charge: Double? = nil, in state: inout GameState, using rng: inout R) throws -> ClashState {
         guard var clash = state.clash else { throw GameEngineError.noClash }
         guard !clash.isOver else { return clash }
         if clash.pendingCounter != nil {
@@ -883,7 +884,7 @@ struct GameEngine {
             throw GameEngineError.noClash
         }
         let level = clashLevels(for: clash, in: state)
-        ClashEngine.playRound(&clash, playerMove: .presence, playerSecret: playerSecret(in: state),
+        ClashEngine.playRound(&clash, playerMove: .presence, playerSecret: playerSecret(in: state), playerCharge: charge,
                               playerLevel: level, opponent: profile.scaled(by: clash.levelBonus),
                               opponentName: opponent.name, opponentSecret: opponent.secret,
                               callbacks: callbacks(for: clash, in: state), using: &rng)

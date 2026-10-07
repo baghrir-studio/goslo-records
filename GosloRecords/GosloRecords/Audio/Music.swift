@@ -177,6 +177,8 @@ enum SoundEffect: String, CaseIterable {
     case siren
     /// The mic hits the stage: thud, two bounces, then a feedback whistle.
     case micDrop
+    /// Secret technique stings, one per animation (`SecretFX`).
+    case fxBass, fxScratch, fxAdlib, fxTear, fxGlitch, fxPen, fxSpotlight, fxChat
 
     /// Frequent, quiet sounds: they go to a dedicated player.
     var isTick: Bool { self == .blip || self == .step || self == .tap }
@@ -300,6 +302,48 @@ enum SoundEffect: String, CaseIterable {
                                (Synth.kick(punch: 0.3, length: 0.1), 0.32, 0.25), (Synth.hat(seed: 65), 0.32, 0.3),
                                (Synth.bass808(note: 91, length: 1.0, slideFrom: 86), 0.38, 0.22),
                                (Synth.bass808(note: 92, length: 0.9), 0.42, 0.12)])
+        case .fxBass:
+            out = Synth.layer([(Synth.kick(punch: 1.8, length: 0.7), 0, 1),
+                               (Synth.bass808(note: 26, length: 1.6, slideFrom: 43), 0, 1),
+                               (Synth.kick(punch: 1.2, length: 0.4), 0.75, 0.6)])
+        case .fxScratch:
+            out = Synth.layer([(Synth.scratch(length: 0.3), 0, 1), (Synth.scratch(length: 0.22, seed: 13), 0.33, 0.9),
+                               (Synth.scratch(length: 0.45, seed: 17), 0.6, 1), (Synth.kick(punch: 1.3), 1.05, 0.9),
+                               (Synth.snare(), 1.05, 0.6)])
+        case .fxAdlib:
+            var parts: [([Float], Double, Float)] = [(Synth.kick(punch: 1.2), 1.08, 0.9), (Synth.clap(), 1.08, 0.7)]
+            for index in 0..<9 {
+                let chirp = Synth.pulse(note: 74 + (index * 5) % 12, length: 0.1, duty: 0.25, decay: 9, glideTo: 66 + (index * 7) % 10)
+                parts.append((chirp, Double(index) * 0.12, Float(1 - Double(index) * 0.06)))
+            }
+            out = Synth.layer(parts)
+        case .fxTear:
+            out = Synth.layer([(Synth.keys([76], length: 0.9, decay: 1.2), 0, 1), (Synth.keys([74], length: 0.9, decay: 1.2), 0.5, 1),
+                               (Synth.keys([69, 72, 76], length: 1.5, decay: 0.9), 1.0, 1.2)])
+        case .fxGlitch:
+            var parts: [([Float], Double, Float)] = [(Synth.crackle(length: 0.7, clicks: 40, seed: 29), 0, 1),
+                                                     (Synth.kick(punch: 1.4), 0.62, 0.9)]
+            for index in 0..<8 {
+                parts.append((Synth.pulse(note: 96 - (index * 11) % 30, length: 0.05, duty: 0.5, decay: 2), Double(index) * 0.07, 0.9))
+            }
+            out = Synth.layer(parts)
+        case .fxPen:
+            var parts: [([Float], Double, Float)] = [(Synth.kick(punch: 1.3), 0.62, 0.9), (Synth.snare(seed: 31), 0.62, 0.6)]
+            for index in 0..<3 {
+                let start = Double(index) * 0.2
+                parts.append((Synth.hat(open: true, seed: UInt32(5 + index * 2)), start, 0.8))
+                parts.append((Synth.scratch(length: 0.14, seed: UInt32(19 + index * 4)), start, 0.7))
+            }
+            out = Synth.layer(parts)
+        case .fxSpotlight:
+            out = Synth.layer([(Synth.bass808(note: 36, length: 0.9), 0, 0.6), (Synth.keys([72, 76, 79], length: 1.3), 0.02, 1),
+                               (Synth.keys([84], length: 1.0), 0.3, 0.6), (Synth.hat(open: true, seed: 41), 0, 0.8)])
+        case .fxChat:
+            var parts: [([Float], Double, Float)] = [(Synth.kick(punch: 1.2), 1.0, 0.9)]
+            for index in 0..<12 {
+                parts.append((Synth.pulse(note: 84 + (index * 5) % 9, length: 0.04, duty: 0.25, decay: 20), Double(index) * 0.08, 0.8))
+            }
+            out = Synth.layer(parts)
         case .radioJingle:
             // "go-slo-ra-di-o": scratch, five notes, then the drop.
             out = Synth.layer([(Synth.scratch(length: 0.3), 0, 0.9)]

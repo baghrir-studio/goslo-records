@@ -7,7 +7,7 @@ struct BattleView: View {
     let clash: ClashState
     let state: GameState
 
-    private enum Stage { case intro, menu, animating, counter, micDrop, finished }
+    private enum Stage { case intro, menu, charge, animating, counter, micDrop, finished }
 
     @State private var stage: Stage = .intro
     @State private var message = ""
@@ -43,6 +43,18 @@ struct BattleView: View {
     @State private var counterTaps = 0
     @State private var counterLeft: CGFloat = 1
     @State private var micDropped = false
+    // Secret technique polish: slow-motion zoom on the target, burst, crowd shout, stunned stars, boss "VS".
+    @State private var zoom: CGFloat = 1
+    @State private var zoomAnchor: UnitPoint = .center
+    @State private var drained = false
+    @State private var impact: ImpactShown?
+    @State private var reaction: ImpactShown?
+    @State private var dizzyPlayer = false
+    @State private var dizzyOpponent = false
+    @State private var vsShown = false
+
+    private static let opponentAnchor = UnitPoint(x: 0.72, y: 0.36)
+    private static let playerAnchor = UnitPoint(x: 0.27, y: 0.74)
 
     private var opponent: CastMember? { model.engine.castMember(clash.opponentId) }
     private var counterStyle: CounterStyle { opponent?.clash?.counter ?? .mash }
@@ -56,8 +68,8 @@ struct BattleView: View {
     var body: some View {
         GeometryReader { geo in
             let w = geo.size.width, arena = geo.size.height * 0.58
-            let opponentSpot = CGPoint(x: w * 0.72, y: arena * 0.36)
-            let playerSpot = CGPoint(x: w * 0.27, y: arena * 0.74)
+            let opponentSpot = CGPoint(x: w * Self.opponentAnchor.x, y: arena * Self.opponentAnchor.y)
+            let playerSpot = CGPoint(x: w * Self.playerAnchor.x, y: arena * Self.playerAnchor.y)
 
             VStack(spacing: 0) {
                 ZStack {
@@ -113,6 +125,25 @@ struct BattleView: View {
                             .id(pop.id)
                     }
 
+                    if dizzyOpponent && !faintedOpponent {
+                        DizzyStars().position(x: opponentSpot.x, y: opponentSpot.y - 58)
+                    }
+                    if dizzyPlayer && !faintedPlayer {
+                        DizzyStars().position(x: playerSpot.x, y: playerSpot.y - 66)
+                    }
+
+                    if let impact {
+                        ImpactBurst(fx: impact.fx, prop: impact.prop)
+                            .position(impact.onPlayer ? playerSpot : opponentSpot)
+                            .id(impact.id)
+                    }
+
+                    if let reaction {
+                        ReactionBubble(text: reaction.text)
+                            .position(x: w * 0.5, y: arena * 0.58)
+                            .id(reaction.id)
+                    }
+
                     if let banner {
                         Text(banner)
                             .font(.display(46))
@@ -134,6 +165,8 @@ struct BattleView: View {
                     }
                 }
                 .frame(width: w, height: arena)
+                .grayscale(drained ? 1 : 0)
+                .scaleEffect(zoom, anchor: zoomAnchor)
                 .clipped()
 
                 controls
@@ -164,6 +197,17 @@ struct BattleView: View {
             }
             if stage == .micDrop {
                 MicDropOverlay { micDropped = true }
+                    .transition(.opacity)
+            }
+            if stage == .charge {
+                ChargeOverlay(technique: model.engine.playerSecret(in: state).name) { charge in
+                    resolve(.secret, charge: charge)
+                }
+                .transition(.opacity)
+            }
+            if vsShown {
+                VSSplash(player: state.rapper.look, opponent: opponent?.look ?? CharacterLook(), name: opponentName,
+                         subtitle: opponent?.role ?? "Boss")
                     .transition(.opacity)
             }
         }
@@ -217,7 +261,7 @@ struct BattleView: View {
                 Button("Continuer") { model.finishClash() }
                     .buttonStyle(PrimaryButtonStyle())
                     .transition(.scale.combined(with: .opacity))
-            case .intro, .animating, .counter, .micDrop:
+            case .intro, .charge, .animating, .counter, .micDrop:
                 EmptyView()
             }
         }
@@ -246,7 +290,12 @@ struct BattleView: View {
         Task {
             try? await Task.sleep(for: .milliseconds(500))
             if clash.isBoss {
-                await showBanner("BOSS")
+                SoundEngine.shared.play(.secretHit)
+                Haptics.shared.play(.strongHit)
+                withAnimation(.easeOut(duration: 0.15)) { vsShown = true }
+                try? await Task.sleep(for: .milliseconds(1900))
+                withAnimation(.easeIn(duration: 0.25)) { vsShown = false }
+                try? await Task.sleep(for: .milliseconds(250))
                 await say("\(opponentName.uppercased()) : \(opponent?.role ?? "") — \(opponent?.bio ?? "")", hold: 0.4)
             } else {
                 await say(clash.isWild ? "\(opponentName) surgit du terrain vague !" : "\(opponentName) veut clasher !", hold: 0.6)
@@ -275,13 +324,14 @@ struct BattleView: View {
         case .beat: "Tape quand l'anneau touche la cible !"
         }
         await say("Oh non. \(opponentName.uppercased()) déclenche sa TECHNIQUE SECRÈTE… \(instruction)", hold: 0)
-        SoundEngine.shared.play(.secretRiser)
+        clearStun()
+        SoundEngine.shared.play(pending.secret.effect.sting)
         Haptics.shared.play(.secretRiser)
         withAnimation(.easeOut(duration: 0.3)) {
             cinematic = SecretCinematic(name: pending.secret.name, byPlayer: false, look: opponent?.look ?? CharacterLook(),
-                                        prop: pending.secret.prop)
+                                        prop: pending.secret.prop, fx: pending.secret.effect)
         }
-        try? await Task.sleep(for: .milliseconds(1400))
+        try? await Task.sleep(for: .milliseconds(1600))
         withAnimation(.easeIn(duration: 0.2)) { cinematic = nil }
 
         counterTaps = 0
@@ -308,10 +358,23 @@ struct BattleView: View {
 
     private func play(_ action: BattleAction) {
         guard stage == .menu else { return }
-        stage = .animating
+        if case .secret = action {
+            // The player's technique is charged in rhythm first (`ChargeOverlay`), then resolved.
+            message = "Tape en rythme pour charger ta technique !"
+            clearStun()
+            withAnimation(.easeOut(duration: 0.2)) { stage = .charge }
+            return
+        }
+        resolve(action, charge: nil)
+    }
+
+    private func resolve(_ action: BattleAction, charge: Double?) {
+        guard stage == .menu || stage == .charge else { return }
+        withAnimation(.easeIn(duration: 0.15)) { stage = .animating }
+        clearStun()
         let result: ClashState? = switch action {
         case .move(let move): model.clashMove(move)
-        case .secret: model.clashSecret()
+        case .secret: model.clashSecret(charge: charge)
         }
         guard let updated = result else {
             stage = .menu
@@ -431,25 +494,44 @@ struct BattleView: View {
             await say(entry.byPlayer
                       ? "Ta jauge déborde… \(attacker.uppercased()) déclenche sa TECHNIQUE SECRÈTE !"
                       : "Oh non. \(attacker.uppercased()) a gardé une TECHNIQUE SECRÈTE…", hold: 0.2)
-            SoundEngine.shared.play(.secretRiser)
+            SoundEngine.shared.play(secret.effect.sting)
             Haptics.shared.play(.secretRiser)
             withAnimation(.easeOut(duration: 0.3)) {
                 cinematic = SecretCinematic(name: secret.name, byPlayer: entry.byPlayer,
                                             look: entry.byPlayer ? state.rapper.look : (opponent?.look ?? CharacterLook()),
-                                            prop: secret.prop)
+                                            prop: secret.prop, fx: secret.effect)
             }
-            try? await Task.sleep(for: .milliseconds(2200))
+            try? await Task.sleep(for: .seconds(secret.effect.cinematicSeconds))
             withAnimation(.easeIn(duration: 0.2)) { cinematic = nil }
         }
 
+        // Slow motion: the camera pushes in on the target, the picture holds its breath…
+        zoomAnchor = entry.byPlayer ? Self.opponentAnchor : Self.playerAnchor
+        withAnimation(.easeOut(duration: 0.35)) {
+            zoom = 1.22
+            if secret.effect == .tear { drained = true }
+        }
+        try? await Task.sleep(for: .milliseconds(380))
+
+        // …then the hit.
         SoundEngine.shared.play(.secretHit)
         Haptics.shared.play(.secretHit)
+        impact = ImpactShown(fx: secret.effect, prop: secret.prop, onPlayer: !entry.byPlayer, id: entry.id)
         withAnimation(.easeOut(duration: 0.08)) { whiteFlash = true }
         try? await Task.sleep(for: .milliseconds(120))
         withAnimation(.easeIn(duration: 0.4)) { whiteFlash = false }
-        withAnimation(.linear(duration: 0.6)) {
-            if entry.byPlayer { shakeOpponent += 2 } else { shakePlayer += 2 }
+        withAnimation(.spring(response: 0.5, dampingFraction: 0.55)) {
+            zoom = 1
+            drained = false
         }
+        withAnimation(.linear(duration: secret.effect == .bass ? 0.9 : 0.6)) {
+            let shakes: CGFloat = secret.effect == .bass ? 4 : 2
+            if entry.byPlayer { shakeOpponent += shakes } else { shakePlayer += shakes }
+        }
+        if entry.byPlayer { dizzyOpponent = true } else { dizzyPlayer = true }
+        SoundEngine.shared.play(.crowdCheer)
+        reaction = ImpactShown(fx: secret.effect, prop: nil, onPlayer: !entry.byPlayer, id: entry.id,
+                               text: ReactionBubble.lines[entry.id % ReactionBubble.lines.count])
         withAnimation(.easeOut(duration: 1.0)) {
             if entry.byPlayer {
                 opponentHype = max(0, opponentHype - Double(entry.damage))
@@ -460,8 +542,25 @@ struct BattleView: View {
             }
         }
         pop = DamagePop(value: entry.damage, onPlayer: !entry.byPlayer, id: entry.id)
-        await showBanner(entry.byPlayer ? "LÉGENDAIRE !" : counterBanner(entry.countered))
+        await showBanner(entry.byPlayer ? chargeBanner(entry.charge) : counterBanner(entry.countered))
+        withAnimation(.easeOut(duration: 0.3)) {
+            impact = nil
+            reaction = nil
+        }
         await say(entry.line, hold: 1.2)
+    }
+
+    private func chargeBanner(_ charge: Double?) -> String {
+        guard let charge else { return "LÉGENDAIRE !" }
+        if charge >= 0.85 { return "LÉGENDAIRE !" }
+        if charge >= 0.45 { return "ÇA FRAPPE FORT !" }
+        return "HORS TEMPO…"
+    }
+
+    /// The stunned stars go once the next action starts.
+    private func clearStun() {
+        dizzyPlayer = false
+        dizzyOpponent = false
     }
 
     private func counterBanner(_ countered: Double?) -> String {
@@ -802,6 +901,16 @@ private struct SecretCinematic: Equatable {
     let look: CharacterLook
     /// SF Symbol raining down behind the character (techniques won along the story).
     var prop: String? = nil
+    var fx: SecretFX = .rays
+}
+
+/// A burst or a crowd shout on one side of the arena.
+private struct ImpactShown: Equatable {
+    let fx: SecretFX
+    let prop: String?
+    let onPlayer: Bool
+    let id: Int
+    var text = ""
 }
 
 /// Props falling across the screen, slightly rotating: the gag of the technique.
@@ -830,26 +939,16 @@ private struct PropRain: View {
 /// Full-screen overlay: radiating rays, giant character, technique name.
 private struct SecretCinematicView: View {
     let cinematic: SecretCinematic
-    @State private var spin = false
     @State private var shown = false
 
     var body: some View {
         ZStack {
             Color.black.opacity(0.88)
-            // Radiating rays.
-            ZStack {
-                ForEach(0..<12, id: \.self) { index in
-                    Rectangle()
-                        .fill((index % 2 == 0 ? Theme.accent : Color(red: 1, green: 0.85, blue: 0.3)).opacity(0.35))
-                        .frame(width: 26, height: 900)
-                        .rotationEffect(.degrees(Double(index) * 15))
-                }
-            }
-            .rotationEffect(.degrees(spin ? 40 : 0))
+            SecretFXBackdrop(fx: cinematic.fx, prop: cinematic.prop)
 
-            if let prop = cinematic.prop { PropRain(symbol: prop) }
+            if let prop = cinematic.prop, cinematic.fx != .emojis { PropRain(symbol: prop) }
 
-            PixelImage(HeroSprite.image(cinematic.look, facing: .down, frame: shown ? 1 : 0), width: 136)
+            SecretFXCharacter(image: HeroSprite.image(cinematic.look, facing: .down, frame: shown ? 1 : 0), width: 136, fx: cinematic.fx)
                 .scaleEffect(shown ? 1 : 0.3)
                 .offset(x: shown ? (cinematic.byPlayer ? -60 : 60) : 0, y: 10)
 
@@ -872,8 +971,11 @@ private struct SecretCinematicView: View {
             .offset(x: shown ? 0 : (cinematic.byPlayer ? -500 : 500))
         }
         .onAppear {
-            withAnimation(.linear(duration: 2.2)) { spin = true }
-            withAnimation(.spring(response: 0.45, dampingFraction: 0.6)) { shown = true }
+            if cinematic.fx == .tear {
+                withAnimation(.easeOut(duration: 1.6)) { shown = true }
+            } else {
+                withAnimation(.spring(response: 0.45, dampingFraction: 0.6)) { shown = true }
+            }
         }
     }
 }
