@@ -73,6 +73,7 @@ enum GameEngineError: Error, Equatable {
     case minigameNotOver
     case gameOver
     case districtLocked(District)
+    case freestyleUsed
 }
 
 /// A secret technique the player can equip (style, item or unlocked), keyed by where it comes from.
@@ -864,6 +865,26 @@ struct GameEngine {
         }
         let level = clashLevels(for: clash, in: state)
         ClashEngine.playRound(&clash, playerMove: move, playerLevel: level,
+                              opponent: profile.scaled(by: clash.levelBonus), opponentName: opponent.name,
+                              opponentSecret: opponent.secret, callbacks: callbacks(for: clash, in: state), using: &rng)
+        state.clash = clash
+        return clash
+    }
+
+    /// Freestyle (once per clash): `rhymes` chained against the clock hit the opponent, who answers as usual.
+    func clashFreestyle<R: RandomNumberGenerator>(rhymes: Int, in state: inout GameState, using rng: inout R) throws -> ClashState {
+        guard var clash = state.clash else { throw GameEngineError.noClash }
+        guard !clash.isOver else { return clash }
+        guard !clash.freestyleUsed else { throw GameEngineError.freestyleUsed }
+        if clash.pendingCounter != nil {
+            ClashEngine.resolveCounter(&clash, taps: 0)
+            state.clash = clash
+            if clash.isOver { return clash }
+        }
+        guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
+            throw GameEngineError.noClash
+        }
+        ClashEngine.playRound(&clash, playerMove: .punchline, playerFreestyle: rhymes, playerLevel: clashLevels(for: clash, in: state),
                               opponent: profile.scaled(by: clash.levelBonus), opponentName: opponent.name,
                               opponentSecret: opponent.secret, callbacks: callbacks(for: clash, in: state), using: &rng)
         state.clash = clash

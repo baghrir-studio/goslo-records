@@ -183,6 +183,8 @@ struct ClashLogEntry: Codable, Equatable, Identifiable {
     var countered: Double? = nil
     /// How well the player charged their technique in rhythm (0…1).
     var charge: Double? = nil
+    /// Rhymes chained in a freestyle (this round was a freestyle).
+    var freestyle: Int? = nil
 }
 
 /// A boss's secret technique, waiting for the player to counter it (tap fast).
@@ -236,6 +238,8 @@ struct ClashState: Codable, Equatable {
     var opponentSecretUsed = false
     /// A boss's technique is on its way: the player can counter it before it lands.
     var pendingCounter: PendingCounter?
+    /// The freestyle has been played (once per clash).
+    var freestyleUsed = false
 
     init(spec: ClashSpec, isWild: Bool = false, levelBonus: Int? = nil) {
         self.spec = spec
@@ -245,7 +249,7 @@ struct ClashState: Codable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case spec, isWild, levelBonus, playerHype, opponentHype, round, playerBoosted, opponentBoosted, log
-        case playerMeter, opponentMeter, playerSecretUsed, opponentSecretUsed, pendingCounter
+        case playerMeter, opponentMeter, playerSecretUsed, opponentSecretUsed, pendingCounter, freestyleUsed
     }
 
     init(from decoder: Decoder) throws {
@@ -265,6 +269,7 @@ struct ClashState: Codable, Equatable {
         playerSecretUsed = try c.decodeIfPresent(Bool.self, forKey: .playerSecretUsed) ?? false
         opponentSecretUsed = try c.decodeIfPresent(Bool.self, forKey: .opponentSecretUsed) ?? false
         pendingCounter = try c.decodeIfPresent(PendingCounter.self, forKey: .pendingCounter)
+        freestyleUsed = try c.decodeIfPresent(Bool.self, forKey: .freestyleUsed) ?? false
     }
 
     var movesUsed: Set<ClashMove> { Set(log.filter { $0.byPlayer && $0.secret == nil }.map(\.move)) }
@@ -335,6 +340,7 @@ enum ClashEngine {
     /// The opponent triggers its own technique as soon as its gauge is full.
     static func playRound<R: RandomNumberGenerator>(_ state: inout ClashState, playerMove: ClashMove,
                                                     playerSecret: SecretTechnique? = nil, playerCharge: Double? = nil,
+                                                    playerFreestyle: Int? = nil,
                                                     playerLevel: (Skill) -> Int, opponent: ClashProfile,
                                                     opponentName: String, opponentSecret: SecretTechnique? = nil,
                                                     callbacks: [String] = [], using rng: inout R) {
@@ -348,6 +354,16 @@ enum ClashEngine {
             state.opponentHype = max(0, state.opponentHype - hit)
             state.log.append(ClashLogEntry(id: state.log.count, byPlayer: true, move: playerMove, damage: hit,
                                            impact: .strong, line: secret.line, secret: secret, charge: playerCharge))
+        } else if let rhymes = playerFreestyle, !state.freestyleUsed {
+            let hit = Freestyle.damage(rhymes: rhymes, level: playerLevel(ClashMove.punchline.skill))
+            state.freestyleUsed = true
+            state.playerBoosted = false
+            state.opponentHype = max(0, state.opponentHype - hit)
+            state.playerMeter += hit
+            let impact: ClashImpact = rhymes <= 0 ? .miss : (rhymes >= Freestyle.strongAt ? .strong : .normal)
+            state.log.append(ClashLogEntry(id: state.log.count, byPlayer: true, move: .punchline, damage: hit,
+                                           impact: impact, line: Freestyle.line(rhymes: rhymes),
+                                           freestyle: min(max(rhymes, 0), Freestyle.maxRhymes)))
         } else {
             let (playerDamage, playerImpact) = damage(move: playerMove, level: playerLevel(playerMove.skill),
                                                       boosted: state.playerBoosted,

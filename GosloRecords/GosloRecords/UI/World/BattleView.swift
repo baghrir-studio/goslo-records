@@ -7,7 +7,7 @@ struct BattleView: View {
     let clash: ClashState
     let state: GameState
 
-    private enum Stage { case intro, menu, charge, animating, counter, micDrop, finished }
+    private enum Stage { case intro, menu, charge, freestyle, animating, counter, micDrop, finished }
 
     @State private var stage: Stage = .intro
     @State private var message = ""
@@ -199,6 +199,10 @@ struct BattleView: View {
                 MicDropOverlay { micDropped = true }
                     .transition(.opacity)
             }
+            if stage == .freestyle {
+                FreestyleOverlay { rhymes in resolve(.freestyle(rhymes), charge: nil) }
+                    .transition(.opacity)
+            }
             if stage == .charge {
                 ChargeOverlay(technique: model.engine.playerSecret(in: state).name) { charge in
                     resolve(.secret, charge: charge)
@@ -244,6 +248,26 @@ struct BattleView: View {
                     SecretButton(technique: model.engine.playerSecret(in: state)) { play(.secret) }
                         .transition(.scale(scale: 0.6).combined(with: .opacity))
                 }
+                if !clash.freestyleUsed {
+                    Button(action: startFreestyle) {
+                        HStack(spacing: 8) {
+                            Text("🎤").font(.system(size: 18))
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text("FREESTYLE").font(.system(size: 14, weight: .heavy, design: .monospaced))
+                                Text("Enchaîne les rimes · 1× par clash").font(.system(size: 10, weight: .semibold))
+                                    .foregroundStyle(.white.opacity(0.7))
+                            }
+                            Spacer(minLength: 0)
+                        }
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(red: 0.35, green: 0.12, blue: 0.45))
+                        .overlay(Rectangle().stroke(Color(red: 1, green: 0.85, blue: 0.3), lineWidth: 1.5))
+                    }
+                    .buttonStyle(PressScaleStyle())
+                }
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
                     let levels = model.engine.clashLevels(for: clash, in: state)
                     ForEach(ClashMove.allCases) { move in
@@ -261,7 +285,7 @@ struct BattleView: View {
                 Button("Continuer") { model.finishClash() }
                     .buttonStyle(PrimaryButtonStyle())
                     .transition(.scale.combined(with: .opacity))
-            case .intro, .charge, .animating, .counter, .micDrop:
+            case .intro, .charge, .freestyle, .animating, .counter, .micDrop:
                 EmptyView()
             }
         }
@@ -354,7 +378,7 @@ struct BattleView: View {
         await settle(updated)
     }
 
-    private enum BattleAction { case move(ClashMove), secret }
+    private enum BattleAction { case move(ClashMove), secret, freestyle(Int) }
 
     private func play(_ action: BattleAction) {
         guard stage == .menu else { return }
@@ -368,13 +392,21 @@ struct BattleView: View {
         resolve(action, charge: nil)
     }
 
+    private func startFreestyle() {
+        guard stage == .menu else { return }
+        message = "Le DJ relance le beat. À toi."
+        clearStun()
+        withAnimation(.easeOut(duration: 0.2)) { stage = .freestyle }
+    }
+
     private func resolve(_ action: BattleAction, charge: Double?) {
-        guard stage == .menu || stage == .charge else { return }
+        guard stage == .menu || stage == .charge || stage == .freestyle else { return }
         withAnimation(.easeIn(duration: 0.15)) { stage = .animating }
         clearStun()
         let result: ClashState? = switch action {
         case .move(let move): model.clashMove(move)
         case .secret: model.clashSecret(charge: charge)
+        case .freestyle(let rhymes): model.clashFreestyle(rhymes: rhymes)
         }
         guard let updated = result else {
             stage = .menu
@@ -402,7 +434,8 @@ struct BattleView: View {
             await playSecret(secret, entry: entry, attacker: attacker)
             return
         }
-        await say("\(attacker.uppercased()) lance \(entry.move.label.uppercased()) !", hold: 0.1)
+        await say(entry.freestyle != nil ? "\(attacker.uppercased()) part en FREESTYLE !"
+                                         : "\(attacker.uppercased()) lance \(entry.move.label.uppercased()) !", hold: 0.1)
 
         withAnimation(.spring(response: 0.16, dampingFraction: 0.5)) {
             if entry.byPlayer { lungePlayer = true } else { lungeOpponent = true }
@@ -447,10 +480,14 @@ struct BattleView: View {
             withAnimation(.easeOut(duration: 0.5)) {
                 if entry.byPlayer { playerMeter += Double(entry.damage) } else { opponentMeter += Double(entry.damage) }
             }
-            switch entry.impact {
-            case .strong: await showBanner("ÇA TOUCHE !")
-            case .weak: await showBanner("ÇA GLISSE…")
-            default: try? await Task.sleep(for: .milliseconds(450))
+            if let rhymes = entry.freestyle {
+                await showBanner("\(rhymes) RIME\(rhymes > 1 ? "S" : "") !")
+            } else {
+                switch entry.impact {
+                case .strong: await showBanner("ÇA TOUCHE !")
+                case .weak: await showBanner("ÇA GLISSE…")
+                default: try? await Task.sleep(for: .milliseconds(450))
+                }
             }
         }
         await say(entry.line, hold: 0.8)

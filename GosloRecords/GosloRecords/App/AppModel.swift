@@ -645,6 +645,17 @@ final class AppModel {
         return clash
     }
 
+    /// Freestyle: the rhymes chained in the overlay.
+    @discardableResult
+    func clashFreestyle(rhymes: Int) -> ClashState? {
+        guard var current = state, case .clash = phase else { return nil }
+        guard let clash = try? engine.clashFreestyle(rhymes: rhymes, in: &current, using: &rng) else { return nil }
+        state = current
+        phase = .clash(clash)
+        persist()
+        return clash
+    }
+
     /// Triggers the secret technique (gauge full), charged in rhythm at `charge` (0…1).
     @discardableResult
     func clashSecret(charge: Double? = nil) -> ClashState? {
