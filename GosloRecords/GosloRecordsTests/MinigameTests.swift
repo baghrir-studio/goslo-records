@@ -36,13 +36,14 @@ final class MinigameTests: XCTestCase {
             XCTAssertEqual(minigame.kind == .signing, minigame.signing != nil, minigame.id)
             for (index, round) in minigame.rounds.enumerated() {
                 let label = "\(minigame.id) #\(index)"
-                XCTAssertEqual(round.words.count, PunchlinerEngine.tileCount, "\(label) : il faut 20 tuiles")
-                XCTAssertGreaterThanOrEqual(round.answers.count, 2, label)
-                for answer in round.answers {
-                    XCTAssertEqual(Set(answer.words).count, answer.words.count, "\(label) : un mot servirait deux fois")
-                    XCTAssertLessThanOrEqual(answer.words.count, PunchlinerEngine.maxWords, label)
-                    XCTAssertTrue(round.rhymes.contains(answer.words.last!), "\(label) : « \(answer.words.last!) » doit rimer")
-                    XCTAssertGreaterThan(answer.score, PunchlinerEngine.rhymeScore, label)
+                XCTAssertEqual(round.endings.count, PunchlinerEngine.endingCount, "\(label) : il faut 4 fins")
+                XCTAssertEqual(round.endings.map(\.score).max(), PunchlinerEngine.bestScore, "\(label) : une vraie punchline")
+                XCTAssertEqual(round.endings.filter { $0.score == PunchlinerEngine.bestScore }.count, 1, "\(label) : une seule meilleure fin")
+                XCTAssertEqual(round.endings.map(\.score).min(), 0, "\(label) : il faut un flop")
+                XCTAssertEqual(Set(round.endings.map(\.text)).count, round.endings.count, "\(label) : fins en double")
+                for ending in round.endings {
+                    XCTAssertFalse(ending.reaction.isEmpty, label)
+                    XCTAssertLessThanOrEqual(ending.text.count, 40, "\(label) : « \(ending.text) » trop long pour un bouton")
                 }
             }
         }
@@ -53,9 +54,9 @@ final class MinigameTests: XCTestCase {
     func testPunchlinerRewardsTheBestLines() throws {
         var state = try start("punchliner_fred")
         while let current = engine.punchlinerRound(in: state) {
-            XCTAssertEqual(Set(current.tiles), Set(current.round.words))
-            let best = try XCTUnwrap(current.round.answers.max { $0.score < $1.score })
-            XCTAssertEqual(try engine.dropPunchline(best.words, in: &state), best.reaction)
+            XCTAssertEqual(current.order.sorted(), Array(current.round.endings.indices))
+            let best = try XCTUnwrap(current.round.endings.indices.max { current.round.endings[$0].score < current.round.endings[$1].score })
+            XCTAssertEqual(try engine.dropPunchline(best, in: &state), current.round.endings[best].reaction)
         }
         XCTAssertEqual(engine.minigameScore(state.minigame!), 1)
         let outcome = try engine.finishMinigame(in: &state)
@@ -65,18 +66,19 @@ final class MinigameTests: XCTestCase {
 
     func testPunchlinerJudging() throws {
         let round = try XCTUnwrap(world.story.minigame("punchliner_banc")?.rounds.first)
-        XCTAssertEqual(PunchlinerEngine.judge([], in: round).points, 0)
-        XCTAssertEqual(PunchlinerEngine.judge(["chargeur", "verre"], in: round).points, PunchlinerEngine.rhymeScore)
-        XCTAssertEqual(PunchlinerEngine.judge(["verre", "chargeur"], in: round).points, 0)
-        // Tiles not on the board, or used twice, are refused.
+        XCTAssertEqual(PunchlinerEngine.judge(nil, in: round).points, 0)
+        for (index, ending) in round.endings.enumerated() {
+            XCTAssertEqual(PunchlinerEngine.judge(index, in: round).points, ending.score)
+        }
+        // An ending that isn't on offer is refused, and the round stays the same.
         var state = try start("punchliner_banc")
-        XCTAssertThrowsError(try engine.dropPunchline(["voiture"], in: &state))
-        XCTAssertThrowsError(try engine.dropPunchline(["verre", "verre"], in: &state))
+        XCTAssertThrowsError(try engine.dropPunchline(PunchlinerEngine.endingCount, in: &state))
+        XCTAssertEqual(state.minigame?.round, 0)
     }
 
     func testSilentPunchlinerLoses() throws {
         var state = try start("punchliner_banc")
-        while engine.punchlinerRound(in: state) != nil { _ = try engine.dropPunchline([], in: &state) }
+        while engine.punchlinerRound(in: state) != nil { _ = try engine.dropPunchline(nil, in: &state) }
         let outcome = try engine.finishMinigame(in: &state)
         XCTAssertEqual(outcome.consequence, engine.minigame("punchliner_banc")!.lose.consequence)
     }
@@ -156,7 +158,7 @@ final class MinigameTests: XCTestCase {
 
     func testMinigameSurvivesASave() throws {
         var state = try start("punchliner_fred")
-        _ = try engine.dropPunchline([], in: &state)
+        _ = try engine.dropPunchline(nil, in: &state)
         let restored = try JSONDecoder().decode(GameState.self, from: JSONEncoder().encode(state))
         XCTAssertEqual(restored.minigame, state.minigame)
         XCTAssertEqual(restored.minigame?.round, 1)

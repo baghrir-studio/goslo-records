@@ -577,22 +577,21 @@ struct GameEngine {
 
     func minigame(_ id: String) -> Minigame? { story.minigame(id) }
 
-    /// Punchliner: the round being played, and its tiles in a stable order.
-    func punchlinerRound(in state: GameState) -> (round: PunchlinerRound, tiles: [String])? {
+    /// Punchliner: the round being played, and the order its endings are shown in (stable).
+    func punchlinerRound(in state: GameState) -> (round: PunchlinerRound, order: [Int])? {
         guard let running = state.minigame, running.kind == .punchliner, let minigame = minigame(running.id),
               minigame.rounds.indices.contains(running.round) else { return nil }
         let round = minigame.rounds[running.round]
-        return (round, PunchlinerEngine.tiles(for: round, seed: PunchlinerEngine.seed(running.id, round: running.round)))
+        return (round, PunchlinerEngine.order(for: round, seed: PunchlinerEngine.seed(running.id, round: running.round)))
     }
 
-    /// Punchliner: the player drops their line (empty = the timer ran out). Returns the reaction.
-    func dropPunchline(_ words: [String], in state: inout GameState) throws -> String {
+    /// Punchliner: the player picks an ending (nil = the timer ran out). Returns the reaction.
+    func dropPunchline(_ choice: Int?, in state: inout GameState) throws -> String {
         guard var running = state.minigame, let current = punchlinerRound(in: state) else {
             throw GameEngineError.noMinigame
         }
-        guard words.count <= PunchlinerEngine.maxWords, words.allSatisfy(current.tiles.contains),
-              Set(words).count == words.count else { throw GameEngineError.invalidChoice(words.count) }
-        let (points, reaction) = PunchlinerEngine.judge(words, in: current.round)
+        if let choice, !current.round.endings.indices.contains(choice) { throw GameEngineError.invalidChoice(choice) }
+        let (points, reaction) = PunchlinerEngine.judge(choice, in: current.round)
         running.points += points
         running.log.append(reaction)
         running.round += 1

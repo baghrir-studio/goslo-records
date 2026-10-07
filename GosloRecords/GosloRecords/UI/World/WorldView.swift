@@ -44,11 +44,12 @@ struct WorldView: View {
                 }
 
                 // Rare scenery on the main road (rows 6–7): drawn above the people on the sidewalk behind it.
-                PassingPoliceCar(map: map)
+                PassingPoliceCar(map: map, avoidRow: state.rapper.city == .casablanca ? OverworldRules.parkedTaxi.first?.y : nil)
                     .zIndex(7.7)
                 if state.rapper.city == .casablanca {
-                    PassingTaxi(map: map)
-                        .zIndex(7.7)
+                    ParkedTaxi()
+                        .frame(width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile, alignment: .topLeading)
+                        .zIndex(Double(OverworldRules.parkedTaxi[0].y) + 0.6)
                 }
 
                 ForEach(model.extraActors.sorted { $0.key < $1.key }, id: \.key) { id, point in

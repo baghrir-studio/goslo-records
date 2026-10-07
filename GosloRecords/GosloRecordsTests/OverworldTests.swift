@@ -67,6 +67,16 @@ final class OverworldTests: XCTestCase {
         XCTAssertFalse(reachable.contains(TilePoint(x: 2, y: 2)))
     }
 
+    func testParkedTaxiSitsOnTheRoadAndBlocksOnlyInCasablanca() throws {
+        let map = try XCTUnwrap(EventLoader.loadWorld(bundle: Bundle(for: AppModel.self)).map)
+        for spot in OverworldRules.parkedTaxi {
+            XCTAssertTrue(OverworldRules.canStep(to: spot, on: map), "le taxi se gare sur la route, pas sur un mur ou un perso")
+            XCTAssertTrue(OverworldRules.blockedByScenery(spot, in: .casablanca))
+            XCTAssertFalse(OverworldRules.blockedByScenery(spot, in: .paris))
+            XCTAssertNil(map.door(at: spot))
+        }
+    }
+
     // MARK: Engine: characters and wild clashes
 
     private let rival = CastMember(id: "rival", name: "Rival", role: "",

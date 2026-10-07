@@ -8,6 +8,8 @@ struct MinigameView: View {
     let state: GameState
 
     @State private var started = false
+    /// Punchliner: the reaction to the last line is still on screen, so the result waits.
+    @State private var reading = false
 
     private var data: Minigame? { model.engine.minigame(minigame.id) }
 
@@ -25,11 +27,11 @@ struct MinigameView: View {
                     Spacer(minLength: 0)
                     Button("C'est parti") { withAnimation(.easeOut(duration: 0.2)) { started = true } }
                         .buttonStyle(PrimaryButtonStyle())
-                } else if minigame.isOver {
+                } else if minigame.isOver && !reading {
                     MinigameResult(minigame: minigame)
                 } else {
                     switch minigame.kind {
-                    case .punchliner: PunchlinerBoard(minigame: minigame)
+                    case .punchliner: PunchlinerBoard(minigame: minigame, reading: $reading)
                     case .platine: PlatineBoard(minigame: minigame)
                     case .fuite: ChaseBoard(look: state.rapper.look)
                     case .signing: SigningBoard()
@@ -77,117 +79,137 @@ private struct MinigameResult: View {
 
 // MARK: - Punchliner
 
-/// The setup line, the start of the punchline, and 20 tiles to finish it before time runs out.
+/// The setup line, the start of the punchline, and four endings to pick from before time runs out.
+/// Once an ending is picked, the engine moves on to the next round; the board keeps showing the answered
+/// one (its line, the chosen ending and the reaction) until the player taps on.
 private struct PunchlinerBoard: View {
     @Environment(AppModel.self) private var model
     let minigame: MinigameState
+    @Binding var reading: Bool
 
     static let seconds = 20.0
 
-    @State private var picked: [String] = []
-    @State private var reaction: String?
+    /// The round just answered, frozen until the player moves on.
+    private struct Answered {
+        let number: Int
+        let round: PunchlinerRound
+        let ending: PunchlinerAnswer?
+        let reaction: String
+    }
+
+    @State private var answered: Answered?
     @State private var deadline = Date().addingTimeInterval(PunchlinerBoard.seconds)
     /// Time left when the app went to the background: the clock waits for the player.
     @State private var pausedLeft: TimeInterval?
     @Environment(\.scenePhase) private var scenePhase
 
+    private var current: (round: PunchlinerRound, order: [Int])? {
+        model.state.flatMap { model.engine.punchlinerRound(in: $0) }
+    }
+
     var body: some View {
-        if let current = model.state.flatMap({ model.engine.punchlinerRound(in: $0) }) {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack {
-                    Text("COUPLET \(minigame.round + 1)/\(minigame.roundCount)").font(.mono(11, weight: .bold))
-                    Spacer()
-                    if reaction == nil {
-                        TimelineView(.periodic(from: .now, by: 0.25)) { context in
-                            let left = max(0, deadline.timeIntervalSince(context.date))
-                            Text("\(Int(left.rounded(.up))) s")
-                                .font(.mono(13, weight: .bold))
-                                .foregroundStyle(left < 5 ? Theme.accent : Theme.text)
-                                .onChange(of: left == 0) { _, timedOut in if timedOut && pausedLeft == nil { drop() } }
-                        }
-                    }
-                }
-                .foregroundStyle(Theme.muted)
-
-                Text(current.round.setup)
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Theme.text.opacity(0.75))
-                (Text(current.round.lead + " ").foregroundStyle(Theme.text)
-                    + Text(picked.isEmpty ? "…" : picked.joined(separator: " ")).foregroundStyle(Theme.accent))
-                    .font(.system(size: 20, weight: .heavy))
+        VStack(alignment: .leading, spacing: 12) {
+            if let answered {
+                header(number: answered.number, timer: false)
+                lines(answered.round, ending: answered.ending?.text)
+                Text(verdict(answered.ending))
+                    .font(.display(30))
+                    .foregroundStyle(answered.ending.map { $0.score >= PunchlinerEngine.bestScore } == true
+                                     ? Color(red: 1, green: 0.85, blue: 0.3) : Theme.accent)
+                Text(answered.reaction)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Theme.text.opacity(0.9))
                     .fixedSize(horizontal: false, vertical: true)
-
-                if let reaction {
-                    Text(reaction)
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
-                        .fixedSize(horizontal: false, vertical: true)
-                    Spacer(minLength: 0)
-                    Button(minigame.isOver ? "Résultat" : "Couplet suivant") { next() }
-                        .buttonStyle(PrimaryButtonStyle())
-                } else {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 84), spacing: 6)], spacing: 6) {
-                        ForEach(current.tiles, id: \.self) { word in
-                            let used = picked.contains(word)
-                            Button {
-                                if !used && picked.count < PunchlinerEngine.maxWords { picked.append(word) }
-                            } label: {
-                                Text(word)
-                                    .font(.system(size: 14, weight: .bold))
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.7)
-                                    .frame(maxWidth: .infinity, minHeight: 36)
-                                    .foregroundStyle(used ? Theme.muted : Theme.text)
-                                    .background(used ? Color.white.opacity(0.04) : Color.white.opacity(0.1))
-                                    .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
-                            }
-                            .buttonStyle(.plain)
-                            .disabled(used)
+                Spacer(minLength: 0)
+                Button(minigame.isOver ? "Résultat" : "Couplet suivant") { next() }
+                    .buttonStyle(PrimaryButtonStyle())
+            } else if let current {
+                header(number: minigame.round + 1, timer: true)
+                lines(current.round, ending: nil)
+                VStack(spacing: 8) {
+                    ForEach(current.order, id: \.self) { index in
+                        Button { drop(index) } label: {
+                            Text(current.round.endings[index].text)
+                                .font(.system(size: 16, weight: .bold))
+                                .multilineTextAlignment(.leading)
+                                .foregroundStyle(Theme.text)
+                                .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
+                                .padding(.horizontal, 12)
+                                .background(Color.white.opacity(0.08))
+                                .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
+                                .contentShape(Rectangle())
                         }
-                    }
-                    Spacer(minLength: 0)
-                    HStack(spacing: 10) {
-                        Button("Effacer") { if !picked.isEmpty { picked.removeLast() } }
-                            .font(.mono(13, weight: .bold))
-                            .foregroundStyle(Theme.text)
-                            .frame(maxWidth: .infinity, minHeight: 48)
-                            .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
-                        Button("Lâcher la punchline") { drop() }
-                            .buttonStyle(PrimaryButtonStyle())
-                            .disabled(picked.isEmpty)
+                        .buttonStyle(PressScaleStyle())
                     }
                 }
+                .padding(.top, 6)
+                Spacer(minLength: 0)
             }
-            .sensoryFeedback(.selection, trigger: picked)
-            .onChange(of: scenePhase) { _, phase in
-                if phase != .active, pausedLeft == nil, reaction == nil {
-                    pausedLeft = max(0, deadline.timeIntervalSinceNow)
-                } else if phase == .active, let left = pausedLeft {
-                    deadline = Date().addingTimeInterval(left)
-                    pausedLeft = nil
-                }
-            }
-        } else {
-            // Last line dropped: the result screen takes over once the reaction has been read.
-            if let reaction {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(reaction).font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
-                    Spacer(minLength: 0)
-                }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase != .active, pausedLeft == nil, answered == nil {
+                pausedLeft = max(0, deadline.timeIntervalSinceNow)
+            } else if phase == .active, let left = pausedLeft {
+                deadline = Date().addingTimeInterval(left)
+                pausedLeft = nil
             }
         }
     }
 
-    private func drop() {
-        guard reaction == nil else { return }
-        reaction = model.dropPunchline(picked) ?? "…"
-        SoundEngine.shared.play(.hit)
+    private func header(number: Int, timer: Bool) -> some View {
+        HStack {
+            Text("COUPLET \(number)/\(minigame.roundCount)").font(.mono(11, weight: .bold))
+            Spacer()
+            if timer {
+                TimelineView(.periodic(from: .now, by: 0.25)) { context in
+                    let left = max(0, deadline.timeIntervalSince(context.date))
+                    Text("\(Int(left.rounded(.up))) s")
+                        .font(.mono(13, weight: .bold))
+                        .foregroundStyle(left < 5 ? Theme.accent : Theme.text)
+                        .onChange(of: left == 0) { _, timedOut in if timedOut && pausedLeft == nil { drop(nil) } }
+                }
+            }
+        }
+        .foregroundStyle(Theme.muted)
+    }
+
+    private func lines(_ round: PunchlinerRound, ending: String?) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(round.setup)
+                .font(.system(size: 17, weight: .semibold))
+                .foregroundStyle(Theme.text.opacity(0.75))
+            (Text(round.lead + " ").foregroundStyle(Theme.text)
+                + Text(ending ?? "…").foregroundStyle(Theme.accent))
+                .font(.system(size: 20, weight: .heavy))
+        }
+        .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private func verdict(_ ending: PunchlinerAnswer?) -> String {
+        guard let ending else { return "TROP TARD" }
+        switch ending.score {
+        case PunchlinerEngine.bestScore...: return "PUNCHLINE !"
+        case 5...: return "ÇA PASSE"
+        case 1...: return "BOF…"
+        default: return "FLOP"
+        }
+    }
+
+    private func drop(_ choice: Int?) {
+        guard answered == nil, let current else { return }
+        let number = minigame.round + 1
+        guard let reaction = model.dropPunchline(choice) else { return }
+        let ending = choice.map { current.round.endings[$0] }
+        reading = true
+        answered = Answered(number: number, round: current.round, ending: ending, reaction: reaction)
+        let best = (ending?.score ?? 0) >= PunchlinerEngine.bestScore
+        SoundEngine.shared.play(best ? .strongHit : (ending?.score ?? 0) > 0 ? .hit : .miss)
+        Haptics.shared.play(best ? .strongHit : (ending?.score ?? 0) > 0 ? .good : .miss)
     }
 
     private func next() {
-        picked = []
-        reaction = nil
+        answered = nil
+        reading = false
         deadline = Date().addingTimeInterval(PunchlinerBoard.seconds)
     }
 }

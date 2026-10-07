@@ -248,8 +248,8 @@ final class EventsDataTests: XCTestCase {
                     switch running.kind {
                     case .punchliner:
                         while let current = engine.punchlinerRound(in: state) {
-                            let count = Int.random(in: 0...4, using: &rng)
-                            _ = try engine.dropPunchline(Array(current.tiles.shuffled(using: &rng).prefix(count)), in: &state)
+                            let choice = Bool.random(using: &rng) ? current.order.randomElement(using: &rng) : nil
+                            _ = try engine.dropPunchline(choice, in: &state)
                         }
                     case .platine:
                         while state.minigame?.isOver == false {

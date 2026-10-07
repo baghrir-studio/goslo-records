@@ -287,6 +287,7 @@ final class AppModel {
             return
         }
         guard OverworldRules.canStep(to: target, on: map) else { return }
+        if let state, OverworldRules.blockedByScenery(target, in: state.rapper.city) { return }
 
         busy = true
         walkFrame = walkFrame == 1 ? 2 : 1
@@ -599,11 +600,11 @@ final class AppModel {
 
     // MARK: - Mini-games
 
-    /// Punchliner: drops the line (empty = time ran out). Returns the reaction.
+    /// Punchliner: drops the chosen ending (nil = time ran out). Returns the reaction.
     @discardableResult
-    func dropPunchline(_ words: [String]) -> String? {
+    func dropPunchline(_ choice: Int?) -> String? {
         guard var current = state, case .minigame = phase else { return nil }
-        guard let reaction = try? engine.dropPunchline(words, in: &current) else { return nil }
+        guard let reaction = try? engine.dropPunchline(choice, in: &current) else { return nil }
         state = current
         if let running = current.minigame { phase = .minigame(running) }
         persist()
@@ -764,7 +765,7 @@ final class AppModel {
         phase = .cinematic
         withAnimation(.easeInOut(duration: 0.45)) { letterbox = true }
         try? await Task.sleep(for: .milliseconds(450))
-        for step in cinematic.steps {
+        for step in cinematic.steps where step.plays(for: state?.rapper.city) {
             guard route == .game else { return }
             await perform(step)
         }

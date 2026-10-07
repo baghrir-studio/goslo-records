@@ -296,9 +296,10 @@ final class Player {
         switch running.kind {
         case .punchliner:
             while let current = engine.punchlinerRound(in: state) {
-                let best = current.round.answers.max { $0.score < $1.score }?.words ?? []
-                let words = chance(profile.pickBest) ? best : Array(current.tiles.shuffled(using: &rng).prefix(3))
-                if (try? engine.dropPunchline(words, in: &state)) == nil { break }
+                let endings = current.round.endings
+                let best = endings.indices.max { endings[$0].score < endings[$1].score }
+                let choice = chance(profile.pickBest) ? best : endings.indices.randomElement(using: &rng)
+                if (try? engine.dropPunchline(choice, in: &state)) == nil { break }
             }
         case .platine:
             while state.minigame?.isOver == false {
