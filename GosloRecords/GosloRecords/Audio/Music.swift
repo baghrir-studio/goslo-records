@@ -313,3 +313,102 @@ enum SoundEffect: String, CaseIterable {
         return out
     }
 }
+
+// MARK: - Concert instrumentals
+
+/// A concert song's instrumental, rendered whole from its `ConcertGroove`: a count-in on the sticks,
+/// the bars, and a last hit. Played as one buffer, so the beat never drifts from the notes on screen.
+enum ConcertMix {
+    static func render(_ song: ConcertSong, seed: UInt64) -> [Float] {
+        let groove = ConcertGroove.make(for: song, seed: seed)
+        let beat = song.beat, sixteenth = song.beat / 4
+        var out = [Float](repeating: 0, count: Synth.count(song.duration))
+        func place(_ sound: [Float], at seconds: Double, gain: Double) {
+            Synth.add(sound, into: &out, at: Int(seconds * Synth.sampleRate), gain: Float(gain))
+        }
+
+        let kit = Kit(groove.style)
+        var cache: [String: [Float]] = [:]
+        func sound(_ key: String, _ make: () -> [Float]) -> [Float] {
+            if let cached = cache[key] { return cached }
+            let made = make()
+            cache[key] = made
+            return made
+        }
+
+        // Count-in: four clicks on the sticks.
+        let stick = Synth.layer([(Synth.hat(seed: 5), 0, 1), (Synth.pulse(note: 96, length: 0.04, duty: 0.5, decay: 40), 0, 0.6)])
+        for index in 0..<ConcertEngine.countInBeats { place(stick, at: Double(index) * beat, gain: index == 0 ? 0.9 : 0.6) }
+
+        let origin = Double(ConcertEngine.countInBeats) * beat
+        for bar in 0..<song.bars {
+            for hit in groove.hits(bar: bar) {
+                let swung = hit.step.rounded() == hit.step && Int(hit.step) % 2 == 1 ? hit.step + groove.swing : hit.step
+                let time = origin + Double(bar * 4) * beat + swung * sixteenth
+                switch hit.part {
+                case .kick: place(kit.kick, at: time, gain: 0.9 * hit.gain)
+                case .snare: place(kit.snare, at: time, gain: kit.snareGain * hit.gain)
+                case .hat: place(kit.hat, at: time, gain: kit.hatGain * hit.gain)
+                case .openHat: place(kit.openHat, at: time, gain: 0.22 * hit.gain)
+                case .bass:
+                    let bass = sound("b\(hit.note)-\(hit.length)-\(hit.slideFrom ?? 0)") {
+                        Synth.bass808(note: hit.note, length: hit.length * beat, slideFrom: hit.slideFrom)
+                    }
+                    place(bass, at: time, gain: kit.bassGain * hit.gain)
+                case .chord:
+                    let quality = hit.note == groove.root ? [0, 3, 7] : [0, 4, 7]
+                    let chord = sound("c\(hit.note)-\(hit.length)") {
+                        Synth.keys(quality.map { hit.note + 12 + $0 }, length: hit.length * beat, decay: kit.chordDecay)
+                    }
+                    place(chord, at: time, gain: kit.chordGain * hit.gain)
+                case .lead:
+                    let lead = sound("l\(hit.note)-\(hit.length)") {
+                        Synth.pulse(note: hit.note, length: hit.length * beat, duty: kit.leadDuty, decay: kit.leadDecay)
+                    }
+                    place(lead, at: time, gain: kit.leadGain * hit.gain)
+                    if groove.style == .trap { place(lead, at: time + sixteenth / 2, gain: kit.leadGain * 0.3) }  // bell echo
+                }
+            }
+        }
+        // The last hit: kick, open hat, the home chord.
+        let end = origin + Double(song.bars * 4) * beat
+        place(kit.kick, at: end, gain: 1)
+        place(kit.openHat, at: end, gain: 0.35)
+        place(Synth.bass808(note: groove.root - 12, length: 1.5 * beat), at: end, gain: kit.bassGain)
+        place(Synth.keys([0, 3, 7].map { groove.root + 12 + $0 }, length: 2 * beat), at: end, gain: 0.45)
+
+        if groove.style == .boomBap {
+            Synth.add(Synth.crackle(length: song.duration, clicks: Int(song.duration * 2)), into: &out, at: 0, gain: 0.6)
+        }
+        // Glue: a touch of saturation, then normalize.
+        for i in out.indices { out[i] = Float(tanh(Double(out[i]) * 1.4)) }
+        Synth.normalize(&out, peak: 0.85)
+        return out
+    }
+
+    /// Drums and levels per style.
+    private struct Kit {
+        let kick, snare, hat, openHat: [Float]
+        var snareGain = 0.7, hatGain = 0.22, bassGain = 0.6, chordGain = 0.35, leadGain = 0.28
+        var chordDecay = 1.4, leadDecay = 6.0, leadDuty = 0.25
+
+        init(_ style: ConcertGroove.Style) {
+            switch style {
+            case .boomBap:
+                kick = Synth.kick(); snare = Synth.snare(seed: 13); hat = Synth.hat(); openHat = Synth.hat(open: true)
+                bassGain = 0.55; chordGain = 0.4
+            case .trap:
+                kick = Synth.kick(punch: 1.2); snare = Synth.clap(); hat = Synth.hat(seed: 17); openHat = Synth.hat(open: true, seed: 19)
+                snareGain = 0.75; hatGain = 0.26; bassGain = 0.85; leadDuty = 0.125; leadDecay = 8; leadGain = 0.24
+            case .afro:
+                kick = Synth.kick(punch: 0.9, length: 0.3); snare = Synth.clap(seed: 41); hat = Synth.hat(seed: 23)
+                openHat = Synth.hat(open: true, seed: 27)
+                snareGain = 0.5; hatGain = 0.16; chordDecay = 6; chordGain = 0.32; leadDuty = 0.5; leadDecay = 5; leadGain = 0.26
+            case .drill:
+                kick = Synth.kick(punch: 1.3, length: 0.3); snare = Synth.snare(seed: 29); hat = Synth.hat(seed: 31)
+                openHat = Synth.hat(open: true, seed: 33)
+                snareGain = 0.75; hatGain = 0.24; bassGain = 0.85; chordGain = 0.18; leadDuty = 0.5; leadDecay = 2.5; leadGain = 0.18
+            }
+        }
+    }
+}

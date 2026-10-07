@@ -18,6 +18,8 @@ final class SoundEngine {
     private let format = AVAudioFormat(standardFormatWithSampleRate: Synth.sampleRate, channels: 1)!
     private let musicPlayers = [AVAudioPlayerNode(), AVAudioPlayerNode()]
     private let tickPlayer = AVAudioPlayerNode()
+    /// A concert song, played whole (see `playSong`).
+    private let songPlayer = AVAudioPlayerNode()
     private let effectPlayers = (0..<6).map { _ in AVAudioPlayerNode() }
     private var activeMusic = 0
     private var nextEffect = 0
@@ -42,7 +44,7 @@ final class SoundEngine {
         let session = AVAudioSession.sharedInstance()
         try? session.setCategory(.ambient, options: [.mixWithOthers])
         try? session.setActive(true)
-        for player in musicPlayers + effectPlayers + [tickPlayer] {
+        for player in musicPlayers + effectPlayers + [tickPlayer, songPlayer] {
             engine.attach(player)
             engine.connect(player, to: engine.mainMixerNode, format: format)
         }
@@ -155,6 +157,27 @@ final class SoundEngine {
         player.volume = effect.volume
         player.scheduleBuffer(buffer, at: nil, options: .interrupts)
         if !player.isPlaying { player.play() }
+    }
+
+    // MARK: Concert songs
+
+    /// Plays a rendered concert song, starting a hair from now at a precise audio time.
+    /// Returns that moment: the notes on screen run on the same clock.
+    func playSong(_ samples: [Float]) -> Date {
+        let lead = 0.15
+        guard started, musicEnabled || effectsEnabled, let buffer = buffer(samples) else {
+            return Date().addingTimeInterval(lead)
+        }
+        startEngine()
+        songPlayer.stop()
+        songPlayer.volume = 0.95
+        songPlayer.scheduleBuffer(buffer, at: nil, options: [])
+        songPlayer.play(at: AVAudioTime(hostTime: mach_absolute_time() + AVAudioTime.hostTime(forSeconds: lead)))
+        return Date().addingTimeInterval(lead)
+    }
+
+    func stopSong() {
+        songPlayer.stop()
     }
 
     // MARK: Settings

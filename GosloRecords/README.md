@@ -23,6 +23,9 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
   (e.g. "Le Sample Interdit" for Boom bap). Opponents fire theirs automatically, defined in `cast.json` under `"secret"`.
 - **Countering a boss**: when a boss fires its secret technique, the player has 2.5 s to tap the screen;
   16 taps take off 75 % of the damage (`ClashState.counter*`). Without a tap, the damage is the same as before.
+- **Concert music**: each song has its own instrumental (`ConcertGroove`, in four styles: boom bap, trap, afro, drill),
+  rendered whole by `ConcertMix` and played as one buffer. The notes to tap come from the same groove: kicks on the
+  left lane, snares and claps in the middle, the hook on the right, so every note sits on a sound you hear.
 - **Mic drop**: winning a clash against a rival or a boss (not a wild one) ends on « LÂCHE LE MIC ». A sharp flick of
   the phone (device motion, `FlickDetector`, no permission needed) or a tap drops the mic; it drops on its own after 6 s.
 - **Vibrations** (`Audio/Haptics.swift`, Core Haptics): concert kicks and snares, notes hit in rhythm, clash hits,
