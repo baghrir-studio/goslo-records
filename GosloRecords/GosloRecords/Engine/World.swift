@@ -83,15 +83,18 @@ struct CastMember: Codable, Equatable, Identifiable {
     let look: CharacterLook
     /// Secret technique in a clash (a generic one if missing).
     let secret: SecretTechnique?
+    /// Small talk once they have nothing new to say (they take turns, see `GameEngine.smallTalk`).
+    let idle: [String]
 
     enum CodingKeys: String, CodingKey {
-        case id, name, role, bio, clash, wild, look, secret
+        case id, name, role, bio, clash, wild, look, secret, idle
         case startRelation = "start_relation"
     }
 
     init(id: String, name: String, role: String, bio: String = "", startRelation: Int = defaultRelation,
          clash: ClashProfile? = nil, wild: Bool = false, look: CharacterLook = CharacterLook(),
-         secret: SecretTechnique? = nil) {
+         secret: SecretTechnique? = nil, idle: [String] = []) {
+        self.idle = idle
         self.id = id
         self.name = name
         self.role = role
@@ -114,6 +117,7 @@ struct CastMember: Codable, Equatable, Identifiable {
         wild = try c.decodeIfPresent(Bool.self, forKey: .wild) ?? false
         look = try c.decodeIfPresent(CharacterLook.self, forKey: .look) ?? CharacterLook()
         secret = try c.decodeIfPresent(SecretTechnique.self, forKey: .secret)
+        idle = try c.decodeIfPresent([String].self, forKey: .idle) ?? []
     }
 }
 

@@ -28,6 +28,13 @@ struct GameState: Codable, Equatable {
     var seenUniqueEvents: Set<String> = []
     /// Recent event ids, to avoid repeats.
     var recentEvents: [String] = []
+    /// Every event already played: the ones never seen come first.
+    var seenEvents: Set<String> = []
+    /// Story progress (`GameEngine.progressKey`) when each character last had something to say:
+    /// until it moves on, talking to them again only gets small talk.
+    var talkedAt: [String: String] = [:]
+    /// How many times each character made small talk (their lines take turns).
+    var smallTalk: [String: Int] = [:]
     var pendingFollowUp: String?
     /// Event shown and awaiting a choice (kept so a resume shows the same card).
     var currentEventId: String?
@@ -79,6 +86,7 @@ struct GameState: Codable, Equatable {
         case minigame
         case questProgress, completedQuests, ending, position, facing, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
+        case seenEvents, talkedAt, smallTalk
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -122,6 +130,9 @@ struct GameState: Codable, Equatable {
         bossLosses = try c.decodeIfPresent([String: Int].self, forKey: .bossLosses) ?? [:]
         equippedTechnique = try c.decodeIfPresent(String.self, forKey: .equippedTechnique)
         knownTechniques = try c.decodeIfPresent(Set<String>.self, forKey: .knownTechniques) ?? []
+        seenEvents = try c.decodeIfPresent(Set<String>.self, forKey: .seenEvents) ?? Set(recentEvents)
+        talkedAt = try c.decodeIfPresent([String: String].self, forKey: .talkedAt) ?? [:]
+        smallTalk = try c.decodeIfPresent([String: Int].self, forKey: .smallTalk) ?? [:]
     }
 
     /// Year 1 to 10.

@@ -113,6 +113,65 @@ final class OverworldTests: XCTestCase {
         XCTAssertFalse(engine.canChallenge("rival", in: state), "pas deux défis du même rival par semestre")
     }
 
+    func testCharactersOnlyTalkAgainOnceTheStoryMoves() throws {
+        let chat = GameEvent(id: "papote", title: "", text: "", location: .quartier, npc: "ami",
+                             choices: [EventChoice(label: "Ok", consequence: "ok")])
+        let ami = CastMember(id: "ami", name: "Ami", role: "", idle: ["Un.", "Deux."])
+        let engine = GameEngine(events: [chat], cast: [ami])
+        var rng = SeededGenerator(seed: 3)
+        var state = engine.newGame(rapper: Rapper(name: "T", city: .lyon, style: .trap))
+        state.pendingCinematic = nil
+        state.actionsLeft = 5
+
+        XCTAssertEqual(try engine.talk(to: "ami", in: &state, using: &rng)?.id, "papote")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertNil(try engine.talk(to: "ami", in: &state, using: &rng), "rien de neuf tant que l'histoire n'avance pas")
+        XCTAssertEqual(state.actionsLeft, 4, "la petite discussion ne coûte pas d'action")
+        XCTAssertEqual(engine.smallTalk(with: "ami", in: &state).first, "« Un. »")
+        XCTAssertEqual(engine.smallTalk(with: "ami", in: &state).first, "« Deux. »", "les répliques se relaient")
+
+        state.objectiveIndex += 1  // The story moves on.
+        XCTAssertEqual(try engine.talk(to: "ami", in: &state, using: &rng)?.id, "papote")
+    }
+
+    func testAOneTimeSceneStillPlaysAfterAChat() throws {
+        let chat = GameEvent(id: "papote", title: "", text: "", location: .quartier, npc: "ami", weight: 1000,
+                             choices: [EventChoice(label: "Ok", consequence: "ok")])
+        let scene = GameEvent(id: "scene", title: "", text: "", location: .quartier, npc: "ami", weight: 1, unique: true,
+                              choices: [EventChoice(label: "Ok", consequence: "ok")])
+        let engine = GameEngine(events: [chat, scene], cast: [CastMember(id: "ami", name: "Ami", role: "")])
+        var rng = SeededGenerator(seed: 5)
+        var state = engine.newGame(rapper: Rapper(name: "T", city: .lyon, style: .trap))
+        state.pendingCinematic = nil
+        state.actionsLeft = 5
+
+        state.talkedAt["ami"] = engine.progressKey(in: state)  // Already chatted since the story last moved.
+
+        XCTAssertEqual(try engine.talk(to: "ami", in: &state, using: &rng)?.id, "scene", "la scène unique passe quand même")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertNil(try engine.talk(to: "ami", in: &state, using: &rng), "puis plus rien jusqu'à la suite de l'histoire")
+    }
+
+    func testEveryoneOnTheMapHasSmallTalk() throws {
+        let world = try EventLoader.loadWorld(bundle: Bundle(for: AppModel.self))
+        let map = try XCTUnwrap(world.map)
+        for npc in Set(map.npcs.map(\.id)) {
+            let member = try XCTUnwrap(world.cast.first { $0.id == npc }, npc)
+            XCTAssertGreaterThanOrEqual(member.idle.count, 3, "\(npc) : au moins trois répliques d'attente")
+        }
+    }
+
+    func testNeverSeenEventsComeFirst() {
+        let a = GameEvent(id: "a", title: "", text: "", choices: [])
+        let b = GameEvent(id: "b", title: "", text: "", choices: [])
+        var state = GameState(rapper: Rapper(name: "T", city: .lyon, style: .trap))
+        state.seenEvents = ["a"]
+        XCTAssertEqual(GameEngine.freshest([a, b], in: state).map(\.id), ["b"])
+        state.seenEvents = ["a", "b"]
+        state.recentEvents = ["b"]
+        XCTAssertEqual(GameEngine.freshest([a, b], in: state).map(\.id), ["a"])
+    }
+
     func testWildClashCostsNoActionAndGrantsXP() throws {
         let engine = GameEngine(events: [], cast: [rival, wildOne])
         var rng = SeededGenerator(seed: 8)

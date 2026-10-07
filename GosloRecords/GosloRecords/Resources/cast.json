@@ -15,7 +15,12 @@
         "accent": "#f2f2f2",
         "hair_style": "bald",
         "beard": true
-      }
+      },
+      "idle": [
+        "La machine 4 refait des siennes. Si tu l'entends taper en rythme, c'est elle, pas un beat.",
+        "Je t'ai gardé une place sur le canapé du label. C'est aussi le canapé de la laverie.",
+        "Chaque fois que quelqu'un signe ici, je pleure. Alors signe pas trop souvent, j'ai plus de mouchoirs."
+      ]
     },
     {
       "id": "fred",
@@ -31,7 +36,12 @@
         "accent": "#ff4d2e",
         "headphones": true,
         "beard": true
-      }
+      },
+      "idle": [
+        "En 2009, j'ai mixé un disque d'or. Je te l'ai déjà dit ? Je te le redis, c'est important.",
+        "Reviens quand t'as du nouveau. Le Bunker t'attend, et la console aussi. Surtout la console.",
+        "Ne touche pas le fader 7. Personne ne touche le fader 7. Même pas moi."
+      ]
     },
     {
       "id": "karim",
@@ -48,7 +58,12 @@
         "accent": "#e8c547",
         "chain": true,
         "glasses": true
-      }
+      },
+      "idle": [
+        "Je compte deux fois, donc je te dis deux fois : reviens plus tard. Reviens plus tard.",
+        "Mes contacts dorment. Enfin, ceux qui me doivent de l'argent font semblant.",
+        "40 %, c'est pas cher pour un manager qui t'écoute. Là, je t'écoute pas, je réfléchis."
+      ]
     },
     {
       "id": "yanis",
@@ -66,7 +81,12 @@
         "glasses": true,
         "headphones": true,
         "beard": true
-      }
+      },
+      "idle": [
+        "Je prépare mon top de fin d'année. Pour l'instant, tu n'y es pas. Pour l'instant.",
+        "Tu savais que ce jour-là, en 1997, trois albums sont sortis ? Moi oui.",
+        "Reviens avec un projet. Je chronique pas les intentions."
+      ]
     },
     {
       "id": "big_nono",
@@ -84,7 +104,12 @@
         "hair_style": "bald",
         "headphones": true,
         "beard": true
-      }
+      },
+      "idle": [
+        "Quinze ans de Micro Ouvert. J'ai tout entendu. Surprends-moi la prochaine fois.",
+        "Le micro est froid, là. Reviens quand il sera chaud. Toi aussi.",
+        "Les auditeurs demandent du neuf. Moi aussi, d'ailleurs."
+      ]
     },
     {
       "id": "le_baron",
@@ -123,7 +148,12 @@
       "secret": {
         "name": "Le Mur de Platine",
         "line": "Le Baron fait défiler son mur de disques de platine pendant quatre minutes, en silence. Tu remets en question tous tes choix de vie."
-      }
+      },
+      "idle": [
+        "Le trône ne se visite pas. Il se prend. Et tu n'es pas encore assez grand pour la chaise.",
+        "J'ai un live dans dix minutes. Je vais clasher quelqu'un. Peut-être toi, si t'insistes.",
+        "Reviens quand on parlera de toi dans ma story. Pour l'instant, je t'ai même pas en sourdine."
+      ]
     },
     {
       "id": "kolosse",
@@ -161,7 +191,12 @@
       "secret": {
         "name": "Le Live Interminable",
         "line": "Kolosse lance un live de 6 heures pour « régler ça ». Tu t'endors à la 40e minute. Le public aussi. Il gagne aux points."
-      }
+      },
+      "idle": [
+        "Défi du jour : rester silencieux une heure. Ça fait quatre minutes. C'est dur.",
+        "Mon live d'hier ? Batterie à 11 %. On en reparle pas.",
+        "Je t'ai à l'œil, petit. Enfin, j'ai l'œil sur tout le monde. Je suis grand."
+      ]
     },
     {
       "id": "le_conteur",
@@ -197,7 +232,12 @@
       "secret": {
         "name": "L'Épisode Final",
         "line": "Le Conteur lance l'épisode final : quatorze minutes, trois rebondissements, et ta mère en featuring surprise."
-      }
+      },
+      "idle": [
+        "Le prochain épisode de ma saga sort quand il sort. Comme toi.",
+        "Chaque rue a une histoire. Celle-ci, je l'ai déjà racontée trois fois.",
+        "Reviens, et je te raconterai la fin. Ou le début. Ça dépend de toi."
+      ]
     },
     {
       "id": "tenebre",
@@ -213,7 +253,12 @@
         "shoes": "#0d0d10",
         "accent": "#3a3a44",
         "hat": "hood"
-      }
+      },
+      "idle": [
+        "…",
+        "Il est trop tôt. Je ne parle qu'à 4 h du matin.",
+        "Les néons sont trop forts ici. Reviens quand la ville dormira."
+      ]
     },
     {
       "id": "orphee",
@@ -249,7 +294,12 @@
       "secret": {
         "name": "La Disparition",
         "line": "Orphée supprime tous ses réseaux en plein clash. Le suspense est tel que tu oublies ton propre couplet."
-      }
+      },
+      "idle": [
+        "Comme disait un poète, « le silence aussi est une rime ». Tu sauras laquelle.",
+        "Je relis un classique. Reviens quand j'aurai fini le chapitre. Ou le siècle.",
+        "Mon collectif répète. Moi, je contemple."
+      ]
     },
     {
       "id": "scalpel",
@@ -286,7 +336,12 @@
       "secret": {
         "name": "Incision Sans Anesthésie",
         "line": "Scalpel relit ton dernier texte au stylo rouge, à voix haute, rime par rime. L'autopsie dure deux minutes."
-      }
+      },
+      "idle": [
+        "J'ai corrigé ton dernier couplet dans ma tête. Il reste deux fautes. Je te les dirai sur scène.",
+        "Une rime, c'est une incision. La tienne, c'est encore un pansement.",
+        "Reviens quand tu auras quelque chose de propre. Ou de tranchant."
+      ]
     },
     {
       "id": "lil_sauge",
@@ -322,7 +377,12 @@
       "secret": {
         "name": "Le Refrain Sifflé",
         "line": "Lil Sauge siffle son tube de l'été. Toute la salle reprend. Tu le siffles aussi, contre ta volonté."
-      }
+      },
+      "idle": [
+        "La marque d'eau gazeuse m'a renvoyé un carton. J'en ai fait un TikTok. Trois millions de vues.",
+        "Toujours sur ton carnet ? Je te ferai coucou d'en haut.",
+        "J'ai pas le temps, je filme. Enfin, je me filme."
+      ]
     },
     {
       "id": "kevlar_jr",
@@ -357,7 +417,12 @@
       "secret": {
         "name": "Le Défilé de Mode",
         "line": "Kevlar Jr. présente sa nouvelle collection en plein battle. Le public applaudit, puis achète des hoodies."
-      }
+      },
+      "idle": [
+        "Invaincu au Ring des Mots. Reviens quand t'auras envie de perdre en public.",
+        "Ma ligne de vêtements sort lundi. T'es pas dans le lookbook.",
+        "Je m'échauffe. Les cordes vocales, c'est comme les poings."
+      ]
     },
     {
       "id": "ptit_wifi",
@@ -393,7 +458,12 @@
       "secret": {
         "name": "Le Ratio Supersonique",
         "line": "P'tit Wifi lance un live : deux millions de viewers spamment des émojis clown sur ta tête."
-      }
+      },
+      "idle": [
+        "Le rap a commencé en 2020. Avant, c'était de la musique de grands-parents.",
+        "Ma batterie est à 100 %, ma patience à 3 %.",
+        "Tu veux un selfie ? Non ? T'es bizarre, toi."
+      ]
     },
     {
       "id": "lucien",
@@ -410,7 +480,12 @@
         "accent": "#c8a165",
         "hat": "beanie",
         "beard": true
-      }
+      },
+      "idle": [
+        "Appelle-moi sur le fixe. Les gens se parlent plus en vrai, de nos jours.",
+        "En 94, on rappait sans filet. Et sans wifi, surtout.",
+        "Garde ton carnet près de toi. Le téléphone, tu peux le perdre."
+      ]
     },
     {
       "id": "clara_soleil",
@@ -426,7 +501,12 @@
         "accent": "#e8c547",
         "hair_style": "long",
         "glasses": true
-      }
+      },
+      "idle": [
+        "Mon tube de l'été tourne encore en octobre. C'est une malédiction douce.",
+        "Un refrain qui colle, c'est quatre mots et un sourire. Je t'apprendrai, un jour.",
+        "Je suis en promo, je souris pour le travail. Repasse."
+      ]
     },
     {
       "id": "hater_anonyme",
@@ -638,7 +718,12 @@
       "secret": {
         "name": "Le Ratio Acheté",
         "line": "Big Kliks déverse deux millions de vues achetées sur ta tête. Elles arrivent toutes en même temps, du même village, à 4 h du matin. Le public est impressionné. Puis il réfléchit."
-      }
+      },
+      "idle": [
+        "Quatre millions d'abonnés, tous du même village. Une fanbase très soudée.",
+        "Mes streams montent à 4 h du matin. C'est l'heure où mon village se lève.",
+        "Je t'envoie un lien de mon dernier son. Écoute-le 200 fois, ça m'aide."
+      ]
     },
     {
       "id": "lingot",
@@ -675,7 +760,12 @@
       "secret": {
         "name": "La Facture",
         "line": "Lingot lit à voix haute le prix de chacun de ses bijoux. Ça dure onze minutes. Le public s'endort. Toi aussi, presque."
-      }
+      },
+      "idle": [
+        "Trois chaînes, deux montres, et toujours pas l'heure pour toi.",
+        "Mes lunettes de soleil coûtent plus cher que ton studio. Je les porte la nuit.",
+        "Reviens quand t'auras de l'or. Ou au moins du plaqué."
+      ]
     },
     {
       "id": "lil_croon",
@@ -711,7 +801,12 @@
       "secret": {
         "name": "L'Autotune Infini",
         "line": "Lil Croon pousse l'autotune à 100 %. Il ne rappe plus, il ne chante plus : il bipe, comme un micro-ondes amoureux. Le public pleure sans savoir pourquoi."
-      }
+      },
+      "idle": [
+        "Je mets de l'autotune sur ma voix, même pour dire bonjour. Bonjouuuur.",
+        "Chanteur ou rappeur ? Moi-même je sais plus.",
+        "Mon répondeur chante. Laisse un message après le refrain."
+      ]
     },
     {
       "id": "gestuel",
@@ -727,7 +822,12 @@
         "shoes": "#e8e8e8",
         "accent": "#f2f2f2",
         "hat": "beanie"
-      }
+      },
+      "idle": [
+        "(Il lève un pouce. Puis le baisse à moitié. Personne ne sait ce que ça veut dire.)",
+        "(Il pointe le ciel, puis toi, puis ses chaussures.)",
+        "(Il fait le geste « plus tard », du moins c'est ce qu'en diront les forums.)"
+      ]
     },
     {
       "id": "big_deal",
@@ -763,7 +863,12 @@
         "accent": "#b5261e",
         "hair_style": "short",
         "glasses": true
-      }
+      },
+      "idle": [
+        "Le rap, c'est une mode. Je le dis depuis 1998. Elle dure, la mode.",
+        "Je n'ai pas écouté votre album. Mais j'ai un avis très précis dessus.",
+        "On se reverra au Grand Débat. J'aurai mes fiches."
+      ]
     },
     {
       "id": "dj_bobine",
@@ -780,7 +885,12 @@
         "accent": "#7fe0a0",
         "hair_style": "puff",
         "headphones": true
-      }
+      },
+      "idle": [
+        "Une platine, un jack, et toute ma confiance. Reviens au prochain set.",
+        "Tout est 2 % trop vite chez moi. Même cette conversation.",
+        "Le pitch est à 102. C'est l'énergie, frère."
+      ]
     },
     {
       "id": "gege",
@@ -798,7 +908,12 @@
         "hair_style": "bald",
         "beard": true,
         "headphones": true
-      }
+      },
+      "idle": [
+        "Un, deux. Un, deux. Ça va. Repasse pour la balance.",
+        "Trente et un ans de métier. Toujours pas souri. Je garde ça pour la retraite.",
+        "Le Transfo ouvre à 19 h. Pas avant. Même pour toi."
+      ]
     },
     {
       "id": "maman",
@@ -815,7 +930,12 @@
         "accent": "#f2a0b8",
         "hair_style": "long",
         "glasses": true
-      }
+      },
+      "idle": [
+        "Tu as mangé ? Tu manges mal, je le vois à ta tête.",
+        "J'ai encore ta pancarte du dernier concert. Je l'ai plastifiée.",
+        "Et sinon, le vrai travail, tu y penses ? Je demande, c'est tout."
+      ]
     },
     {
       "id": "victor_contrat",
@@ -832,7 +952,12 @@
         "accent": "#e8e8e8",
         "hair_style": "short",
         "glasses": true
-      }
+      },
+      "idle": [
+        "On va faire de grandes choses. Je dis ça à tout le monde, mais toi, je le pense à moitié.",
+        "Mon agenda est plein. Mes baskets aussi : elles sont neuves.",
+        "Reviens avec des chiffres. Les sentiments, je les sous-traite."
+      ]
     },
     {
       "id": "zanga",
@@ -849,7 +974,12 @@
         "accent": "#d8b04a",
         "hat": "cap",
         "chain": true
-      }
+      },
+      "idle": [
+        "Wakha khoya, repasse ce soir. Casa dort pas avant 2 h.",
+        "Le petit taxi rouge m'attend. Il m'attend toujours, c'est mon cousin.",
+        "On se capte au studio. Ramène des rimes, je ramène le thé."
+      ]
     }
   ]
 }

@@ -207,16 +207,73 @@ struct GameEngine {
             return story
         }
         var pool = events(featuring: castId, in: state)
-        if challenge { pool = pool.filter { isChallenge($0, by: castId) } }
-        let fresh = pool.filter { !state.recentEvents.contains($0.id) }
-        guard let event = GameEngine.weightedPick(fresh.isEmpty ? pool : fresh, using: &rng) else { return nil }
+        if challenge {
+            pool = pool.filter { isChallenge($0, by: castId) }
+        } else if hasTalked(to: castId, in: state) {
+            // Already talked since the story last moved: only what still matters (a first-time scene, a quest lead).
+            pool = pool.filter { isImportant($0, in: state) }
+        }
+        guard let event = GameEngine.weightedPick(GameEngine.freshest(pool, in: state), using: &rng) else { return nil }
 
         if challenge { state.challengedThisSemester.insert(castId) }
+        state.talkedAt[castId] = progressKey(in: state)
         state.actionsLeft -= 1
         state.currentLocation = event.location
         state.currentEventId = event.id
         state.metCast.insert(castId)
         return event
+    }
+
+    /// Events never played first, then the ones not played lately, then anything.
+    static func freshest(_ pool: [GameEvent], in state: GameState) -> [GameEvent] {
+        let unseen = pool.filter { !state.seenEvents.contains($0.id) }
+        if !unseen.isEmpty { return unseen }
+        let notRecent = pool.filter { !state.recentEvents.contains($0.id) }
+        return notRecent.isEmpty ? pool : notRecent
+    }
+
+    /// Where the story stands: the chapter's objective and the quests. Moves when something important happens.
+    func progressKey(in state: GameState) -> String {
+        "\(state.chapter).\(state.objectiveIndex)|\(state.completedQuests.count).\(state.questProgress.values.reduce(0, +))"
+    }
+
+    /// This character already had their say since the story last moved.
+    func hasTalked(to castId: String, in state: GameState) -> Bool {
+        state.talkedAt[castId] == progressKey(in: state)
+    }
+
+    /// Worth playing even after a chat: a one-time scene not seen yet, or one that sets a flag the story or a quest waits for.
+    func isImportant(_ event: GameEvent, in state: GameState) -> Bool {
+        if event.unique && !state.seenUniqueEvents.contains(event.id) { return true }
+        let awaited = awaitedFlags(in: state)
+        return event.choices.contains { !Set($0.setFlags).isDisjoint(with: awaited) }
+    }
+
+    /// Flags the current objective or an active quest step still needs.
+    func awaitedFlags(in state: GameState) -> Set<String> {
+        var conditions = activeQuests(in: state).compactMap { currentStep(of: $0, in: state)?.conditions }
+        if let objective = currentObjective(in: state) { conditions.append(objective.conditions) }
+        return Set(conditions.flatMap(\.requiredFlags)).subtracting(state.flags)
+    }
+
+    /// Small talk when a character has nothing new: their own lines in turn, then a nudge toward the objective.
+    func smallTalk(with castId: String, in state: inout GameState) -> [String] {
+        let member = castMember(castId)
+        let count = state.smallTalk[castId, default: 0]
+        state.smallTalk[castId] = count + 1
+        var lines: [String]
+        if let idle = member?.idle, !idle.isEmpty {
+            lines = ["« \(idle[count % idle.count]) »"]
+        } else if let taunts = member?.clash?.taunts, !taunts.isEmpty {
+            lines = ["« \(taunts[count % taunts.count]) »"]
+        } else {
+            let generic = ["Repasse plus tard, je suis sous l'eau.", "On se capte bientôt, promis.", "J'ai rien de neuf pour toi, frère."]
+            lines = ["« \(generic[count % generic.count]) »"]
+        }
+        if let objective = currentObjective(in: state), objective.trigger?.npc != castId {
+            lines.append("En attendant : \(objective.label.prefix(1).lowercased() + objective.label.dropFirst()).")
+        }
+        return lines
     }
 
     // MARK: - Quests
@@ -252,8 +309,7 @@ struct GameEngine {
             chosen = story
         } else {
             let eligible = eligibleEvents(at: location, in: state)
-            let fresh = eligible.filter { !state.recentEvents.contains($0.id) }
-            chosen = GameEngine.weightedPick(fresh.isEmpty ? eligible : fresh, using: &rng) ?? GameEngine.fallbackEvent
+            chosen = GameEngine.weightedPick(GameEngine.freshest(eligible, in: state), using: &rng) ?? GameEngine.fallbackEvent
         }
 
         state.actionsLeft -= 1
@@ -323,6 +379,7 @@ struct GameEngine {
         outcome.add(levelUps: state.skills.gain(visitXP.merging(choice.xp, uniquingKeysWith: +)))
 
         if event.unique { state.seenUniqueEvents.insert(event.id) }
+        state.seenEvents.insert(event.id)
         state.recentEvents = Array((state.recentEvents + [event.id]).suffix(GameState.recentMemory))
         state.pendingFollowUp = choice.followUp
         state.currentEventId = nil
