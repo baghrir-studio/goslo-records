@@ -34,6 +34,8 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
   Bobine's pitch on 100 %). Repeatable encounters with small rewards; rules in `Engine/Minigames.swift`.
 - **Look**: hair, hair colour, hat, glasses, beard, chain and headphones can be picked at creation
   (nil = the style's look).
+- **Sprites**: the map uses 16×16 sprites (`CharacterSprite`). Wherever a character is shown large (creation,
+  clashes, cinematics, dialogue portraits, concerts), the detailed 40×56 `HeroSprite` is drawn from the same look.
 - **Relationships** (0–100) with the cast, and **quests** with steps shown on the map (● QUÊTE).
 - Each semester ends with an upkeep: −2 argent, −4 streams (`GameEngine.semesterUpkeep`).
 - 4 early endings (a stat at 0) and 7 endings for finishing all 10 years, including **Héritier du trône**

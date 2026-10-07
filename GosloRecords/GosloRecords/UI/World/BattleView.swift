@@ -69,7 +69,7 @@ struct BattleView: View {
                     Platform().frame(width: 190, height: 44).position(x: playerSpot.x, y: playerSpot.y + 58)
 
                     // Opponent (facing us).
-                    PixelImage(CharacterSprite.image(opponent?.look ?? CharacterLook(), facing: .down), width: 124)
+                    PixelImage(HeroSprite.image(opponent?.look ?? CharacterLook(), facing: .down), width: 92)
                         .opacity(flashOpponent ? 0.15 : 1)
                         .modifier(Shake(amount: shakeOpponent))
                         .offset(x: lungeOpponent ? -26 : 0, y: (lungeOpponent ? 16 : 0) + (idle ? -2 : 2))
@@ -79,7 +79,7 @@ struct BattleView: View {
                         .position(opponentSpot)
 
                     // The player, from behind.
-                    PixelImage(CharacterSprite.image(state.rapper.look, facing: .up), width: 140)
+                    PixelImage(HeroSprite.image(state.rapper.look, facing: .up), width: 104)
                         .opacity(flashPlayer ? 0.15 : 1)
                         .modifier(Shake(amount: shakePlayer))
                         .offset(x: lungePlayer ? 28 : 0, y: (lungePlayer ? -18 : 0) + (idle ? 2 : -1))
@@ -848,7 +848,7 @@ private struct SecretCinematicView: View {
 
             if let prop = cinematic.prop { PropRain(symbol: prop) }
 
-            PixelImage(CharacterSprite.image(cinematic.look, facing: .down, frame: shown ? 1 : 0), width: 190)
+            PixelImage(HeroSprite.image(cinematic.look, facing: .down, frame: shown ? 1 : 0), width: 136)
                 .scaleEffect(shown ? 1 : 0.3)
                 .offset(x: shown ? (cinematic.byPlayer ? -60 : 60) : 0, y: 10)
 

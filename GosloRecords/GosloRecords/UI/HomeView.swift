@@ -21,7 +21,7 @@ struct HomeView: View {
             HStack(spacing: -12) {
                 ForEach(Array(Style.allCases.enumerated()), id: \.offset) { index, style in
                     WalkingSprite(look: Rapper(name: "", city: .paris, style: style, skinTone: [1, 3, 0, 4][index]).look,
-                                  facing: index % 2 == 0 ? .right : .down, size: 64)
+                                  facing: .down, size: 64)
                 }
             }
             .padding(.top, 16)
