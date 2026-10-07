@@ -612,6 +612,30 @@ struct GameEngine {
         return (pitch, reaction)
     }
 
+    /// Signing: the artists on offer, and the budget this player has.
+    func signingOffer(in state: GameState) -> (spec: SigningSpec, budget: Int)? {
+        guard let running = state.minigame, running.kind == .signing,
+              let spec = minigame(running.id)?.signing else { return nil }
+        return (spec, SigningEngine.budget(spec, businessLevel: state.skills.level(.business)))
+    }
+
+    /// Signing: the player signs these artists. Returns what happens to each of them.
+    func sign(_ ids: [String], in state: inout GameState) throws -> [String] {
+        guard var running = state.minigame, !running.isOver, let offer = signingOffer(in: state) else {
+            throw GameEngineError.noMinigame
+        }
+        guard SigningEngine.isAffordable(ids, in: offer.spec, businessLevel: state.skills.level(.business)) else {
+            throw GameEngineError.invalidChoice(ids.count)
+        }
+        let reveals = ids.compactMap { id in offer.spec.artists.first { $0.id == id }?.reveal }
+        running.signed = ids
+        running.points = SigningEngine.points(ids, in: offer.spec)
+        running.log = reveals
+        running.round = 1
+        state.minigame = running
+        return reveals
+    }
+
     /// Fuir la foule: the chase screen reports how it ended.
     func endChase(escaped: Bool, in state: inout GameState) throws {
         guard var running = state.minigame, running.kind == .fuite else { throw GameEngineError.noMinigame }
@@ -629,6 +653,9 @@ struct GameEngine {
             return Double(running.points) / Double(PlatineEngine.runs * PlatineEngine.maxPoints)
         case .fuite:
             return running.escaped == true ? 1 : 0
+        case .signing:
+            let target = minigame(running.id)?.signing?.target ?? 0
+            return target > 0 ? min(1, Double(running.points) / Double(target)) : 0
         }
     }
 
@@ -722,6 +749,14 @@ struct GameEngine {
     func isStoryUnfinished(in state: GameState) -> Bool {
         guard let finale = story.chapters.first(where: \.isFinale) else { return false }
         return !state.flags.contains("chapitre_\(finale.number)")
+    }
+
+    /// The last chapter, once the one before it is done (the epilogue after the throne).
+    /// It's played outside the clock: semesters no longer pass, so the time limit can't cut it short.
+    func isInEpilogue(_ state: GameState) -> Bool {
+        guard let finale = story.chapters.first(where: \.isFinale), finale.number > 1 else { return false }
+        return state.chapter == finale.number && isStoryUnfinished(in: state)
+            && state.flags.contains("chapitre_\(finale.number - 1)")
     }
 
     /// Semester at which the career ends. The limit waits for the story: while the finale is still to play,
@@ -935,7 +970,7 @@ struct GameEngine {
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
             outcome.add(state.stats.apply(GameEngine.upkeep(for: state.stats)))
             let limit = turnLimit(in: state)
-            state.turn = min(state.turn + 1, limit)
+            if !isInEpilogue(state) { state.turn = min(state.turn + 1, limit) }
             state.actionsLeft = GameState.actionsPerTurn
             state.challengedThisSemester = []
             outcome.semesterEnded = true

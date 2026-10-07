@@ -256,6 +256,15 @@ final class EventsDataTests: XCTestCase {
                         }
                     case .fuite:
                         try engine.endChase(escaped: Bool.random(using: &rng), in: &state)
+                    case .signing:
+                        // A random affordable pair, or a single artist.
+                        let offer = try XCTUnwrap(engine.signingOffer(in: state))
+                        let ids = offer.spec.artists.map(\.id)
+                        let options = ids.flatMap { a in ids.map { [a, $0] } }.filter { $0[0] != $0[1] } + ids.map { [$0] }
+                        let affordable = options.filter {
+                            SigningEngine.isAffordable($0, in: offer.spec, businessLevel: state.skills.level(.business))
+                        }
+                        _ = try engine.sign(affordable.randomElement(using: &rng)!, in: &state)
                     }
                     _ = try engine.finishMinigame(in: &state)
                 case .writing:

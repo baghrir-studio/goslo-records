@@ -166,12 +166,115 @@ final class FinaleTests: XCTestCase {
         }
         XCTAssertTrue(try XCTUnwrap(try engine.finishConcert(in: &state).concert).passed)
         XCTAssertEqual(state.pendingCinematic, "ch6_outro")
-        XCTAssertFalse(state.isOver, "la carrière se termine après la cinématique de fin")
 
+        // The throne no longer ends the career: the epilogue opens.
         engine.cinematicFinished("ch6_outro", in: &state)
         XCTAssertTrue(state.flags.contains("chapitre_6"))
-        XCTAssertEqual(state.ending, .heritier, "le trône revient à l'héritier")
+        XCTAssertFalse(state.isOver, "après le trône, l'épilogue du label")
+        XCTAssertEqual(state.chapter, 7)
+        XCTAssertEqual(state.pendingCinematic, "ch7_intro")
+    }
+
+    // MARK: Epilogue: the label
+
+    /// A career at the start of the epilogue, after beating the Baron.
+    private func epilogueStart() -> GameState {
+        let engine = GameEngine(world: world)
+        var state = engine.newGame(rapper: Rapper(name: "Kiki", city: .casablanca, style: .boomBap))
+        engine.debugJump(toChapter: 7, in: &state)
+        state.flags.insert("clash_gagne_le_baron")
+        state.stats = Stats(streams: 60, credibilite: 60, argent: 50, mental: 70)
+        engine.cinematicFinished("ch7_intro", in: &state)
+        return state
+    }
+
+    /// Plays the epilogue, signing `artists` at the auditions.
+    private func playEpilogue(signing artists: [String]) throws -> GameState {
+        let engine = GameEngine(world: world)
+        var state = epilogueStart()
+        func refill() { if state.actionsLeft == 0 { state.actionsLeft = GameState.actionsPerTurn } }
+
+        XCTAssertEqual(try engine.visit(.label, in: &state, using: &rng).id, "story_cles")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        refill()
+        XCTAssertEqual(try engine.visit(.scene, in: &state, using: &rng).id, "story_auditions")
+        guard case .minigame = try engine.resolve(choiceAt: 0, in: &state) else {
+            XCTFail("pas d'auditions")
+            return state
+        }
+        XCTAssertEqual(try engine.sign(artists, in: &state).count, artists.count)
+        _ = try engine.finishMinigame(in: &state)
+        refill()
+        XCTAssertEqual(try engine.visit(.media, in: &state, using: &rng).id, "story_label_radio")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertEqual(state.pendingCinematic, "ch7_outro")
+        XCTAssertFalse(state.isOver, "la carrière se termine après la cinématique de fin")
+        engine.cinematicFinished("ch7_outro", in: &state)
+        XCTAssertTrue(state.flags.contains("chapitre_7"))
         XCTAssertNil(state.pendingCinematic)
-        XCTAssertEqual(state.chapter, 6)
+        return state
+    }
+
+    /// Reaching the throne on the very last semester still lets you play the epilogue.
+    func testTheClockStopsDuringTheEpilogue() throws {
+        let engine = GameEngine(world: world)
+        var state = epilogueStart()
+        state.turn = engine.turnLimit(in: state) - 1
+        XCTAssertTrue(engine.isInEpilogue(state))
+        for _ in 0..<6 {
+            state.actionsLeft = 1
+            _ = try engine.visit(.quartier, in: &state, using: &rng)
+            let event = try XCTUnwrap(engine.currentEvent(in: state))
+            let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.clash == nil
+                && $0.minigame == nil && $0.followUp == nil && $0.skipTurns == 0 })
+            _ = try engine.resolve(choiceAt: choice, in: &state)
+            state.stats = Stats(streams: 60, credibilite: 60, argent: 50, mental: 70)
+            XCTAssertNil(state.ending, "la limite de semestres ne coupe pas l'épilogue")
+        }
+        XCTAssertEqual(state.turn, engine.turnLimit(in: state) - 1, "le temps est figé")
+    }
+
+    func testGoodSigningsMakeYouALabelBoss() throws {
+        let state = try playEpilogue(signing: ["celeste_k", "petite_brume"])
+        XCTAssertEqual(state.ending, .patronDeLabel)
+    }
+
+    func testChasingTheBuzzKeepsYouOnTheThrone() throws {
+        let state = try playEpilogue(signing: ["tonton_turbo", "junior_ascenseur"])
+        XCTAssertEqual(state.ending, .heritier, "label raté : on reste l'héritier du trône")
+    }
+
+    func testSigningRespectsBudgetAndContracts() throws {
+        let engine = GameEngine(world: world)
+        var state = epilogueStart()
+        state.skills = Skills(xp: [:])
+        _ = try engine.visit(.label, in: &state, using: &rng)
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        state.actionsLeft = GameState.actionsPerTurn
+        _ = try engine.visit(.scene, in: &state, using: &rng)
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        let offer = try XCTUnwrap(engine.signingOffer(in: state))
+        XCTAssertEqual(offer.budget, offer.spec.budget + state.skills.level(.business) * SigningEngine.budgetPerBusinessLevel,
+                       "chaque niveau de Business ajoute au budget")
+        XCTAssertThrowsError(try engine.sign([], in: &state), "au moins un contrat")
+        XCTAssertThrowsError(try engine.sign(["celeste_k", "petite_brume", "junior_ascenseur"], in: &state), "deux contrats au plus")
+        XCTAssertThrowsError(try engine.sign(["tonton_turbo", "celeste_k"], in: &state), "hors budget")
+        XCTAssertThrowsError(try engine.sign(["celeste_k", "celeste_k"], in: &state), "pas deux fois le même")
+        XCTAssertNoThrow(try engine.sign(["junior_ascenseur"], in: &state))
+        XCTAssertTrue(state.minigame?.isOver == true)
+    }
+
+    /// Buzz alone never makes a label; at least one good pair is always affordable without Business.
+    func testSigningBalance() throws {
+        let spec = try XCTUnwrap(world.story.minigame("signing_releve")?.signing)
+        let ids = spec.artists.map(\.id)
+        let pairs = ids.flatMap { a in ids.map { [a, $0] } }.filter { $0[0] < $0[1] }
+        for level in 0...Skills.maxLevel {
+            let affordable = pairs.filter { SigningEngine.isAffordable($0, in: spec, businessLevel: level) }
+            let winners = affordable.filter { SigningEngine.points($0, in: spec) >= spec.target }
+            XCTAssertGreaterThanOrEqual(winners.count, 3, "niveau \(level) : trop peu de bons duos")
+            XCTAssertLessThan(winners.count, affordable.count, "niveau \(level) : impossible de rater")
+            XCTAssertFalse(winners.contains { $0.contains("tonton_turbo") }, "le buzz seul ne fait pas un label")
+        }
     }
 }

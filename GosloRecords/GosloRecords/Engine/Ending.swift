@@ -7,6 +7,8 @@ enum Ending: String, Codable, CaseIterable {
     case vendu
     case oublie
     // Survival endings (all 20 semesters played)
+    /// Epilogue: you took over the label and your first signings took off.
+    case patronDeLabel = "patron_de_label"
     case heritier
     case legende
     case starCommerciale = "star_commerciale"
@@ -21,6 +23,7 @@ enum Ending: String, Codable, CaseIterable {
         case .retourAuTaf: "Retour au taf"
         case .vendu: "Vendu"
         case .oublie: "Oublié"
+        case .patronDeLabel: "Patron de label"
         case .heritier: "Héritier du trône"
         case .legende: "Légende"
         case .starCommerciale: "Star commerciale"
@@ -41,6 +44,8 @@ enum Ending: String, Codable, CaseIterable {
             "Plus personne dans le milieu ne te respecte. Tu fais des jingles pour une enseigne de bricolage. Ils sont très efficaces."
         case .oublie:
             "Zéro écoute. L'algorithme t'a rayé de la carte. Même ta mère a arrêté de partager tes sons."
+        case .patronDeLabel:
+            "Le trône, tu l'as laissé refroidir. Tu as repris la laverie, signé la relève, et ce sont leurs noms que le quartier scande maintenant. Toi, tu souris au fond de la salle. Tu as trouvé mieux qu'un trône : un banc de touche."
         case .heritier:
             "Tu as battu le Baron sur son propre terrain. Le trône est à toi. Il est inconfortable, et tout le monde veut s'asseoir dessus."
         case .legende:
@@ -83,6 +88,7 @@ enum EndingResolver {
     static func finalEnding(for state: GameState) -> Ending {
         let stats = state.stats
         let streams = stats.streams, cred = stats.credibilite
+        if state.flags.contains("releve_signee") { return .patronDeLabel }
         if state.flags.contains("clash_gagne_le_baron") && streams >= 50 { return .heritier }
         if streams >= 75 && cred >= 75 { return .legende }
         if streams >= 65 && cred < 50 { return .starCommerciale }

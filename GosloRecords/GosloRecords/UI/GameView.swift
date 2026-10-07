@@ -22,6 +22,12 @@ struct GameView: View {
                     CinematicOverlay()
                         .zIndex(5)
                 } else {
+                    // Full-screen modes hide the map, including behind the translucent HUD.
+                    if let backdrop = fullScreenBackdrop {
+                        backdrop
+                            .ignoresSafeArea()
+                            .transition(.opacity)
+                    }
                     VStack(spacing: 0) {
                         hud(state)
                         if case .clash(let clash) = model.phase {
@@ -94,6 +100,17 @@ struct GameView: View {
                 Button("Accueil") { model.go(.home) }.buttonStyle(SecondaryButtonStyle())
             }
             .padding(Theme.gutter)
+        }
+    }
+
+    /// Background of the full-screen modes (the interview keeps the studio visible).
+    private var fullScreenBackdrop: Color? {
+        switch model.phase {
+        case .clash: Color(red: 0.05, green: 0.05, blue: 0.06)
+        case .writing, .negotiation: Color(red: 0.06, green: 0.06, blue: 0.08)
+        case .minigame: Color(red: 0.05, green: 0.05, blue: 0.07)
+        case .concert: Color(red: 0.05, green: 0.03, blue: 0.06)
+        default: nil
         }
     }
 

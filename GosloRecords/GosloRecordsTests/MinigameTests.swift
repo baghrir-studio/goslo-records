@@ -27,12 +27,13 @@ final class MinigameTests: XCTestCase {
 
     func testMinigameDataIsConsistent() {
         let minigames = world.story.minigames
-        XCTAssertEqual(Set(minigames.map(\.kind)), [.punchliner, .fuite, .platine])
+        XCTAssertEqual(Set(minigames.map(\.kind)), [.punchliner, .fuite, .platine, .signing])
         let launched = Set((world.events + world.story.events).flatMap { $0.choices.compactMap(\.minigame) })
         XCTAssertEqual(launched, Set(minigames.map(\.id)), "chaque mini-jeu est lancé par un événement, et seulement les existants")
         for minigame in minigames {
             XCTAssertTrue((0...1).contains(minigame.passScore), minigame.id)
             XCTAssertEqual(minigame.kind == .punchliner, !minigame.rounds.isEmpty, minigame.id)
+            XCTAssertEqual(minigame.kind == .signing, minigame.signing != nil, minigame.id)
             for (index, round) in minigame.rounds.enumerated() {
                 let label = "\(minigame.id) #\(index)"
                 XCTAssertEqual(round.words.count, PunchlinerEngine.tileCount, "\(label) : il faut 20 tuiles")

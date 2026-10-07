@@ -629,6 +629,15 @@ final class AppModel {
         persist()
     }
 
+    /// Auditions: signs these artists.
+    func sign(_ ids: [String]) {
+        guard var current = state, case .minigame = phase else { return }
+        guard (try? engine.sign(ids, in: &current)) != nil else { return }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+    }
+
     func finishMinigame() {
         guard var current = state, case .minigame = phase else { return }
         let before = current.stats

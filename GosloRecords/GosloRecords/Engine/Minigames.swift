@@ -9,6 +9,8 @@ struct Minigame: Codable, Equatable, Identifiable {
         case fuite
         /// Stop DJ Bobine's pitch on 100 %.
         case platine
+        /// Epilogue: sign young artists to your label, within a budget.
+        case signing
     }
 
     let id: String
@@ -19,22 +21,25 @@ struct Minigame: Codable, Equatable, Identifiable {
     let passScore: Double
     /// Punchliner only.
     let rounds: [PunchlinerRound]
+    /// Signing only.
+    let signing: SigningSpec?
     let win: InterviewResult
     let lose: InterviewResult
 
     enum CodingKeys: String, CodingKey {
-        case id, kind, title, intro, rounds, win, lose
+        case id, kind, title, intro, rounds, signing, win, lose
         case passScore = "pass_score"
     }
 
     init(id: String, kind: Kind, title: String, intro: String = "", passScore: Double = 0.5,
-         rounds: [PunchlinerRound] = [], win: InterviewResult, lose: InterviewResult) {
+         rounds: [PunchlinerRound] = [], signing: SigningSpec? = nil, win: InterviewResult, lose: InterviewResult) {
         self.id = id
         self.kind = kind
         self.title = title
         self.intro = intro
         self.passScore = passScore
         self.rounds = rounds
+        self.signing = signing
         self.win = win
         self.lose = lose
     }
@@ -47,6 +52,7 @@ struct Minigame: Codable, Equatable, Identifiable {
         intro = try c.decodeIfPresent(String.self, forKey: .intro) ?? ""
         passScore = try c.decodeIfPresent(Double.self, forKey: .passScore) ?? 0.5
         rounds = try c.decodeIfPresent([PunchlinerRound].self, forKey: .rounds) ?? []
+        signing = try c.decodeIfPresent(SigningSpec.self, forKey: .signing)
         win = try c.decode(InterviewResult.self, forKey: .win)
         lose = try c.decode(InterviewResult.self, forKey: .lose)
     }
@@ -56,7 +62,7 @@ struct Minigame: Codable, Equatable, Identifiable {
         switch kind {
         case .punchliner: rounds.count
         case .platine: PlatineEngine.runs
-        case .fuite: 1
+        case .fuite, .signing: 1
         }
     }
 }
@@ -71,6 +77,8 @@ struct MinigameState: Codable, Equatable {
     var log: [String] = []
     /// Fuite only: set by the chase screen once it's over.
     var escaped: Bool?
+    /// Signing only: the artists signed, in order (optional so saves from before the epilogue still load).
+    var signed: [String]?
     let roundCount: Int
 
     init(minigame: Minigame) {
@@ -255,5 +263,60 @@ struct CrowdChase: Equatable {
     private mutating func settle() {
         if player == CrowdChase.door { escaped = true }
         if !escaped && fans.contains(player) { caught = true }
+    }
+}
+
+// MARK: - Signing (epilogue)
+
+/// The label's first auditions: a budget, a few young artists, two contracts at most.
+struct SigningSpec: Codable, Equatable {
+    /// Money to share between the advances (Business levels add to it).
+    let budget: Int
+    /// Contracts at most.
+    let picks: Int
+    /// Points needed for the label to take off.
+    let target: Int
+    let artists: [SigningArtist]
+}
+
+/// A young artist. Talent and buzz are shown; reliability stays hidden until they're signed.
+struct SigningArtist: Codable, Equatable, Identifiable {
+    let id: String
+    let name: String
+    let style: String
+    let pitch: String
+    /// A hint about the hidden reliability.
+    let flaw: String
+    let cost: Int
+    let talent: Int
+    let buzz: Int
+    let reliability: Int
+    /// What happens to their first single.
+    let reveal: String
+
+    var points: Int { talent + buzz + reliability }
+}
+
+enum SigningEngine {
+    /// Two artists of different styles: the label sounds like a label, not a clone factory.
+    static let varietyBonus = 3
+    /// Extra budget per Business level.
+    static let budgetPerBusinessLevel = 2
+
+    static func budget(_ spec: SigningSpec, businessLevel: Int) -> Int {
+        spec.budget + max(0, businessLevel) * budgetPerBusinessLevel
+    }
+
+    /// Can these artists be signed together?
+    static func isAffordable(_ ids: [String], in spec: SigningSpec, businessLevel: Int) -> Bool {
+        let artists = ids.compactMap { id in spec.artists.first { $0.id == id } }
+        return !ids.isEmpty && artists.count == ids.count && Set(ids).count == ids.count && ids.count <= spec.picks
+            && artists.map(\.cost).reduce(0, +) <= budget(spec, businessLevel: businessLevel)
+    }
+
+    static func points(_ ids: [String], in spec: SigningSpec) -> Int {
+        let artists = ids.compactMap { id in spec.artists.first { $0.id == id } }
+        let bonus = Set(artists.map(\.style)).count > 1 ? varietyBonus : 0
+        return artists.map(\.points).reduce(0, +) + bonus
     }
 }

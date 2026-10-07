@@ -455,7 +455,6 @@
       "title": "Le trône",
       "intro": "ch6_intro",
       "outro": "ch6_outro",
-      "finale": true,
       "objectives": [
         {
           "id": "dome",
@@ -544,6 +543,57 @@
           }
         }
       ]
+    },
+    {
+      "number": 7,
+      "title": "Le label",
+      "intro": "ch7_intro",
+      "outro": "ch7_outro",
+      "objectives": [
+        {
+          "id": "cles",
+          "label": "Récupère les clés de la laverie",
+          "hint": "Momo t'attend à la laverie, en bas à gauche.",
+          "trigger": {
+            "location": "label"
+          },
+          "event": "story_cles",
+          "conditions": {
+            "required_flags": [
+              "patron_label"
+            ]
+          }
+        },
+        {
+          "id": "auditions",
+          "label": "Auditionne la relève",
+          "hint": "Cinq jeunes t'attendent devant la scène, en haut à droite.",
+          "trigger": {
+            "location": "scene"
+          },
+          "event": "story_auditions",
+          "conditions": {
+            "required_flags": [
+              "auditions_faites"
+            ]
+          }
+        },
+        {
+          "id": "lancement",
+          "label": "Présente ton label sur goslo radio",
+          "hint": "Yanis te garde un créneau à la radio, en haut au milieu.",
+          "trigger": {
+            "location": "media"
+          },
+          "event": "story_label_radio",
+          "conditions": {
+            "required_flags": [
+              "label_lance"
+            ]
+          }
+        }
+      ],
+      "finale": true
     }
   ],
   "events": [
@@ -552,48 +602,26 @@
       "title": "Le carnet à spirale",
       "location": "chez_toi",
       "weight": 0,
-      "text": "Ta chambre. Le radiateur fait un bruit de moteur d'avion. Sur le bureau, un carnet à spirale acheté en 2016 et jamais fini. Ce soir, tu écris ton premier vrai texte.",
+      "text": "Ta chambre. Le radiateur fait un bruit de moteur d'avion. Sur le bureau, un carnet à spirale acheté en 2016 et jamais fini. Ce soir, tu écris ton premier vrai texte. Trois couplets. Le début de chaque phrase est déjà là, il reste à trouver la fin.",
       "choices": [
         {
-          "label": "Écrire sur le bas du bloc, ce que tu vois",
+          "label": "Ouvrir le carnet et finir les phrases",
+          "minigame": "punchliner_carnet",
+          "consequence": "Tu ouvres le carnet. Le stylo hésite, puis il part."
+        },
+        {
+          "label": "Écrire d'une traite, sans te relire",
           "effects": {
-            "credibilite": 4,
+            "credibilite": 1,
             "mental": 2
           },
           "xp": {
-            "plume": 40
+            "plume": 20
           },
           "set_flags": [
             "premier_texte"
           ],
-          "consequence": "Seize mesures sur le hall, la boîte aux lettres cassée et le voisin qui tousse. C'est brut. C'est vrai. C'est toi."
-        },
-        {
-          "label": "Écrire un egotrip : t'es le meilleur, point",
-          "effects": {
-            "streams": 2,
-            "credibilite": 1
-          },
-          "xp": {
-            "flow": 40
-          },
-          "set_flags": [
-            "premier_texte"
-          ],
-          "consequence": "« Je suis le roi du bloc » rimé avec « je suis le roi du bloc ». La forme est à revoir. L'énergie, elle, est là."
-        },
-        {
-          "label": "Écrire sur ta daronne",
-          "effects": {
-            "mental": 6
-          },
-          "xp": {
-            "plume": 30
-          },
-          "set_flags": [
-            "premier_texte"
-          ],
-          "consequence": "Tu as pleuré à la troisième mesure. Ta mère a frappé à la porte : « Ça va ? » Ça va très bien."
+          "consequence": "Quatre pages d'un coup, sans une rature. Demain, tu ne pourras pas te relire. Ce soir, ça compte quand même."
         }
       ]
     },
@@ -2100,6 +2128,95 @@
           "consequence": "Tu penses au bas du bloc, au Transfo, à la laverie. Puis tu entres. Tu n'as plus peur."
         }
       ]
+    },
+    {
+      "id": "story_cles",
+      "title": "Les clés de la laverie",
+      "location": "label",
+      "npc": "momo",
+      "weight": 0,
+      "text": "La laverie, un mardi matin. Momo plie des draps. Il les plie mal. Sur le comptoir, un trousseau de clés et un post-it : « Pour le patron. »",
+      "choices": [
+        {
+          "label": "Prendre les clés",
+          "effects": {
+            "credibilite": 3
+          },
+          "set_flags": [
+            "patron_label"
+          ],
+          "consequence": "Momo pose la main sur la machine 4. « Celle-là, tu la gardes. Elle fait partie du contrat. Elle a toujours fait partie du contrat. »"
+        },
+        {
+          "label": "Demander ce que Momo va devenir",
+          "effects": {
+            "mental": 4
+          },
+          "relations": {
+            "momo": 10
+          },
+          "set_flags": [
+            "patron_label"
+          ],
+          "consequence": "« Moi ? Je prends ma retraite. Je vais ouvrir une laverie. » Il réfléchit. « Une autre. Avec des machines qui marchent. »"
+        }
+      ]
+    },
+    {
+      "id": "story_auditions",
+      "title": "Les auditions",
+      "location": "scene",
+      "npc": "dj_bobine",
+      "weight": 0,
+      "text": "Le Transfo, un après-midi. Cinq jeunes attendent sur des chaises en plastique, chacun avec son téléphone, son carnet ou sa rage. DJ Bobine tient la platine. Tu as un budget, deux contrats, et le souvenir très précis de ton premier carnet.",
+      "choices": [
+        {
+          "label": "Lancer les auditions",
+          "minigame": "signing_releve",
+          "consequence": "Le premier candidat s'avance. Il a les mains qui tremblent. Toi aussi, la première fois."
+        },
+        {
+          "label": "Écouter tout le monde deux fois avant de choisir",
+          "effects": {
+            "mental": -3
+          },
+          "minigame": "signing_releve",
+          "consequence": "« Encore une fois. » DJ Bobine soupire et relance le beat. Les jeunes adorent. Bobine, moins."
+        }
+      ]
+    },
+    {
+      "id": "story_label_radio",
+      "title": "Le nouveau patron",
+      "location": "media",
+      "npc": "yanis",
+      "weight": 0,
+      "text": "goslo radio. Yanis a sorti le micro des grands jours, celui qui ne grésille presque pas. « Ce soir, on reçoit le nouveau patron de goslo records. Et sa relève. Enfin, s'ils trouvent la porte. »",
+      "choices": [
+        {
+          "label": "Laisser parler tes artistes",
+          "effects": {
+            "credibilite": 4
+          },
+          "set_flags": [
+            "label_lance"
+          ],
+          "consequence": "Tu restes en retrait. Ils parlent, ils rappent, ils bafouillent un peu. C'est parfait. C'est exactement toi, avant."
+        },
+        {
+          "label": "Un dernier freestyle, pour leur ouvrir la porte",
+          "effects": {
+            "streams": 4
+          },
+          "xp": {
+            "flow": 20
+          },
+          "set_flags": [
+            "label_lance"
+          ],
+          "consequence": "Un dernier freestyle, pas pour toi : pour eux. Yanis coupe le micro et dit, hors antenne : « Ça, c'est un patron. »"
+        }
+      ]
     }
   ],
   "interviews": [
@@ -2556,19 +2673,31 @@
         {
           "say": {
             "who": "lil_sauge",
-            "text": "Encore en train de gratter, {nom} ? Laisse tomber, frère. Le rap, c'est pas pour les gens d'ici."
+            "text": "Encore sur ton carnet, {nom} ? Les gens lisent plus, frère. Ils scrollent."
           }
         },
         {
           "say": {
             "who": "player",
-            "text": "On verra."
+            "text": "Alors j'écrirai des trucs qui les font arrêter de scroller."
           }
         },
         {
           "say": {
             "who": "lil_sauge",
-            "text": "C'est tout vu. Moi j'ai 800 abonnés. Toi t'as un cahier."
+            "text": "Moi j'ai trouvé la recette : un refrain de quatre mots, une danse, un filtre chien. Hier, une marque d'eau gazeuse m'a écrit."
+          }
+        },
+        {
+          "say": {
+            "who": "player",
+            "text": "Et t'as répondu quoi ?"
+          }
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Oui. Évidemment, oui. Garde ton carnet, va. Quand je serai en haut, je te ferai coucou."
           }
         },
         {
@@ -2591,7 +2720,7 @@
           }
         },
         {
-          "narration": "Il a peut-être raison. Mais ce soir, tu vas écrire ton premier vrai texte."
+          "narration": "Il remonte la rue en se filmant. Il a peut-être raison. Mais ce soir, tu vas écrire ton premier vrai texte."
         }
       ]
     },
@@ -2731,12 +2860,6 @@
           "title": {
             "text": "FIN DU CHAPITRE 1",
             "subtitle": "En bas du bloc"
-          }
-        },
-        {
-          "title": {
-            "text": "À SUIVRE",
-            "subtitle": "Chapitre 2 · La laverie"
           }
         },
         {
@@ -2901,12 +3024,6 @@
             "text": "FIN DU CHAPITRE 2",
             "subtitle": "La laverie"
           }
-        },
-        {
-          "title": {
-            "text": "À SUIVRE",
-            "subtitle": "Chapitre 3 · Première scène"
-          }
         }
       ]
     },
@@ -3052,12 +3169,6 @@
           "title": {
             "text": "FIN DU CHAPITRE 3",
             "subtitle": "Première scène"
-          }
-        },
-        {
-          "title": {
-            "text": "À SUIVRE",
-            "subtitle": "Chapitre 4 · Le buzz"
           }
         },
         {
@@ -3227,12 +3338,6 @@
             "text": "FIN DU CHAPITRE 4",
             "subtitle": "Le buzz"
           }
-        },
-        {
-          "title": {
-            "text": "À SUIVRE",
-            "subtitle": "Chapitre 5 · Le game"
-          }
         }
       ]
     },
@@ -3354,12 +3459,6 @@
           "title": {
             "text": "FIN DU CHAPITRE 5",
             "subtitle": "Le game"
-          }
-        },
-        {
-          "title": {
-            "text": "À SUIVRE",
-            "subtitle": "Chapitre 6 · Le trône"
           }
         }
       ]
@@ -3497,6 +3596,124 @@
         },
         {
           "title": {
+            "text": "FIN DU CHAPITRE 6",
+            "subtitle": "Le trône"
+          }
+        },
+        {
+          "fade": true
+        }
+      ]
+    },
+    {
+      "id": "ch7_intro",
+      "steps": [
+        {
+          "title": {
+            "text": "ÉPILOGUE",
+            "subtitle": "Le label"
+          }
+        },
+        {
+          "narration": "Six mois après le Dôme. Le trône grince toujours. Tu t'assois de moins en moins dessus."
+        },
+        {
+          "sound": "radioJingle"
+        },
+        {
+          "narration": "Sur goslo radio : « Rumeur dans le quartier : Momo raccrocherait le tablier. Qui va reprendre la laverie la plus célèbre du rap ? »"
+        },
+        {
+          "camera": {
+            "x": 3,
+            "y": 12
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Petit. Passe à la laverie, j'ai un truc à te donner. C'est pas du linge, promis."
+          }
+        },
+        {
+          "camera_reset": true
+        }
+      ]
+    },
+    {
+      "id": "ch7_outro",
+      "steps": [
+        {
+          "fade": true
+        },
+        {
+          "place": {
+            "who": "player",
+            "x": 6,
+            "y": 13,
+            "facing": "left"
+          }
+        },
+        {
+          "place": {
+            "who": "momo",
+            "x": 4,
+            "y": 13,
+            "facing": "right"
+          }
+        },
+        {
+          "place": {
+            "who": "maman",
+            "x": 8,
+            "y": 13,
+            "facing": "left"
+          }
+        },
+        {
+          "fade": false
+        },
+        {
+          "sound": "crowdCheer"
+        },
+        {
+          "narration": "Un vendredi soir, devant la laverie. Le premier single de la relève sort à minuit. Dans la rue, une voiture ralentit. Puis une autre."
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "La machine 4 tourne toute seule. Elle a jamais tourné toute seule. Je crois qu'elle est fière."
+          }
+        },
+        {
+          "say": {
+            "who": "fred",
+            "text": "Je les ai mixés. Ça me fait un disque d'or et deux espoirs. Je mettrai les deux dans mes mémoires."
+          }
+        },
+        {
+          "say": {
+            "who": "maman",
+            "text": "Donc maintenant, tu es patron ? Avec des employés, des fiches de paie ?"
+          }
+        },
+        {
+          "say": {
+            "who": "player",
+            "text": "Oui, maman."
+          }
+        },
+        {
+          "say": {
+            "who": "maman",
+            "text": "Ça, c'est un vrai travail."
+          }
+        },
+        {
+          "narration": "Sur le toit d'en face, le chat regarde la rue. Il a neuf vies. Toi, tu viens d'en commencer une deuxième."
+        },
+        {
+          "title": {
             "text": "FIN",
             "subtitle": "goslo records"
           }
@@ -3504,7 +3721,7 @@
         {
           "title": {
             "text": "MERCI D'AVOIR JOUÉ",
-            "subtitle": "{nom}, du bas du bloc jusqu'au trône"
+            "subtitle": "{nom}, du bas du bloc jusqu'au label"
           }
         },
         {
@@ -3856,6 +4073,14 @@
       "conditions": {
         "required_flags": [
           "baron_tombe"
+        ]
+      }
+    },
+    {
+      "text": "Momo prend sa retraite. Il annonce ouvrir « une autre laverie, avec des machines qui marchent ». Personne n'y croit.",
+      "conditions": {
+        "required_flags": [
+          "patron_label"
         ]
       }
     }
@@ -4682,6 +4907,197 @@
   ],
   "minigames": [
     {
+      "id": "punchliner_carnet",
+      "kind": "punchliner",
+      "title": "Punchliner · le carnet",
+      "intro": "Ton premier texte, trois couplets. Le début de chaque phrase est écrit. Choisis les mots qui la terminent, dans l'ordre, et fais rimer la fin. Le chrono tourne, comme sur un vrai beat.",
+      "pass_score": 0.3,
+      "rounds": [
+        {
+          "setup": "En bas du bloc, l'ascenseur est en panne depuis l'hiver,",
+          "lead": "moi je monte quand même",
+          "answers": [
+            {
+              "words": [
+                "à",
+                "la",
+                "force",
+                "des",
+                "vers"
+              ],
+              "score": 10,
+              "reaction": "« À la force des vers. » Tu relis la phrase trois fois. Tu as un peu envie de la crier dans la cage d'escalier."
+            },
+            {
+              "words": [
+                "avec",
+                "mon",
+                "carnet",
+                "ouvert"
+              ],
+              "score": 8,
+              "reaction": "Simple, juste. On voit la scène : toi, sept étages, et le carnet qui ne se ferme jamais."
+            },
+            {
+              "words": [
+                "et",
+                "je",
+                "vise",
+                "l'univers"
+              ],
+              "score": 6,
+              "reaction": "Ambitieux pour quelqu'un qui n'a pas d'ascenseur. Mais ça rime, et ça a du cœur."
+            }
+          ],
+          "decoys": [
+            "escalier",
+            "clés",
+            "pied",
+            "fer",
+            "voisin",
+            "courrier",
+            "lumière"
+          ],
+          "rhymes": [
+            "vers",
+            "ouvert",
+            "l'univers",
+            "fer",
+            "lumière"
+          ]
+        },
+        {
+          "setup": "Ma mère me demande quand je trouve un vrai travail,",
+          "lead": "je lui réponds :",
+          "answers": [
+            {
+              "words": [
+                "je",
+                "rappe",
+                "pour",
+                "qu'on",
+                "se",
+                "taille"
+              ],
+              "score": 10,
+              "reaction": "Derrière la porte, ta mère : « Se tailler où ? » Puis, plus bas : « …c'est pas mal, quand même. »"
+            },
+            {
+              "words": [
+                "le",
+                "jour",
+                "où",
+                "j'aurai",
+                "ma",
+                "médaille"
+              ],
+              "score": 8,
+              "reaction": "Ta mère ne dit rien. Elle repasse ton t-shirt pour demain. C'est sa façon de dire oui."
+            },
+            {
+              "words": [
+                "après",
+                "cette",
+                "bataille"
+              ],
+              "score": 6,
+              "reaction": "« Quelle bataille ? Tu vas au lit. » Le combat est reporté à demain."
+            }
+          ],
+          "decoys": [
+            "CDI",
+            "lundi",
+            "patron",
+            "paille",
+            "vaisselle"
+          ],
+          "rhymes": [
+            "taille",
+            "médaille",
+            "bataille",
+            "paille"
+          ]
+        },
+        {
+          "setup": "Le bloc dort encore, mais bientôt il saura mon nom,",
+          "lead": "ce soir j'écris",
+          "answers": [
+            {
+              "words": [
+                "seize",
+                "mesures",
+                "qui",
+                "frappent",
+                "au",
+                "plafond"
+              ],
+              "score": 10,
+              "reaction": "Le voisin du dessus tape au plafond. Tu le prends comme une ovation."
+            },
+            {
+              "words": [
+                "comme",
+                "un",
+                "futur",
+                "champion"
+              ],
+              "score": 8,
+              "reaction": "Tu l'écris en majuscules. Puis tu le soulignes. Deux fois."
+            },
+            {
+              "words": [
+                "à",
+                "la",
+                "lueur",
+                "du",
+                "néon"
+              ],
+              "score": 6,
+              "reaction": "Le néon de la cuisine clignote, comme pour applaudir. Ou pour mourir. Les deux, sûrement."
+            }
+          ],
+          "decoys": [
+            "filtre",
+            "chien",
+            "refrain",
+            "million",
+            "danse"
+          ],
+          "rhymes": [
+            "plafond",
+            "champion",
+            "néon",
+            "million"
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "credibilite": 4,
+          "mental": 3
+        },
+        "xp": {
+          "plume": 40
+        },
+        "set_flags": [
+          "premier_texte"
+        ],
+        "consequence": "Trois couplets, et pas un seul que tu as envie de rayer. Ce n'est pas encore un classique. Mais c'est le tien."
+      },
+      "lose": {
+        "effects": {
+          "mental": 1
+        },
+        "xp": {
+          "plume": 20
+        },
+        "set_flags": [
+          "premier_texte"
+        ],
+        "consequence": "Tu as raturé plus que tu n'as écrit. Mais au fond du carnet, il reste quatre lignes que tu ne regrettes pas. C'est un début."
+      }
+    },
+    {
       "id": "punchliner_bunker",
       "kind": "punchliner",
       "title": "Punchliner · au Bunker",
@@ -5118,6 +5534,107 @@
           "flow": 10
         },
         "consequence": "Le pitch t'échappe. Bobine hausse les épaules : « 109 %, c'est une couleur. » Tu as un peu le tournis."
+      }
+    },
+    {
+      "id": "signing_releve",
+      "kind": "signing",
+      "title": "Auditions · la relève",
+      "intro": "Cinq candidats, deux contrats au maximum. Le talent et le buzz se voient tout de suite. La fiabilité, tu la découvriras après la signature. Ton niveau Business fait grimper le budget.",
+      "pass_score": 1.0,
+      "signing": {
+        "budget": 70,
+        "picks": 2,
+        "target": 40,
+        "artists": [
+          {
+            "id": "petite_brume",
+            "name": "Petite Brume",
+            "style": "Mélancolique",
+            "pitch": "Écrit dans le bus de nuit. 312 abonnés, tous en larmes.",
+            "flaw": "Très timide. Mais elle n'a jamais raté un rendez-vous.",
+            "cost": 30,
+            "talent": 9,
+            "buzz": 3,
+            "reliability": 8,
+            "reveal": "Petite Brume sort « Bus de nuit ». Trois minutes de pluie et de néons. Tous les commentaires disent la même chose : « pourquoi je pleure dans le tram ». Succès lent, mais solide."
+          },
+          {
+            "id": "tonton_turbo",
+            "name": "Tonton Turbo",
+            "style": "Trap",
+            "pitch": "Déjà viral. Grâce à une vidéo de son chat.",
+            "flaw": "Répond aux messages une fois par semaine. Le dimanche. Parfois.",
+            "cost": 45,
+            "talent": 5,
+            "buzz": 9,
+            "reliability": 1,
+            "reveal": "Tonton Turbo devait livrer un single. Il a livré une vidéo de son chat qui danse sur un beat. Douze millions de vues, zéro single. Il est injoignable : il part en tournée avec le chat."
+          },
+          {
+            "id": "jumeaux_mazout",
+            "name": "Les Jumeaux Mazout",
+            "style": "Drill",
+            "pitch": "Un duo. Deux flows, une seule paire de baskets.",
+            "flaw": "Ne sont jamais d'accord. Sur rien. Même pas sur l'heure du rendez-vous.",
+            "cost": 35,
+            "talent": 7,
+            "buzz": 6,
+            "reliability": 4,
+            "reveal": "Les Jumeaux Mazout ont fini leur morceau. Chacun a sorti sa version, le même jour, en se clashant dans les commentaires. L'algorithme a adoré. Leur mère, beaucoup moins."
+          },
+          {
+            "id": "celeste_k",
+            "name": "Céleste K.",
+            "style": "Boom bap",
+            "pitch": "Ancienne prof de maths. Ses rimes tombent juste, au millimètre.",
+            "flaw": "Arrive toujours dix minutes en avance. Avec un tableur.",
+            "cost": 40,
+            "talent": 8,
+            "buzz": 4,
+            "reliability": 9,
+            "reveal": "Céleste K. rend son single en avance, avec une note de bas de page. Les puristes l'adorent, les profs de maths aussi. Il tourne dans les cours de récré comme une formule à apprendre."
+          },
+          {
+            "id": "junior_ascenseur",
+            "name": "Junior Ascenseur",
+            "style": "Kickeur",
+            "pitch": "15 ans. Rappe dans la cage d'escalier du bloc d'en face.",
+            "flaw": "Doit rentrer avant 20 h. C'est non négociable.",
+            "cost": 20,
+            "talent": 6,
+            "buzz": 5,
+            "reliability": 6,
+            "reveal": "Junior Ascenseur sort « 7e étage » entre deux révisions. Sa mère a validé le clip à condition qu'il ait son brevet. Il l'a eu, avec mention. Le clip aussi."
+          }
+        ]
+      },
+      "win": {
+        "effects": {
+          "streams": 6,
+          "credibilite": 4
+        },
+        "xp": {
+          "business": 40
+        },
+        "set_flags": [
+          "auditions_faites",
+          "releve_signee"
+        ],
+        "consequence": "Deux contrats signés sur le capot d'une machine à laver. Le premier single sort vendredi. Le quartier l'attend déjà."
+      },
+      "lose": {
+        "effects": {
+          "argent": -6,
+          "mental": -3
+        },
+        "xp": {
+          "business": 20
+        },
+        "set_flags": [
+          "auditions_faites"
+        ],
+        "consequence": "Les contrats sont signés, les singles sortent, et ils font un bruit… discret. Tu apprends le métier de patron : c'est comme celui de rappeur, avec des factures en plus."
       }
     }
   ]

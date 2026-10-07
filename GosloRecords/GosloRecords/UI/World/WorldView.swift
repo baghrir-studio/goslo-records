@@ -17,7 +17,7 @@ struct WorldView: View {
         GeometryReader { geo in
             let camera = cameraOffset(viewport: geo.size)
             ZStack(alignment: .topLeading) {
-                PixelImage(TileArt.mapImage(map), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
+                PixelImage(TileArt.mapImage(map, city: state.rapper.city), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
 
                 LampGlows(map: map)
 
