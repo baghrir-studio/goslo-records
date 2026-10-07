@@ -34,6 +34,7 @@ jobs:
       # Same compiler as the archive on the Mac: interface errors show up here, before any build to TestFlight.
       - name: Compiler (simulateur, sans signature)
         run: |
+          set +e
           xcodebuild -project GosloRecords/GosloRecords.xcodeproj -scheme GosloRecords -configuration Debug \
             -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build > build.log 2>&1
           status=$?
