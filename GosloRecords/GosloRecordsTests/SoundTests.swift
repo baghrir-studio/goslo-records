@@ -33,6 +33,14 @@ final class SoundTests: XCTestCase {
         }
     }
 
+    func testPlayerTrackRendersInTheirStyle() {
+        let track = PlayerTrack(title: "T", lines: ["a", "b", "c", "d"], style: .drill, seed: 9)
+        XCTAssertEqual(ConcertGroove.make(for: track.song, seed: track.seed, style: track.style).style, .drill)
+        let samples = ConcertMix.render(track.song, seed: track.seed, style: track.style)
+        XCTAssertEqual(samples.count, Synth.count(track.song.duration))
+        assertClean(samples, "morceau du joueur")
+    }
+
     func testRenderingIsDeterministic() {
         XCTAssertEqual(SoundEffect.hit.render(), SoundEffect.hit.render())
         XCTAssertEqual(SoundTrack.drill.render(), SoundTrack.drill.render())

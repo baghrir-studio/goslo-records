@@ -24,6 +24,8 @@ struct WorldView: View {
                 PixelImage(TileArt.mapImage(map, city: state.rapper.city), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
 
                 LampGlows(map: map)
+                FameMarks(map: map, look: state.rapper.look, posters: model.engine.fame(in: state) * 2,
+                          fresco: model.engine.hasFresco(in: state))
 
                 ForEach(map.doors, id: \.location) { door in
                     DoorSign(location: door.location, hasQuest: markers.contains(door.location),
@@ -276,5 +278,59 @@ struct ObjectiveMarker: View {
             .onAppear {
                 withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) { bounce = true }
             }
+    }
+}
+
+/// The career on the walls: posters of the player (more as the streams grow), and a fresco on the
+/// laundromat once the Baron has fallen. Only on front walls, away from the shop fronts.
+private struct FameMarks: View {
+    let map: WorldMap
+    let look: CharacterLook
+    let posters: Int
+    let fresco: Bool
+
+    private var spots: [TilePoint] {
+        (0..<map.height).flatMap { y in
+            (0..<map.width).compactMap { x -> TilePoint? in
+                let point = TilePoint(x: x, y: y), below = map.tile(at: point.moved(.down))
+                guard map.tile(at: point) == .wall, below != .wall, below != .door,
+                      !map.doors.contains(where: { $0.y == y && abs($0.x - x) <= 2 }) else { return nil }
+                return point
+            }
+        }
+    }
+
+    var body: some View {
+        let tile = WorldView.tile
+        ZStack(alignment: .topLeading) {
+            ForEach(Array(spots.prefix(posters).enumerated()), id: \.offset) { index, spot in
+                PixelImage(HeroSprite.bust(look), width: tile * 0.62)
+                    .padding(3)
+                    .background(index % 2 == 0 ? Theme.accent : Color(red: 1, green: 0.85, blue: 0.3))
+                    .overlay(Rectangle().stroke(Color.white.opacity(0.8), lineWidth: 1))
+                    .rotationEffect(.degrees(index % 2 == 0 ? -4 : 3))
+                    .position(x: (CGFloat(spot.x) + 0.5) * tile, y: (CGFloat(spot.y) + 0.45) * tile)
+            }
+            if fresco, let door = map.doors.first(where: { $0.location == .label }) {
+                ZStack {
+                    LinearGradient(colors: [Theme.accent, Color(red: 0.31, green: 0.84, blue: 0.88), Color(red: 1, green: 0.85, blue: 0.3)],
+                                   startPoint: .topLeading, endPoint: .bottomTrailing)
+                        .opacity(0.85)
+                    HStack(spacing: 4) {
+                        PixelImage(HeroSprite.image(look, facing: .down), width: tile * 0.95)
+                        Text("GOSLO\nFOREVER")
+                            .font(.system(size: 13, weight: .black, design: .monospaced))
+                            .foregroundStyle(.white)
+                            .shadow(color: .black, radius: 0, x: 1, y: 1)
+                    }
+                }
+                .frame(width: tile * 2.6, height: tile * 1.7)
+                .clipped()
+                .position(x: (CGFloat(door.x) + 2.5) * tile, y: CGFloat(door.y) * tile)
+            }
+        }
+        .frame(width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile, alignment: .topLeading)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }

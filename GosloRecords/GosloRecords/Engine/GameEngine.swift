@@ -262,7 +262,9 @@ struct GameEngine {
         let count = state.smallTalk[castId, default: 0]
         state.smallTalk[castId] = count + 1
         var lines: [String]
-        if let idle = member?.idle, !idle.isEmpty {
+        if count % 3 == 2, let memory = memoryLine(for: castId, in: state) {
+            lines = ["« \(memory) »"]
+        } else if let idle = member?.idle, !idle.isEmpty {
             lines = ["« \(idle[count % idle.count]) »"]
         } else if let taunts = member?.clash?.taunts, !taunts.isEmpty {
             lines = ["« \(taunts[count % taunts.count]) »"]
@@ -649,6 +651,9 @@ struct GameEngine {
         }
         if let choice, !current.round.endings.indices.contains(choice) { throw GameEngineError.invalidChoice(choice) }
         let (points, reaction) = PunchlinerEngine.judge(choice, in: current.round)
+        let ending = choice.map { current.round.endings[$0].text } ?? "…"
+        running.lyrics = (running.lyrics ?? []) + [current.round.setup, "\(current.round.lead) \(ending)"]
+        if points >= PunchlinerEngine.bestScore, running.hook == nil, let choice { running.hook = current.round.endings[choice].text }
         running.points += points
         running.log.append(reaction)
         running.round += 1
@@ -728,6 +733,7 @@ struct GameEngine {
             let applied = state.changeRelation(castId, by: delta)
             if applied != 0 { outcome.relationChanges[castId, default: 0] += applied }
         }
+        if let hook = running.hook, !state.hooks.contains(hook) { state.hooks.append(hook) }
         state.minigame = nil
         return finishAction(outcome, in: &state)
     }
@@ -855,7 +861,7 @@ struct GameEngine {
         let level = clashLevels(for: clash, in: state)
         ClashEngine.playRound(&clash, playerMove: move, playerLevel: level,
                               opponent: profile.scaled(by: clash.levelBonus), opponentName: opponent.name,
-                              opponentSecret: opponent.secret, using: &rng)
+                              opponentSecret: opponent.secret, callbacks: callbacks(for: clash, in: state), using: &rng)
         state.clash = clash
         return clash
     }
@@ -876,7 +882,8 @@ struct GameEngine {
         let level = clashLevels(for: clash, in: state)
         ClashEngine.playRound(&clash, playerMove: .presence, playerSecret: playerSecret(in: state),
                               playerLevel: level, opponent: profile.scaled(by: clash.levelBonus),
-                              opponentName: opponent.name, opponentSecret: opponent.secret, using: &rng)
+                              opponentName: opponent.name, opponentSecret: opponent.secret,
+                              callbacks: callbacks(for: clash, in: state), using: &rng)
         state.clash = clash
         return clash
     }

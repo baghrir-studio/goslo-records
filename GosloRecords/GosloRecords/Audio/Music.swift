@@ -319,8 +319,8 @@ enum SoundEffect: String, CaseIterable {
 /// A concert song's instrumental, rendered whole from its `ConcertGroove`: a count-in on the sticks,
 /// the bars, and a last hit. Played as one buffer, so the beat never drifts from the notes on screen.
 enum ConcertMix {
-    static func render(_ song: ConcertSong, seed: UInt64) -> [Float] {
-        let groove = ConcertGroove.make(for: song, seed: seed)
+    static func render(_ song: ConcertSong, seed: UInt64, style: ConcertGroove.Style? = nil) -> [Float] {
+        let groove = ConcertGroove.make(for: song, seed: seed, style: style)
         let beat = song.beat, sixteenth = song.beat / 4
         var out = [Float](repeating: 0, count: Synth.count(song.duration))
         func place(_ sound: [Float], at seconds: Double, gain: Double) {

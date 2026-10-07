@@ -180,6 +180,18 @@ final class SoundEngine {
         songPlayer.stop()
     }
 
+    /// Fades the background loop out while a song plays; `restoreMusic` brings it back.
+    func silenceMusic() {
+        let keep = wantedTrack
+        setMusic(nil)
+        wantedTrack = keep
+    }
+
+    func restoreMusic() {
+        playingTrack = nil
+        setMusic(wantedTrack)
+    }
+
     // MARK: Settings
 
     func setMusicEnabled(_ enabled: Bool) {

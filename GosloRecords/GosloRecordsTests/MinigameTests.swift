@@ -64,6 +64,23 @@ final class MinigameTests: XCTestCase {
         XCTAssertEqual(outcome.consequence, engine.minigame("punchliner_bunker")!.win.consequence)
     }
 
+    func testPunchlinerMakesAPlayableTrack() throws {
+        var state = try start("punchliner_fred")
+        while let current = engine.punchlinerRound(in: state) {
+            let endings = current.round.endings
+            _ = try engine.dropPunchline(endings.indices.max { endings[$0].score < endings[$1].score }, in: &state)
+        }
+        let running = try XCTUnwrap(state.minigame)
+        let track = try XCTUnwrap(engine.track(for: running, rapper: state.rapper))
+        XCTAssertEqual(track.lines.count, running.roundCount * 2, "deux lignes par couplet")
+        XCTAssertEqual(track.title, "Essoré, mais jamais délavé", "le titre, c'est la première vraie punchline")
+        XCTAssertEqual(track.style, state.rapper.style.groove)
+        for index in track.lines.indices {
+            XCTAssertLessThan(track.lineStart(index) + track.barSeconds, track.song.duration, "la ligne \(index) tient dans le morceau")
+        }
+        XCTAssertNil(engine.track(for: MinigameState(minigame: try XCTUnwrap(engine.minigame("platine_bobine"))), rapper: state.rapper))
+    }
+
     func testPunchlinerJudging() throws {
         let round = try XCTUnwrap(world.story.minigame("punchliner_banc")?.rounds.first)
         XCTAssertEqual(PunchlinerEngine.judge(nil, in: round).points, 0)

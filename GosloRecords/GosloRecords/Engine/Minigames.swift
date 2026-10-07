@@ -79,6 +79,10 @@ struct MinigameState: Codable, Equatable {
     var escaped: Bool?
     /// Signing only: the artists signed, in order (optional so saves from before the epilogue still load).
     var signed: [String]?
+    /// Punchliner only: the verse as written, two lines per round (see `PlayerTrack`).
+    var lyrics: [String]?
+    /// Punchliner only: the first real punchline the player found, the track's title.
+    var hook: String?
     let roundCount: Int
 
     init(minigame: Minigame) {
