@@ -81,16 +81,19 @@ struct BackButton: View {
     }
 }
 
-/// Music and sound effect switches (menu items).
+/// Music, sound effect and vibration switches (menu items).
 struct SoundToggles: View {
     @State private var music = SoundEngine.shared.musicEnabled
     @State private var effects = SoundEngine.shared.effectsEnabled
+    @State private var haptics = Haptics.shared.enabled
 
     var body: some View {
         Toggle("Musique", isOn: $music)
             .onChange(of: music) { _, on in SoundEngine.shared.setMusicEnabled(on) }
         Toggle("Bruitages", isOn: $effects)
             .onChange(of: effects) { _, on in SoundEngine.shared.setEffectsEnabled(on) }
+        Toggle("Vibrations", isOn: $haptics)
+            .onChange(of: haptics) { _, on in Haptics.shared.setEnabled(on) }
     }
 }
 

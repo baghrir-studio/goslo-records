@@ -175,6 +175,8 @@ enum SoundEffect: String, CaseIterable {
     case ringtone
     /// A police siren far away, as the car passes.
     case siren
+    /// The mic hits the stage: thud, two bounces, then a feedback whistle.
+    case micDrop
 
     /// Frequent, quiet sounds: they go to a dedicated player.
     var isTick: Bool { self == .blip || self == .step || self == .tap }
@@ -292,6 +294,12 @@ enum SoundEffect: String, CaseIterable {
             out = (0..<n).map { i in noise.next() * Float(sin(Double(i) / Double(n) * .pi)) }
             Synth.lowpass(&out, cutoff: 700)
             out = Synth.layer([(out, 0, 1), (Synth.pulse(note: 50, length: 0.7, decay: 3, glideTo: 43), 0, 0.5)])
+        case .micDrop:
+            out = Synth.layer([(Synth.kick(punch: 1.6, length: 0.5), 0, 1), (Synth.clap(seed: 61), 0, 0.5),
+                               (Synth.kick(punch: 0.5, length: 0.15), 0.2, 0.45), (Synth.hat(seed: 63), 0.2, 0.5),
+                               (Synth.kick(punch: 0.3, length: 0.1), 0.32, 0.25), (Synth.hat(seed: 65), 0.32, 0.3),
+                               (Synth.bass808(note: 91, length: 1.0, slideFrom: 86), 0.38, 0.22),
+                               (Synth.bass808(note: 92, length: 0.9), 0.42, 0.12)])
         case .radioJingle:
             // "go-slo-ra-di-o": scratch, five notes, then the drop.
             out = Synth.layer([(Synth.scratch(length: 0.3), 0, 0.9)]

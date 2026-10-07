@@ -7,7 +7,7 @@ struct BattleView: View {
     let clash: ClashState
     let state: GameState
 
-    private enum Stage { case intro, menu, animating, counter, finished }
+    private enum Stage { case intro, menu, animating, counter, micDrop, finished }
 
     @State private var stage: Stage = .intro
     @State private var message = ""
@@ -42,6 +42,7 @@ struct BattleView: View {
     // Countering a boss's technique.
     @State private var counterTaps = 0
     @State private var counterLeft: CGFloat = 1
+    @State private var micDropped = false
 
     private var opponent: CastMember? { model.engine.castMember(clash.opponentId) }
     private var counterStyle: CounterStyle { opponent?.clash?.counter ?? .mash }
@@ -161,6 +162,10 @@ struct BattleView: View {
                         .transition(.opacity)
                 }
             }
+            if stage == .micDrop {
+                MicDropOverlay { micDropped = true }
+                    .transition(.opacity)
+            }
         }
         .onAppear(perform: intro)
     }
@@ -212,7 +217,7 @@ struct BattleView: View {
                 Button("Continuer") { model.finishClash() }
                     .buttonStyle(PrimaryButtonStyle())
                     .transition(.scale.combined(with: .opacity))
-            case .intro, .animating, .counter:
+            case .intro, .animating, .counter, .micDrop:
                 EmptyView()
             }
         }
@@ -271,6 +276,7 @@ struct BattleView: View {
         }
         await say("Oh non. \(opponentName.uppercased()) déclenche sa TECHNIQUE SECRÈTE… \(instruction)", hold: 0)
         SoundEngine.shared.play(.secretRiser)
+        Haptics.shared.play(.secretRiser)
         withAnimation(.easeOut(duration: 0.3)) {
             cinematic = SecretCinematic(name: pending.secret.name, byPlayer: false, look: opponent?.look ?? CharacterLook(),
                                         prop: pending.secret.prop)
@@ -352,6 +358,7 @@ struct BattleView: View {
 
         if entry.impact == .miss {
             SoundEngine.shared.play(.miss)
+            Haptics.shared.play(.miss)
             await showBanner("RATÉ !")
         } else {
             for _ in 0..<3 {
@@ -373,6 +380,7 @@ struct BattleView: View {
             }
             pop = DamagePop(value: entry.damage, onPlayer: !entry.byPlayer, id: entry.id)
             SoundEngine.shared.play(entry.impact == .strong ? .strongHit : .hit)
+            Haptics.shared.play(entry.impact == .strong ? .strongHit : entry.impact == .weak ? .weakHit : .hit)
             withAnimation(.easeOut(duration: 0.5)) {
                 if entry.byPlayer { playerMeter += Double(entry.damage) } else { opponentMeter += Double(entry.damage) }
             }
@@ -390,10 +398,30 @@ struct BattleView: View {
             if final.playerWon { faintedOpponent = true } else { faintedPlayer = true }
         }
         SoundEngine.shared.play(final.playerWon ? .victory : .defeat)
+        Haptics.shared.play(final.playerWon ? .victory : .defeat)
+        if final.playerWon && !clash.isWild { await micDrop() }
         await say(final.playerWon
                   ? "\(opponentName.uppercased()) est K.O. verbal ! Le public est avec toi."
                   : "Le public a choisi \(opponentName.hasSuffix(".") ? String(opponentName.dropLast()) : opponentName). Tu quittes la scène, tête basse.", hold: 0.2)
         stage = .finished
+    }
+
+    /// Rival and boss wins end with a mic drop: the player flicks the phone (or taps) and the mic hits the stage.
+    private func micDrop() async {
+        try? await Task.sleep(for: .milliseconds(900))
+        message = "Le public retient son souffle…"
+        micDropped = false
+        withAnimation(.easeOut(duration: 0.2)) { stage = .micDrop }
+        var waited = 0.0
+        // The overlay drops the mic on its own after a few seconds; the cap is only a safety net.
+        while !micDropped && waited < MicDropOverlay.waitSeconds + 3 {
+            try? await Task.sleep(for: .milliseconds(50))
+            waited += 0.05
+        }
+        try? await Task.sleep(for: .milliseconds(500))
+        SoundEngine.shared.play(.crowdCheer)
+        try? await Task.sleep(for: .milliseconds(900))
+        withAnimation(.easeOut(duration: 0.3)) { stage = .animating }
     }
 
     /// The full secret technique sequence: announcement, cinematic, flash, big hit.
@@ -404,6 +432,7 @@ struct BattleView: View {
                       ? "Ta jauge déborde… \(attacker.uppercased()) déclenche sa TECHNIQUE SECRÈTE !"
                       : "Oh non. \(attacker.uppercased()) a gardé une TECHNIQUE SECRÈTE…", hold: 0.2)
             SoundEngine.shared.play(.secretRiser)
+            Haptics.shared.play(.secretRiser)
             withAnimation(.easeOut(duration: 0.3)) {
                 cinematic = SecretCinematic(name: secret.name, byPlayer: entry.byPlayer,
                                             look: entry.byPlayer ? state.rapper.look : (opponent?.look ?? CharacterLook()),
@@ -414,6 +443,7 @@ struct BattleView: View {
         }
 
         SoundEngine.shared.play(.secretHit)
+        Haptics.shared.play(.secretHit)
         withAnimation(.easeOut(duration: 0.08)) { whiteFlash = true }
         try? await Task.sleep(for: .milliseconds(120))
         withAnimation(.easeIn(duration: 0.4)) { whiteFlash = false }

@@ -57,8 +57,10 @@ final class ConcertRunner {
                 if halfBeat % 2 == 0 {
                     if halfBeat / 2 < ConcertEngine.countInBeats {
                         SoundEngine.shared.play(.concertHit)
+                        Haptics.shared.play(.snare)
                     } else {
                         SoundEngine.shared.play(beatInBar % 2 == 0 ? .concertKick : .concertSnare)
+                        Haptics.shared.play(beatInBar % 2 == 0 ? .kick : .snare)
                     }
                 }
                 if halfBeat / 2 >= ConcertEngine.countInBeats { SoundEngine.shared.play(.concertHat) }
@@ -83,6 +85,7 @@ final class ConcertRunner {
               let judgment = ConcertEngine.judge(offset: t - note.time, sceneLevel: sceneLevel) else { return }
         record(judgment, for: note)
         SoundEngine.shared.play(.concertHit)
+        Haptics.shared.play(judgment == .perfect ? .perfect : .good)
     }
 
     private func record(_ judgment: ConcertJudgment, for note: ConcertNote) {
