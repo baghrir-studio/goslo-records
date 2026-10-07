@@ -23,6 +23,10 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
   (e.g. "Le Sample Interdit" for Boom bap). Opponents fire theirs automatically, defined in `cast.json` under `"secret"`.
 - **Countering a boss**: when a boss fires its secret technique, the player has 2.5 s to tap the screen;
   16 taps take off 75 % of the damage (`ClashState.counter*`). Without a tap, the damage is the same as before.
+- **Mic drop**: winning a clash against a rival or a boss (not a wild one) ends on « LÂCHE LE MIC ». A sharp flick of
+  the phone (device motion, `FlickDetector`, no permission needed) or a tap drops the mic; it drops on its own after 6 s.
+- **Vibrations** (`Audio/Haptics.swift`, Core Haptics): concert kicks and snares, notes hit in rhythm, clash hits,
+  secret techniques (a rumble that builds over the cinematic) and the mic drop. Switch: menu « … » → Vibrations.
 - **Unlockable techniques** (`story.json` → `techniques`): each boss beaten before chapter 5 leaves a funny
   technique (same damage, its own gag and falling props). The notebook (Objets tab) picks the one to use.
 - **Mini-games** (`story.json` → `minigames`, started by an event choice `"minigame": id`): Punchliner (finish
