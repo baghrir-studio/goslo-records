@@ -89,6 +89,7 @@ final class EventsDataTests: XCTestCase {
         settable.formUnion(world.story.concerts.flatMap { $0.win.setFlags + $0.lose.setFlags })
         settable.formUnion(world.story.negotiations.flatMap { $0.win.setFlags + $0.lose.setFlags })
         settable.formUnion(world.story.writings.flatMap { $0.win.setFlags + $0.lose.setFlags })
+        settable.formUnion(world.story.minigames.flatMap { $0.win.setFlags + $0.lose.setFlags })
         settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap(\.clash).flatMap { $0.win.setFlags + $0.lose.setFlags } })
         settable.formUnion((1...world.story.chapters.count).map { "chapitre_\($0)" })
         settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap { $0.clash.map { "clash_gagne_\($0.opponent)" } } })
@@ -256,6 +257,15 @@ final class EventsDataTests: XCTestCase {
                         }
                     case .fuite:
                         try engine.endChase(escaped: Bool.random(using: &rng), in: &state)
+                    case .signing:
+                        // A random affordable pair, or a single artist.
+                        let offer = try XCTUnwrap(engine.signingOffer(in: state))
+                        let ids = offer.spec.artists.map(\.id)
+                        let options = ids.flatMap { a in ids.map { [a, $0] } }.filter { $0[0] != $0[1] } + ids.map { [$0] }
+                        let affordable = options.filter {
+                            SigningEngine.isAffordable($0, in: offer.spec, businessLevel: state.skills.level(.business))
+                        }
+                        _ = try engine.sign(affordable.randomElement(using: &rng)!, in: &state)
                     }
                     _ = try engine.finishMinigame(in: &state)
                 case .writing:

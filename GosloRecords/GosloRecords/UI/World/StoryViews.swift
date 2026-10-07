@@ -120,7 +120,7 @@ struct ObjectiveBanner: View {
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text("★").foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
-                    Text("CH.\(chapter.number) · \(chapter.title.uppercased())")
+                    Text("\(chapter.isFinale ? "ÉPILOGUE" : "CH.\(chapter.number)") · \(chapter.title.uppercased())")
                         .foregroundStyle(.white.opacity(0.6))
                 }
                 .font(.system(size: 9, weight: .heavy, design: .monospaced))

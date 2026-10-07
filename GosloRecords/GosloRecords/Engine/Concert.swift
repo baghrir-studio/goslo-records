@@ -150,6 +150,29 @@ enum ConcertEngine {
         return nil
     }
 
+    // MARK: Calibration
+
+    /// Clicks played during calibration, and how many first taps are ignored (warming up).
+    static let calibrationClicks = 10
+    static let calibrationWarmup = 2
+    static let calibrationInterval = 0.6
+    /// The offset never goes past this (a bigger one is a mistake, not latency).
+    static let maxLatency = 0.25
+
+    /// Audio and touch latency from calibration taps: the median gap between each tap and the nearest click,
+    /// warm-up taps left out. Positive = the player hears (and taps) late.
+    static func latency(taps: [Double], interval: Double = calibrationInterval) -> Double? {
+        let gaps = taps.map { tap -> Double in
+            let nearest = (tap / interval).rounded() * interval
+            return tap - nearest
+        }
+        .dropFirst(calibrationWarmup)
+        .sorted()
+        guard gaps.count >= 3 else { return nil }
+        let median = gaps[gaps.count / 2]
+        return min(max(median, -maxLatency), maxLatency)
+    }
+
     /// Stable seed per concert and song (Swift's own hash changes on every launch).
     static func seed(_ concertId: String, song: Int) -> UInt64 {
         concertId.unicodeScalars.reduce(UInt64(1469598103934665603)) { ($0 ^ UInt64($1.value)) &* 1099511628211 }

@@ -17,7 +17,11 @@ struct WorldView: View {
         GeometryReader { geo in
             let camera = cameraOffset(viewport: geo.size)
             ZStack(alignment: .topLeading) {
-                PixelImage(TileArt.mapImage(map), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
+                // The horizon above the neighbourhood (landmarks stand there, never on a building).
+                PixelImage(TileArt.skyline(city: state.rapper.city, width: map.width), width: CGFloat(map.width) * tile,
+                           height: skyHeight)
+                    .offset(y: -skyHeight)
+                PixelImage(TileArt.mapImage(map, city: state.rapper.city), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
 
                 LampGlows(map: map)
 
@@ -42,6 +46,10 @@ struct WorldView: View {
                 // Rare scenery on the main road (rows 6–7): drawn above the people on the sidewalk behind it.
                 PassingPoliceCar(map: map)
                     .zIndex(7.7)
+                if state.rapper.city == .casablanca {
+                    PassingTaxi(map: map)
+                        .zIndex(7.7)
+                }
 
                 ForEach(model.extraActors.sorted { $0.key < $1.key }, id: \.key) { id, point in
                     npcSprite(id, at: point, facing: model.npcFacing[id] ?? .down, isObjective: false)
@@ -97,7 +105,10 @@ struct WorldView: View {
         CGPoint(x: (CGFloat(point.x) + 0.5) * WorldView.tile, y: (CGFloat(point.y) + 0.5) * WorldView.tile - 8)
     }
 
-    /// Centers the player, without going past the edges of the map.
+    /// The sky band drawn above row 0.
+    private var skyHeight: CGFloat { CGFloat(TileArt.skyRows) * WorldView.tile }
+
+    /// Centers the player, without going past the edges of the map (the sky band counts as map at the top).
     private func cameraOffset(viewport: CGSize) -> CGSize {
         let tile = WorldView.tile
         let mapSize = CGSize(width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
@@ -111,8 +122,8 @@ struct WorldView: View {
         // and the camera may go a little past the bottom edge of the map.
         let anchor: CGFloat = model.letterbox ? 0.32 : 0.45
         let overscroll: CGFloat = model.letterbox ? viewport.height * 0.35 : 0
-        let vertical = clamp(viewport.height * anchor - center.y, view: viewport.height - overscroll,
-                             content: mapSize.height)
+        let vertical = clamp(viewport.height * anchor - (center.y + skyHeight), view: viewport.height - overscroll,
+                             content: mapSize.height + skyHeight) + skyHeight
         return CGSize(width: clamp(viewport.width / 2 - center.x, view: viewport.width, content: mapSize.width),
                       height: vertical)
     }

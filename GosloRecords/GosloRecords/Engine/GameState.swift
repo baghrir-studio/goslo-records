@@ -60,6 +60,8 @@ struct GameState: Codable, Equatable {
     var seenCinematics: Set<String> = []
     /// Collected items (ids from story.json).
     var items: Set<String> = []
+    /// Lost boss clashes, by opponent: each defeat teaches you their game (see `GameEngine.bossExperience`).
+    var bossLosses: [String: Int] = [:]
     /// Secret technique picked in the notebook: "style", an item id or a technique id (nil = automatic).
     var equippedTechnique: String?
     /// Unlocked techniques already announced to the player.
@@ -76,7 +78,7 @@ struct GameState: Codable, Equatable {
         case seenUniqueEvents, recentEvents, pendingFollowUp, currentEventId, currentLocation, clash, interview, concert, negotiation, writing
         case minigame
         case questProgress, completedQuests, ending, position, facing, stepsSinceWild, challengedThisSemester
-        case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques
+        case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -117,6 +119,7 @@ struct GameState: Codable, Equatable {
         pendingCinematic = try c.decodeIfPresent(String.self, forKey: .pendingCinematic)
         seenCinematics = try c.decodeIfPresent(Set<String>.self, forKey: .seenCinematics) ?? []
         items = try c.decodeIfPresent(Set<String>.self, forKey: .items) ?? []
+        bossLosses = try c.decodeIfPresent([String: Int].self, forKey: .bossLosses) ?? [:]
         equippedTechnique = try c.decodeIfPresent(String.self, forKey: .equippedTechnique)
         knownTechniques = try c.decodeIfPresent(Set<String>.self, forKey: .knownTechniques) ?? []
     }

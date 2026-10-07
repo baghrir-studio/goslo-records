@@ -185,6 +185,8 @@ struct ChoiceMenu: View {
                                 Text(lock).font(.system(size: 10, weight: .heavy, design: .monospaced)).foregroundStyle(Theme.accent)
                             } else if choice.clash != nil {
                                 Text("⚔ LANCE UN CLASH").font(.system(size: 10, weight: .heavy, design: .monospaced)).foregroundStyle(Theme.accent)
+                            } else if !choice.statHints.isEmpty {
+                                StatHints(hints: choice.statHints)
                             }
                         }
                         Spacer(minLength: 0)
@@ -215,6 +217,27 @@ struct ChoiceMenu: View {
         }
         parts += requirement.stats.sorted { $0.key.rawValue < $1.key.rawValue }.map { "\($0.key.shortLabel) \($0.value)" }
         return parts.joined(separator: " · ") + " REQUIS"
+    }
+}
+
+/// Which stats a choice touches: a dot per stat, bigger when the effect is big. Never the direction.
+struct StatHints: View {
+    let hints: [(kind: StatKind, size: Int)]
+
+    var body: some View {
+        HStack(spacing: 10) {
+            ForEach(hints, id: \.kind) { hint in
+                HStack(spacing: 4) {
+                    Circle().fill(Color.white.opacity(0.85))
+                        .frame(width: hint.size > 1 ? 8 : 5, height: hint.size > 1 ? 8 : 5)
+                    Text(hint.kind.shortLabel)
+                        .font(.system(size: 9, weight: .heavy, design: .monospaced))
+                        .foregroundStyle(Color.white.opacity(0.55))
+                }
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Touche : " + hints.map { $0.kind.label + ($0.size > 1 ? " beaucoup" : "") }.joined(separator: ", "))
     }
 }
 

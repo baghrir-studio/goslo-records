@@ -3869,6 +3869,231 @@
           "consequence": "Tu rappes à 109 %. Ta langue fait un footing. Bobine trouve ça « très énergie »."
         }
       ]
+    },
+    {
+      "id": "defi_paris",
+      "title": "Un clip sous la tour",
+      "text": "Ton caméraman a une idée : tourner le clip au pied de la tour, ce soir, sans demander à personne. « Personne ne demande jamais. C'est pour ça que c'est beau. »",
+      "location": "quartier",
+      "weight": 30,
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Paris",
+        "excluded_flags": [
+          "defi_paris_fait"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Tourner le clip, tout de suite",
+          "minigame": "fuite_tour",
+          "consequence": "C'est parti."
+        },
+        {
+          "label": "Une autre fois, avec une autorisation",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Tu rentres. Ton caméraman t'envoie des repérages toute la nuit. Il ne lâchera pas."
+        }
+      ]
+    },
+    {
+      "id": "defi_casablanca",
+      "title": "Le feat avec Zanga",
+      "text": "Zanga, le rappeur le plus écouté des petits taxis de Casa, t'attend au studio. Il a un beat, un refrain en darija, et une place pour toi sur le couplet.",
+      "location": "studio",
+      "weight": 30,
+      "npc": "zanga",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Casablanca",
+        "excluded_flags": [
+          "defi_casablanca_fait"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Entrer en cabine avec Zanga",
+          "minigame": "punchliner_zanga",
+          "consequence": "C'est parti."
+        },
+        {
+          "label": "Lui promettre de revenir demain",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Zanga hausse les épaules. « Demain, inch'Allah. » Il garde le beat pour toi."
+        }
+      ]
+    },
+    {
+      "id": "defi_marseille",
+      "title": "Concert sur le Vieux-Port",
+      "text": "Un pêcheur t'offre son bateau pour un concert improvisé sur le Vieux-Port. La sono est posée sur des caisses de poissons. Le public s'installe déjà sur le quai.",
+      "location": "scene",
+      "weight": 30,
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Marseille",
+        "excluded_flags": [
+          "defi_marseille_fait"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Monter sur le bateau",
+          "minigame": "platine_port",
+          "consequence": "C'est parti."
+        },
+        {
+          "label": "Rester sur la terre ferme",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Le pêcheur range sa sono. « La mer, elle attendra. Elle a l'habitude. »"
+        }
+      ]
+    },
+    {
+      "id": "defi_lyon",
+      "title": "Freestyle dans les traboules",
+      "text": "Dans le vieux quartier, les passages couverts font un écho parfait. Ton pote filme. Il dit que c'est le meilleur studio gratuit de la ville.",
+      "location": "quartier",
+      "weight": 30,
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Lyon",
+        "excluded_flags": [
+          "defi_lyon_fait"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Lancer le freestyle",
+          "minigame": "punchliner_traboules",
+          "consequence": "C'est parti."
+        },
+        {
+          "label": "Garder ta voix pour ce soir",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "L'écho répète « ce soir ». Ton pote range son téléphone, déçu."
+        }
+      ]
+    },
+    {
+      "id": "defi_toulouse",
+      "title": "Soir de match",
+      "text": "Le studio t'attend à 22 h, de l'autre côté de la ville. Problème : le match de rugby vient de finir, et la rue est noire de monde.",
+      "location": "studio",
+      "weight": 30,
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Toulouse",
+        "excluded_flags": [
+          "defi_toulouse_fait"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Fendre la foule",
+          "minigame": "fuite_rugby",
+          "consequence": "C'est parti."
+        },
+        {
+          "label": "Attendre que la rue se vide",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Tu attends deux heures sur un banc. La foule chante toujours. Tu connais l'hymne par cœur."
+        }
+      ]
+    },
+    {
+      "id": "defi_lille",
+      "title": "La sono de la braderie",
+      "text": "La braderie bat son plein. Un organisateur t'offre l'estrade pour trois morceaux, entre deux stands. La sono de location a l'air fatiguée.",
+      "location": "scene",
+      "weight": 30,
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Lille",
+        "excluded_flags": [
+          "defi_lille_fait"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Monter sur l'estrade",
+          "minigame": "platine_braderie",
+          "consequence": "C'est parti."
+        },
+        {
+          "label": "Chiner des vinyles à la place",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Tu repars avec trois vinyles et une casserole. Tu ne sais pas pourquoi la casserole."
+        }
+      ]
+    },
+    {
+      "id": "defi_bruxelles",
+      "title": "Clip à la friterie",
+      "text": "Une friterie du coin propose de servir de décor à ton clip, à condition de citer la sauce maison. Le patron a déjà préparé le cornet de la star.",
+      "location": "label",
+      "weight": 30,
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Bruxelles",
+        "excluded_flags": [
+          "defi_bruxelles_fait"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Tourner dans la friterie",
+          "minigame": "punchliner_friterie",
+          "consequence": "C'est parti."
+        },
+        {
+          "label": "Juste manger, pour cette fois",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Tu manges. C'est délicieux. Le clip attendra, le cornet non."
+        }
+      ]
+    },
+    {
+      "id": "defi_montreal",
+      "title": "Show dans la tempête",
+      "text": "Tempête de neige sur la ville. Ton show commence dans vingt minutes, au bout de la rue. On ne voit plus le bout de la rue.",
+      "location": "scene",
+      "weight": 30,
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Montréal",
+        "excluded_flags": [
+          "defi_montreal_fait"
+        ]
+      },
+      "choices": [
+        {
+          "label": "Y aller, quoi qu'il arrive",
+          "minigame": "fuite_tempete",
+          "consequence": "C'est parti."
+        },
+        {
+          "label": "Annuler et rester au chaud",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Le show est reporté. Le public t'envoie des photos de bonhommes de neige. Certains te ressemblent."
+        }
+      ]
     }
   ]
 }

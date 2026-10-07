@@ -118,17 +118,30 @@ struct CastMember: Codable, Equatable, Identifiable {
 }
 
 /// An opponent's clash profile. Stats run 1–10, like the player's levels.
+/// How the player counters a boss's secret technique.
+enum CounterStyle: String, Codable {
+    /// Tap as fast as you can.
+    case mash
+    /// Scalpel: tap the words marked in red, avoid the others.
+    case pen
+    /// Tap when the ring lands on the beat.
+    case beat
+}
+
 struct ClashProfile: Codable, Equatable {
     let stats: [ClashMove: Int]
     let weakness: ClashMove?
     let resistance: ClashMove?
     let taunts: [String]
+    let counter: CounterStyle
 
-    init(stats: [ClashMove: Int], weakness: ClashMove? = nil, resistance: ClashMove? = nil, taunts: [String] = []) {
+    init(stats: [ClashMove: Int], weakness: ClashMove? = nil, resistance: ClashMove? = nil, taunts: [String] = [],
+         counter: CounterStyle = .mash) {
         self.stats = stats
         self.weakness = weakness
         self.resistance = resistance
         self.taunts = taunts
+        self.counter = counter
     }
 
     init(from decoder: Decoder) throws {
@@ -137,6 +150,7 @@ struct ClashProfile: Codable, Equatable {
         weakness = try c.decodeIfPresent(ClashMove.self, forKey: .weakness)
         resistance = try c.decodeIfPresent(ClashMove.self, forKey: .resistance)
         taunts = try c.decodeIfPresent([String].self, forKey: .taunts) ?? []
+        counter = try c.decodeIfPresent(CounterStyle.self, forKey: .counter) ?? .mash
     }
 
     func stat(_ move: ClashMove) -> Int {

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Repeatable mini-games: Punchliner, Fuir la foule, Cale la platine.
+/// Mini-games: Punchliner, Fuir la foule, Cale la platine, and the epilogue auditions.
 /// The rules live in Engine/Minigames.swift; these screens only play them.
 struct MinigameView: View {
     @Environment(AppModel.self) private var model
@@ -32,6 +32,7 @@ struct MinigameView: View {
                     case .punchliner: PunchlinerBoard(minigame: minigame)
                     case .platine: PlatineBoard(minigame: minigame)
                     case .fuite: ChaseBoard(look: state.rapper.look)
+                    case .signing: SigningBoard()
                     }
                 }
             }
@@ -86,6 +87,9 @@ private struct PunchlinerBoard: View {
     @State private var picked: [String] = []
     @State private var reaction: String?
     @State private var deadline = Date().addingTimeInterval(PunchlinerBoard.seconds)
+    /// Time left when the app went to the background: the clock waits for the player.
+    @State private var pausedLeft: TimeInterval?
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         if let current = model.state.flatMap({ model.engine.punchlinerRound(in: $0) }) {
@@ -99,7 +103,7 @@ private struct PunchlinerBoard: View {
                             Text("\(Int(left.rounded(.up))) s")
                                 .font(.mono(13, weight: .bold))
                                 .foregroundStyle(left < 5 ? Theme.accent : Theme.text)
-                                .onChange(of: left == 0) { _, timedOut in if timedOut { drop() } }
+                                .onChange(of: left == 0) { _, timedOut in if timedOut && pausedLeft == nil { drop() } }
                         }
                     }
                 }
@@ -155,6 +159,14 @@ private struct PunchlinerBoard: View {
                 }
             }
             .sensoryFeedback(.selection, trigger: picked)
+            .onChange(of: scenePhase) { _, phase in
+                if phase != .active, pausedLeft == nil, reaction == nil {
+                    pausedLeft = max(0, deadline.timeIntervalSinceNow)
+                } else if phase == .active, let left = pausedLeft {
+                    deadline = Date().addingTimeInterval(left)
+                    pausedLeft = nil
+                }
+            }
         } else {
             // Last line dropped: the result screen takes over once the reaction has been read.
             if let reaction {
@@ -362,5 +374,97 @@ private struct ChaseBoard: View {
             SoundEngine.shared.play(.step)
             try? await Task.sleep(for: .milliseconds(200))
         }
+    }
+}
+
+// MARK: - Signing (epilogue)
+
+/// Artist cards: talent and buzz on show, reliability hidden behind a hint. Pick within the budget, then sign.
+private struct SigningBoard: View {
+    @Environment(AppModel.self) private var model
+    @State private var picked: [String] = []
+
+    var body: some View {
+        if let offer = model.state.flatMap({ model.engine.signingOffer(in: $0) }) {
+            let spent = picked.compactMap { id in offer.spec.artists.first { $0.id == id }?.cost }.reduce(0, +)
+            VStack(alignment: .leading, spacing: 10) {
+                HStack {
+                    Text("BUDGET \(offer.budget - spent)/\(offer.budget) K€").font(.mono(12, weight: .bold))
+                    Spacer()
+                    Text("CONTRATS \(picked.count)/\(offer.spec.picks)").font(.mono(12, weight: .bold))
+                }
+                .foregroundStyle(Theme.muted)
+
+                ScrollView {
+                    VStack(spacing: 8) {
+                        ForEach(offer.spec.artists) { artist in
+                            let selected = picked.contains(artist.id)
+                            let affordable = selected || (picked.count < offer.spec.picks
+                                && spent + artist.cost <= offer.budget)
+                            Button {
+                                withAnimation(.easeOut(duration: 0.15)) {
+                                    if selected { picked.removeAll { $0 == artist.id } } else { picked.append(artist.id) }
+                                }
+                            } label: {
+                                ArtistCard(artist: artist, selected: selected)
+                            }
+                            .buttonStyle(PressScaleStyle())
+                            .disabled(!affordable)
+                            .opacity(affordable ? 1 : 0.4)
+                        }
+                    }
+                }
+
+                Button(picked.count < 2 ? "Signer \(picked.count == 1 ? "cet artiste" : "")" : "Signer ces deux artistes") {
+                    model.sign(picked)
+                }
+                .buttonStyle(PrimaryButtonStyle())
+                .disabled(picked.isEmpty)
+            }
+        }
+    }
+}
+
+private struct ArtistCard: View {
+    let artist: SigningArtist
+    let selected: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(alignment: .firstTextBaseline) {
+                Text(artist.name.uppercased()).font(.display(18)).foregroundStyle(Theme.text)
+                Text(artist.style).font(.mono(10, weight: .bold)).foregroundStyle(Theme.muted)
+                Spacer()
+                Text("\(artist.cost) K€").font(.mono(13, weight: .bold))
+                    .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+            }
+            Text(artist.pitch).font(.system(size: 14, weight: .semibold)).foregroundStyle(Theme.text.opacity(0.85))
+                .fixedSize(horizontal: false, vertical: true)
+            gauge("TALENT", artist.talent)
+            gauge("BUZZ", artist.buzz)
+            HStack(spacing: 6) {
+                Text("FIABILITÉ ?").font(.mono(10, weight: .bold)).foregroundStyle(Theme.muted)
+                Text(artist.flaw).font(.system(size: 12).italic()).foregroundStyle(Theme.text.opacity(0.7))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white.opacity(selected ? 0.12 : 0.04))
+        .overlay(Rectangle().stroke(selected ? Theme.accent : Color.white.opacity(0.2), lineWidth: selected ? 3 : 1))
+        .multilineTextAlignment(.leading)
+    }
+
+    private func gauge(_ label: String, _ value: Int) -> some View {
+        HStack(spacing: 6) {
+            Text(label).font(.mono(10, weight: .bold)).foregroundStyle(Theme.muted).frame(width: 52, alignment: .leading)
+            HStack(spacing: 2) {
+                ForEach(0..<10, id: \.self) { index in
+                    Rectangle().fill(index < value ? Theme.accent : Color.white.opacity(0.15)).frame(height: 6)
+                }
+            }
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(label.lowercased()) \(value) sur 10")
     }
 }

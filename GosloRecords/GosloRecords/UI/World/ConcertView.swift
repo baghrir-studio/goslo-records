@@ -76,7 +76,8 @@ final class ConcertRunner {
     func tap(_ lane: Int) {
         guard running else { return }
         flash[lane, default: 0] += 1
-        let t = elapsed
+        // The calibrated latency: a tap that came late because the sound did is moved back.
+        let t = elapsed - ConcertCalibration.latency
         let candidates = notes.filter { $0.lane == lane && judged[$0.id] == nil && abs($0.time - t) <= goodWindow }
         guard let note = candidates.min(by: { abs($0.time - t) < abs($1.time - t) }),
               let judgment = ConcertEngine.judge(offset: t - note.time, sceneLevel: sceneLevel) else { return }
@@ -98,6 +99,7 @@ struct ConcertView: View {
     let state: GameState
 
     private enum Stage: Equatable { case title, playing, result, interlude, reaction, finished }
+    @State private var showCalibration = false
 
     @State private var stage: Stage = .title
     @State private var runner: ConcertRunner?
@@ -194,8 +196,16 @@ struct ConcertView: View {
                     }
                 }
                 Button("C'est parti") { startSong() }.buttonStyle(PrimaryButtonStyle())
+                Button(ConcertCalibration.isSet ? "Régler le timing (\(ConcertCalibration.label))" : "Régler le timing") {
+                    showCalibration = true
+                }
+                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .foregroundStyle(.white.opacity(0.7))
             }
             .transition(.opacity)
+            .sheet(isPresented: $showCalibration) {
+                CalibrationView().presentationBackground(Theme.background)
+            }
         case .playing:
             if let runner {
                 VStack(spacing: 8) {

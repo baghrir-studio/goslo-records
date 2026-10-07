@@ -100,3 +100,108 @@ enum PoliceCarArt {
         return c
     }
 }
+
+/// Casablanca scenery: red petits taxis drive along the main road, often, in both directions.
+struct PassingTaxi: View {
+    @Environment(AppModel.self) private var model
+    let map: WorldMap
+
+    static let interval = 12.0...30.0
+    static let crossing = 3.6
+
+    private struct Run: Equatable {
+        let row: Int
+        let rightward: Bool
+        var progress: CGFloat = 0
+    }
+
+    @State private var run: Run?
+
+    private var lanes: [Int] {
+        (0..<map.height).filter { y in
+            (1..<(map.width - 1)).allSatisfy {
+                let tile = map.tile(at: TilePoint(x: $0, y: y))
+                return tile == .asphalt || tile == .crosswalk
+            }
+        }
+    }
+
+    var body: some View {
+        let tile = WorldView.tile
+        ZStack(alignment: .topLeading) {
+            if let run {
+                let travel = CGFloat(map.width + 4) * tile
+                let x = -2 * tile + travel * (run.rightward ? run.progress : 1 - run.progress)
+                PixelImage(TaxiArt.image(facingRight: run.rightward), width: tile * 1.5)
+                    .position(x: x, y: (CGFloat(run.row) + 0.45) * tile)
+            }
+        }
+        .frame(width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile, alignment: .topLeading)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+        .task { await drive() }
+    }
+
+    private func drive() async {
+        guard let top = lanes.first, let bottom = lanes.last else { return }
+        try? await Task.sleep(for: .seconds(3))
+        while !Task.isCancelled {
+            if model.phase == .overworld, !model.letterbox {
+                let rightward = Bool.random()
+                run = Run(row: rightward ? bottom : top, rightward: rightward)
+                withAnimation(.linear(duration: Self.crossing)) { run?.progress = 1 }
+                try? await Task.sleep(for: .seconds(Self.crossing))
+                run = nil
+            }
+            try? await Task.sleep(for: .seconds(Double.random(in: Self.interval)))
+        }
+    }
+}
+
+/// The petit taxi, side view, 24×14 pixels: a small boxy red hatchback, black bumpers,
+/// and on the roof a black panel with its number in yellow.
+@MainActor
+enum TaxiArt {
+    static func image(facingRight: Bool) -> UIImage {
+        PixelCache.image("taxi3-\(facingRight)") {
+            let canvas = car().outlined()
+            return (facingRight ? canvas : canvas.mirrored()).makeImage()
+        }
+    }
+
+    private static func car() -> PixelCanvas {
+        let c = PixelCanvas(width: 24, height: 14)
+        let red = PixelColor(hex: "#d42a2a"), shade = PixelColor(hex: "#a01c1e"), light = PixelColor(hex: "#ec5a50")
+        let glass = PixelColor(hex: "#1c2632"), black = PixelColor(hex: "#16161a"), yellow = PixelColor(hex: "#f2c81e")
+        // Lower body, long and flat.
+        c.fill(1, 7, 22, 10, red)
+        c.fill(1, 7, 22, 7, light)
+        c.fill(2, 10, 21, 10, shade)
+        // Boxy cabin: straight hatch at the back (left), sloped windscreen at the front (right).
+        c.fill(3, 3, 16, 6, red)
+        c.fill(17, 4, 17, 6, red)
+        c.fill(18, 5, 18, 6, red)
+        // Windows: hatch, rear side, door, windscreen.
+        c.fill(4, 4, 5, 5, glass)
+        c.fill(7, 4, 10, 5, glass)
+        c.fill(12, 4, 15, 5, glass)
+        c.dot(16, 4, glass); c.fill(16, 5, 17, 5, glass)
+        // Door line and handle.
+        c.fill(11, 6, 11, 9, shade)
+        c.dot(13, 7, shade)
+        // Roof panel: black, with the taxi number in yellow.
+        c.fill(4, 0, 15, 2, black)
+        for x in [6, 9, 12] { c.fill(x, 1, x + 1, 1, yellow) }
+        // Black bumpers, lights.
+        c.fill(21, 8, 23, 10, black)
+        c.fill(0, 8, 1, 10, black)
+        c.dot(22, 7, PixelColor(hex: "#fff2b0"))
+        c.dot(1, 7, PixelColor(hex: "#ff3b30").shaded(0.8))
+        // Wheels.
+        for x in [6, 18] {
+            c.circle(cx: x, cy: 11, radius: 2, black)
+            c.dot(x, 11, PixelColor(hex: "#8a8a96"))
+        }
+        return c
+    }
+}

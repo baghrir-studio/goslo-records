@@ -309,6 +309,17 @@ final class Player {
             }
         case .fuite:
             try? engine.endChase(escaped: chance(profile.pickBest), in: &state)
+        case .signing:
+            // A careful player signs the best affordable pair; the others pick any affordable one.
+            guard let offer = engine.signingOffer(in: state) else { break }
+            let ids = offer.spec.artists.map(\.id)
+            let business = state.skills.level(.business)
+            let pairs = ids.flatMap { a in ids.map { [a, $0] } }.filter { $0[0] < $0[1] }
+                .filter { SigningEngine.isAffordable($0, in: offer.spec, businessLevel: business) }
+            let best = pairs.max { SigningEngine.points($0, in: offer.spec) < SigningEngine.points($1, in: offer.spec) }
+            if let pick = chance(profile.pickBest) ? best : pairs.randomElement(using: &rng) {
+                _ = try? engine.sign(pick, in: &state)
+            }
         }
     }
 

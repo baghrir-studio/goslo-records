@@ -612,6 +612,30 @@ struct GameEngine {
         return (pitch, reaction)
     }
 
+    /// Signing: the artists on offer, and the budget this player has.
+    func signingOffer(in state: GameState) -> (spec: SigningSpec, budget: Int)? {
+        guard let running = state.minigame, running.kind == .signing,
+              let spec = minigame(running.id)?.signing else { return nil }
+        return (spec, SigningEngine.budget(spec, businessLevel: state.skills.level(.business)))
+    }
+
+    /// Signing: the player signs these artists. Returns what happens to each of them.
+    func sign(_ ids: [String], in state: inout GameState) throws -> [String] {
+        guard var running = state.minigame, !running.isOver, let offer = signingOffer(in: state) else {
+            throw GameEngineError.noMinigame
+        }
+        guard SigningEngine.isAffordable(ids, in: offer.spec, businessLevel: state.skills.level(.business)) else {
+            throw GameEngineError.invalidChoice(ids.count)
+        }
+        let reveals = ids.compactMap { id in offer.spec.artists.first { $0.id == id }?.reveal }
+        running.signed = ids
+        running.points = SigningEngine.points(ids, in: offer.spec)
+        running.log = reveals
+        running.round = 1
+        state.minigame = running
+        return reveals
+    }
+
     /// Fuir la foule: the chase screen reports how it ended.
     func endChase(escaped: Bool, in state: inout GameState) throws {
         guard var running = state.minigame, running.kind == .fuite else { throw GameEngineError.noMinigame }
@@ -629,6 +653,9 @@ struct GameEngine {
             return Double(running.points) / Double(PlatineEngine.runs * PlatineEngine.maxPoints)
         case .fuite:
             return running.escaped == true ? 1 : 0
+        case .signing:
+            let target = minigame(running.id)?.signing?.target ?? 0
+            return target > 0 ? min(1, Double(running.points) / Double(target)) : 0
         }
     }
 
@@ -724,6 +751,14 @@ struct GameEngine {
         return !state.flags.contains("chapitre_\(finale.number)")
     }
 
+    /// The last chapter, once the one before it is done (the epilogue after the throne).
+    /// It's played outside the clock: semesters no longer pass, so the time limit can't cut it short.
+    func isInEpilogue(_ state: GameState) -> Bool {
+        guard let finale = story.chapters.first(where: \.isFinale), finale.number > 1 else { return false }
+        return state.chapter == finale.number && isStoryUnfinished(in: state)
+            && state.flags.contains("chapitre_\(finale.number - 1)")
+    }
+
     /// Semester at which the career ends. The limit waits for the story: while the finale is still to play,
     /// the career goes into overtime, up to `GameState.overtimeTurns` more semesters.
     func turnLimit(in state: GameState) -> Int {
@@ -761,7 +796,7 @@ struct GameEngine {
             let cost = min(ClashState.storyCredCost, max(0, state.stats.credibilite - 1))
             state.stats.apply([.credibilite: -cost])
         }
-        let level = clashLevels(in: state)
+        let level = clashLevels(for: clash, in: state)
         ClashEngine.playRound(&clash, playerMove: move, playerLevel: level,
                               opponent: profile.scaled(by: clash.levelBonus), opponentName: opponent.name,
                               opponentSecret: opponent.secret, using: &rng)
@@ -782,7 +817,7 @@ struct GameEngine {
         guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
             throw GameEngineError.noClash
         }
-        let level = clashLevels(in: state)
+        let level = clashLevels(for: clash, in: state)
         ClashEngine.playRound(&clash, playerMove: .presence, playerSecret: playerSecret(in: state),
                               playerLevel: level, opponent: profile.scaled(by: clash.levelBonus),
                               opponentName: opponent.name, opponentSecret: opponent.secret, using: &rng)
@@ -879,6 +914,21 @@ struct GameEngine {
     static let wildXP = (win: 25, lose: 8)
 
     /// Applies the result of a finished clash.
+    /// Levels gained against a boss per lost clash, up to `maxBossExperience`.
+    static let maxBossExperience = 2
+
+    /// Extra levels against this opponent: losing to a boss teaches you their game.
+    func bossExperience(against opponentId: String, in state: GameState) -> Int {
+        min(GameEngine.maxBossExperience, state.bossLosses[opponentId, default: 0])
+    }
+
+    /// Clash levels for the running clash, boss experience included.
+    func clashLevels(for clash: ClashState, in state: GameState) -> (Skill) -> Int {
+        let base = clashLevels(in: state)
+        let bonus = clash.isBoss ? bossExperience(against: clash.opponentId, in: state) : 0
+        return { skill in min(Skills.maxLevel, base(skill) + bonus) }
+    }
+
     func finishClash(in state: inout GameState) throws -> TurnOutcome {
         guard let clash = state.clash else { throw GameEngineError.noClash }
         guard clash.isOver else { throw GameEngineError.clashNotOver }
@@ -899,6 +949,14 @@ struct GameEngine {
         let applied = state.changeRelation(clash.opponentId, by: penalty)
         if applied != 0 { outcome.relationChanges[clash.opponentId] = applied }
         outcome.add(levelUps: state.skills.gain(won ? [.plume: 20, .flow: 20] : [.plume: 10]))
+        if !won && clash.isBoss {
+            let before = bossExperience(against: clash.opponentId, in: state)
+            state.bossLosses[clash.opponentId, default: 0] += 1
+            if bossExperience(against: clash.opponentId, in: state) > before {
+                let name = castMember(clash.opponentId)?.name ?? "ce boss"
+                outcome.consequence += " Tu as appris de ta défaite : +1 niveau contre \(name) au prochain clash."
+            }
+        }
 
         state.clash = nil
         return finishAction(outcome, in: &state)
@@ -935,7 +993,7 @@ struct GameEngine {
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
             outcome.add(state.stats.apply(GameEngine.upkeep(for: state.stats)))
             let limit = turnLimit(in: state)
-            state.turn = min(state.turn + 1, limit)
+            if !isInEpilogue(state) { state.turn = min(state.turn + 1, limit) }
             state.actionsLeft = GameState.actionsPerTurn
             state.challengedThisSemester = []
             outcome.semesterEnded = true

@@ -29,7 +29,7 @@ struct RootView: View {
             switch running.kind {
             case .punchliner: return .drill
             case .fuite: return .battle
-            case .platine: return .menu
+            case .platine, .signing: return .menu
             }
         }
         if case .writing(let running) = model.phase {

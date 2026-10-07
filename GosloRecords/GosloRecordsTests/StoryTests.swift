@@ -92,7 +92,13 @@ final class StoryTests: XCTestCase {
         XCTAssertEqual(engine.currentObjective(in: state)?.id, "ecrire")
         XCTAssertNil(engine.storyEvent(forNPC: "lucien", in: state), "Lucien ne doit pas encore déclencher l'histoire")
         XCTAssertEqual(try engine.visit(.chezToi, in: &state, using: &rng).id, "story_carnet")
-        guard case .outcome(let first) = try engine.resolve(choiceAt: 0, in: &state) else { return XCTFail() }
+        guard case .minigame = try engine.resolve(choiceAt: 0, in: &state) else { return XCTFail("pas de Punchliner") }
+        XCTAssertEqual(state.minigame?.id, "punchliner_carnet")
+        while let current = engine.punchlinerRound(in: state) {
+            let best = try XCTUnwrap(current.round.answers.max { $0.score < $1.score })
+            _ = try engine.dropPunchline(best.words, in: &state)
+        }
+        let first = try engine.finishMinigame(in: &state)
         XCTAssertEqual(first.completedObjectives, ["Écris ton premier texte"])
 
         // 2. Lucien.
@@ -154,6 +160,21 @@ final class StoryTests: XCTestCase {
     /// The boss must be beatable with a good strategy, without being a formality.
     /// Without a single tap, countering changes nothing: same clashes, same winners as when a boss's
     /// technique landed straight away. Each clash gets its own seed, so both runs see the same dice.
+    /// A missed first text still counts: the story never blocks on the notebook.
+    func testFirstTextIsWrittenEvenWhenThePunchlinerFails() throws {
+        var state = engine.newGame(rapper: Rapper(name: "Kiki", city: .paris, style: .boomBap))
+        engine.cinematicFinished("prologue", in: &state)
+        _ = try engine.visit(.chezToi, in: &state, using: &rng)
+        guard case .minigame = try engine.resolve(choiceAt: 0, in: &state) else { return XCTFail("pas de Punchliner") }
+        while engine.punchlinerRound(in: state) != nil {
+            _ = try engine.dropPunchline([], in: &state)
+        }
+        let outcome = try engine.finishMinigame(in: &state)
+        XCTAssertEqual(engine.minigameScore(try XCTUnwrap(outcome.minigame)), 0)
+        XCTAssertEqual(outcome.completedObjectives, ["Écris ton premier texte"])
+        XCTAssertEqual(engine.currentObjective(in: state)?.id, "lucien")
+    }
+
     func testUncounteredBossTechniqueKeepsTheOldBalance() throws {
         let engine = engine
         for id in ["story_ring", "story_kolosse", "story_baron_clash"] {
@@ -390,13 +411,13 @@ final class StoryTests: XCTestCase {
         state.flags.insert("clash_gagne_kevlar_jr")
         // Any action announces it.
         let event = try engine.visit(.chezToi, in: &state, using: &rng)
-        let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.followUp == nil && $0.skipTurns == 0 })
+        let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.followUp == nil && $0.skipTurns == 0 && $0.minigame == nil })
         guard case .outcome(let outcome) = try engine.resolve(choiceAt: choice, in: &state) else { return XCTFail() }
         XCTAssertEqual(outcome.unlockedTechniques, ["Le Défilé Retourné"])
         XCTAssertEqual(engine.playerSecret(in: state).name, "Le Défilé Retourné")
         // Announced once only.
         let again = try engine.visit(.chezToi, in: &state, using: &rng)
-        let next = try XCTUnwrap(again.choices.firstIndex { $0.isAvailable(in: state) && $0.followUp == nil && $0.skipTurns == 0 })
+        let next = try XCTUnwrap(again.choices.firstIndex { $0.isAvailable(in: state) && $0.followUp == nil && $0.skipTurns == 0 && $0.minigame == nil })
         guard case .outcome(let second) = try engine.resolve(choiceAt: next, in: &state) else { return XCTFail() }
         XCTAssertTrue(second.unlockedTechniques.isEmpty)
         // The notebook can switch back to the style's technique, but not to a locked one.
@@ -440,7 +461,7 @@ final class StoryTests: XCTestCase {
         state.pendingCinematic = nil
         engine.debugLastSemester(in: &state)
         let event = try engine.visit(.chezToi, in: &state, using: &rng)
-        let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.skipTurns == 0 && $0.followUp == nil })
+        let choice = try XCTUnwrap(event.choices.firstIndex { $0.isAvailable(in: state) && $0.skipTurns == 0 && $0.followUp == nil && $0.minigame == nil })
         _ = try engine.resolve(choiceAt: choice, in: &state)
         XCTAssertTrue(state.isOvertime)
         XCTAssertEqual(state.periodLabel, "PROLONGATION")

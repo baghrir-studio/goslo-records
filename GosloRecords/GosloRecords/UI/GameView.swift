@@ -4,6 +4,7 @@ import SwiftUI
 struct GameView: View {
     @Environment(AppModel.self) private var model
     @State private var showCarnet = false
+    @State private var showCalibration = false
 
     var body: some View {
         if let state = model.state, let map = model.map {
@@ -22,6 +23,12 @@ struct GameView: View {
                     CinematicOverlay()
                         .zIndex(5)
                 } else {
+                    // Full-screen modes hide the map, including behind the translucent HUD.
+                    if let backdrop = fullScreenBackdrop {
+                        backdrop
+                            .ignoresSafeArea()
+                            .transition(.opacity)
+                    }
                     VStack(spacing: 0) {
                         hud(state)
                         if case .clash(let clash) = model.phase {
@@ -82,6 +89,9 @@ struct GameView: View {
             .animation(.easeOut(duration: 0.25), value: model.phase)
             .animation(.easeInOut(duration: 0.3), value: model.interior)
             .sensoryFeedback(.impact(weight: .light), trigger: model.deltaToken)
+            .sheet(isPresented: $showCalibration) {
+                CalibrationView().presentationBackground(Theme.background)
+            }
             .sheet(isPresented: $showCarnet) {
                 CarnetView(state: state)
                     .environment(model)
@@ -94,6 +104,17 @@ struct GameView: View {
                 Button("Accueil") { model.go(.home) }.buttonStyle(SecondaryButtonStyle())
             }
             .padding(Theme.gutter)
+        }
+    }
+
+    /// Background of the full-screen modes (the interview keeps the studio visible).
+    private var fullScreenBackdrop: Color? {
+        switch model.phase {
+        case .clash: Color(red: 0.05, green: 0.05, blue: 0.06)
+        case .writing, .negotiation: Color(red: 0.06, green: 0.06, blue: 0.08)
+        case .minigame: Color(red: 0.05, green: 0.05, blue: 0.07)
+        case .concert: Color(red: 0.05, green: 0.03, blue: 0.06)
+        default: nil
         }
     }
 
@@ -144,6 +165,7 @@ struct GameView: View {
                 hudButton(systemImage: "book.closed.fill", label: "Carnet") { showCarnet = true }
                 Menu {
                     SoundToggles()
+                    Button("Régler le timing des concerts") { showCalibration = true }
                     #if DEBUG
                     Section("Debug") {
                         Menu("Aller au chapitre…") {

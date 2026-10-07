@@ -14,7 +14,7 @@ Sur l'écran d'accueil de l'iPhone, l'app garde le nom court `goslo records` (`C
 
 ## Texte promotionnel (170 max, modifiable sans nouvelle version)
 
-Signe dans une laverie, survis à un débat télé, remplis le Dôme et fais tomber le Baron. Une carrière de rappeur en 6 chapitres, 100 % hors ligne.
+Signe dans une laverie, survis à un débat télé, remplis le Dôme et fais tomber le Baron. Une carrière de rappeur en 6 chapitres et un épilogue, 100 % hors ligne.
 
 ## Description (4 000 max)
 
@@ -22,12 +22,13 @@ Tu as un carnet à spirale, zéro abonné et une certitude : un jour, tout le qu
 
 Goslo Records est un jeu de rôle sur la carrière d'un rappeur, avec de l'humour qui pique. Tu pars d'en bas du bloc. Tu signes chez goslo records, un label installé dans l'arrière-boutique d'une laverie. Tu montes jusqu'au trône, marche après marche.
 
-UNE HISTOIRE EN 6 CHAPITRES
+UNE HISTOIRE EN 6 CHAPITRES ET UN ÉPILOGUE
 • Ton premier texte, ton premier freestyle à la radio, ton premier boss au Ring des Mots
 • Une mixtape enregistrée au Bunker avec Fred, qui a mixé un disque d'or en 2009 (il te le rappellera)
 • Ton premier concert, une major qui t'appelle, un contrat de 84 pages en police 7
 • Un duel à la plume contre Scalpel et son stylo rouge
 • Le Baron, le Dôme, et un trône qui grince
+• Et après le trône : reprends la laverie et signe la relève
 
 DES CLASHS AU TOUR PAR TOUR
 Punchline, Flow, Présence ou Story : chaque rival a son point faible. Remplis ta jauge et déclenche ta technique secrète.
@@ -39,7 +40,7 @@ DES MINI-JEUX QUI CHANGENT À CHAQUE CHAPITRE
 • Duel à la plume : finis tes couplets avant la fin du temps imparti, rime contre rime
 
 UNE CARRIÈRE À GÉRER
-Dix ans, deux actions par semestre. Ton argent, ta crédibilité, tes streams et ton mental baissent vite et remontent lentement. Un burn-out, un compte à zéro ou un public qui t'oublie, et la carrière s'arrête. Onze fins possibles, de Légende à Retour au taf.
+Dix ans, deux actions par semestre. Ton argent, ta crédibilité, tes streams et ton mental baissent vite et remontent lentement. Un burn-out, un compte à zéro ou un public qui t'oublie, et la carrière s'arrête. Douze fins possibles, de Patron de label à Retour au taf.
 
 UN QUARTIER VIVANT
 Une laverie et sa machine n° 4, une radio de quartier, un DJ avec une seule platine, un régisseur qui n'a jamais souri, et ta mère, qui te demande encore quand tu chercheras un vrai travail.

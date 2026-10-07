@@ -243,6 +243,11 @@ struct ClashState: Codable, Equatable {
     var isOver: Bool { pendingCounter == nil && (playerHype <= 0 || opponentHype <= 0 || round > rounds) }
 
     /// Share of the damage taken off by `taps` taps (up to `counterMaxReduction`).
+    /// Pen and beat counters score from 0 to 1; this turns the score into the taps a perfect mash would give.
+    static func counterEquivalentTaps(score: Double) -> Int {
+        Int((min(1, max(0, score)) * Double(ClashState.counterTaps)).rounded())
+    }
+
     static func counterReduction(taps: Int) -> Double {
         min(1, Double(max(0, taps)) / Double(counterTaps)) * counterMaxReduction
     }

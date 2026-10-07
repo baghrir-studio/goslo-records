@@ -67,6 +67,8 @@ struct EventConditions: Codable, Equatable {
     /// Story chapter bounds (inclusive).
     var minChapter: Int?
     var maxChapter: Int?
+    /// Only in this starting city (city challenges).
+    var city: City?
 
     enum CodingKeys: String, CodingKey {
         case minYear = "min_year"
@@ -81,12 +83,13 @@ struct EventConditions: Codable, Equatable {
         case maxRelations = "max_relations"
         case minChapter = "min_chapter"
         case maxChapter = "max_chapter"
+        case city
     }
 
     init(minYear: Int? = nil, maxYear: Int? = nil, requiredFlags: [String] = [], excludedFlags: [String] = [],
          minStats: [StatKind: Int] = [:], maxStats: [StatKind: Int] = [:], minCounters: [CounterKind: Int] = [:],
          minSkills: [Skill: Int] = [:], minRelations: [String: Int] = [:], maxRelations: [String: Int] = [:],
-         minChapter: Int? = nil, maxChapter: Int? = nil) {
+         minChapter: Int? = nil, maxChapter: Int? = nil, city: City? = nil) {
         self.minYear = minYear
         self.maxYear = maxYear
         self.requiredFlags = requiredFlags
@@ -99,6 +102,7 @@ struct EventConditions: Codable, Equatable {
         self.maxRelations = maxRelations
         self.minChapter = minChapter
         self.maxChapter = maxChapter
+        self.city = city
     }
 
     init(from decoder: Decoder) throws {
@@ -115,6 +119,7 @@ struct EventConditions: Codable, Equatable {
         maxRelations = try c.decodeIfPresent([String: Int].self, forKey: .maxRelations) ?? [:]
         minChapter = try c.decodeIfPresent(Int.self, forKey: .minChapter)
         maxChapter = try c.decodeIfPresent(Int.self, forKey: .maxChapter)
+        city = try c.decodeIfPresent(City.self, forKey: .city)
     }
 
     /// All bounds are inclusive.
@@ -123,6 +128,7 @@ struct EventConditions: Codable, Equatable {
         if let maxYear, state.year > maxYear { return false }
         if let minChapter, state.chapter < minChapter { return false }
         if let maxChapter, state.chapter > maxChapter { return false }
+        if let city, state.rapper.city != city { return false }
         if !requiredFlags.allSatisfy(state.flags.contains) { return false }
         if excludedFlags.contains(where: state.flags.contains) { return false }
         if minStats.contains(where: { state.stats[$0.key] < $0.value }) { return false }
@@ -252,6 +258,17 @@ struct EventChoice: Codable, Equatable {
         followUp = try c.decodeIfPresent(String.self, forKey: .followUp)
         skipTurns = max(0, try c.decodeIfPresent(Int.self, forKey: .skipTurns) ?? 0)
         minigame = try c.decodeIfPresent(String.self, forKey: .minigame)
+    }
+
+    /// Effects at or above this size show as a big dot.
+    static let bigEffect = 6
+
+    /// Reigns-style hint: which stats this choice moves (1 = a little, 2 = a lot), never in which direction.
+    var statHints: [(kind: StatKind, size: Int)] {
+        StatKind.allCases.compactMap { kind in
+            guard let value = effects[kind], value != 0 else { return nil }
+            return (kind, abs(value) >= EventChoice.bigEffect ? 2 : 1)
+        }
     }
 
     func isAvailable(in state: GameState) -> Bool {
