@@ -223,7 +223,7 @@
     },
     {
       "id": "saphir",
-      "x": 8,
+      "x": 11,
       "y": 13,
       "facing": "up",
       "sight": 3,
@@ -239,16 +239,16 @@
     },
     {
       "id": "madame_rature",
-      "x": 17,
-      "y": 13,
-      "facing": "left",
+      "x": 10,
+      "y": 8,
+      "facing": "up",
       "from_chapter": 2
     },
     {
       "id": "diva_decibel",
-      "x": 19,
-      "y": 13,
-      "facing": "down",
+      "x": 22,
+      "y": 8,
+      "facing": "left",
       "from_chapter": 2
     }
   ]
