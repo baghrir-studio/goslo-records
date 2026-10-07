@@ -2,8 +2,9 @@ import Foundation
 
 /// A character's outfit (colors in #RRGGBB hex). The sprites are drawn from it.
 struct CharacterLook: Codable, Hashable {
-    enum HairStyle: String, Codable, CaseIterable { case short, long, bald, puff }
-    enum Hat: String, Codable, CaseIterable { case none, cap, beanie, hood }
+    enum HairStyle: String, Codable, CaseIterable { case short, long, bald, puff, braids, fade }
+    enum Hat: String, Codable, CaseIterable { case none, cap, beanie, hood, bucket, bandana }
+    enum Outfit: String, Codable, CaseIterable { case hoodie, jacket, jersey, puffer }
 
     var skin = "#c68642"
     var hair = "#1b1b1f"
@@ -17,15 +18,20 @@ struct CharacterLook: Codable, Hashable {
     var headphones = false
     var chain = false
     var beard = false
+    var outfit: Outfit = .hoodie
+    var earrings = false
 
     enum CodingKeys: String, CodingKey {
-        case skin, hair, top, bottom, shoes, accent, hat, glasses, headphones, chain, beard
+        case skin, hair, top, bottom, shoes, accent, hat, glasses, headphones, chain, beard, outfit, earrings
         case hairStyle = "hair_style"
     }
 
     init(skin: String = "#c68642", hair: String = "#1b1b1f", top: String = "#2b2b33", bottom: String = "#23232a",
          shoes: String = "#e8e8e8", accent: String = "#ff4d2e", hairStyle: HairStyle = .short, hat: Hat = .none,
-         glasses: Bool = false, headphones: Bool = false, chain: Bool = false, beard: Bool = false) {
+         glasses: Bool = false, headphones: Bool = false, chain: Bool = false, beard: Bool = false,
+         outfit: Outfit = .hoodie, earrings: Bool = false) {
+        self.outfit = outfit
+        self.earrings = earrings
         self.skin = skin
         self.hair = hair
         self.top = top
@@ -55,6 +61,8 @@ struct CharacterLook: Codable, Hashable {
         headphones = try c.decodeIfPresent(Bool.self, forKey: .headphones) ?? false
         chain = try c.decodeIfPresent(Bool.self, forKey: .chain) ?? false
         beard = try c.decodeIfPresent(Bool.self, forKey: .beard) ?? false
+        outfit = try c.decodeIfPresent(Outfit.self, forKey: .outfit) ?? .hoodie
+        earrings = try c.decodeIfPresent(Bool.self, forKey: .earrings) ?? false
     }
 
     /// The colors, to check they're valid hex.
@@ -81,6 +89,8 @@ extension Rapper {
         if let beard { look.beard = beard }
         if let chain { look.chain = chain }
         if let headphones { look.headphones = headphones }
+        if let outfit { look.outfit = outfit }
+        if let earrings { look.earrings = earrings }
         return look
     }
 }

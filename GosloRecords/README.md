@@ -35,8 +35,9 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
 - **Mini-games** (`story.json` → `minigames`, started by an event choice `"minigame": id`): Punchliner (pick the
   ending of the line among four: the punchline, a decent line, a weak rhyme, a flop), Fuir la foule (run to the door through a crowd) and Cale la platine (stop DJ
   Bobine's pitch on 100 %). Repeatable encounters with small rewards; rules in `Engine/Minigames.swift`.
-- **Look**: hair, hair colour, hat, glasses, beard, chain and headphones can be picked at creation
-  (nil = the style's look).
+- **Look**: hair (short, long, shaved, afro, braids, fade), hair colour, headwear (cap, beanie, hood, bucket hat,
+  bandana), outfit (hoodie, jacket, jersey, puffer), glasses, beard, chain, earrings and headphones can be picked
+  at creation (nil = the style's look).
 - **Sprites**: the map uses 16×16 sprites (`CharacterSprite`). Wherever a character is shown large (creation,
   clashes, cinematics, dialogue portraits, concerts), the detailed 40×56 `HeroSprite` is drawn from the same look.
 - **Relationships** (0–100) with the cast, and **quests** with steps shown on the map (● QUÊTE).

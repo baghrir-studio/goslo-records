@@ -64,6 +64,15 @@ enum CharacterSprite {
         c.dot(3, leftArmEnd + 1, p.skin)
         c.dot(12, rightArmEnd + 1, p.skin)
         c.fill(7, 8, 8, 8, p.skin)
+        switch look.outfit {
+        case .hoodie: break
+        case .jacket: c.fill(7, 9, 8, 11, PixelColor(hex: "#e8e6e0"))
+        case .jersey:
+            c.fill(3, 9, 3, leftArmEnd, p.skin)
+            c.fill(12, 9, 12, rightArmEnd, p.skin)
+            c.dot(7, 10, PixelColor(hex: "#f2efe8"))
+        case .puffer: c.fill(4, 10, 11, 10, p.topShade)
+        }
         if look.chain {
             c.fill(6, 9, 9, 9, p.accent)
             c.fill(7, 10, 8, 10, p.accent)
@@ -83,6 +92,10 @@ enum CharacterSprite {
         if look.glasses {
             c.fill(5, 5, 10, 5, p.lens)
             c.dot(6, 5, p.lens.shaded(1.8))
+        }
+        if look.earrings {
+            c.dot(4, 6, PixelColor(hex: "#e8c547"))
+            c.dot(11, 6, PixelColor(hex: "#e8c547"))
         }
         frontHair(c, look, p)
         return c
@@ -106,6 +119,14 @@ enum CharacterSprite {
             c.dot(6, 5, look.glasses ? p.lens : p.eye)
             c.dot(9, 5, look.glasses ? p.lens : p.eye)
             if look.glasses { c.fill(5, 5, 10, 5, p.lens) }
+        case .bucket:
+            c.fill(5, 1, 10, 2, p.accent)
+            c.fill(3, 3, 12, 3, p.accentShade)
+        case .bandana:
+            c.fill(4, 1, 11, 3, p.accent)
+            c.dot(6, 2, p.accent.shaded(1.4))
+            c.dot(9, 1, p.accent.shaded(1.4))
+            c.fill(12, 3, 12, 4, p.accentShade)
         case .none:
             switch look.hairStyle {
             case .short:
@@ -125,6 +146,17 @@ enum CharacterSprite {
                 c.dot(11, 3, p.hair)
             case .bald:
                 c.dot(7, 2, p.skin.shaded(1.15))
+            case .braids:
+                c.fill(5, 1, 10, 1, p.hair)
+                c.fill(4, 2, 11, 2, p.hair)
+                c.fill(4, 3, 4, 9, p.hair)
+                c.fill(11, 3, 11, 9, p.hair)
+                c.dot(4, 10, p.accent)
+                c.dot(11, 10, p.accent)
+            case .fade:
+                c.fill(5, 1, 10, 2, p.hair)
+                c.dot(4, 3, p.hairShade)
+                c.dot(11, 3, p.hairShade)
             }
         }
         if look.headphones {
@@ -150,11 +182,24 @@ enum CharacterSprite {
         case .beanie:
             c.fill(5, 4, 10, 7, look.hairStyle == .bald ? p.skin : p.hair)
             c.fill(4, 0, 11, 4, p.accent)
+        case .bucket:
+            c.fill(5, 3, 10, 7, look.hairStyle == .bald ? p.skin : p.hair)
+            c.fill(5, 1, 10, 2, p.accent)
+            c.fill(3, 3, 12, 3, p.accentShade)
+        case .bandana:
+            c.fill(5, 4, 10, 7, look.hairStyle == .bald ? p.skin : p.hair)
+            c.fill(4, 1, 11, 3, p.accent)
+            c.fill(7, 4, 8, 5, p.accentShade)
         case .none:
             let back = look.hairStyle == .bald ? p.skin : p.hair
             c.fill(5, 2, 10, 7, back)
             if look.hairStyle == .puff { c.fill(3, 0, 12, 4, p.hair) }
             if look.hairStyle == .long { c.fill(4, 2, 11, 9, p.hair) }
+            if look.hairStyle == .fade { c.fill(5, 5, 10, 7, p.skin) }
+            if look.hairStyle == .braids {
+                c.fill(4, 2, 11, 9, p.hair)
+                for x in [5, 7, 9] { c.fill(x, 3, x, 9, p.hairShade) }
+            }
         }
         c.fill(7, 8, 8, 8, look.hat == .hood ? p.topShade : p.skin)
         if look.headphones {
@@ -212,6 +257,12 @@ enum CharacterSprite {
         case .beanie:
             c.fill(5, 0, 10, 3, p.accent)
             c.fill(5, 3, 10, 3, p.accentShade)
+        case .bucket:
+            c.fill(6, 1, 10, 2, p.accent)
+            c.fill(4, 3, 12, 3, p.accentShade)
+        case .bandana:
+            c.fill(5, 1, 10, 3, p.accent)
+            c.fill(4, 3, 4, 4, p.accentShade)
         case .hood:
             c.fill(4, 1, 10, 9, p.top)
             c.fill(7, 3, 10, 7, p.skin)
@@ -231,6 +282,13 @@ enum CharacterSprite {
                 c.fill(4, 1, 6, 5, p.hair)
             case .bald:
                 c.dot(7, 2, p.skin.shaded(1.15))
+            case .braids:
+                c.fill(6, 1, 10, 2, p.hair)
+                c.fill(4, 2, 6, 10, p.hair)
+                c.dot(5, 11, p.accent)
+            case .fade:
+                c.fill(6, 1, 10, 2, p.hair)
+                c.dot(5, 3, p.hairShade)
             }
         }
         if look.headphones {
@@ -248,6 +306,8 @@ private extension CharacterLook {
         copy.glasses = false
         copy.beard = false
         copy.chain = false
+        copy.earrings = false
+        if copy.outfit == .jacket { copy.outfit = .hoodie }
         return copy
     }
 }
