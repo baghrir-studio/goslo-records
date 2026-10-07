@@ -52,6 +52,8 @@ struct BattleView: View {
     @State private var dizzyPlayer = false
     @State private var dizzyOpponent = false
     @State private var vsShown = false
+    /// The poster of a won clash, to share.
+    @State private var poster: UIImage?
 
     private static let opponentAnchor = UnitPoint(x: 0.72, y: 0.36)
     private static let playerAnchor = UnitPoint(x: 0.27, y: 0.74)
@@ -282,9 +284,21 @@ struct BattleView: View {
                         .frame(maxWidth: .infinity)
                 }
             case .finished:
-                Button("Continuer") { model.finishClash() }
-                    .buttonStyle(PrimaryButtonStyle())
-                    .transition(.scale.combined(with: .opacity))
+                HStack(spacing: 10) {
+                    if let poster {
+                        let image = Image(uiImage: poster)
+                        ShareLink(item: image,
+                                  subject: Text("Clash sur goslo records"),
+                                  message: Text("\(state.rapper.name) a mis \(opponentName) K.O. @goslo_records"),
+                                  preview: SharePreview("\(state.rapper.name) bat \(opponentName)", image: image)) {
+                            Label("Affiche", systemImage: "square.and.arrow.up")
+                        }
+                        .buttonStyle(SecondaryButtonStyle())
+                    }
+                    Button("Continuer") { model.finishClash() }
+                        .buttonStyle(PrimaryButtonStyle())
+                }
+                .transition(.scale.combined(with: .opacity))
             case .intro, .charge, .freestyle, .animating, .counter, .micDrop:
                 EmptyView()
             }
@@ -499,6 +513,10 @@ struct BattleView: View {
         }
         SoundEngine.shared.play(final.playerWon ? .victory : .defeat)
         Haptics.shared.play(final.playerWon ? .victory : .defeat)
+        if final.playerWon {
+            poster = ClashPoster.render(player: state.rapper, opponentName: opponentName,
+                                        opponentLook: opponent?.look ?? CharacterLook(), clash: final)
+        }
         if final.playerWon && !clash.isWild { await micDrop() }
         await say(final.playerWon
                   ? "\(opponentName.uppercased()) est K.O. verbal ! Le public est avec toi."
