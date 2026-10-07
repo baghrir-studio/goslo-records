@@ -89,6 +89,7 @@ final class EventsDataTests: XCTestCase {
         settable.formUnion(world.story.concerts.flatMap { $0.win.setFlags + $0.lose.setFlags })
         settable.formUnion(world.story.negotiations.flatMap { $0.win.setFlags + $0.lose.setFlags })
         settable.formUnion(world.story.writings.flatMap { $0.win.setFlags + $0.lose.setFlags })
+        settable.formUnion(world.story.minigames.flatMap { $0.win.setFlags + $0.lose.setFlags })
         settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap(\.clash).flatMap { $0.win.setFlags + $0.lose.setFlags } })
         settable.formUnion((1...world.story.chapters.count).map { "chapitre_\($0)" })
         settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap { $0.clash.map { "clash_gagne_\($0.opponent)" } } })

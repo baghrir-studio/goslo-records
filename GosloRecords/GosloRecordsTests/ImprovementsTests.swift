@@ -104,4 +104,36 @@ final class ImprovementsTests: XCTestCase {
         XCTAssertEqual(ClashState.counterEquivalentTaps(score: -1), 0, "trop d'erreurs ne pénalise pas en dessous de zéro")
         XCTAssertEqual(ClashState.counterEquivalentTaps(score: 2), ClashState.counterTaps)
     }
+
+    // MARK: City challenges
+
+    func testEveryCityHasItsOwnChallenge() throws {
+        for city in City.allCases {
+            let challenges = world.events.filter { $0.conditions.city == city }
+            XCTAssertEqual(challenges.count, 1, "\(city) : un défi et un seul")
+            let quest = try XCTUnwrap(world.quests.first { $0.conditions.city == city }, "\(city) : pas de quête")
+            let event = try XCTUnwrap(challenges.first)
+            let minigame = try XCTUnwrap(event.choices.compactMap(\.minigame).first.flatMap(world.story.minigame),
+                                         "\(event.id) : pas de mini-jeu")
+            // Winning sets the flag that ends the quest and hides the event; losing lets you retry.
+            let flag = try XCTUnwrap(quest.steps.last?.conditions.requiredFlags.first)
+            XCTAssertTrue(minigame.win.setFlags.contains(flag), event.id)
+            XCTAssertFalse(minigame.lose.setFlags.contains(flag), event.id)
+            XCTAssertTrue(event.conditions.excludedFlags.contains(flag), event.id)
+            XCTAssertEqual(quest.steps.last?.location, event.location, "\(event.id) : le repère de quête mène au défi")
+        }
+    }
+
+    func testChallengesOnlyShowUpInTheirCity() throws {
+        let paris = try XCTUnwrap(world.events.first { $0.id == "defi_paris" })
+        var state = engine.newGame(rapper: Rapper(name: "T", city: .paris, style: .boomBap))
+        state.chapter = 2
+        XCTAssertTrue(engine.isEligible(paris, in: state))
+        var elsewhere = engine.newGame(rapper: Rapper(name: "T", city: .casablanca, style: .boomBap))
+        elsewhere.chapter = 2
+        XCTAssertFalse(engine.isEligible(paris, in: elsewhere), "pas de tour à Casablanca")
+        state.chapter = 1
+        XCTAssertFalse(engine.isEligible(paris, in: state), "pas avant le chapitre 2")
+        XCTAssertEqual(world.events.first { $0.id == "defi_casablanca" }?.npc, "zanga")
+    }
 }

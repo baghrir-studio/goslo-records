@@ -305,6 +305,238 @@
         },
         "text": "Le trône est à toi. Il est en carton et il grince. Personne ne te l'avait dit."
       }
+    },
+    {
+      "id": "defi_paris",
+      "title": "Défi de la ville · Le clip sous la tour",
+      "description": "Tourner un clip au pied de la tour, avant que les gardiens ne s'en mêlent.",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Paris"
+      },
+      "steps": [
+        {
+          "label": "Tourner le clip sous la tour",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "defi_paris_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
+      }
+    },
+    {
+      "id": "defi_casablanca",
+      "title": "Défi de la ville · Le feat avec Zanga",
+      "description": "Enregistrer un feat avec Zanga, la voix des petits taxis de Casa.",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Casablanca"
+      },
+      "steps": [
+        {
+          "label": "Enregistrer le feat avec Zanga",
+          "location": "studio",
+          "conditions": {
+            "required_flags": [
+              "defi_casablanca_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
+      }
+    },
+    {
+      "id": "defi_marseille",
+      "title": "Défi de la ville · Le Vieux-Port",
+      "description": "Donner un concert sur un bateau du Vieux-Port, malgré la houle.",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Marseille"
+      },
+      "steps": [
+        {
+          "label": "Jouer sur le bateau du Vieux-Port",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "defi_marseille_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
+      }
+    },
+    {
+      "id": "defi_lyon",
+      "title": "Défi de la ville · L'écho des traboules",
+      "description": "Lâcher un freestyle dans les passages couverts du vieux quartier.",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Lyon"
+      },
+      "steps": [
+        {
+          "label": "Freestyler dans les traboules",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "defi_lyon_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
+      }
+    },
+    {
+      "id": "defi_toulouse",
+      "title": "Défi de la ville · Soir de match",
+      "description": "Traverser la ville un soir de match pour rejoindre le studio.",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Toulouse"
+      },
+      "steps": [
+        {
+          "label": "Rejoindre le studio malgré la foule",
+          "location": "studio",
+          "conditions": {
+            "required_flags": [
+              "defi_toulouse_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
+      }
+    },
+    {
+      "id": "defi_lille",
+      "title": "Défi de la ville · La braderie",
+      "description": "Jouer trois morceaux sur l'estrade de la braderie.",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Lille"
+      },
+      "steps": [
+        {
+          "label": "Jouer à la braderie",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "defi_lille_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
+      }
+    },
+    {
+      "id": "defi_bruxelles",
+      "title": "Défi de la ville · La friterie",
+      "description": "Tourner un clip dans une friterie, sauce maison citée.",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Bruxelles"
+      },
+      "steps": [
+        {
+          "label": "Tourner le clip à la friterie",
+          "location": "label",
+          "conditions": {
+            "required_flags": [
+              "defi_bruxelles_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
+      }
+    },
+    {
+      "id": "defi_montreal",
+      "title": "Défi de la ville · La tempête",
+      "description": "Rejoindre la salle en pleine tempête de neige.",
+      "conditions": {
+        "min_chapter": 2,
+        "city": "Montréal"
+      },
+      "steps": [
+        {
+          "label": "Arriver au show malgré la tempête",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "defi_montreal_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 5
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
+      }
     }
   ]
 }

@@ -833,6 +833,23 @@
         "hair_style": "short",
         "glasses": true
       }
+    },
+    {
+      "id": "zanga",
+      "name": "Zanga",
+      "role": "Le rappeur de Casa",
+      "bio": "A grandi entre deux derbs. Rappe en darija, en français, et parfois en klaxon de petit taxi.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#8a5a3a",
+        "hair": "#1a1a1e",
+        "top": "#1f7a6a",
+        "bottom": "#2a2a33",
+        "shoes": "#e8e8ee",
+        "accent": "#d8b04a",
+        "hat": "cap",
+        "chain": true
+      }
     }
   ]
 }

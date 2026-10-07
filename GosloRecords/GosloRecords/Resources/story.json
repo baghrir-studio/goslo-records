@@ -5636,6 +5636,563 @@
         ],
         "consequence": "Les contrats sont signés, les singles sortent, et ils font un bruit… discret. Tu apprends le métier de patron : c'est comme celui de rappeur, avec des factures en plus."
       }
+    },
+    {
+      "id": "fuite_tour",
+      "kind": "fuite",
+      "title": "Clip sous la tour",
+      "intro": "Tu tournes ton clip au pied de la tour, sans autorisation. Deux gardiens arrivent en courant. Ton caméraman filme en reculant. Rejoins la sortie avant qu'on vous confisque la carte mémoire.",
+      "pass_score": 1,
+      "win": {
+        "effects": {
+          "streams": 8,
+          "credibilite": 3
+        },
+        "xp": {
+          "scene": 30
+        },
+        "consequence": "Dernier plan : toi, essoufflé, la tour derrière, un gardien flou dans le coin. Le clip fait le tour des écrans du quartier. Puis d'ailleurs.",
+        "set_flags": [
+          "defi_paris_fait"
+        ]
+      },
+      "lose": {
+        "effects": {
+          "mental": -3
+        },
+        "xp": {
+          "scene": 10
+        },
+        "consequence": "Les gardiens ont été plus rapides. La carte mémoire est sauve, mais il n'y a dessus que tes baskets et un pigeon. On retente un autre jour."
+      }
+    },
+    {
+      "id": "punchliner_zanga",
+      "kind": "punchliner",
+      "title": "Feat avec Zanga",
+      "intro": "Studio de Casa, 2 h du matin. Zanga pose le premier vers. Toi, tu finis la phrase, en mélangeant ses mots et les tiens. Deux couplets, et le feat est dans la boîte.",
+      "pass_score": 0.5,
+      "rounds": [
+        {
+          "setup": "On se capte à Casa, entre deux petits taxis rouges,",
+          "lead": "Zanga me dit :",
+          "answers": [
+            {
+              "words": [
+                "wakha",
+                "khoya",
+                "ici",
+                "tout",
+                "bouge"
+              ],
+              "score": 10,
+              "reaction": "« Wakha khoya ! » Zanga tape dans la vitre de la cabine. L'ingé son hoche la tête sans lever les yeux. C'est validé."
+            },
+            {
+              "words": [
+                "mets",
+                "le",
+                "son",
+                "que",
+                "ça",
+                "bouge"
+              ],
+              "score": 8,
+              "reaction": "Zanga monte le son lui-même. Le voisin du dessous monte le sien. C'est une conversation."
+            },
+            {
+              "words": [
+                "le",
+                "taxi",
+                "est",
+                "rouge"
+              ],
+              "score": 6,
+              "reaction": "« C'est vrai, il est rouge. » Zanga rit. Il te laisse une deuxième chance, par politesse."
+            }
+          ],
+          "decoys": [
+            "bezzaf",
+            "safi",
+            "drari",
+            "zwin",
+            "mdina",
+            "minuit",
+            "Atlantique"
+          ],
+          "rhymes": [
+            "bouge",
+            "rouge"
+          ]
+        },
+        {
+          "setup": "Il rappe en darija, moi je réponds en français,",
+          "lead": "ensemble",
+          "answers": [
+            {
+              "words": [
+                "c'est",
+                "zwin",
+                "comme",
+                "jamais"
+              ],
+              "score": 10,
+              "reaction": "« Zwin comme jamais. » Zanga l'écrit au marqueur sur le mur du studio. Le propriétaire ne dira rien : il chante aussi."
+            },
+            {
+              "words": [
+                "on",
+                "vise",
+                "le",
+                "sommet"
+              ],
+              "score": 8,
+              "reaction": "Simple, efficace. Zanga lève le poing vers le plafond, qui est bas. Il se cogne. Ça reste dans la prise."
+            },
+            {
+              "words": [
+                "on",
+                "sonne",
+                "vrai"
+              ],
+              "score": 6,
+              "reaction": "Correct. Zanga dit « safi », ce qui veut dire « ça suffit ». Avec le sourire, heureusement."
+            }
+          ],
+          "decoys": [
+            "khoya",
+            "safi",
+            "wakha",
+            "drari",
+            "palais",
+            "frais",
+            "Casa",
+            "taxi",
+            "nuit",
+            "bloc"
+          ],
+          "rhymes": [
+            "sommet",
+            "jamais",
+            "vrai",
+            "palais",
+            "frais"
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 7,
+          "credibilite": 5
+        },
+        "xp": {
+          "plume": 30
+        },
+        "consequence": "Le feat sort un vendredi. Il passe dans les petits taxis, dans les cafés, dans les mariages. Zanga t'envoie un vocal de quatre minutes. Que des éloges.",
+        "set_flags": [
+          "defi_casablanca_fait"
+        ]
+      },
+      "lose": {
+        "effects": {
+          "mental": -2
+        },
+        "xp": {
+          "plume": 10
+        },
+        "consequence": "Zanga écoute la prise, longtemps. « Demain, khoya. On refait tout demain. » Il a raison."
+      }
+    },
+    {
+      "id": "platine_port",
+      "kind": "platine",
+      "title": "Concert sur le Vieux-Port",
+      "intro": "Un concert improvisé sur un bateau amarré au Vieux-Port. La houle fait tanguer la sono, et le pitch avec. Arrête le curseur sur 100 % à chaque morceau.",
+      "pass_score": 0.5,
+      "win": {
+        "effects": {
+          "streams": 6,
+          "credibilite": 4
+        },
+        "xp": {
+          "scene": 30
+        },
+        "consequence": "Trois morceaux, zéro faux départ. Sur le quai, les gens dansent, les pêcheurs aussi. Un goéland vole ta casquette. C'est le prix du succès.",
+        "set_flags": [
+          "defi_marseille_fait"
+        ]
+      },
+      "lose": {
+        "effects": {
+          "mental": -3
+        },
+        "xp": {
+          "scene": 10
+        },
+        "consequence": "La sono a tangué plus que toi. Ton refrain est sorti en accéléré, puis au ralenti. Le public a applaudi la houle."
+      }
+    },
+    {
+      "id": "punchliner_traboules",
+      "kind": "punchliner",
+      "title": "Freestyle dans les traboules",
+      "intro": "Les vieux passages couverts de la ville, et un écho qui répète tout. Deux phrases à finir avant que le guide arrive avec son groupe de touristes.",
+      "pass_score": 0.5,
+      "rounds": [
+        {
+          "setup": "Je me perds dans les traboules, je retrouve mon flow,",
+          "lead": "chaque passage",
+          "answers": [
+            {
+              "words": [
+                "me",
+                "renvoie",
+                "l'écho"
+              ],
+              "score": 10,
+              "reaction": "L'écho répète ta fin de phrase trois fois. Un touriste applaudit. Il croyait que ça faisait partie de la visite."
+            },
+            {
+              "words": [
+                "mène",
+                "plus",
+                "haut"
+              ],
+              "score": 8,
+              "reaction": "Ça monte, comme la ville. Tes mollets, eux, n'ont pas validé."
+            },
+            {
+              "words": [
+                "devient",
+                "un",
+                "studio"
+              ],
+              "score": 6,
+              "reaction": "Correct. Un habitant ouvre sa fenêtre pour mieux entendre. Ou pour te demander de baisser."
+            }
+          ],
+          "decoys": [
+            "pente",
+            "escalier",
+            "colline",
+            "soie",
+            "rivière",
+            "pont",
+            "brouillard",
+            "bravo",
+            "chaud",
+            "vieux",
+            "nuit"
+          ],
+          "rhymes": [
+            "l'écho",
+            "haut",
+            "studio",
+            "bravo",
+            "chaud"
+          ]
+        },
+        {
+          "setup": "Ici on monte les pentes à pied, sans se plaindre,",
+          "lead": "mes rimes aussi",
+          "answers": [
+            {
+              "words": [
+                "sont",
+                "dures",
+                "à",
+                "atteindre"
+              ],
+              "score": 10,
+              "reaction": "Le groupe de touristes arrive au moment exact. Le guide te prend en photo pour sa prochaine brochure."
+            },
+            {
+              "words": [
+                "n'ont",
+                "rien",
+                "à",
+                "craindre"
+              ],
+              "score": 8,
+              "reaction": "Solide. Une dame te tend une bouteille d'eau. La montée, c'est pour tout le monde."
+            },
+            {
+              "words": [
+                "refusent",
+                "de",
+                "s'éteindre"
+              ],
+              "score": 6,
+              "reaction": "Ça tient. L'écho, fatigué, ne répète que la moitié."
+            }
+          ],
+          "decoys": [
+            "peindre",
+            "feindre",
+            "colline",
+            "souffle",
+            "mollets",
+            "sommet",
+            "traboule",
+            "lumière",
+            "fatigue",
+            "marche"
+          ],
+          "rhymes": [
+            "atteindre",
+            "craindre",
+            "s'éteindre",
+            "peindre",
+            "feindre"
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 5,
+          "credibilite": 6
+        },
+        "xp": {
+          "plume": 30
+        },
+        "consequence": "La vidéo du freestyle tourne : toi, l'écho, et un touriste qui hoche la tête en rythme. Le titre écrit dessus : « Le flow des traboules ».",
+        "set_flags": [
+          "defi_lyon_fait"
+        ]
+      },
+      "lose": {
+        "effects": {
+          "mental": -2
+        },
+        "xp": {
+          "plume": 10
+        },
+        "consequence": "L'écho a répété tes hésitations, toutes. Le guide a dit : « Et ici, un jeune homme qui cherche ses mots. »"
+      }
+    },
+    {
+      "id": "fuite_rugby",
+      "kind": "fuite",
+      "title": "Soir de match",
+      "intro": "Le match de rugby vient de finir. Des milliers de supporters chantent dans la rue, et ton studio est de l'autre côté. Fends la foule sans te faire embarquer dans la chorale.",
+      "pass_score": 1,
+      "win": {
+        "effects": {
+          "streams": 5,
+          "mental": 3
+        },
+        "xp": {
+          "scene": 30
+        },
+        "consequence": "Tu arrives au studio pile à l'heure. Dehors, la foule chante encore. Tu enregistres le refrain fenêtre ouverte : quarante mille choristes, gratuits.",
+        "set_flags": [
+          "defi_toulouse_fait"
+        ]
+      },
+      "lose": {
+        "effects": {
+          "mental": -3
+        },
+        "xp": {
+          "scene": 10
+        },
+        "consequence": "La foule t'a adopté. Tu as chanté l'hymne trois fois, tu as une écharpe et un nouvel ami. Le studio, ce sera demain."
+      }
+    },
+    {
+      "id": "platine_braderie",
+      "kind": "platine",
+      "title": "La sono de la braderie",
+      "intro": "Braderie géante : une estrade entre un stand de moules et un vendeur de vinyles. La sono de location fait des siennes. Cale le pitch à 100 % pour tes trois morceaux.",
+      "pass_score": 0.5,
+      "win": {
+        "effects": {
+          "streams": 6,
+          "argent": 4
+        },
+        "xp": {
+          "scene": 30
+        },
+        "consequence": "Trois morceaux impeccables. Le vendeur de vinyles te propose d'échanger ton CD contre un 45 tours. Tu refuses. Puis tu acceptes.",
+        "set_flags": [
+          "defi_lille_fait"
+        ]
+      },
+      "lose": {
+        "effects": {
+          "mental": -3
+        },
+        "xp": {
+          "scene": 10
+        },
+        "consequence": "La sono a lâché au deuxième morceau. Tu as fini a cappella, accompagné par un accordéon voisin. Le public a préféré l'accordéon."
+      }
+    },
+    {
+      "id": "punchliner_friterie",
+      "kind": "punchliner",
+      "title": "Clip à la friterie",
+      "intro": "Le clip se tourne dans une friterie, entre deux commandes. Deux phrases à finir avant que la friteuse sonne.",
+      "pass_score": 0.5,
+      "rounds": [
+        {
+          "setup": "Septante couplets écrits dans une friterie,",
+          "lead": "une fois",
+          "answers": [
+            {
+              "words": [
+                "la",
+                "sauce",
+                "a",
+                "tout",
+                "dit"
+              ],
+              "score": 10,
+              "reaction": "Le patron de la friterie pose sa louche et applaudit. Il ne pose jamais sa louche."
+            },
+            {
+              "words": [
+                "c'est",
+                "du",
+                "génie"
+              ],
+              "score": 8,
+              "reaction": "« Du génie, une fois. » Le caméraman rit tellement que le plan est flou. On le garde."
+            },
+            {
+              "words": [
+                "j'ai",
+                "mangé",
+                "puis",
+                "fini"
+              ],
+              "score": 6,
+              "reaction": "Honnête. Le patron te ressert un cornet, par solidarité."
+            }
+          ],
+          "decoys": [
+            "nonante",
+            "dikke",
+            "cornet",
+            "mayo",
+            "pluie",
+            "merci",
+            "aussi",
+            "brol"
+          ],
+          "rhymes": [
+            "dit",
+            "génie",
+            "fini",
+            "pluie",
+            "merci",
+            "aussi"
+          ]
+        },
+        {
+          "setup": "Il pleut sur la ville, mais le public est là,",
+          "lead": "nonante personnes",
+          "answers": [
+            {
+              "words": [
+                "et",
+                "personne",
+                "ne",
+                "s'en",
+                "va"
+              ],
+              "score": 10,
+              "reaction": "Personne ne part, malgré l'averse. Le patron distribue des cornets comme des parapluies."
+            },
+            {
+              "words": [
+                "crient",
+                "mon",
+                "nom",
+                "déjà"
+              ],
+              "score": 8,
+              "reaction": "Ils crient ton nom, la bouche pleine. C'est la plus belle ovation de ta vie, et la plus grasse."
+            },
+            {
+              "words": [
+                "chantent",
+                "comme",
+                "ça"
+              ],
+              "score": 6,
+              "reaction": "Correct. Ils chantent, en effet. Comme ça."
+            }
+          ],
+          "decoys": [
+            "septante",
+            "parapluie",
+            "dikke",
+            "brol",
+            "frites",
+            "cornet",
+            "voilà",
+            "pluie"
+          ],
+          "rhymes": [
+            "va",
+            "déjà",
+            "ça",
+            "voilà"
+          ]
+        }
+      ],
+      "win": {
+        "effects": {
+          "streams": 7,
+          "credibilite": 3
+        },
+        "xp": {
+          "plume": 30
+        },
+        "consequence": "Le clip sort. Il sent la friture à travers l'écran, et tout le monde adore. La friterie affiche ta photo au-dessus de la caisse.",
+        "set_flags": [
+          "defi_bruxelles_fait"
+        ]
+      },
+      "lose": {
+        "effects": {
+          "mental": -2
+        },
+        "xp": {
+          "plume": 10
+        },
+        "consequence": "La friteuse a sonné avant ta fin de phrase. Le clip, c'est surtout une très belle frite. On refait mardi."
+      }
+    },
+    {
+      "id": "fuite_tempete",
+      "kind": "fuite",
+      "title": "Show dans la tempête",
+      "intro": "Tempête de neige, -25 °C. La salle est au bout de la rue, et les déneigeuses vont bloquer le passage. Rejoins la porte avant d'être enseveli.",
+      "pass_score": 1,
+      "win": {
+        "effects": {
+          "streams": 6,
+          "mental": 3
+        },
+        "xp": {
+          "scene": 30
+        },
+        "consequence": "Tu entres dans la salle couvert de neige. Le public croit que c'est un costume. Tu ne dis rien. Ça devient ton costume.",
+        "set_flags": [
+          "defi_montreal_fait"
+        ]
+      },
+      "lose": {
+        "effects": {
+          "mental": -3
+        },
+        "xp": {
+          "scene": 10
+        },
+        "consequence": "La déneigeuse t'a doublé. Tu as fait le show sur le trottoir pour trois personnes et un raton laveur. Il est resté jusqu'à la fin."
+      }
     }
   ]
 }

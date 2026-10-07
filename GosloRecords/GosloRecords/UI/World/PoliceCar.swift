@@ -100,3 +100,96 @@ enum PoliceCarArt {
         return c
     }
 }
+
+/// Casablanca scenery: red petits taxis drive along the main road, often, in both directions.
+struct PassingTaxi: View {
+    @Environment(AppModel.self) private var model
+    let map: WorldMap
+
+    static let interval = 12.0...30.0
+    static let crossing = 3.6
+
+    private struct Run: Equatable {
+        let row: Int
+        let rightward: Bool
+        var progress: CGFloat = 0
+    }
+
+    @State private var run: Run?
+
+    private var lanes: [Int] {
+        (0..<map.height).filter { y in
+            (1..<(map.width - 1)).allSatisfy {
+                let tile = map.tile(at: TilePoint(x: $0, y: y))
+                return tile == .asphalt || tile == .crosswalk
+            }
+        }
+    }
+
+    var body: some View {
+        let tile = WorldView.tile
+        ZStack(alignment: .topLeading) {
+            if let run {
+                let travel = CGFloat(map.width + 4) * tile
+                let x = -2 * tile + travel * (run.rightward ? run.progress : 1 - run.progress)
+                PixelImage(TaxiArt.image(facingRight: run.rightward), width: tile * 1.5)
+                    .position(x: x, y: (CGFloat(run.row) + 0.45) * tile)
+            }
+        }
+        .frame(width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile, alignment: .topLeading)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+        .task { await drive() }
+    }
+
+    private func drive() async {
+        guard let top = lanes.first, let bottom = lanes.last else { return }
+        try? await Task.sleep(for: .seconds(3))
+        while !Task.isCancelled {
+            if model.phase == .overworld, !model.letterbox {
+                let rightward = Bool.random()
+                run = Run(row: rightward ? bottom : top, rightward: rightward)
+                withAnimation(.linear(duration: Self.crossing)) { run?.progress = 1 }
+                try? await Task.sleep(for: .seconds(Self.crossing))
+                run = nil
+            }
+            try? await Task.sleep(for: .seconds(Double.random(in: Self.interval)))
+        }
+    }
+}
+
+/// The petit taxi, side view, 22×13 pixels: red body, roof sign, roof rack.
+@MainActor
+enum TaxiArt {
+    static func image(facingRight: Bool) -> UIImage {
+        PixelCache.image("taxi-\(facingRight)") {
+            let canvas = car().outlined()
+            return (facingRight ? canvas : canvas.mirrored()).makeImage()
+        }
+    }
+
+    private static func car() -> PixelCanvas {
+        let c = PixelCanvas(width: 22, height: 13)
+        let red = PixelColor(hex: "#d0202a"), shade = PixelColor(hex: "#9a1820")
+        let glass = PixelColor(hex: "#1c2a3a"), chrome = PixelColor(hex: "#c8c8d0")
+        // Body: a small hatchback, rounder at the back.
+        c.fill(1, 6, 20, 9, red)
+        c.fill(1, 9, 20, 9, shade)
+        c.fill(4, 3, 15, 6, red)
+        c.fill(5, 4, 8, 5, glass)
+        c.fill(10, 4, 14, 5, glass)
+        // Roof rack and the little lit sign.
+        c.fill(5, 2, 14, 2, chrome)
+        c.fill(8, 0, 11, 1, PixelColor(hex: "#f2e6b0"))
+        // Bumpers and lights.
+        c.fill(20, 8, 21, 9, chrome)
+        c.fill(0, 8, 1, 9, chrome)
+        c.dot(20, 7, PixelColor(hex: "#ffe27a"))
+        c.dot(1, 7, PixelColor(hex: "#ff3b30").shaded(0.7))
+        for x in [5, 16] {
+            c.circle(cx: x, cy: 10, radius: 2, PixelColor(hex: "#141418"))
+            c.dot(x, 10, PixelColor(hex: "#8a8a96"))
+        }
+        return c
+    }
+}

@@ -46,6 +46,10 @@ struct WorldView: View {
                 // Rare scenery on the main road (rows 6–7): drawn above the people on the sidewalk behind it.
                 PassingPoliceCar(map: map)
                     .zIndex(7.7)
+                if state.rapper.city == .casablanca {
+                    PassingTaxi(map: map)
+                        .zIndex(7.7)
+                }
 
                 ForEach(model.extraActors.sorted { $0.key < $1.key }, id: \.key) { id, point in
                     npcSprite(id, at: point, facing: model.npcFacing[id] ?? .down, isObjective: false)
