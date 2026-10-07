@@ -336,7 +336,10 @@ final class AppModel {
                 phase = .encounter(event)
                 persist()
             } else {
-                phase = .dialogue(speaker: member?.name, lines: [idleLine(for: member)])
+                let lines = engine.smallTalk(with: npc.id, in: &current)
+                state = current
+                phase = .dialogue(speaker: member?.name, lines: lines)
+                persist()
             }
         case .bench:
             sound.play(.select)
@@ -358,13 +361,6 @@ final class AppModel {
         source = .phone
         phase = .encounter(event)
         persist()
-    }
-
-    private func idleLine(for member: CastMember?) -> String {
-        if let taunt = member?.clash?.taunts.randomElement() { return "« \(taunt) »" }
-        return ["« Repasse plus tard, je suis sous l'eau. »",
-                "« On se capte bientôt, promis. »",
-                "« J'ai rien pour toi là, frère. »"].randomElement()!
     }
 
     private func enter(_ door: MapDoor) async {
