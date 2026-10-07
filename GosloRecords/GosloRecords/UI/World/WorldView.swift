@@ -137,13 +137,23 @@ struct SpriteView: View {
     var frame = 0
     var size: CGFloat = WorldView.tile
 
+    /// From this size up, front and back views use the detailed sprite (the map, at 48, keeps the 16×16 one).
+    static let detailedFrom: CGFloat = 60
+
+    private var detailed: Bool { size >= SpriteView.detailedFrom && (facing == .down || facing == .up) }
+
     var body: some View {
         ZStack(alignment: .bottom) {
             Ellipse()
                 .fill(.black.opacity(0.35))
                 .frame(width: size * 0.6, height: size * 0.16)
                 .offset(y: -size * 0.02)
-            PixelImage(CharacterSprite.image(look, facing: facing, frame: frame), width: size)
+            if detailed {
+                PixelImage(HeroSprite.image(look, facing: facing, frame: frame),
+                           width: size * CGFloat(HeroSprite.width) / CGFloat(HeroSprite.height), height: size)
+            } else {
+                PixelImage(CharacterSprite.image(look, facing: facing, frame: frame), width: size)
+            }
         }
         .frame(width: size, height: size)
     }

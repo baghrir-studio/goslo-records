@@ -105,7 +105,7 @@ struct Portrait: View {
     let look: CharacterLook
 
     var body: some View {
-        SpriteView(look: look, facing: .down, size: 84)
+        PixelImage(HeroSprite.bust(look), width: 84)
             .padding(6)
             .background(Color(red: 0.12, green: 0.12, blue: 0.14))
             .overlay(Rectangle().stroke(Color.white, lineWidth: 3))
