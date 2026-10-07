@@ -181,43 +181,92 @@ enum TileArt {
                 if (x / size) % 3 == 1 { c.fill(x + 1, y - 8, x + 4, y - 2, PixelColor(hex: "#e8e4dc")) }
                 c.dot(x, y - 11, NightPalette.lampLight)
             }
-        case .ironTower:
-            // Over the top-right block: a solid lattice silhouette, three platforms, dark iron. No light show.
-            let cx = (map.width - 4) * size, top = 0, base = 3 * size - 2
-            let iron = PixelColor(hex: "#1c1c24"), edge = PixelColor(hex: "#6e6e82")
-            func half(_ y: Int) -> Int {
-                let progress = Double(y - top) / Double(base - top)
-                return Int(1.5 + pow(progress, 2.4) * 17)
-            }
-            for y in top...base {
-                let h = half(y)
-                c.fill(cx - h, y, cx + h, y, iron)
-                c.dot(cx - h, y, edge); c.dot(cx + h, y, edge)
-                // Lattice: small gaps that let the roof show through.
-                if h > 3, y % 4 == 2 {
-                    for x in stride(from: cx - h + 2, to: cx + h - 1, by: 3) { c.dot(x, y, t.roof) }
-                }
-            }
-            // The arch between the legs.
-            for y in (base - 9)...base {
-                let h = half(y), opening = max(0, h - 6) * (y - base + 10) / 10
-                if opening > 0 { c.fill(cx - opening, y, cx + opening, y, t.roof) }
-            }
-            for y in [top + 14, top + 27] { let h = half(y) + 2; c.fill(cx - h, y, cx + h, y + 1, edge) }
-            c.fill(cx, top, cx, top + 3, edge)
-        case .minaret:
-            // Over the top-left block: a square tower, a tile band, a lantern and a small dome.
-            let cx = 3 * size, top = 2, base = 3 * size - 4
-            let wall = PixelColor(hex: "#d8d0c0"), shade = PixelColor(hex: "#b0a898"), green = PixelColor(hex: "#1f7a6a")
-            c.fill(cx - 6, top + 10, cx + 6, base, wall)
-            c.fill(cx + 4, top + 10, cx + 6, base, shade)
-            for y in stride(from: top + 16, to: base - 4, by: 8) {
-                c.fill(cx - 3, y, cx - 1, y + 4, green); c.fill(cx + 1, y, cx + 3, y + 4, green)
-            }
-            c.fill(cx - 7, top + 8, cx + 7, top + 9, green)
-            c.fill(cx - 4, top + 3, cx + 4, top + 7, wall); c.fill(cx - 2, top + 4, cx + 2, top + 6, NightPalette.lampLight)
-            c.fill(cx - 3, top + 1, cx + 3, top + 2, green); c.fill(cx, 0, cx, top, PixelColor(hex: "#c8b070"))
+        case .ironTower, .minaret:
+            break  // On the horizon (see `skyline`).
         }
+    }
+
+    // MARK: Horizon
+
+    /// Height of the sky band above the map, in tiles.
+    static let skyRows = 6
+
+    /// The night sky above the neighbourhood: stars, distant rooftops, and the city's landmark on the horizon.
+    static func skyline(city: City, width: Int) -> UIImage {
+        PixelCache.image("sky-\(city.rawValue)-\(width)") {
+            let theme = CityTheme.forCity(city)
+            let w = width * size, h = skyRows * size
+            let c = PixelCanvas(width: w, height: h)
+            var noise = PixelNoise(w, h, salt: city.rawValue.count)
+            // Sky, darker at the top.
+            for y in 0..<h {
+                let t = Double(y) / Double(h)
+                c.fill(0, y, w - 1, y, PixelColor(r: UInt8(10 + 16 * t), g: UInt8(12 + 18 * t), b: UInt8(26 + 30 * t)))
+            }
+            for _ in 0..<(w / 9) {
+                c.dot(noise.next(w), noise.next(h * 2 / 3), PixelColor(hex: noise.chance(25) ? "#f2e6b0" : "#8a90a8"))
+            }
+            c.circle(cx: w / 6, cy: 14, radius: 5, PixelColor(hex: "#e8e2c8"))
+            c.circle(cx: w / 6 + 2, cy: 12, radius: 4, PixelColor(r: 14, g: 17, b: 33))
+            // The landmark stands behind the distant rooftops.
+            switch theme.landmark {
+            case .ironTower?: ironTower(c, cx: w * 3 / 4, base: h - 6)
+            case .minaret?: minaret(c, cx: w / 3, base: h - 6)
+            default: break
+            }
+            // Distant rooftops, in silhouette, a few windows still lit.
+            let far = PixelColor(hex: "#14161f"), near = PixelColor(hex: "#1b1e29")
+            var x = 0
+            while x < w {
+                let bw = 10 + noise.next(22), bh = 8 + noise.next(theme.snow ? 10 : 16)
+                c.fill(x, h - bh - 6, x + bw, h - 1, noise.chance(50) ? far : near)
+                if theme.snow { c.fill(x, h - bh - 6, x + bw, h - bh - 5, PixelColor(hex: "#c8d0dc")) }
+                for _ in 0..<(bw / 6) where noise.chance(40) {
+                    c.dot(x + 2 + noise.next(max(1, bw - 3)), h - bh + noise.next(max(1, bh - 2)), NightPalette.windowLit.shaded(0.8))
+                }
+                x += bw + 1
+            }
+            return c.makeImage()
+        }
+    }
+
+    /// A lattice iron tower, about 80 px tall: dark iron, three platforms. No light show.
+    private static func ironTower(_ c: PixelCanvas, cx: Int, base: Int) {
+        let top = 4
+        let iron = PixelColor(hex: "#262634"), edge = PixelColor(hex: "#6e6e86"), sky = PixelColor(hex: "#1a1e36")
+        func half(_ y: Int) -> Int {
+            let progress = Double(y - top) / Double(base - top)
+            return Int(1.5 + pow(progress, 2.3) * 26)
+        }
+        for y in top...base {
+            let h = half(y)
+            c.fill(cx - h, y, cx + h, y, iron)
+            c.dot(cx - h, y, edge); c.dot(cx + h, y, edge)
+            if h > 4, y % 4 == 2 { for x in stride(from: cx - h + 2, to: cx + h - 1, by: 3) { c.dot(x, y, sky) } }
+        }
+        for y in (base - 14)...base {
+            let h = half(y), opening = max(0, h - 8) * (y - base + 15) / 15
+            if opening > 0 { c.fill(cx - opening, y, cx + opening, y, sky) }
+        }
+        for y in [top + 24, top + 46] { let h = half(y) + 3; c.fill(cx - h, y, cx + h, y + 1, edge) }
+        c.fill(cx, 0, cx, top, edge)
+    }
+
+    /// A generic Moroccan-style minaret, about 80 px tall: square shaft, tile bands, a lantern and a small dome.
+    private static func minaret(_ c: PixelCanvas, cx: Int, base: Int) {
+        let top = 6
+        let wall = PixelColor(hex: "#cfc6b4"), shade = PixelColor(hex: "#a39a88"), green = PixelColor(hex: "#1f7a6a")
+        c.fill(cx - 9, top + 18, cx + 9, base, wall)
+        c.fill(cx + 6, top + 18, cx + 9, base, shade)
+        for y in stride(from: top + 26, to: base - 6, by: 12) {
+            for x in [cx - 6, cx - 1, cx + 4] { c.fill(x, y, x + 2, y + 6, green) }
+        }
+        c.fill(cx - 10, top + 15, cx + 10, top + 17, green)
+        c.fill(cx - 5, top + 6, cx + 5, top + 14, wall); c.fill(cx + 3, top + 6, cx + 5, top + 14, shade)
+        c.fill(cx - 3, top + 8, cx + 1, top + 12, NightPalette.lampLight)
+        c.fill(cx - 6, top + 4, cx + 6, top + 5, green)
+        c.circle(cx: cx, cy: top + 2, radius: 2, green)
+        c.fill(cx, 0, cx, top, PixelColor(hex: "#c8b070"))
     }
 
     private static func asphalt(_ c: PixelCanvas, _ noise: inout PixelNoise) {
