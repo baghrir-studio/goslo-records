@@ -269,13 +269,13 @@ struct GameEngine {
         } else if let taunts = member?.clash?.taunts, !taunts.isEmpty {
             lines = ["« \(taunts[count % taunts.count]) »"]
         } else {
-            let generic = ["Repasse plus tard, je suis sous l'eau.", "On se capte bientôt, promis.", "J'ai rien de neuf pour toi, frère."]
+            let generic = ["Repasse plus tard, je suis sous l'eau.", "On se capte bientôt, promis.", "J'ai rien de neuf pour toi, {frère|ma sœur}."]
             lines = ["« \(generic[count % generic.count]) »"]
         }
         if let objective = currentObjective(in: state), objective.trigger?.npc != castId {
             lines.append("En attendant : \(objective.label.prefix(1).lowercased() + objective.label.dropFirst()).")
         }
-        return lines
+        return lines.map { TextTemplate.render($0, for: state.rapper) }
     }
 
     // MARK: - Quests
@@ -652,8 +652,11 @@ struct GameEngine {
         if let choice, !current.round.endings.indices.contains(choice) { throw GameEngineError.invalidChoice(choice) }
         let (points, reaction) = PunchlinerEngine.judge(choice, in: current.round)
         let ending = choice.map { current.round.endings[$0].text } ?? "…"
-        running.lyrics = (running.lyrics ?? []) + [current.round.setup, "\(current.round.lead) \(ending)"]
-        if points >= PunchlinerEngine.bestScore, running.hook == nil, let choice { running.hook = current.round.endings[choice].text }
+        let verse = [current.round.setup, "\(current.round.lead) \(ending)"].map { TextTemplate.render($0, for: state.rapper) }
+        running.lyrics = (running.lyrics ?? []) + verse
+        if points >= PunchlinerEngine.bestScore, running.hook == nil, let choice {
+            running.hook = TextTemplate.render(current.round.endings[choice].text, for: state.rapper)
+        }
         running.points += points
         running.log.append(reaction)
         running.round += 1

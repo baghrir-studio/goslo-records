@@ -16,11 +16,12 @@ struct CreationView: View {
     @State private var headphones: Bool?
     @State private var outfit: CharacterLook.Outfit?
     @State private var earrings: Bool?
+    @State private var gender: Gender = .rappeur
     @FocusState private var nameFocused: Bool
 
     private var draft: Rapper {
         Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
-               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings)
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, gender: gender)
     }
 
     /// Name used when the player leaves the field empty (the field's placeholder).
@@ -41,7 +42,7 @@ struct CreationView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 32) {
                     HStack(alignment: .bottom) {
-                        Text("Crée ton\nrappeur")
+                        Text(gender == .rappeuse ? "Crée ta\nrappeuse" : "Crée ton\nrappeur")
                             .font(.display(52))
                             .lineSpacing(-8)
                         Spacer()
@@ -119,6 +120,11 @@ struct CreationView: View {
         let look = draft.look
         return VStack(alignment: .leading, spacing: 14) {
             Kicker(text: "Look")
+            ChoiceRow(options: Gender.allCases, selected: gender, label: { $0 == .rappeuse ? "Rappeuse" : "Rappeur" }) {
+                gender = $0
+                hairStyle = nil
+                beard = nil
+            }
             HStack(spacing: 12) {
                 ForEach(Rapper.hairColors.indices, id: \.self) { index in
                     Button {
@@ -232,6 +238,7 @@ private extension CharacterLook.HairStyle {
         case .puff: "Afro"
         case .braids: "Tresses"
         case .fade: "Dégradé"
+        case .bun: "Chignon"
         }
     }
 }

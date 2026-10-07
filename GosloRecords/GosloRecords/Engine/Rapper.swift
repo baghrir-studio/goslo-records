@@ -13,6 +13,11 @@ enum City: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
+/// Rappeur or rappeuse: the texts agree with it (`TextTemplate`), and the sprite follows.
+enum Gender: String, Codable, CaseIterable {
+    case rappeur, rappeuse
+}
+
 enum Style: String, Codable, CaseIterable, Identifiable {
     case boomBap = "Boom bap"
     case trap = "Trap"
@@ -92,11 +97,16 @@ struct Rapper: Codable, Equatable {
     var headphones: Bool?
     var outfit: CharacterLook.Outfit?
     var earrings: Bool?
+    /// nil in saves from before the choice existed: rappeur.
+    var genderChoice: Gender?
+
+    var gender: Gender { genderChoice ?? .rappeur }
 
     init(name: String, city: City, style: Style, skinTone: Int = 2, hairColor: Int? = nil,
          hairStyle: CharacterLook.HairStyle? = nil, hat: CharacterLook.Hat? = nil, glasses: Bool? = nil,
          beard: Bool? = nil, chain: Bool? = nil, headphones: Bool? = nil,
-         outfit: CharacterLook.Outfit? = nil, earrings: Bool? = nil) {
+         outfit: CharacterLook.Outfit? = nil, earrings: Bool? = nil, gender: Gender = .rappeur) {
+        genderChoice = gender
         self.outfit = outfit
         self.earrings = earrings
         self.name = name
@@ -127,5 +137,6 @@ struct Rapper: Codable, Equatable {
         headphones = try c.decodeIfPresent(Bool.self, forKey: .headphones)
         outfit = try c.decodeIfPresent(CharacterLook.Outfit.self, forKey: .outfit)
         earrings = try c.decodeIfPresent(Bool.self, forKey: .earrings)
+        genderChoice = try c.decodeIfPresent(Gender.self, forKey: .genderChoice)
     }
 }

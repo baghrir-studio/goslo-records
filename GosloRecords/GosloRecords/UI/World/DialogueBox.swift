@@ -268,7 +268,7 @@ struct ConsequenceBox: View {
             }
 
             ForEach(outcome.completedQuests) { quest in
-                QuestBanner(quest: quest)
+                QuestBanner(quest: quest, rapper: state.rapper)
                     .transition(.move(edge: .top).combined(with: .opacity))
             }
 
@@ -329,6 +329,7 @@ struct ConsequenceBox: View {
 
 private struct QuestBanner: View {
     let quest: Quest
+    let rapper: Rapper
     @State private var shine = false
 
     var body: some View {
@@ -336,7 +337,7 @@ private struct QuestBanner: View {
             Text("★ QUÊTE TERMINÉE").font(.system(size: 11, weight: .heavy, design: .monospaced))
             Text(quest.title.uppercased()).font(.display(24))
             if !quest.reward.text.isEmpty {
-                Text(quest.reward.text).font(.system(size: 13)).fixedSize(horizontal: false, vertical: true)
+                Text(TextTemplate.render(quest.reward.text, for: rapper)).font(.system(size: 13)).fixedSize(horizontal: false, vertical: true)
             }
         }
         .foregroundStyle(Theme.background)

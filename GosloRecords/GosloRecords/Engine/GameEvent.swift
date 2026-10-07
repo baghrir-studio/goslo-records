@@ -284,10 +284,19 @@ struct EventChoice: Codable, Equatable {
     }
 }
 
-/// Fills `{nom}` and `{ville}` placeholders in event text.
+/// Fills `{nom}` and `{ville}`, and agrees `{masculin|féminin}` with the player: « {prêt|prête} ».
 enum TextTemplate {
+    private static let agreement = try! NSRegularExpression(pattern: "\\{([^{}|]*)\\|([^{}|]*)\\}")
+
     static func render(_ text: String, for rapper: Rapper) -> String {
-        text.replacingOccurrences(of: "{nom}", with: rapper.name)
+        agree(text, rapper.gender)
+            .replacingOccurrences(of: "{nom}", with: rapper.name)
             .replacingOccurrences(of: "{ville}", with: rapper.city.rawValue)
+    }
+
+    static func agree(_ text: String, _ gender: Gender) -> String {
+        guard text.contains("|") else { return text }
+        let range = NSRange(text.startIndex..., in: text)
+        return agreement.stringByReplacingMatches(in: text, range: range, withTemplate: gender == .rappeuse ? "$2" : "$1")
     }
 }

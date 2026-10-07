@@ -74,7 +74,7 @@
         "xp": {
           "scene": 40
         },
-        "text": "Tu n'es plus « un mec qui rappe ». Tu es un rappeur."
+        "text": "Tu n'es plus « {un mec|une meuf} qui rappe ». Tu es {un rappeur|une rappeuse}."
       }
     },
     {

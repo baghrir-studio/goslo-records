@@ -43,7 +43,10 @@ final class MinigameTests: XCTestCase {
                 XCTAssertEqual(Set(round.endings.map(\.text)).count, round.endings.count, "\(label) : fins en double")
                 for ending in round.endings {
                     XCTAssertFalse(ending.reaction.isEmpty, label)
-                    XCTAssertLessThanOrEqual(ending.text.count, 40, "\(label) : « \(ending.text) » trop long pour un bouton")
+                    for gender in Gender.allCases {
+                        let shown = TextTemplate.agree(ending.text, gender)
+                        XCTAssertLessThanOrEqual(shown.count, 40, "\(label) : « \(shown) » trop long pour un bouton")
+                    }
                 }
             }
         }
