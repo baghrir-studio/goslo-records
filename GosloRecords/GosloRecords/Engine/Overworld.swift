@@ -130,6 +130,46 @@ struct MapPlot: Codable, Equatable, Identifiable {
     var point: TilePoint { TilePoint(x: x, y: y) }
 }
 
+/// A piece of scenery painted over a rectangle of the map: the city stade, a car park, a rooftop terrace…
+/// Only the look changes: which tiles you can walk on still comes from `rows` (the scenery dresses the
+/// walkable tiles of its rectangle as floor, and its blocked tiles as props: cars, stalls, buses, railings).
+struct MapScenery: Codable, Equatable {
+    enum Kind: String, Codable, CaseIterable {
+        /// A fenced football cage (city stade): synthetic pitch on the walkable tiles, the cage on the fence.
+        case pitch
+        /// A car park: bays painted on the asphalt, a car on each blocked tile (a coach on a run of three).
+        case parking
+        /// A rooftop terrace: roofing floor, a parapet on the fence, a water tank on a blocked tile.
+        case terrace
+        /// Concrete steps going up (walkable).
+        case stairs
+        /// A covered market: tiled floor under an iron frame, a stall on each blocked tile.
+        case market
+        /// Murals painted over a stretch of front walls.
+        case murals
+        /// A barge moored on the water.
+        case barge
+        /// A wooden lookout: planks on the walkable tiles, a railing on the fence.
+        case belvedere
+        /// The city's lights far below, painted over the blocked edge of the map.
+        case panorama
+        /// The arena's backstage: hazard lines, tour buses, flight cases, the loading dock and the dressing rooms.
+        case backstage
+        /// A footbridge over the water (walkable planks, a handrail on each side).
+        case bridge
+    }
+
+    let kind: Kind
+    let x: Int
+    let y: Int
+    let w: Int
+    let h: Int
+
+    func contains(_ point: TilePoint) -> Bool {
+        (x..<(x + w)).contains(point.x) && (y..<(y + h)).contains(point.y)
+    }
+}
+
 /// The neighbourhood (map.json).
 struct WorldMap: Codable, Equatable {
     let rows: [String]
@@ -142,6 +182,8 @@ struct WorldMap: Codable, Equatable {
     var plots: [MapPlot]? = nil
 
     var decorPlots: [MapPlot] { plots ?? [] }
+    /// Painted scenery (the look only, see `MapScenery`).
+    var scenery: [MapScenery]? = nil
 
     /// Where you come out of the metro (just below the entrance), or the spawn point.
     var arrival: TilePoint { metro?.moved(.down) ?? spawn }
@@ -173,7 +215,7 @@ struct WorldMap: Codable, Equatable {
     func forChapter(_ chapter: Int, flags: Set<String> = []) -> WorldMap {
         WorldMap(rows: rows, spawn: spawn, doors: doors, npcs: npcs.filter { npc in
             npc.fromChapter <= chapter && !(npc.hiddenIf.map(flags.contains) ?? false)
-        }, metro: metro, plots: plots)
+        }, metro: metro, plots: plots, scenery: scenery)
     }
 
     /// Symbols that aren't part of TileKind (used to validate the data).

@@ -18,6 +18,24 @@
       "T#####=====F\"\"\"\"\"\"\"\"\"\"=T",
       "T##M##=====F\"\"\"\"\"\"\"\"\"\"=T",
       "T======================T",
+      "TRRRRRRRRR=============T",
+      "TRRRRRRRRR===TT=TTT=TT=T",
+      "T#########=============T",
+      "T#########=============T",
+      "TB===========TTT=TT=TT=T",
+      "TRRRRRRRRR=============T",
+      "TRRRRRRRRR===TT=TTT=TT=T",
+      "T#########=============T",
+      "T#########==B====L====BT",
+      "TL======L=======L=====LT",
+      "TFFFF==FFFFFFFFFFFF==FFT",
+      "TFFFF==FFFFFFFFFFFF==FFT",
+      "T======================T",
+      "T=B======L====B=====L==T",
+      "TWWWWWWWWWWWWWWWWWWWWWWT",
+      "TWWWWWWWWWWWWWWWWWWWWWWT",
+      "TWWWWWWWWWWWWWWWWWWWWWWT",
+      "TWWWWWWWWWWWWWWWWWWWWWWT",
       "TTTTTTTTTTTTTTTTTTTTTTTT"
     ],
     "spawn": {
@@ -61,6 +79,70 @@
         "y": 12,
         "facing": "down"
       }
+    ],
+    "plots": [
+      {
+        "id": "centre_1",
+        "x": 15,
+        "y": 12
+      },
+      {
+        "id": "centre_2",
+        "x": 4,
+        "y": 21
+      },
+      {
+        "id": "centre_3",
+        "x": 14,
+        "y": 20
+      },
+      {
+        "id": "centre_4",
+        "x": 11,
+        "y": 29
+      },
+      {
+        "id": "centre_5",
+        "x": 7,
+        "y": 26
+      }
+    ],
+    "scenery": [
+      {
+        "kind": "market",
+        "x": 12,
+        "y": 17,
+        "w": 11,
+        "h": 7
+      },
+      {
+        "kind": "murals",
+        "x": 1,
+        "y": 19,
+        "w": 9,
+        "h": 2
+      },
+      {
+        "kind": "stairs",
+        "x": 5,
+        "y": 27,
+        "w": 2,
+        "h": 2
+      },
+      {
+        "kind": "stairs",
+        "x": 19,
+        "y": 27,
+        "w": 2,
+        "h": 2
+      },
+      {
+        "kind": "barge",
+        "x": 4,
+        "y": 32,
+        "w": 5,
+        "h": 1
+      }
     ]
   },
   "hauts": {
@@ -81,6 +163,26 @@
       "T##M##==##########==###T",
       "T======================T",
       "T==B=====L=====B=====L=T",
+      "TRRRRRR==RRRRRR==RRRRRRT",
+      "TRRRRRR==RRRRRR==RRRRRRT",
+      "T######==######==######T",
+      "T######==######==######T",
+      "T===L=========L=======LT",
+      "T=....................=T",
+      "T=....................=T",
+      "T==B=========B=========T",
+      "TFFFFFFFFF====FFFFFFFFFT",
+      "T\"\"\"T\"\"\"\"\"====\"\"\"\"\"T\"\"\"T",
+      "T\"\"\"\"\"\"\"\"\"====\"\"\"\"\"\"\"\"TT",
+      "TT\"\"\"TTT\"\"====\"\"TTT\"\"\"\"T",
+      "T==B===L============B==T",
+      "TT\"\"\"\"\"\"\"\"====\"\"\"\"\"\"TT\"T",
+      "T\"\"\"\"T\"\"\"\"====\"\"T\"\"\"\"\"\"T",
+      "TTT\"\"\"\"\"\"\"====\"\"\"\"\"\"\"TTT",
+      "T\"\"\"\"\"\"\"\"\"====\"\"\"\"\"\"\"\"\"T",
+      "T=B==L===B======B===L=BT",
+      "TFFFFFFFFFFFFFFFFFFFFFFT",
+      "TTTTTTTTTTTTTTTTTTTTTTTT",
       "TTTTTTTTTTTTTTTTTTTTTTTT"
     ],
     "spawn": {
@@ -140,6 +242,49 @@
         "y": 14,
         "facing": "up"
       }
+    ],
+    "plots": [
+      {
+        "id": "hauts_1",
+        "x": 8,
+        "y": 6
+      },
+      {
+        "id": "hauts_2",
+        "x": 11,
+        "y": 20
+      },
+      {
+        "id": "hauts_3",
+        "x": 18,
+        "y": 23
+      },
+      {
+        "id": "hauts_4",
+        "x": 16,
+        "y": 28
+      },
+      {
+        "id": "hauts_5",
+        "x": 12,
+        "y": 33
+      }
+    ],
+    "scenery": [
+      {
+        "kind": "belvedere",
+        "x": 1,
+        "y": 33,
+        "w": 22,
+        "h": 2
+      },
+      {
+        "kind": "panorama",
+        "x": 0,
+        "y": 35,
+        "w": 24,
+        "h": 2
+      }
     ]
   },
   "dome": {
@@ -159,6 +304,25 @@
       "T==B===RRRRRR=====B====T",
       "T======##M###==========T",
       "T======================T",
+      "T==L======L======L====LT",
+      "T=T.T.T.T.T..T.T.T.T.T=T",
+      "T=....................=T",
+      "T=....................=T",
+      "T=TTT.TTT....TTT.T.T.T=T",
+      "T=....................=T",
+      "T===B======L========B==T",
+      "TFFFFFFFFFF==FFFFFFFFFFT",
+      "TF====================FT",
+      "TF=TTT===========TTT==FT",
+      "TF====================FT",
+      "TF=T=T=T==RRRRRR==T=T=FT",
+      "TF========######======FT",
+      "TF==RRR===######==RRR=FT",
+      "TF==###===========###=FT",
+      "TF====================FT",
+      "TF=B=====L====L=====B=FT",
+      "TFFFFFFFFFFFFFFFFFFFFFFT",
+      "TTTTTTTTTTTTTTTTTTTTTTTT",
       "TTTTTTTTTTTTTTTTTTTTTTTT"
     ],
     "spawn": {
@@ -183,6 +347,49 @@
         "y": 6,
         "facing": "left",
         "sight": 3
+      }
+    ],
+    "plots": [
+      {
+        "id": "dome_1",
+        "x": 5,
+        "y": 8
+      },
+      {
+        "id": "dome_2",
+        "x": 11,
+        "y": 17
+      },
+      {
+        "id": "dome_3",
+        "x": 5,
+        "y": 21
+      },
+      {
+        "id": "dome_4",
+        "x": 10,
+        "y": 25
+      },
+      {
+        "id": "dome_5",
+        "x": 8,
+        "y": 30
+      }
+    ],
+    "scenery": [
+      {
+        "kind": "parking",
+        "x": 2,
+        "y": 16,
+        "w": 20,
+        "h": 5
+      },
+      {
+        "kind": "backstage",
+        "x": 1,
+        "y": 22,
+        "w": 22,
+        "h": 11
       }
     ]
   }
