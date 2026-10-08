@@ -310,6 +310,11 @@ final class Player {
             }
         case .fuite:
             try? engine.endChase(escaped: chance(profile.pickBest), in: &state)
+        case .beatbox:
+            // Each pattern is longer: a good player keeps up a little longer.
+            while state.minigame?.isOver == false {
+                if (try? engine.beatbox(repeated: chance(profile.pickBest), in: &state)) == nil { break }
+            }
         case .signing:
             // A careful player signs the best affordable pair; the others pick any affordable one.
             guard let offer = engine.signingOffer(in: state) else { break }
