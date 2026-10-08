@@ -946,7 +946,7 @@ final class AppModel {
         phase = .cinematic
         withAnimation(.easeInOut(duration: 0.45)) { letterbox = true }
         try? await Task.sleep(for: .milliseconds(450))
-        for step in cinematic.steps where step.plays(for: state?.rapper.city) {
+        for step in cinematic.steps where step.plays(in: state) {
             guard route == .game else { return }
             await perform(step)
         }

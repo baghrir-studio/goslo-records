@@ -112,6 +112,21 @@ final class FinaleTests: XCTestCase {
         XCTAssertEqual(state.pendingCinematic, "baron_provoc")
         engine.cinematicFinished("baron_provoc", in: &state)
 
+        // Lucien's funeral. The Baron was there too, at the back.
+        refill()
+        XCTAssertEqual(try engine.talk(to: "momo", in: &state, using: &rng)?.id, "story_adieu_lucien")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertTrue(state.items.contains("carnet_lucien"))
+        XCTAssertEqual(try XCTUnwrap(engine.takeFollowUp(in: &state)).id, "story_baron_obseques")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertTrue(state.flags.isSuperset(of: ["adieu_lucien", "baron_respect"]))
+        XCTAssertEqual(state.pendingCinematic, "banc_vide")
+        engine.cinematicFinished("banc_vide", in: &state)
+        XCTAssertFalse(try XCTUnwrap(world.map).forChapter(6, flags: state.flags).npcs.contains { $0.id == "lucien" },
+                       "le banc de Lucien est vide")
+        // Never went up to the Baron's: Momo has no photo to ask about, the story moves on.
+        XCTAssertEqual(engine.currentObjective(in: state)?.id, "stylo")
+
         refill()
         XCTAssertEqual(try engine.talk(to: "scalpel", in: &state, using: &rng)?.id, "story_stylo")
         _ = try engine.resolve(choiceAt: 0, in: &state)
@@ -121,6 +136,21 @@ final class FinaleTests: XCTestCase {
         refill()
         XCTAssertEqual(try engine.talk(to: "dj_bobine", in: &state, using: &rng)?.id, "story_bobine_dome")
         _ = try engine.resolve(choiceAt: 2, in: &state)
+
+        // The night before: doubt, goslo radio's night line, then mum's kitchen at dawn.
+        refill()
+        XCTAssertEqual(try engine.visit(.reseaux, in: &state, using: &rng).id, "story_nuit_blanche")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertEqual(try XCTUnwrap(engine.takeFollowUp(in: &state)).id, "story_antenne_nuit")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        let kitchen = try XCTUnwrap(engine.takeFollowUp(in: &state))
+        XCTAssertEqual(kitchen.id, "story_cuisine_maman")
+        XCTAssertFalse(kitchen.choices[1].isAvailable(in: state), "Lil Sauge n'est pas assez proche pour être dans ton coin")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertTrue(state.flags.isSuperset(of: ["nuit_traversee", "doute_avoue", "coin_maman"]))
+        XCTAssertNil(state.pendingFollowUp)
+        XCTAssertEqual(state.pendingCinematic, "aube_bloc")
+        engine.cinematicFinished("aube_bloc", in: &state)
 
         // Boss 1: the Baron, retried until he falls.
         refill()

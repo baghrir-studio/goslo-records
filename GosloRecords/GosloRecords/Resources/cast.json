@@ -20,6 +20,58 @@
         "La machine 4 refait des siennes. Si tu l'entends taper en rythme, c'est elle, pas un beat.",
         "Je t'ai gardé une place sur le canapé du label. C'est aussi le canapé de la laverie.",
         "Chaque fois que quelqu'un signe ici, je pleure. Alors signe pas trop souvent, j'ai plus de mouchoirs."
+      ],
+      "moments": [
+        {
+          "text": "Le premier concert, c'est comme la première machine : tu sais jamais si ça va déborder. Ça déborde toujours. C'est bon signe.",
+          "conditions": {
+            "min_chapter": 3
+          }
+        },
+        {
+          "text": "Hexagone t'a donné un tabouret ? Ici, t'avais un canapé. Je dis ça, je dis rien. Je plie.",
+          "conditions": {
+            "required_flags": [
+              "contrat_signe"
+            ],
+            "min_chapter": 5
+          }
+        },
+        {
+          "text": "Je laisse le rideau à moitié baissé, cette semaine. Lucien disait que la laverie avait l'air triste, fermée. Alors je la laisse à moitié triste.",
+          "conditions": {
+            "required_flags": [
+              "adieu_lucien"
+            ]
+          }
+        },
+        {
+          "text": "Des gens qui disent non aux stylos en or. Je l'ai brodé sur un tablier. Il est moche. Je le porte quand même.",
+          "conditions": {
+            "required_flags": [
+              "momo_verite"
+            ]
+          }
+        },
+        {
+          "text": "Bonjour. Lavage, 4 €. Séchage, 2 €. Le reste, on verra.",
+          "conditions": {
+            "required_flags": [
+              "momo_blesse"
+            ],
+            "excluded_flags": [
+              "chapitre_6"
+            ]
+          }
+        },
+        {
+          "text": "La 4 tourne toute seule depuis que t'as repris les clés. Je lui parle plus. Elle a un nouveau patron.",
+          "conditions": {
+            "required_flags": [
+              "patron_label"
+            ]
+          }
+        }
       ]
     },
     {
@@ -41,6 +93,40 @@
         "En 2009, j'ai mixé un disque d'or. Je te l'ai déjà dit ? Je te le redis, c'est important.",
         "Reviens quand t'as du nouveau. Le Bunker t'attend, et la console aussi. Surtout la console.",
         "Ne touche pas le fader 7. Personne ne touche le fader 7. Même pas moi."
+      ],
+      "moments": [
+        {
+          "text": "Hexagone a envoyé un micro neuf. Il est très bien. Il a pas d'âme, mais il est très bien.",
+          "conditions": {
+            "required_flags": [
+              "contrat_signe"
+            ]
+          }
+        },
+        {
+          "text": "J'ai rendu l'enveloppe. Le Baron a même pas ouvert sa porte. Il a juste dit « ok » à travers. Je crois qu'il avait honte, lui aussi.",
+          "conditions": {
+            "required_flags": [
+              "fred_pardonne"
+            ]
+          }
+        },
+        {
+          "text": "… Tu peux enregistrer, hein. La console marche. Moi, je vais faire un tour.",
+          "conditions": {
+            "required_flags": [
+              "fred_banni"
+            ]
+          }
+        },
+        {
+          "text": "« Le meilleur de 2009 et de maintenant. » Je l'ai fait graver sur le fader 7. Personne y touche. Surtout pas moi.",
+          "conditions": {
+            "required_flags": [
+              "fred_retrouve"
+            ]
+          }
+        }
       ]
     },
     {
@@ -86,6 +172,32 @@
         "Je prépare mon top de fin d'année. Pour l'instant, tu n'y es pas. Pour l'instant.",
         "Tu savais que ce jour-là, en 1997, trois albums sont sortis ? Moi oui.",
         "Reviens avec un projet. Je chronique pas les intentions."
+      ],
+      "moments": [
+        {
+          "text": "Ton concert au Transfo : 15 sur 20. Je mets jamais plus de 14 à un premier concert. Le répète pas.",
+          "conditions": {
+            "required_flags": [
+              "concert_reussi"
+            ]
+          }
+        },
+        {
+          "text": "J'ai retrouvé une chronique de 1995 sur Lucien. Je l'avais descendu. J'avais tort. Je le lui dirai jamais. Alors je te le dis à toi.",
+          "conditions": {
+            "required_flags": [
+              "adieu_lucien"
+            ]
+          }
+        },
+        {
+          "text": "Le troisième morceau de la cassette, je l'ai réécouté. Mon père aurait aimé, je crois. Bref. Ton dernier son : 16.",
+          "conditions": {
+            "required_flags": [
+              "yanis_demo"
+            ]
+          }
+        }
       ]
     },
     {
@@ -109,6 +221,16 @@
         "Quinze ans de Micro Ouvert. J'ai tout entendu. Surprends-moi la prochaine fois.",
         "Le micro est froid, là. Reviens quand il sera chaud. Toi aussi.",
         "Les auditeurs demandent du neuf. Moi aussi, d'ailleurs."
+      ],
+      "moments": [
+        {
+          "text": "J'ai éteint le néon ON AIR une heure, pour Lucien. Le standard a sonné quand même. Tout le quartier voulait juste dire merci.",
+          "conditions": {
+            "required_flags": [
+              "adieu_lucien"
+            ]
+          }
+        }
       ]
     },
     {
@@ -155,6 +277,32 @@
         "Le trône ne se visite pas. Il se prend. Et tu n'es pas encore assez {grand|grande} pour la chaise.",
         "J'ai un live dans dix minutes. Je vais clasher quelqu'un. Peut-être toi, si t'insistes.",
         "Reviens quand on parlera de toi dans ma story. Pour l'instant, je t'ai même pas en sourdine."
+      ],
+      "moments": [
+        {
+          "text": "On m'a raccroché au nez. Moi. J'ai gardé la tonalité en sonnerie. Pour me souvenir.",
+          "conditions": {
+            "required_flags": [
+              "refus_baron"
+            ]
+          }
+        },
+        {
+          "text": "Didier, c'est seulement quand y a personne. Là, y a quelqu'un : moi. Donc c'est le Baron.",
+          "conditions": {
+            "required_flags": [
+              "baron_respect"
+            ]
+          }
+        },
+        {
+          "text": "Tu sais ce qu'il y a de bien, quand on tombe ? On voit enfin le plafond. Le mien était moche.",
+          "conditions": {
+            "required_flags": [
+              "baron_tombe"
+            ]
+          }
+        }
       ]
     },
     {
@@ -347,6 +495,32 @@
         "J'ai corrigé ton dernier couplet dans ma tête. Il reste deux fautes. Je te les dirai sur scène.",
         "Une rime, c'est une incision. La tienne, c'est encore un pansement.",
         "Reviens quand tu auras quelque chose de propre. Ou de tranchant."
+      ],
+      "moments": [
+        {
+          "text": "Tu m'as battu à la plume. J'ai relu notre duel trois fois. Il reste deux fautes. Je te les dirai un jour.",
+          "conditions": {
+            "required_flags": [
+              "scalpel_battu"
+            ]
+          }
+        },
+        {
+          "text": "J'ai lu un couplet de Lucien, hier. Pas une rime riche. Et pourtant, rien à corriger. Je ne comprends pas encore comment.",
+          "conditions": {
+            "required_flags": [
+              "adieu_lucien"
+            ]
+          }
+        },
+        {
+          "text": "La relève m'a envoyé ses textes. Je les ai corrigés au crayon à papier. Le rouge, c'est toi qui l'as.",
+          "conditions": {
+            "required_flags": [
+              "auditions_faites"
+            ]
+          }
+        }
       ]
     },
     {
@@ -390,6 +564,32 @@
         "La marque d'eau gazeuse m'a renvoyé un carton. J'en ai fait un TikTok. Trois millions de vues.",
         "Toujours sur ton carnet ? Je te ferai coucou d'en haut.",
         "J'ai pas le temps, je filme. Enfin, je me filme."
+      ],
+      "moments": [
+        {
+          "text": "Le chat a plus d'abonnés que moi, maintenant. On a fait un feat, et c'est lui le featuring principal.",
+          "conditions": {
+            "required_flags": [
+              "feat_sauge"
+            ]
+          }
+        },
+        {
+          "text": "J'ai laissé mon téléphone chez moi, aujourd'hui. Je sais pas quoi faire de mes mains. Je les mets dans mes poches. C'est à ça que ça sert, les poches ?",
+          "conditions": {
+            "required_flags": [
+              "sauge_aide"
+            ]
+          }
+        },
+        {
+          "text": "Ma grand-mère a écouté le son. Elle a dit « enfin ». Juste « enfin ». J'ai pleuré dans le bus.",
+          "conditions": {
+            "required_flags": [
+              "sauge_change"
+            ]
+          }
+        }
       ]
     },
     {
@@ -432,6 +632,25 @@
         "Invaincu au Ring des Mots. Reviens quand t'auras envie de perdre en public.",
         "Ma ligne de vêtements sort lundi. T'es pas dans le lookbook.",
         "Je m'échauffe. Les cordes vocales, c'est comme les poings."
+      ],
+      "moments": [
+        {
+          "text": "Ma marque a sorti « J'ai perdu, et alors ? ». Ça se vend mieux que quand j'étais invaincu. Merci, je crois.",
+          "conditions": {
+            "required_flags": [
+              "clash_gagne_kevlar_jr"
+            ],
+            "min_chapter": 2
+          }
+        },
+        {
+          "text": "Inès, la petite de la finale, s'entraîne tous les soirs. Elle dit qu'elle va te battre. Je lui dis d'attendre d'avoir dix ans.",
+          "conditions": {
+            "required_flags": [
+              "kevlar_coach"
+            ]
+          }
+        }
       ]
     },
     {
@@ -496,6 +715,37 @@
         "Appelle-moi sur le fixe. Les gens se parlent plus en vrai, de nos jours.",
         "En 94, on rappait sans filet. Et sans wifi, surtout.",
         "Garde ton carnet près de toi. Le téléphone, tu peux le perdre."
+      ],
+      "moments": [
+        {
+          "text": "Ils parlent de toi au snack. Je fais semblant de pas écouter. J'écoute.",
+          "conditions": {
+            "min_chapter": 2
+          }
+        },
+        {
+          "text": "300 personnes dans un téléphone. J'ai gardé le combiné contre l'oreille une heure après. Pour rien. Pour l'écho.",
+          "conditions": {
+            "required_flags": [
+              "lucien_promesse",
+              "concert_reussi"
+            ]
+          }
+        },
+        {
+          "text": "Tu m'as demandé si j'allais bien. Personne me demande ça. J'ai pas su quoi répondre. Je vais bien. Un peu moins bien que toi, c'est tout.",
+          "conditions": {
+            "required_flags": [
+              "lucien_inquiet"
+            ]
+          }
+        },
+        {
+          "text": "Le Baron ? Je l'ai connu, il pesait quarante kilos et il respirait au mauvais endroit. Comme toi. Faut croire que c'est un passage obligé.",
+          "conditions": {
+            "min_chapter": 5
+          }
+        }
       ]
     },
     {
@@ -911,6 +1161,32 @@
         "Une platine, un jack, et toute ma confiance. Reviens au prochain set.",
         "Tout est 2 % trop vite chez moi. Même cette conversation.",
         "Le pitch est à 102. C'est l'énergie, frère."
+      ],
+      "moments": [
+        {
+          "text": "Je joue ton set à 102 %. Pour l'énergie. Et parce que ma platine est bloquée sur 102. Les deux.",
+          "conditions": {
+            "required_flags": [
+              "dj_recrute"
+            ]
+          }
+        },
+        {
+          "text": "Deux platines. Je dors mal. J'ai des choix à faire, maintenant. Avant, j'avais une platine et aucun doute.",
+          "conditions": {
+            "required_flags": [
+              "equipe_prete"
+            ]
+          }
+        },
+        {
+          "text": "Le Baron est tombé, et j'ai joué l'outro à 100 %. Pile. Pour la première fois de ma vie. Je crois que j'étais ému.",
+          "conditions": {
+            "required_flags": [
+              "baron_tombe"
+            ]
+          }
+        }
       ]
     },
     {
@@ -2078,6 +2354,32 @@
         "La vraie antenne, c'est @goslo_radio. Passe dire bonjour, et dis-leur que tu viens du jeu.",
         "Je fais de la radio depuis quinze ans. Toi, du rap depuis quinze minutes. On va bien s'entendre.",
         "Le jingle, tu l'as trouvé ? Non ? Regarde mieux l'affiche, dans le studio."
+      ],
+      "moments": [
+        {
+          "text": "Paraît qu'il y a eu un concert au Transfo. Les rumeurs disent que c'était bien. Les rumeurs, c'est ma spécialité.",
+          "conditions": {
+            "required_flags": [
+              "concert_reussi"
+            ]
+          }
+        },
+        {
+          "text": "Une voix m'a appelé une nuit, à 3 h. Je dirai jamais à qui elle était. Mais elle est devant moi, et elle a meilleure mine.",
+          "conditions": {
+            "required_flags": [
+              "doute_avoue"
+            ]
+          }
+        },
+        {
+          "text": "Quinze ans d'antenne. J'avais jamais entendu un quartier entier crier en même temps. J'ai baissé le son. Puis je l'ai remonté.",
+          "conditions": {
+            "required_flags": [
+              "baron_tombe"
+            ]
+          }
+        }
       ]
     },
     {
@@ -2102,6 +2404,32 @@
         "Une punchline, c'est un aphorisme qui a mis des baskets.",
         "Le rap, c'est de la philosophie qui a eu le temps de s'entraîner.",
         "Je lis tout. Même les commentaires. Surtout les commentaires."
+      ],
+      "moments": [
+        {
+          "text": "Le banc a perdu son propriétaire. Il ne l'a jamais possédé, remarque. On ne possède pas un banc. On l'habite.",
+          "conditions": {
+            "required_flags": [
+              "adieu_lucien"
+            ]
+          }
+        },
+        {
+          "text": "Tu as eu peur, et tu es {venu|venue} quand même. Kierkegaard appelait ça l'angoisse. Moi, j'appelle ça le courage avec un mauvais sommeil.",
+          "conditions": {
+            "required_flags": [
+              "doute_avoue"
+            ]
+          }
+        },
+        {
+          "text": "Héraclite : tout s'écoule. Même les trônes en carton. Surtout eux, d'ailleurs : ils prennent l'eau.",
+          "conditions": {
+            "required_flags": [
+              "baron_tombe"
+            ]
+          }
+        }
       ]
     }
   ]
