@@ -131,6 +131,8 @@ final class AppModel {
     private var taxiRideOffered = false
     private var taxiTalks = 0
     private var bunkerKnocks = 0
+    /// The philosopher's analysis being read, to share as a card (cleared when the dialogue ends).
+    private(set) var philosophyCard: PhilosophyCard?
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
         self.engine = engine
@@ -385,6 +387,7 @@ final class AppModel {
             // goslo radio's philosopher reads your latest punchline.
             sound.play(.select)
             npcFacing[npc.id] = facing.opposite
+            philosophyCard = engine.philosophyCard(in: current)
             let lines = engine.philosopherReading(in: &current)
             state = current
             persist()
@@ -856,6 +859,7 @@ final class AppModel {
     func advance() {
         switch phase {
         case .dialogue:
+            philosophyCard = nil
             if taxiRideOffered {
                 // Driss drives you: same destinations as the tram.
                 taxiRideOffered = false
@@ -1175,6 +1179,14 @@ final class AppModel {
         guard !deltas.isEmpty else { return }
         lastDeltas = deltas
         deltaToken += 1
+    }
+
+    /// A clash tip has been read: it won't show again this career.
+    func learn(_ tip: ClashTip) {
+        guard var current = state else { return }
+        current.flags.insert(tip.flag)
+        state = current
+        persist()
     }
 
     func persist() {

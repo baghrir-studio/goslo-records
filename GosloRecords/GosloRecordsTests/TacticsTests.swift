@@ -68,4 +68,19 @@ final class TacticsTests: XCTestCase {
         XCTAssertNil(old.lastPlayerMove)
         XCTAssertNil(old.crowdFavorite)
     }
+
+    func testYanisExplainsEachTacticOnce() {
+        var state = clash()
+        state.crowdFavorite = .story
+        XCTAssertEqual(ClashTip.next(for: state, seen: []), .crowd, "au premier tour : le public")
+        var seen: Set<String> = [ClashTip.crowd.flag]
+        XCTAssertNil(ClashTip.next(for: state, seen: seen))
+        round(&state, .flow)
+        XCTAssertEqual(ClashTip.next(for: state, seen: seen), .counter, "il se trahit : le contre d'abord")
+        seen.insert(ClashTip.counter.flag)
+        XCTAssertEqual(ClashTip.next(for: state, seen: seen), .combo, "le flow prépare un combo")
+        seen.insert(ClashTip.combo.flag)
+        XCTAssertNil(ClashTip.next(for: state, seen: seen), "une seule fois par carrière")
+        XCTAssertTrue(ClashTip.crowd.line(crowd: .story).contains("STORY"))
+    }
 }

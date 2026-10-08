@@ -270,6 +270,13 @@ struct BattleView: View {
                     }
                     .buttonStyle(PressScaleStyle())
                 }
+                if let tip = ClashTip.next(for: clash, seen: state.flags) {
+                    TipBubble(text: tip.line(crowd: clash.crowdFavorite)) {
+                        withAnimation(.easeOut(duration: 0.2)) { model.learn(tip) }
+                    }
+                    .id(tip)
+                    .transition(.scale(scale: 0.9).combined(with: .opacity))
+                }
                 TacticsStrip(tell: telegraphed.map { $0.tell(opponentName) }, counter: telegraphed?.counter,
                              crowd: clash.crowdFavorite, combo: clash.lastPlayerMove.flatMap { ClashCombo.started(by: $0) })
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
@@ -1279,6 +1286,35 @@ private struct BeatCounterOverlay: View {
         } else {
             SoundEngine.shared.play(.tap)
         }
+    }
+}
+
+/// Yanis's tip, the first time a tactic comes up (tap to dismiss for good).
+private struct TipBubble: View {
+    let text: String
+    let dismiss: () -> Void
+
+    var body: some View {
+        Button(action: dismiss) {
+            HStack(alignment: .top, spacing: 8) {
+                Text("💡").font(.system(size: 16))
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("YANIS").font(.system(size: 10, weight: .heavy, design: .monospaced))
+                        .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                    Text(text).font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(.white)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text("OK, COMPRIS ›").font(.system(size: 9, weight: .heavy, design: .monospaced))
+                        .foregroundStyle(.white.opacity(0.6))
+                }
+                Spacer(minLength: 0)
+            }
+            .padding(10)
+            .background(Color(red: 0.08, green: 0.14, blue: 0.24))
+            .overlay(Rectangle().stroke(Color(red: 0.55, green: 0.8, blue: 1), lineWidth: 1.5))
+        }
+        .buttonStyle(.plain)
     }
 }
 

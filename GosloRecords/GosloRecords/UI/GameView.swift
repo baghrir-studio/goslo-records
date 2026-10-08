@@ -243,9 +243,14 @@ struct GameView: View {
             .opacity(model.transition == nil ? 1 : 0)
             .transition(.opacity)
         case .dialogue(let speaker, let lines):
-            LinesBox(speaker: speaker, lines: lines)
-                .id(lines.joined())
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+            VStack(alignment: .trailing, spacing: 8) {
+                if let card = model.philosophyCard {
+                    PhilosophyShareButton(card: card)
+                }
+                LinesBox(speaker: speaker, lines: lines)
+                    .id(lines.joined())
+            }
+            .transition(.move(edge: .bottom).combined(with: .opacity))
         case .encounter(let event):
             EncounterBox(event: event, state: state)
                 .transition(.move(edge: .bottom).combined(with: .opacity))

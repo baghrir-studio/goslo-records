@@ -66,3 +66,30 @@ enum ClashTactics {
     /// round (the opponent sizes you up), so the opening blow stays a surprise.
     static func telegraphed(_ state: ClashState) -> ClashMove? { state.nextOpponentMove }
 }
+
+/// First-time tips from Yanis in a clash: each one shows once per career, when it's useful.
+enum ClashTip: String, CaseIterable {
+    case counter, combo, crowd
+
+    var flag: String { "tuto_\(rawValue)" }
+
+    func line(crowd: ClashMove?) -> String {
+        switch self {
+        case .counter:
+            "Regarde, il se trahit (la ligne 👁). Joue le coup marqué CONTRE : il ne fera qu'un tiers de ses dégâts."
+        case .combo:
+            "Ton dernier coup prépare un combo. Enchaîne le coup marqué COMBO : il frappe plus fort et ne rate jamais."
+        case .crowd:
+            "Chaque quartier a son public. Ici, il adore le coup \(crowd?.label.uppercased() ?? "PUBLIC") : il frappe 20 % plus fort. Pour l'adversaire aussi."
+        }
+    }
+
+    /// The tip to show now, if any: the counter as soon as a tell shows, then the combo, then the crowd.
+    static func next(for clash: ClashState, seen flags: Set<String>) -> ClashTip? {
+        guard !clash.isOver else { return nil }
+        if ClashTactics.telegraphed(clash) != nil, !flags.contains(ClashTip.counter.flag) { return .counter }
+        if clash.lastPlayerMove.flatMap({ ClashCombo.started(by: $0) }) != nil, !flags.contains(ClashTip.combo.flag) { return .combo }
+        if clash.crowdFavorite != nil, !flags.contains(ClashTip.crowd.flag) { return .crowd }
+        return nil
+    }
+}

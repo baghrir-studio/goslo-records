@@ -61,4 +61,24 @@ final class PhilosopherTests: XCTestCase {
         XCTAssertTrue(again[1].contains("déjà"))
         XCTAssertEqual(Philosopher.reading(of: "x"), Philosopher.reading(of: "x"), "toujours le même penseur pour le même refrain")
     }
+
+    func testTheAnalysisBecomesACardToShare() throws {
+        let engine = GameEngine(world: try EventLoader.loadWorld(bundle: Bundle(for: AppModel.self)))
+        XCTAssertEqual(Philosopher.thinkers.count, Philosopher.readings.count)
+        for (index, reading) in Philosopher.readings.enumerated() {
+            XCTAssertTrue(reading.hasPrefix("« {h} ». "), "lecture \(index)")
+            XCTAssertTrue(reading.contains(Philosopher.thinkers[index]),
+                          "le penseur \(Philosopher.thinkers[index]) est bien celui de la lecture \(index)")
+        }
+        var state = engine.newGame(rapper: Rapper(name: "Kiki", city: .lyon, style: .trap))
+        XCTAssertNil(engine.philosophyCard(in: state), "rien à partager sans refrain")
+        state.hooks = ["le bitume est mon costume", "j'écris la nuit"]
+        let card = try XCTUnwrap(engine.philosophyCard(in: state))
+        XCTAssertEqual(card.hook, "j'écris la nuit", "la carte montre le refrain qu'il va lire")
+        XCTAssertEqual(card.artist, "Kiki")
+        XCTAssertFalse(card.analysis.contains("{h}"))
+        XCTAssertFalse(card.analysis.hasPrefix("«"), "la punchline n'est pas répétée dans l'analyse")
+        let lines = engine.philosopherReading(in: &state)
+        XCTAssertTrue(lines[0].hasSuffix(card.analysis))
+    }
 }
