@@ -17,6 +17,7 @@ final class GameStore {
 
     private var currentRunURL: URL { directory.appendingPathComponent("current_run.json") }
     private var historyURL: URL { directory.appendingPathComponent("history.json") }
+    private var profileURL: URL { directory.appendingPathComponent("profile.json") }
 
     init(directory: URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]) {
         self.directory = directory
@@ -42,6 +43,15 @@ final class GameStore {
 
     func saveHistory(_ records: [CareerRecord]) {
         write(records, to: historyURL)
+    }
+
+    /// Achievements, kept across careers.
+    func loadProfile() -> Profile {
+        read(Profile.self, from: profileURL) ?? Profile()
+    }
+
+    func saveProfile(_ profile: Profile) {
+        write(profile, to: profileURL)
     }
 
     private func read<T: Decodable>(_ type: T.Type, from url: URL) -> T? {

@@ -21,6 +21,8 @@ struct HomeView: View {
             HStack(spacing: -12) {
                 ForEach(Array(Style.allCases.enumerated()), id: \.offset) { index, style in
                     WalkingSprite(look: Rapper(name: "", city: .paris, style: style, skinTone: [1, 3, 0, 4][index],
+                                               hairStyle: [.fade, .braids, .short, .puff][index], hat: [.cap, .none, .beanie, .none][index],
+                                               outfit: [.hoodie, .jacket, .puffer, .jersey][index], outfitColor: [0, 3, 1, 4][index],
                                                gender: index % 2 == 1 ? .rappeuse : .rappeur).look,
                                   facing: .down, size: 64)
                 }
@@ -70,8 +72,12 @@ struct HomeView: View {
                 .buttonStyle(model.resumableRun == nil ? AnyButtonStyle(PrimaryButtonStyle()) : AnyButtonStyle(SecondaryButtonStyle()))
                 .disabled(model.loadError != nil)
 
-                Button("Mes carrières") { model.go(.history) }
-                    .buttonStyle(SecondaryButtonStyle())
+                HStack(spacing: 12) {
+                    Button("Mes carrières") { model.go(.history) }
+                        .buttonStyle(SecondaryButtonStyle())
+                    Button("Succès \(model.profile.unlocked.count)/\(Achievement.allCases.count)") { model.go(.achievements) }
+                        .buttonStyle(SecondaryButtonStyle())
+                }
             }
 
             SoundSwitches()

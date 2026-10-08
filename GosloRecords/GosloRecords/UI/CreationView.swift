@@ -17,6 +17,7 @@ struct CreationView: View {
     @State private var outfit: CharacterLook.Outfit?
     @State private var earrings: Bool?
     @State private var outfitColor: Int?
+    @State private var heritage: Heritage?
     @State private var gender: Gender = .rappeur
     @State private var step: Step = .identity
     @FocusState private var nameFocused: Bool
@@ -36,7 +37,7 @@ struct CreationView: View {
 
     private var draft: Rapper {
         Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
-               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, gender: gender)
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, gender: gender, heritage: heritage)
     }
 
     /// Name used when the player leaves the field empty (the field's placeholder).
@@ -84,6 +85,7 @@ struct CreationView: View {
                         lookSection
                     case .style:
                         styleSection
+                        heritageSection
                     }
                 }
                 .padding(.horizontal, Theme.gutter)
@@ -137,6 +139,49 @@ struct CreationView: View {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = previous }
         } else {
             model.go(.home)
+        }
+    }
+
+    /// Bonuses earned in previous careers (Succès): pick one, or none.
+    private var heritageSection: some View {
+        let unlocked = model.profile.heritages
+        return VStack(alignment: .leading, spacing: 10) {
+            Kicker(text: "Héritage")
+            if unlocked.isEmpty {
+                Text("Tes succès débloqueront des bonus pour tes prochaines carrières. Va au bout d'une première carrière pour commencer.")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Theme.muted)
+            }
+            ForEach(Heritage.allCases) { option in
+                let open = unlocked.contains(option)
+                let picked = heritage == option
+                Button {
+                    heritage = picked ? nil : option
+                } label: {
+                    HStack(alignment: .top, spacing: 10) {
+                        Image(systemName: open ? (picked ? "checkmark.square.fill" : "square") : "lock.fill")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundStyle(picked ? Theme.accent : Theme.muted)
+                            .frame(width: 22)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(option.name.uppercased())
+                                .font(.mono(12, weight: .bold))
+                                .foregroundStyle(open ? Theme.text : Theme.faint)
+                            Text(open ? option.detail : "Succès « \(option.unlockedBy.title) » : \(option.unlockedBy.detail)")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Theme.muted)
+                                .multilineTextAlignment(.leading)
+                        }
+                        Spacer(minLength: 0)
+                    }
+                    .padding(10)
+                    .overlay(Rectangle().stroke(picked ? Theme.accent : Theme.line, lineWidth: picked ? 1.5 : 1))
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .disabled(!open)
+                .opacity(open ? 1 : 0.55)
+            }
         }
     }
 

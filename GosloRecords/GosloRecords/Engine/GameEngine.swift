@@ -143,6 +143,7 @@ struct GameEngine {
             state.relations[member.id] = member.startRelation
         }
         state.pendingCinematic = world.story.chapter(1)?.intro
+        if let heritage = rapper.heritage { applyHeritage(heritage, to: &state) }
         return state
     }
 
@@ -397,7 +398,8 @@ struct GameEngine {
 
         if let spec = choice.clash, castIndex[spec.opponent]?.clash != nil,
            EndingResolver.prematureEnding(for: state.stats) == nil {
-            let clash = ClashState(spec: spec)
+            var clash = ClashState(spec: spec)
+            clash.playerMeter = startingMeter(in: state)
             state.clash = clash
             return .clash(clash)
         }
@@ -885,6 +887,7 @@ struct GameEngine {
         guard let opponent = castIndex[clash.opponentId], let profile = opponent.clash else {
             throw GameEngineError.noClash
         }
+        if rhymes >= Freestyle.maxRhymes { state.flags.insert(AchievementRules.freestyleFlag) }
         ClashEngine.playRound(&clash, playerMove: .punchline, playerFreestyle: rhymes, playerLevel: clashLevels(for: clash, in: state),
                               opponent: profile.scaled(by: clash.levelBonus), opponentName: opponent.name,
                               opponentSecret: opponent.secret, callbacks: callbacks(for: clash, in: state), using: &rng)
@@ -907,6 +910,7 @@ struct GameEngine {
             throw GameEngineError.noClash
         }
         let level = clashLevels(for: clash, in: state)
+        if let charge, charge >= AchievementRules.perfectCharge { state.flags.insert(AchievementRules.chargeFlag) }
         ClashEngine.playRound(&clash, playerMove: .presence, playerSecret: playerSecret(in: state), playerCharge: charge,
                               playerLevel: level, opponent: profile.scaled(by: clash.levelBonus),
                               opponentName: opponent.name, opponentSecret: opponent.secret,
@@ -987,7 +991,8 @@ struct GameEngine {
             lose: ClashResultSpec(effects: GameEngine.wildRewards.lose,
                                   consequence: "\(opponent.name) t'a mis à l'amende devant tout le monde. Ton ego boite jusqu'à chez toi.")
         )
-        let clash = ClashState(spec: spec, isWild: true, levelBonus: (state.year - 1) / 2)
+        var clash = ClashState(spec: spec, isWild: true, levelBonus: (state.year - 1) / 2)
+        clash.playerMeter = startingMeter(in: state)
         state.clash = clash
         state.stepsSinceWild = 0
         return clash

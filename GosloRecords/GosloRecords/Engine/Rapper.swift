@@ -102,6 +102,8 @@ struct Rapper: Codable, Equatable {
     /// Saves from before the look had its own page wore their style's outfit; new characters don't:
     /// the style is how you rap, not how you dress.
     var lookFromStyle: Bool
+    /// Bonus inherited from previous careers (picked at creation).
+    var heritage: Heritage?
     /// nil in saves from before the choice existed: rappeur.
     var genderChoice: Gender?
 
@@ -110,7 +112,9 @@ struct Rapper: Codable, Equatable {
     init(name: String, city: City, style: Style, skinTone: Int = 2, hairColor: Int? = nil,
          hairStyle: CharacterLook.HairStyle? = nil, hat: CharacterLook.Hat? = nil, glasses: Bool? = nil,
          beard: Bool? = nil, chain: Bool? = nil, headphones: Bool? = nil,
-         outfit: CharacterLook.Outfit? = nil, earrings: Bool? = nil, outfitColor: Int? = nil, gender: Gender = .rappeur) {
+         outfit: CharacterLook.Outfit? = nil, earrings: Bool? = nil, outfitColor: Int? = nil, gender: Gender = .rappeur,
+         heritage: Heritage? = nil) {
+        self.heritage = heritage
         genderChoice = gender
         self.outfitColor = outfitColor
         lookFromStyle = false
@@ -147,5 +151,6 @@ struct Rapper: Codable, Equatable {
         genderChoice = try c.decodeIfPresent(Gender.self, forKey: .genderChoice)
         outfitColor = try c.decodeIfPresent(Int.self, forKey: .outfitColor)
         lookFromStyle = try c.decodeIfPresent(Bool.self, forKey: .lookFromStyle) ?? true
+        heritage = try c.decodeIfPresent(Heritage.self, forKey: .heritage)
     }
 }
