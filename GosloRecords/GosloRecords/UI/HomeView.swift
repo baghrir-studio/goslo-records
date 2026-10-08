@@ -73,6 +73,10 @@ struct HomeView: View {
                 .buttonStyle(model.resumableRun == nil ? AnyButtonStyle(PrimaryButtonStyle()) : AnyButtonStyle(SecondaryButtonStyle()))
                 .disabled(model.loadError != nil)
 
+                Button("Arcade · mini-jeux") { model.go(.arcade) }
+                    .buttonStyle(SecondaryButtonStyle())
+                    .disabled(model.loadError != nil)
+
                 HStack(spacing: 12) {
                     Button("Mes carrières") { model.go(.history) }
                         .buttonStyle(SecondaryButtonStyle())

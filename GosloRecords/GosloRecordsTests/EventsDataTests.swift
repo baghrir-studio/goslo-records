@@ -257,6 +257,10 @@ final class EventsDataTests: XCTestCase {
                         }
                     case .fuite:
                         try engine.endChase(escaped: Bool.random(using: &rng), in: &state)
+                    case .beatbox:
+                        while state.minigame?.isOver == false {
+                            try engine.beatbox(repeated: Bool.random(using: &rng), in: &state)
+                        }
                     case .signing:
                         // A random affordable pair, or a single artist.
                         let offer = try XCTUnwrap(engine.signingOffer(in: state))

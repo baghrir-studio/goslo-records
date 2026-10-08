@@ -30,6 +30,8 @@ struct RootView: View {
             case .punchliner: return .drill
             case .fuite: return .battle
             case .platine, .signing: return .menu
+            // The beatboxer is the music.
+            case .beatbox: return nil
             }
         }
         if case .writing(let running) = model.phase {
@@ -50,6 +52,7 @@ struct RootView: View {
                 case .ending(let record): EndingView(record: record)
                 case .history: HistoryView()
                 case .achievements: AchievementsView()
+                case .arcade: ArcadeView()
                 }
             }
             .transition(.opacity)

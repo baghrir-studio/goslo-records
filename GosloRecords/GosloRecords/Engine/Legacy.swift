@@ -142,6 +142,8 @@ struct TrophyCase: Codable, Equatable {
     var achievements: [Achievement: Date] = [:]
     /// The daily clash: attempts and streak.
     var daily = DailyRecord()
+    /// Arcade records, per game.
+    var arcadeBest: [String: Int] = [:]
 
     var unlocked: Set<Achievement> { Set(achievements.keys) }
     var heritages: [Heritage] { Heritage.allCases.filter { unlocked.contains($0.unlockedBy) } }
@@ -154,6 +156,7 @@ struct TrophyCase: Codable, Equatable {
         let raw = try c.decodeIfPresent([String: Date].self, forKey: .achievements) ?? [:]
         achievements = Dictionary(uniqueKeysWithValues: raw.compactMap { key, date in Achievement(rawValue: key).map { ($0, date) } })
         daily = try c.decodeIfPresent(DailyRecord.self, forKey: .daily) ?? DailyRecord()
+        arcadeBest = try c.decodeIfPresent([String: Int].self, forKey: .arcadeBest) ?? [:]
     }
 }
 

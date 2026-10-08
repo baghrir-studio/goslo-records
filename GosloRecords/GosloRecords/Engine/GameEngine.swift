@@ -640,7 +640,7 @@ struct GameEngine {
 
     // MARK: - Mini-games
 
-    func minigame(_ id: String) -> Minigame? { story.minigame(id) }
+    func minigame(_ id: String) -> Minigame? { story.minigame(id) ?? (id == Arcade.beatbox.id ? Arcade.beatbox : nil) }
 
     /// Punchliner: the round being played, and the order its endings are shown in (stable).
     func punchlinerRound(in state: GameState) -> (round: PunchlinerRound, order: [Int])? {
@@ -721,6 +721,8 @@ struct GameEngine {
             return best > 0 ? Double(running.points) / Double(best) : 0
         case .platine:
             return Double(running.points) / Double(PlatineEngine.runs * PlatineEngine.maxPoints)
+        case .beatbox:
+            return Double(running.points) / Double(BeatboxEngine.rounds)
         case .fuite:
             return running.escaped == true ? 1 : 0
         case .signing:

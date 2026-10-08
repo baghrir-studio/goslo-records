@@ -33,6 +33,8 @@ struct GameView: View {
                     VStack(spacing: 0) {
                         if let daily = model.dailyClash {
                             DailyHeader(challenge: daily, opponent: model.engine.castMember(daily.opponentId)?.name ?? "???")
+                        } else if let game = model.arcadePlaying {
+                            ArcadeHeader(game: game)
                         } else {
                             hud(state)
                         }
