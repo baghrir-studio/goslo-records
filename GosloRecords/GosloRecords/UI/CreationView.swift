@@ -16,12 +16,27 @@ struct CreationView: View {
     @State private var headphones: Bool?
     @State private var outfit: CharacterLook.Outfit?
     @State private var earrings: Bool?
+    @State private var outfitColor: Int?
     @State private var gender: Gender = .rappeur
+    @State private var step: Step = .identity
     @FocusState private var nameFocused: Bool
+
+    /// Three pages: who you are, how you look, how you rap. The career starts only on the last one.
+    enum Step: Int, CaseIterable {
+        case identity, look, style
+
+        var title: String {
+            switch self {
+            case .identity: "Identité"
+            case .look: "Look"
+            case .style: "Style"
+            }
+        }
+    }
 
     private var draft: Rapper {
         Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
-               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, gender: gender)
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, gender: gender)
     }
 
     /// Name used when the player leaves the field empty (the field's placeholder).
@@ -34,8 +49,9 @@ struct CreationView: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                BackButton(title: "Accueil") { model.go(.home) }
+                BackButton(title: step == .identity ? "Accueil" : "Retour") { back() }
                 Spacer()
+                stepper
             }
             .padding(.horizontal, Theme.gutter)
 
@@ -58,24 +74,80 @@ struct CreationView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 32) {
-                    nameSection
-                    skinSection
-                    lookSection
-                    citySection
-                    styleSection
+                    switch step {
+                    case .identity:
+                        nameSection
+                        genderSection
+                        citySection
+                    case .look:
+                        skinSection
+                        lookSection
+                    case .style:
+                        styleSection
+                    }
                 }
                 .padding(.horizontal, Theme.gutter)
                 .padding(.top, 20)
                 .padding(.bottom, 24)
+                .id(step)
+                .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity),
+                                        removal: .move(edge: .leading).combined(with: .opacity)))
             }
             .scrollDismissesKeyboard(.interactively)
 
-            Button("Lancer la carrière") {
-                model.startCareer(draft)
+            Button(step == .style ? "Lancer la carrière" : "Suivant") { next() }
+                .buttonStyle(PrimaryButtonStyle())
+                .padding(.horizontal, Theme.gutter)
+                .padding(.vertical, 12)
+        }
+    }
+
+    /// "1 Identité · 2 Look · 3 Style", the current page lit.
+    private var stepper: some View {
+        HStack(spacing: 10) {
+            ForEach(Step.allCases, id: \.self) { item in
+                HStack(spacing: 4) {
+                    Text("\(item.rawValue + 1)")
+                        .font(.mono(10, weight: .bold))
+                        .foregroundStyle(item == step ? Theme.background : Theme.muted)
+                        .frame(width: 18, height: 18)
+                        .background(item.rawValue <= step.rawValue ? Theme.accent : Color.clear)
+                        .overlay(Rectangle().stroke(item.rawValue <= step.rawValue ? Theme.accent : Theme.line, lineWidth: 1))
+                    if item == step {
+                        Text(item.title.uppercased()).font(.mono(10, weight: .bold)).foregroundStyle(Theme.text)
+                    }
+                }
             }
-            .buttonStyle(PrimaryButtonStyle())
-            .padding(.horizontal, Theme.gutter)
-            .padding(.vertical, 12)
+        }
+        .animation(.easeOut(duration: 0.2), value: step)
+    }
+
+    private func next() {
+        nameFocused = false
+        if let following = Step(rawValue: step.rawValue + 1) {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = following }
+        } else {
+            model.startCareer(draft)
+        }
+    }
+
+    private func back() {
+        nameFocused = false
+        if let previous = Step(rawValue: step.rawValue - 1) {
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = previous }
+        } else {
+            model.go(.home)
+        }
+    }
+
+    private var genderSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Kicker(text: "Tu es")
+            ChoiceRow(options: Gender.allCases, selected: gender, label: { $0 == .rappeuse ? "Rappeuse" : "Rappeur" }) {
+                gender = $0
+                hairStyle = nil
+                beard = nil
+            }
         }
     }
 
@@ -126,11 +198,6 @@ struct CreationView: View {
         let look = draft.look
         return VStack(alignment: .leading, spacing: 14) {
             Kicker(text: "Look")
-            ChoiceRow(options: Gender.allCases, selected: gender, label: { $0 == .rappeuse ? "Rappeuse" : "Rappeur" }) {
-                gender = $0
-                hairStyle = nil
-                beard = nil
-            }
             HStack(spacing: 12) {
                 ForEach(Rapper.hairColors.indices, id: \.self) { index in
                     Button {
@@ -149,6 +216,26 @@ struct CreationView: View {
             ChoiceRow(options: CharacterLook.HairStyle.allCases, selected: look.hairStyle, label: \.label) { hairStyle = $0 }
             ChoiceRow(options: CharacterLook.Hat.allCases, selected: look.hat, label: \.label) { hat = $0 }
             ChoiceRow(options: CharacterLook.Outfit.allCases, selected: look.outfit, label: \.label) { outfit = $0 }
+            HStack(spacing: 12) {
+                ForEach(Rapper.outfitColors.indices, id: \.self) { index in
+                    let colors = Rapper.outfitColors[index]
+                    let picked = (outfitColor ?? 0) == index
+                    Button {
+                        outfitColor = index
+                    } label: {
+                        VStack(spacing: 0) {
+                            Color(uiColor: PixelColor(hex: colors.top).uiColor)
+                            Color(uiColor: PixelColor(hex: colors.bottom).uiColor)
+                        }
+                        .frame(width: 30, height: 30)
+                        .clipShape(Circle())
+                        .overlay(Circle().fill(Color(uiColor: PixelColor(hex: colors.accent).uiColor)).frame(width: 8, height: 8))
+                        .overlay(Circle().stroke(picked ? Theme.accent : Theme.line, lineWidth: picked ? 3 : 1))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Couleur de tenue \(index + 1)")
+                }
+            }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 8)], spacing: 8) {
                 ToggleChip(title: "Lunettes", isOn: look.glasses) { glasses = !look.glasses }
                 ToggleChip(title: "Barbe", isOn: look.beard) { beard = !look.beard }

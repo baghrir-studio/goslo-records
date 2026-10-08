@@ -2827,11 +2827,172 @@
           "narration": "Zéro abonné. Un carnet à spirale. Et une certitude : un jour, tout le quartier connaîtra ton nom."
         },
         {
+          "place": {
+            "who": "kenzo_livraison",
+            "x": 16,
+            "y": 13,
+            "facing": "right"
+          },
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
           "move": {
-            "who": "lil_sauge",
+            "who": "kenzo_livraison",
             "x": 20,
             "y": 13
-          }
+          },
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
+          "place": {
+            "who": "tatie_nadia",
+            "x": 16,
+            "y": 13,
+            "facing": "right"
+          },
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "move": {
+            "who": "tatie_nadia",
+            "x": 20,
+            "y": 13
+          },
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "place": {
+            "who": "gaspard_pentes",
+            "x": 16,
+            "y": 13,
+            "facing": "right"
+          },
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "move": {
+            "who": "gaspard_pentes",
+            "x": 20,
+            "y": 13
+          },
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "place": {
+            "who": "fifou_capitole",
+            "x": 16,
+            "y": 13,
+            "facing": "right"
+          },
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "move": {
+            "who": "fifou_capitole",
+            "x": 20,
+            "y": 13
+          },
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "place": {
+            "who": "meme_ginette",
+            "x": 16,
+            "y": 13,
+            "facing": "right"
+          },
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "move": {
+            "who": "meme_ginette",
+            "x": 20,
+            "y": 13
+          },
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "place": {
+            "who": "jean_mi_stoemp",
+            "x": 16,
+            "y": 13,
+            "facing": "right"
+          },
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "move": {
+            "who": "jean_mi_stoemp",
+            "x": 20,
+            "y": 13
+          },
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "place": {
+            "who": "ti_guy_deneigeur",
+            "x": 16,
+            "y": 13,
+            "facing": "right"
+          },
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "move": {
+            "who": "ti_guy_deneigeur",
+            "x": 20,
+            "y": 13
+          },
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "place": {
+            "who": "driss_taxi",
+            "x": 16,
+            "y": 13,
+            "facing": "right"
+          },
+          "cities": [
+            "Casablanca"
+          ]
+        },
+        {
+          "move": {
+            "who": "driss_taxi",
+            "x": 20,
+            "y": 13
+          },
+          "cities": [
+            "Casablanca"
+          ]
         },
         {
           "face": {
@@ -2841,20 +3002,8 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Encore sur ton carnet, {nom} ? Les gens lisent plus, {frère|ma sœur}. Ils scrollent."
-          }
-        },
-        {
-          "say": {
-            "who": "player",
-            "text": "Alors j'écrirai des trucs qui les font arrêter de scroller."
-          }
-        },
-        {
-          "say": {
-            "who": "lil_sauge",
-            "text": "Ici, y a un rappeur par cage d'escalier. Pour qu'on te remarque, faut un concept."
+            "who": "kenzo_livraison",
+            "text": "Encore sur ton carnet, {nom} ? À Paris, t'as un rappeur par cage d'escalier. Et ils ont tous un carnet."
           },
           "cities": [
             "Paris"
@@ -2862,8 +3011,8 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Ici, même le poissonnier rappe. Pour sortir du lot, faut un concept."
+            "who": "tatie_nadia",
+            "text": "Oh {nom} ! Tu écris encore à minuit ? Viens, je te mets une barquette de frites, t'es {tout pâle|toute pâle}."
           },
           "cities": [
             "Marseille"
@@ -2871,8 +3020,8 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Ici, les gens écoutent jusqu'au bout avant d'applaudir. T'as pas le temps pour ça. Faut un concept."
+            "who": "gaspard_pentes",
+            "text": "Salut {nom}. Je descends les Pentes, j'ai entendu quelqu'un marmonner des rimes. C'était toi, évidemment."
           },
           "cities": [
             "Lyon"
@@ -2880,8 +3029,8 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Ici, il fait trop beau pour lire un carnet. Les gens sont en terrasse. Faut un concept."
+            "who": "fifou_capitole",
+            "text": "Oh {nom} ! T'écris à cette heure-ci ? Il fait trop beau pour un carnet, viens en terrasse !"
           },
           "cities": [
             "Toulouse"
@@ -2889,8 +3038,8 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Ici, il pleut huit mois sur douze, les gens vivent sur leur téléphone. Faut un concept."
+            "who": "meme_ginette",
+            "text": "Eh bé {nom}, t'es encore dehors ? Il bruine, tu vas attraper la mort avec ton carnet."
           },
           "cities": [
             "Lille"
@@ -2898,8 +3047,8 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Ici, on a déjà la frite et la BD. Pour exister, faut un concept, une fois."
+            "who": "jean_mi_stoemp",
+            "text": "Tiens, {nom} ! Toujours ton carnet, une fois ? Moi j'ai des BD, toi t'as des rimes. On est des artistes."
           },
           "cities": [
             "Bruxelles"
@@ -2907,8 +3056,8 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Ici, il fait moins quinze. Personne enlève ses gants pour applaudir. Faut un concept."
+            "who": "ti_guy_deneigeur",
+            "text": "Heille {nom} ! T'écris dehors à moins quinze ? T'es {dédié|dédiée} en tabarnouche."
           },
           "cities": [
             "Montréal"
@@ -2916,8 +3065,8 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Ici, même les petits taxis ont plus de flow que toi, {khoya|khti}. Faut un concept."
+            "who": "driss_taxi",
+            "text": "Ah {nom}, {khoya|khti} ! Toujours ton carnet ? Monte, je te dépose nulle part, juste pour parler."
           },
           "cities": [
             "Casablanca"
@@ -2925,34 +3074,359 @@
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Moi j'ai trouvé la recette : un refrain de quatre mots, une danse, un filtre chien. Hier, une marque d'eau gazeuse m'a écrit."
+            "who": "player",
+            "text": "J'écris des trucs qui vont faire arrêter les gens de scroller."
           }
+        },
+        {
+          "say": {
+            "who": "kenzo_livraison",
+            "text": "Je livre des sushis jusqu'à deux heures du mat'. Chaque immeuble, je l'entends : un mec qui rappe dans sa salle de bain."
+          },
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
+          "say": {
+            "who": "tatie_nadia",
+            "text": "Ici, même le poissonnier rappe, {mon fils|ma fille}, je te jure. Le mistral, il emporte les rimes de tout le monde."
+          },
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "say": {
+            "who": "gaspard_pentes",
+            "text": "Ici, les gens écoutent jusqu'au bout avant d'applaudir. C'est bien. Mais c'est long."
+          },
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "say": {
+            "who": "fifou_capitole",
+            "text": "Ici, les gens sont en terrasse jusqu'à minuit. Pour qu'ils t'écoutent, faut chanter plus fort que moi. Et c'est pas gagné."
+          },
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "say": {
+            "who": "meme_ginette",
+            "text": "Ici, il pleut huit mois sur douze. Les gens vivent sur leur téléphone. Faut leur donner une raison de lever la tête."
+          },
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "say": {
+            "who": "jean_mi_stoemp",
+            "text": "Ici, on a déjà la frite, la BD et l'Atomium. Pour exister, faut être un peu surréaliste."
+          },
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "say": {
+            "who": "ti_guy_deneigeur",
+            "text": "Ici, personne enlève ses mitaines pour applaudir. Faut que ta rime réchauffe plus qu'un chocolat chaud."
+          },
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "say": {
+            "who": "driss_taxi",
+            "text": "Ici, même les petits taxis ont plus de flow que toi. Quinze ans que j'écoute du rap à la radio. Je sais reconnaître un vrai."
+          },
+          "cities": [
+            "Casablanca"
+          ]
+        },
+        {
+          "say": {
+            "who": "kenzo_livraison",
+            "text": "T'as vu Lil Sauge ? Un refrain de quatre mots, une danse, un filtre chien. Une marque d'eau gazeuse lui a écrit. Lui, il a un concept."
+          },
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
+          "say": {
+            "who": "tatie_nadia",
+            "text": "Le petit Lil Sauge, il est passé tout à l'heure. Il filmait ses frites. Une marque d'eau gazeuse lui a écrit, il paraît. Lui, il a un « concept »."
+          },
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "say": {
+            "who": "gaspard_pentes",
+            "text": "Lil Sauge m'a demandé une prod. Quatre mots, une danse, un filtre chien. Une marque d'eau gazeuse le suit. Moi, je fais des beats de six minutes. On n'a pas le même concept."
+          },
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "say": {
+            "who": "fifou_capitole",
+            "text": "Lil Sauge, il a fait chanter son refrain à tout le bar. Quatre mots. Une marque d'eau gazeuse l'a appelé. Lui, il a compris le concept : tout le monde reprend en chœur."
+          },
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "say": {
+            "who": "meme_ginette",
+            "text": "Le petit Lil Sauge a fait une vidéo devant ma friterie. Une danse avec une fricadelle. Une marque d'eau gazeuse l'a contacté. Pas moi. Moi, je vends de la bière."
+          },
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "say": {
+            "who": "jean_mi_stoemp",
+            "text": "Lil Sauge est passé m'acheter un album. Pour la photo. Il l'a même pas ouvert. Une marque d'eau gazeuse lui a écrit. Ça, c'est un concept."
+          },
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "say": {
+            "who": "ti_guy_deneigeur",
+            "text": "Lil Sauge a fait une danse dans le banc de neige. Une marque d'eau gazeuse l'a contacté. De l'eau gazeuse, en janvier. Ça, c'est un concept."
+          },
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "say": {
+            "who": "driss_taxi",
+            "text": "Lil Sauge est monté dans mon taxi hier. Il s'est filmé tout le trajet. Une marque d'eau gazeuse lui a écrit, il dit. Il a payé en « visibilité »."
+          },
+          "cities": [
+            "Casablanca"
+          ]
         },
         {
           "say": {
             "who": "player",
-            "text": "Et t'as répondu quoi ?"
+            "text": "Moi, j'ai un carnet. Ça suffira."
           }
         },
         {
           "say": {
-            "who": "lil_sauge",
-            "text": "Oui. Évidemment, oui. Garde ton carnet, va. Quand je serai en haut, je te ferai coucou."
-          }
+            "who": "kenzo_livraison",
+            "text": "Bon, j'ai un poke au saumon qui refroidit. Si un jour t'es connu, commande chez moi. Je te ferai pas attendre."
+          },
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
+          "say": {
+            "who": "tatie_nadia",
+            "text": "Bon, je ferme. Tu mangeras quand tu seras connu. Et là, tu paieras. Double."
+          },
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "say": {
+            "who": "gaspard_pentes",
+            "text": "Si un jour t'as besoin d'un beat qui dure plus de trente secondes, tu sais où je dors. Sur mon clavier."
+          },
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "say": {
+            "who": "fifou_capitole",
+            "text": "Allez, je rentre. Le jour où t'auras un refrain, je le chanterai dans les tribunes. Promis."
+          },
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "say": {
+            "who": "meme_ginette",
+            "text": "Allez, rentre te mettre au chaud. Et quand tu passeras à la radio, dis bonjour à Ginette."
+          },
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "say": {
+            "who": "jean_mi_stoemp",
+            "text": "Allez, je range mes bacs. Le jour où t'as un album, je le mets en vitrine. Entre Tintin et un vieux vinyle."
+          },
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "say": {
+            "who": "ti_guy_deneigeur",
+            "text": "Bon, j'ai trois rues à dégager. Si t'es connu un jour, je te fais une haie d'honneur avec la souffleuse."
+          },
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "say": {
+            "who": "driss_taxi",
+            "text": "Bon, j'ai un client qui m'attend. Le jour où ton son passe à ma radio, la course est gratuite."
+          },
+          "cities": [
+            "Casablanca"
+          ]
         },
         {
           "move": {
-            "who": "lil_sauge",
-            "x": 13,
+            "who": "kenzo_livraison",
+            "x": 16,
             "y": 13
-          }
+          },
+          "cities": [
+            "Paris"
+          ]
         },
         {
-          "face": {
-            "who": "lil_sauge",
-            "facing": "left"
-          }
+          "despawn": "kenzo_livraison",
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
+          "move": {
+            "who": "tatie_nadia",
+            "x": 16,
+            "y": 13
+          },
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "despawn": "tatie_nadia",
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "move": {
+            "who": "gaspard_pentes",
+            "x": 16,
+            "y": 13
+          },
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "despawn": "gaspard_pentes",
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "move": {
+            "who": "fifou_capitole",
+            "x": 16,
+            "y": 13
+          },
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "despawn": "fifou_capitole",
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "move": {
+            "who": "meme_ginette",
+            "x": 16,
+            "y": 13
+          },
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "despawn": "meme_ginette",
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "move": {
+            "who": "jean_mi_stoemp",
+            "x": 16,
+            "y": 13
+          },
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "despawn": "jean_mi_stoemp",
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "move": {
+            "who": "ti_guy_deneigeur",
+            "x": 16,
+            "y": 13
+          },
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "despawn": "ti_guy_deneigeur",
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "move": {
+            "who": "driss_taxi",
+            "x": 16,
+            "y": 13
+          },
+          "cities": [
+            "Casablanca"
+          ]
+        },
+        {
+          "despawn": "driss_taxi",
+          "cities": [
+            "Casablanca"
+          ]
         },
         {
           "face": {
@@ -2961,7 +3435,7 @@
           }
         },
         {
-          "narration": "Il remonte la rue en se filmant. Il a peut-être raison. Mais ce soir, tu vas écrire ton premier vrai texte."
+          "narration": "Le quartier se rendort. Tu ouvres ton carnet. Ce soir, tu vas écrire ton premier vrai texte."
         }
       ]
     },

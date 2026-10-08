@@ -81,10 +81,25 @@ extension Rapper {
     static let skinTones = ["#f1c9a5", "#e0ac7e", "#c68642", "#8d5524", "#5a3825"]
     /// Black, brown, auburn, blond, grey.
     static let hairColors = ["#1b1b1f", "#5a3a22", "#9a4a24", "#d9bf73", "#9a9aa6"]
+    /// Outfit colors picked at creation: grey and denim, all black, midnight blue, burgundy, khaki, white.
+    static let outfitColors: [(top: String, bottom: String, accent: String)] = [
+        ("#6b6b75", "#2f4a7a", "#ff4d2e"),
+        ("#16161a", "#16161a", "#e8c547"),
+        ("#24304f", "#141418", "#8fa3c7"),
+        ("#7a1f24", "#1a1a1f", "#f2f2f2"),
+        ("#3f5a34", "#2a2a30", "#f2c14e"),
+        ("#e8e4dc", "#3a3a44", "#e04fb0"),
+    ]
 
-    /// The player's outfit: set by the style, then the skin tone and whatever was picked at creation.
+    /// The player's look: the colors and options picked at creation (old saves start from their style's outfit).
     var look: CharacterLook {
-        var look = style.outfit
+        var look: CharacterLook
+        if lookFromStyle {
+            look = style.outfit
+        } else {
+            let colors = Rapper.outfitColors[min(max(outfitColor ?? 0, 0), Rapper.outfitColors.count - 1)]
+            look = CharacterLook(top: colors.top, bottom: colors.bottom, shoes: "#f2f2f2", accent: colors.accent)
+        }
         if gender == .rappeuse {
             look.feminine = true
             look.beard = false

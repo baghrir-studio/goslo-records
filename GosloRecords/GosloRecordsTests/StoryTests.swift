@@ -87,10 +87,20 @@ final class StoryTests: XCTestCase {
     func testPrologueOpensDifferentlyInEachCity() throws {
         let prologue = try XCTUnwrap(world.story.cinematic("prologue"))
         var openings = Set<String>()
+        var speakers = Set<String>()
+        let castIds = Set(world.cast.map(\.id))
         for city in City.allCases {
             let steps = prologue.steps.filter { $0.plays(for: city) }
             let cityLines = steps.filter { $0.cities != nil }
-            XCTAssertEqual(cityLines.count, 2, "\(city) : une narration et une réplique propres à la ville")
+            XCTAssertEqual(cityLines.filter { $0.narration != nil }.count, 1, "\(city) : une narration propre à la ville")
+            // Each city has its own neighbour who comes to talk, with their own lines.
+            let cityVoices = Set(cityLines.compactMap { $0.say?.who })
+            XCTAssertEqual(cityVoices.count, 1, "\(city) : un seul personnage local")
+            let speaker = try XCTUnwrap(cityVoices.first)
+            XCTAssertTrue(castIds.contains(speaker), "\(city) : \(speaker) n'est pas au casting")
+            XCTAssertGreaterThanOrEqual(cityLines.filter { $0.say?.who == speaker }.count, 4, "\(city) : un vrai dialogue")
+            XCTAssertTrue(speakers.insert(speaker).inserted, "\(city) : même personnage qu'une autre ville")
+            XCTAssertTrue(steps.contains { $0.place?.who == speaker }, "\(city) : \(speaker) doit apparaître avant de marcher")
             let opening = try XCTUnwrap(steps.compactMap(\.narration).first, "\(city)")
             XCTAssertTrue(opening.hasPrefix(city.rawValue), "\(city) : la scène s'ouvre sur le nom de la ville")
             openings.insert(opening)
