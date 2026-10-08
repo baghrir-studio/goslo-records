@@ -87,17 +87,21 @@ struct CastMember: Codable, Equatable, Identifiable {
     let idle: [String]
     /// Only met in these cities (nil = everywhere). Wild opponents use it to belong to their city.
     let cities: [City]?
+    /// Lines tied to the story (a chapter, a choice made earlier): in small talk, the newest one that applies
+    /// and hasn't been heard yet comes first, once (see `GameEngine.freshMoment`).
+    let moments: [CastMoment]
 
     enum CodingKeys: String, CodingKey {
-        case id, name, role, bio, clash, wild, look, secret, idle, cities
+        case id, name, role, bio, clash, wild, look, secret, idle, cities, moments
         case startRelation = "start_relation"
     }
 
     init(id: String, name: String, role: String, bio: String = "", startRelation: Int = defaultRelation,
          clash: ClashProfile? = nil, wild: Bool = false, look: CharacterLook = CharacterLook(),
-         secret: SecretTechnique? = nil, idle: [String] = [], cities: [City]? = nil) {
+         secret: SecretTechnique? = nil, idle: [String] = [], cities: [City]? = nil, moments: [CastMoment] = []) {
         self.idle = idle
         self.cities = cities
+        self.moments = moments
         self.id = id
         self.name = name
         self.role = role
@@ -122,9 +126,30 @@ struct CastMember: Codable, Equatable, Identifiable {
         secret = try c.decodeIfPresent(SecretTechnique.self, forKey: .secret)
         idle = try c.decodeIfPresent([String].self, forKey: .idle) ?? []
         cities = try c.decodeIfPresent([City].self, forKey: .cities)
+        moments = try c.decodeIfPresent([CastMoment].self, forKey: .moments) ?? []
     }
 
     func belongs(to city: City) -> Bool { cities?.contains(city) ?? true }
+}
+
+/// A character's line tied to the story (cast.json "moments"): said once, when its conditions hold.
+struct CastMoment: Codable, Equatable {
+    let text: String
+    let conditions: EventConditions
+
+    init(text: String, conditions: EventConditions = EventConditions()) {
+        self.text = text
+        self.conditions = conditions
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        text = try c.decode(String.self, forKey: .text)
+        conditions = try c.decodeIfPresent(EventConditions.self, forKey: .conditions) ?? EventConditions()
+    }
+
+    /// Flag set once the player has heard this line.
+    static func heardFlag(_ castId: String, _ index: Int) -> String { "replique_\(castId)_\(index)" }
 }
 
 /// An opponent's clash profile. Stats run 1–10, like the player's levels.

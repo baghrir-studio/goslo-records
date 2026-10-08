@@ -67,6 +67,13 @@ extension GameEngine {
     /// Talking to the philosopher: his reading of your newest refrain not yet analysed (pen XP the first time),
     /// or of your latest one again, or an invitation to write one.
     func philosopherReading(in state: inout GameState) -> [String] {
+        var lines = philosopherAnalysis(in: &state)
+        // Something happened in the story since: he has a thought about it, after the reading.
+        if let moment = takeFreshMoment(of: Philosopher.id, in: &state) { lines.append(moment) }
+        return lines
+    }
+
+    private func philosopherAnalysis(in state: inout GameState) -> [String] {
         guard !state.hooks.isEmpty else { return [Philosopher.noRefrain[state.flags.count % Philosopher.noRefrain.count]] }
         let fresh = state.hooks.indices.last { !state.flags.contains(Philosopher.readFlag($0)) }
         let index = fresh ?? state.hooks.count - 1

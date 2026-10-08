@@ -84,9 +84,12 @@ struct Objective: Codable, Equatable, Identifiable {
     let conditions: EventConditions
     /// Cinematic played once the objective is done.
     let cinematic: String?
+    /// A story scene rather than a career move (a funeral, a sleepless night): playing its event doesn't
+    /// spend one of the semester's actions, so it makes the story longer without eating into the clock.
+    let free: Bool
 
     init(id: String, label: String, hint: String = "", trigger: StoryTrigger? = nil, event: String? = nil,
-         conditions: EventConditions, cinematic: String? = nil) {
+         conditions: EventConditions, cinematic: String? = nil, free: Bool = false) {
         self.id = id
         self.label = label
         self.hint = hint
@@ -94,6 +97,7 @@ struct Objective: Codable, Equatable, Identifiable {
         self.event = event
         self.conditions = conditions
         self.cinematic = cinematic
+        self.free = free
     }
 
     init(from decoder: Decoder) throws {
@@ -105,6 +109,7 @@ struct Objective: Codable, Equatable, Identifiable {
         event = try c.decodeIfPresent(String.self, forKey: .event)
         conditions = try c.decode(EventConditions.self, forKey: .conditions)
         cinematic = try c.decodeIfPresent(String.self, forKey: .cinematic)
+        free = try c.decodeIfPresent(Bool.self, forKey: .free) ?? false
     }
 }
 
@@ -185,15 +190,25 @@ struct CinematicStep: Codable, Equatable {
     var sound: String?
     /// Only plays for players from these cities (nil = everyone). Not an action: not counted in `fieldCount`.
     var cities: [City]?
+    /// Only plays when these conditions hold (same format as an event's): a line that depends on an earlier
+    /// choice, for instance. nil = always. Not an action: not counted in `fieldCount`.
+    var when: EventConditions?
 
     enum CodingKeys: String, CodingKey {
-        case narration, say, title, move, place, despawn, face, exclaim, camera, fade, wait, sound, cities
+        case narration, say, title, move, place, despawn, face, exclaim, camera, fade, wait, sound, cities, when
         case cameraReset = "camera_reset"
     }
 
     func plays(for city: City?) -> Bool {
         guard let cities, let city else { return true }
         return cities.contains(city)
+    }
+
+    /// The step plays in this career: the right city, and its `when` conditions hold.
+    func plays(in state: GameState?) -> Bool {
+        guard plays(for: state?.rapper.city) else { return false }
+        guard let when, let state else { return true }
+        return when.isSatisfied(by: state)
     }
 
     init(narration: String? = nil, say: Line? = nil, title: Title? = nil, move: Placement? = nil,

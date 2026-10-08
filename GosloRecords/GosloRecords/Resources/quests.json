@@ -307,6 +307,53 @@
       }
     },
     {
+      "id": "revenants",
+      "title": "Ceux qui reviennent",
+      "description": "Les rivaux d'hier ont changé. Ou alors c'est toi qui les regardes autrement.",
+      "conditions": {
+        "min_chapter": 4
+      },
+      "steps": [
+        {
+          "label": "Juger la finale de l'école du Ring de Kevlar Jr.",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "kevlar_coach"
+            ]
+          }
+        },
+        {
+          "label": "Écouter la cassette de 1998 de Yanis",
+          "location": "media",
+          "conditions": {
+            "required_flags": [
+              "yanis_demo"
+            ]
+          }
+        },
+        {
+          "label": "Aider Lil Sauge à écrire sans filtre",
+          "location": "studio",
+          "conditions": {
+            "required_flags": [
+              "sauge_change"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 6,
+          "mental": 6
+        },
+        "xp": {
+          "plume": 30
+        },
+        "text": "Kevlar Jr. coache, Yanis fredonne, Lil Sauge écrit sur sa grand-mère. Le game a changé. Un peu grâce à toi."
+      }
+    },
+    {
       "id": "defi_paris",
       "title": "Défi de la ville · Le clip sous la tour",
       "description": "Tourner un clip au pied de la tour, avant que les gardiens ne s'en mêlent.",

@@ -517,7 +517,10 @@
       "conditions": {
         "min_stats": {
           "credibilite": 40
-        }
+        },
+        "excluded_flags": [
+          "adieu_lucien"
+        ]
       },
       "sound": "ringtone",
       "choices": [
@@ -4418,6 +4421,247 @@
             "diva_decibel": -2
           },
           "consequence": "Elle attend. Douze secondes. Puis elle chante sa déclaration au mégaphone. Tout le quartier connaît maintenant la fin de l'histoire."
+        }
+      ]
+    },
+    {
+      "id": "sauge_lache",
+      "title": "Lil Sauge, sans filtre",
+      "text": "La marque d'eau gazeuse a lâché Lil Sauge. Pire : elle a sorti une pub avec un sosie de Lil Sauge, en plus souriant. Sur ses réseaux, plus de danse, plus de filtre chien. Juste une story noire, à 2 h du matin : « en vrai je sais pas rapper sans téléphone ». 400 000 personnes l'ont vue. Personne n'a répondu.",
+      "location": "reseaux",
+      "npc": "lil_sauge",
+      "weight": 18,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 5
+      },
+      "choices": [
+        {
+          "label": "Lui répondre : « Si. Tu sais. Viens au Bunker. »",
+          "effects": {
+            "mental": -2
+          },
+          "relations": {
+            "lil_sauge": 15
+          },
+          "set_flags": [
+            "sauge_aide"
+          ],
+          "consequence": "Trois petits points. Puis rien. Puis, une heure plus tard : « ok ». Le premier message de Lil Sauge sans émoji de toute l'histoire d'internet."
+        },
+        {
+          "label": "Reposter le sosie avec un émoji qui pleure de rire",
+          "effects": {
+            "streams": 5,
+            "credibilite": -4
+          },
+          "relations": {
+            "lil_sauge": -15
+          },
+          "consequence": "Ton repost cartonne. Lil Sauge le like. Puis il retire son like. Puis il supprime son compte. Tu as gagné. Ça n'a pas le goût que tu pensais."
+        },
+        {
+          "label": "Ne rien dire, mais écouter enfin son tout premier son",
+          "effects": {
+            "mental": 2
+          },
+          "xp": {
+            "plume": 20
+          },
+          "relations": {
+            "lil_sauge": 5
+          },
+          "consequence": "Tu remontes son compte jusqu'en bas. Son premier son, 112 vues : un texte sur sa grand-mère, sans danse, sans filtre. Il est bon. Vraiment bon. Tu ne lui dis pas. Pas encore."
+        }
+      ]
+    },
+    {
+      "id": "sauge_texte",
+      "title": "Seize mesures sans filtre",
+      "text": "Lil Sauge est au Bunker, sans téléphone. Il l'a laissé chez lui, exprès, et ça se voit : il ne sait pas quoi faire de ses mains. Il te tend une feuille pliée en huit. « J'ai écrit un truc. Sur ma grand-mère. Dis-moi si c'est nul. Non. Dis-moi pas. Si. Dis-moi. »",
+      "location": "studio",
+      "npc": "lil_sauge",
+      "weight": 20,
+      "unique": true,
+      "conditions": {
+        "required_flags": [
+          "sauge_aide"
+        ]
+      },
+      "choices": [
+        {
+          "label": "« C'est le meilleur truc que t'aies jamais écrit. »",
+          "effects": {
+            "credibilite": 2
+          },
+          "relations": {
+            "lil_sauge": 12
+          },
+          "set_flags": [
+            "sauge_change"
+          ],
+          "consequence": "Il enregistre en une seule prise, les yeux fermés. À la fin, le Bunker reste silencieux dix secondes. Lil Sauge repart sans se filmer. Il marche différemment."
+        },
+        {
+          "label": "Le corriger ligne par ligne, comme Scalpel",
+          "xp": {
+            "plume": 30
+          },
+          "relations": {
+            "lil_sauge": 6
+          },
+          "set_flags": [
+            "sauge_change"
+          ],
+          "consequence": "Tu barres, il réécrit. Il râle, il réécrit. À la fin, il reste quatre mots de la première version, et ce sont les plus beaux. « T'es pire que Madame Rature », dit-il. Il le dit comme un merci."
+        }
+      ]
+    },
+    {
+      "id": "kevlar_minots",
+      "title": "L'école du Ring",
+      "text": "Au terrain vague, Kevlar Jr. a tracé un ring à la craie. Dedans, six minots de dix ans s'échauffent la mâchoire. Lui porte un sifflet et un t-shirt de sa propre marque : « J'AI PERDU, ET ALORS ? ». « Depuis toi, je donne des cours. Gratuits. Enfin, ils paient en goûters. Tu veux juger la finale ? »",
+      "location": "quartier",
+      "npc": "kevlar_jr",
+      "weight": 14,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "choices": [
+        {
+          "label": "Juger la finale, très sérieusement",
+          "effects": {
+            "credibilite": 3
+          },
+          "relations": {
+            "kevlar_jr": 12
+          },
+          "set_flags": [
+            "kevlar_coach"
+          ],
+          "consequence": "Finale : Inès, 9 ans, contre Bilal, 10 ans. Inès gagne avec une punchline sur les chaussettes de Bilal. Kevlar Jr. essuie une larme. « Elle me rappelle quelqu'un. » Il te regarde. « Pas moi. Toi. »"
+        },
+        {
+          "label": "Clasher tous les minots en même temps, pour rire",
+          "effects": {
+            "mental": 4
+          },
+          "xp": {
+            "flow": 25
+          },
+          "relations": {
+            "kevlar_jr": 8
+          },
+          "set_flags": [
+            "kevlar_coach"
+          ],
+          "consequence": "Six minots contre toi. Tu perds, officiellement. Kevlar Jr. note le score à la craie : « La légende : 0. Les minots : 6. » Ils te demandent un autographe sur leur goûter."
+        },
+        {
+          "label": "Passer ton chemin, t'as un planning",
+          "effects": {
+            "mental": 1
+          },
+          "consequence": "Les minots te regardent partir. L'un d'eux dit : « {Il|Elle} a peur. » Kevlar Jr. répond : « Non. {Il|Elle} est {occupé|occupée}. Les grands sont toujours occupés. » Tu entends la déception dans sa voix."
+        }
+      ]
+    },
+    {
+      "id": "yanis_cassette",
+      "title": "La cassette de 1998",
+      "text": "Après Le Débrief, Yanis reste dans le studio vide. Il te tend une cassette, étiquette au feutre : « YANIS T. — DÉMO — 1998 — NE PAS ÉCOUTER ». « J'ai jamais dit à personne que j'avais rappé. Je chronique les autres parce que moi, j'ai jamais osé envoyer ça. Tu veux écouter ? Non. Si. Écoute. »",
+      "location": "media",
+      "npc": "yanis",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "choices": [
+        {
+          "label": "L'écouter en entier",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "yanis": 15
+          },
+          "set_flags": [
+            "yanis_demo"
+          ],
+          "consequence": "Quatre titres. Un flow de 1998, des rimes en « -ique », un violon piqué à un dessin animé. Et un troisième morceau, sur son père, qui te laisse sans voix. Yanis regarde le mur. « Alors ? » Tu dis : « Le troisième. » Il hoche la tête. Il savait."
+        },
+        {
+          "label": "« Tu devrais la sortir. »",
+          "relations": {
+            "yanis": 8
+          },
+          "set_flags": [
+            "yanis_demo"
+          ],
+          "consequence": "« Sortir ça ? À mon âge ? Je me ferais démolir. Par moi-même, d'abord. » Il range la cassette dans sa poche intérieure, côté cœur. Il ne dit pas non."
+        },
+        {
+          "label": "La glisser dans ta poche « pour plus tard »",
+          "effects": {
+            "credibilite": 1
+          },
+          "relations": {
+            "yanis": -5
+          },
+          "consequence": "Il te la reprend des mains, gentiment. « Plus tard, c'est ce que je me dis depuis 1998. » Il remet ses lunettes et redevient le chroniqueur. « Ton dernier son : 13 sur 20. » Tu l'as bien cherché."
+        }
+      ]
+    },
+    {
+      "id": "lingot_retour",
+      "title": "Retour de Miami",
+      "text": "Lingot est revenu de Miami. Sans chaînes, sans montres, avec un coup de soleil et une valise à roulettes qui couine. Il fait la queue au snack comme tout le monde. Sans ses bijoux, il a l'air plus petit. Ou alors il a enfin l'air de sa vraie taille. « Ils m'ont tout repris, là-bas. Le fisc, l'ex, le bijoutier. Il me reste mes lunettes. Elles étaient fausses. »",
+      "location": "quartier",
+      "npc": "lingot",
+      "weight": 14,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 6
+      },
+      "choices": [
+        {
+          "label": "Lui payer une barquette",
+          "effects": {
+            "argent": -2,
+            "mental": 3
+          },
+          "relations": {
+            "lingot": 15
+          },
+          "set_flags": [
+            "lingot_change"
+          ],
+          "consequence": "Il mange en silence. Puis : « Tu sais ce que j'ai appris ? Personne te regarde quand tu brilles. Ils regardent ce qui brille. » Il te laisse sa dernière paire de lunettes, les fausses. Elles sont très laides. Tu les gardes."
+        },
+        {
+          "label": "Lui proposer un couplet sur ton prochain projet",
+          "effects": {
+            "streams": 3
+          },
+          "relations": {
+            "lingot": 10
+          },
+          "set_flags": [
+            "lingot_change"
+          ],
+          "consequence": "Il écrit un couplet sur ses bijoux perdus. C'est la première fois qu'il parle de lui à la première personne. Le morceau s'appelle « Plaqué ». C'est son meilleur texte. Il pleure en le rappant. Il dit que c'est le coup de soleil."
+        },
+        {
+          "label": "Lui rappeler qu'il devait « remettre de l'ordre dans le quartier »",
+          "effects": {
+            "credibilite": 2
+          },
+          "relations": {
+            "lingot": -5
+          },
+          "consequence": "« L'ordre ? » Il rit, fatigué. « J'ai même plus l'heure. » Il repart avec sa valise qui couine. Tu as eu le dernier mot. Il n'avait pas l'air d'y tenir."
         }
       ]
     }

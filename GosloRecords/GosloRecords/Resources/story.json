@@ -233,6 +233,21 @@
           }
         },
         {
+          "id": "lucien_banc",
+          "label": "Passe voir Vieux Mic Lucien avant le concert",
+          "hint": "Il est sur son banc, au Bloc. Il ne viendra pas au Transfo.",
+          "trigger": {
+            "npc": "lucien"
+          },
+          "event": "story_lucien_banc",
+          "conditions": {
+            "required_flags": [
+              "lucien_ch3"
+            ]
+          },
+          "free": true
+        },
+        {
           "id": "balance",
           "label": "Fais la balance avec Gégé",
           "hint": "La scène, en haut à droite. Gégé t'attend. Il ne sourit pas.",
@@ -405,6 +420,21 @@
           }
         },
         {
+          "id": "fuite",
+          "label": "Quelqu'un a fait fuiter ton refrain",
+          "hint": "Une seule personne avait les fichiers. Va au Bunker.",
+          "trigger": {
+            "location": "studio"
+          },
+          "event": "story_fuite",
+          "conditions": {
+            "required_flags": [
+              "trahison_reglee"
+            ]
+          },
+          "free": true
+        },
+        {
           "id": "conteur",
           "label": "Le Conteur sort un épisode sur toi",
           "hint": "Le Conteur, au milieu de la rue. Il a écrit une série sur toi. Tu es {le méchant|la méchante}. Va lui parler.",
@@ -472,6 +502,37 @@
           "cinematic": "baron_provoc"
         },
         {
+          "id": "adieu_lucien",
+          "label": "Va voir Momo. Il a mis un costume noir.",
+          "hint": "Il t'attend devant la laverie, au Bloc.",
+          "trigger": {
+            "npc": "momo"
+          },
+          "event": "story_adieu_lucien",
+          "conditions": {
+            "required_flags": [
+              "adieu_lucien"
+            ]
+          },
+          "cinematic": "banc_vide",
+          "free": true
+        },
+        {
+          "id": "momo_photo",
+          "label": "Explique-toi avec Momo",
+          "hint": "Quelqu'un t'a pris en photo dans l'escalier du Baron. Momo l'a vue.",
+          "trigger": {
+            "location": "label"
+          },
+          "event": "story_momo_photo",
+          "conditions": {
+            "excluded_flags": [
+              "photo_baron"
+            ]
+          },
+          "free": true
+        },
+        {
           "id": "stylo",
           "label": "Scalpel veut te parler",
           "hint": "Scalpel, au milieu de la rue. Il a refermé son carnet. Ça veut dire qu'il est sérieux.",
@@ -498,6 +559,22 @@
               "equipe_prete"
             ]
           }
+        },
+        {
+          "id": "nuit_blanche",
+          "label": "Passe la nuit d'avant",
+          "hint": "3 h du matin. Ton téléphone est allumé. Toi aussi.",
+          "trigger": {
+            "location": "reseaux"
+          },
+          "event": "story_nuit_blanche",
+          "conditions": {
+            "required_flags": [
+              "nuit_traversee"
+            ]
+          },
+          "cinematic": "aube_bloc",
+          "free": true
         },
         {
           "id": "baron",
@@ -577,6 +654,21 @@
               "auditions_faites"
             ]
           }
+        },
+        {
+          "id": "bunker",
+          "label": "La relève a besoin d'un ingé son",
+          "hint": "Au Bunker, une affiche « À VENDRE ».",
+          "trigger": {
+            "location": "studio"
+          },
+          "event": "story_bunker_vendre",
+          "conditions": {
+            "excluded_flags": [
+              "fred_banni"
+            ]
+          },
+          "free": true
         },
         {
           "id": "lancement",
@@ -2341,6 +2433,622 @@
           "consequence": "Le sol est froid, lisse, et vibre encore du dernier concert. Tu sors sans un bruit. Le Dôme saura te reconnaître."
         }
       ]
+    },
+    {
+      "id": "story_lucien_banc",
+      "title": "Le banc de Lucien",
+      "location": "quartier",
+      "npc": "lucien",
+      "weight": 0,
+      "text": "Vieux Mic Lucien est sur son banc, une couverture sur les genoux alors qu'il fait vingt degrés. Il tousse, longtemps, puis sourit comme si de rien n'était. « Ton concert, j'y serai pas, {petit|petite}. Trois étages sans ascenseur, au Transfo. Mes genoux ont pris leur retraite avant moi. Mais raconte. Tu ouvres avec quoi ? »",
+      "choices": [
+        {
+          "label": "Lui promettre de l'appeler depuis la scène",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "lucien": 10
+          },
+          "set_flags": [
+            "lucien_ch3",
+            "lucien_promesse"
+          ],
+          "consequence": "Il sort de sa poche un papier plié en quatre : son numéro de fixe, écrit en majuscules. « Sonne trois fois. Je décroche à la quatrième, c'est ma classe. » Il replie la couverture. Il a l'air d'avoir moins froid."
+        },
+        {
+          "label": "Lui rapper ton premier morceau, là, sur le banc",
+          "effects": {
+            "credibilite": 2
+          },
+          "xp": {
+            "scene": 30
+          },
+          "relations": {
+            "lucien": 6
+          },
+          "set_flags": [
+            "lucien_ch3"
+          ],
+          "consequence": "Tu rappes pour un seul spectateur. Il bat la mesure avec sa canne, à contretemps, exprès. À la fin : « Tu respires au bon endroit, maintenant. » Venant de lui, c'est un disque d'or."
+        },
+        {
+          "label": "Lui demander s'il va bien. Vraiment.",
+          "effects": {
+            "mental": -2
+          },
+          "relations": {
+            "lucien": 4
+          },
+          "set_flags": [
+            "lucien_ch3",
+            "lucien_inquiet"
+          ],
+          "consequence": "« Je vais comme un vieux qui a trop parlé dans des micros. » Il change de sujet trois fois en une minute. Tu fais semblant de ne pas avoir remarqué. Lui fait semblant de te croire."
+        }
+      ]
+    },
+    {
+      "id": "story_fuite",
+      "title": "Le fader 7",
+      "location": "studio",
+      "npc": "fred",
+      "weight": 0,
+      "text": "Trois jours après ta sortie, le Baron poste un son. Ton instru. Ton refrain du Bunker, celui que tu n'avais fait écouter à personne, découpé, accéléré, avec sa voix dessus. Deux millions d'écoutes en une nuit. Une seule personne avait les fichiers. Au Bunker, la lumière est éteinte. Fred est assis devant la console, une enveloppe épaisse posée sur le fader 7, celui que personne ne touche. « Il m'a promis mon nom sur un disque. Mon nom à moi, {petit|petite}. Pas “Fred, ingé”. Fred. Depuis 2009, personne m'a rappelé. Lui, il a rappelé. »",
+      "choices": [
+        {
+          "label": "« Fallait me demander. Je t'aurais mis sur la pochette. »",
+          "effects": {
+            "mental": -4
+          },
+          "relations": {
+            "fred": 15
+          },
+          "set_flags": [
+            "trahison_reglee",
+            "fred_pardonne"
+          ],
+          "consequence": "Fred pleure. Pas comme Momo : il n'a pas de lessive pour cacher. Il pousse l'enveloppe loin de lui, comme un cafard. « Je la rends au Baron demain. En main propre. Je mixe ton album gratuitement. Le prochain aussi. Et je te parle plus jamais de 2009. » Il tient trois minutes avant d'en reparler.",
+          "follow_up": "story_appel_baron"
+        },
+        {
+          "label": "Reprendre tes fichiers et partir sans un mot",
+          "effects": {
+            "credibilite": 4,
+            "mental": -6
+          },
+          "relations": {
+            "fred": -30
+          },
+          "set_flags": [
+            "trahison_reglee",
+            "fred_banni"
+          ],
+          "consequence": "Tu débranches ton disque dur. Tu prends ton carnet. Fred ne se lève pas. Sur le pas de la porte, tu entends le fader 7 remonter tout seul, comme une question. Tu ne te retournes pas. Le Bunker, c'était chez toi. Ça ne l'est plus.",
+          "follow_up": "story_appel_baron"
+        },
+        {
+          "label": "Lui demander pourquoi. Vraiment pourquoi.",
+          "consequence": "Fred allume la petite lampe de la console. Il a vieilli d'un coup. Ou alors tu ne l'avais jamais regardé à cette lumière-là.",
+          "follow_up": "story_fuite_pourquoi"
+        }
+      ]
+    },
+    {
+      "id": "story_fuite_pourquoi",
+      "title": "Fred, 2009",
+      "location": "studio",
+      "npc": "fred",
+      "weight": 0,
+      "text": "« En 2009, j'ai mixé un disque d'or. Tu le sais, je le dis toutes les quatre minutes. Ce que je dis jamais, c'est qu'après, plus rien. Le rappeur est parti avec un ingé de Paris, de Los Angeles, je sais même pas. Moi je suis resté ici, avec un disque en plastique. Quand t'as signé chez Hexagone, ils ont envoyé un micro neuf et un ingé à eux. Pas un mot pour moi. J'ai cru que ça recommençait. Alors quand le Baron a appelé… » Il ne finit pas sa phrase. Il n'a pas besoin.",
+      "choices": [
+        {
+          "label": "Le prendre dans tes bras",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "fred": 20
+          },
+          "set_flags": [
+            "trahison_reglee",
+            "fred_pardonne"
+          ],
+          "consequence": "Il sent le café froid et le câble chaud. Il te tape trois fois dans le dos, comme on teste un micro. « Un, deux. Ça marche encore. » Demain, il rend l'enveloppe. Ce soir, il te refait le mix du refrain. Le meilleur de sa vie, dit-il. Il dit ça à chaque fois. Cette fois, c'est vrai.",
+          "follow_up": "story_appel_baron"
+        },
+        {
+          "label": "« Je comprends. Mais je peux plus te faire confiance. »",
+          "effects": {
+            "credibilite": 2,
+            "mental": -4
+          },
+          "relations": {
+            "fred": -20
+          },
+          "set_flags": [
+            "trahison_reglee",
+            "fred_banni"
+          ],
+          "consequence": "Il hoche la tête, lentement. « C'est juste. » Il te tend les clés du Bunker, que tu ne lui demandais pas. Tu les reposes sur la console. En sortant, tu remarques qu'il ne rallume pas la lumière.",
+          "follow_up": "story_appel_baron"
+        }
+      ]
+    },
+    {
+      "id": "story_appel_baron",
+      "title": "Numéro masqué",
+      "location": "reseaux",
+      "npc": "le_baron",
+      "weight": 0,
+      "text": "Ton téléphone sonne. Numéro masqué. Une voix grave, lente, qui sourit sans le montrer. « Le Baron. T'as vu ? Tout s'achète, {petit|petite}. Même un ingé son qui pleure devant sa console. Alors parlons franchement : viens chez moi. Baronnie Records rachète ton contrat Hexagone, ta laverie garde ses machines. Pas de clash, pas de Dôme à remplir. Je te passe le trône comme on passe le sel. T'as juste à monter me voir. »",
+      "sound": "ringtone",
+      "choices": [
+        {
+          "label": "Raccrocher",
+          "effects": {
+            "credibilite": 4
+          },
+          "relations": {
+            "le_baron": -5,
+            "momo": 5
+          },
+          "set_flags": [
+            "refus_baron"
+          ],
+          "consequence": "Tu raccroches. Ton pouce tremble un peu. Tu envoies un message à Momo : « Ça va ? » Il répond par une photo de la machine 4. C'est sa façon de dire oui."
+        },
+        {
+          "label": "« J'arrive. Juste pour voir. »",
+          "effects": {
+            "argent": 10,
+            "streams": 6
+          },
+          "relations": {
+            "le_baron": 10
+          },
+          "set_flags": [
+            "rdv_baron"
+          ],
+          "consequence": "« Juste pour voir. » Il rit. « C'est ce qu'ils disent tous. Dernier étage. L'ascenseur est en panne : tu montes à pied, comme moi à l'époque. » Sur ton compte, une avance est déjà tombée. Personne ne t'a demandé ton RIB.",
+          "follow_up": "story_tour_baron"
+        },
+        {
+          "label": "« Le Bloc n'est pas à vendre. »",
+          "effects": {
+            "credibilite": 6,
+            "mental": -2
+          },
+          "relations": {
+            "le_baron": -10
+          },
+          "set_flags": [
+            "refus_baron"
+          ],
+          "consequence": "Silence. Puis, pour la première fois, le Baron ne trouve rien à dire tout de suite. « Tout le monde dit ça. Avant. » Il raccroche. Toi, tu respires enfin."
+        }
+      ]
+    },
+    {
+      "id": "story_tour_baron",
+      "title": "Le dernier étage",
+      "location": "quartier",
+      "npc": "le_baron",
+      "weight": 0,
+      "text": "Quatorze étages à pied. En haut, pas de trône : un canapé usé, une plante en plastique et une baie vitrée sur tout le quartier. On voit le terrain vague, la laverie, le banc de Lucien. Le Baron ne porte pas ses lunettes. « Tu vois le banc, là ? C'est là que j'ai écrit mon premier texte. 1996. Un vieux m'a dit que je respirais au mauvais endroit. » Il pose un contrat sur la table basse. Le stylo est en or. Évidemment.",
+      "choices": [
+        {
+          "label": "Déchirer le contrat, proprement",
+          "effects": {
+            "credibilite": 5
+          },
+          "relations": {
+            "le_baron": 5
+          },
+          "set_flags": [
+            "baron_secret",
+            "photo_baron"
+          ],
+          "consequence": "Tu le déchires en deux, puis en quatre, bien droit. Le Baron regarde les morceaux. « Personne avait jamais pris le temps de le plier avant. » Il te raccompagne à la porte. Dans l'escalier, un voisin te prend en photo. Tu ne le vois pas."
+        },
+        {
+          "label": "« Pourquoi moi ? »",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "le_baron": 8
+          },
+          "set_flags": [
+            "baron_secret",
+            "photo_baron"
+          ],
+          "consequence": "Il regarde le banc, longtemps. « Parce que t'es le premier depuis moi qui vient d'en bas et qui a pas encore changé. Je voulais voir si ça s'achetait. » Il range le contrat. « Faut croire que non. On se verra en bas, alors. Devant tout le monde. » Dans l'escalier, un voisin te prend en photo. Tu ne le vois pas."
+        }
+      ]
+    },
+    {
+      "id": "story_adieu_lucien",
+      "title": "Costume noir",
+      "location": "label",
+      "npc": "momo",
+      "weight": 0,
+      "text": "Momo t'attend devant la laverie, dans un costume noir trop grand pour lui. Il a baissé le rideau en plein après-midi. Ça n'arrive jamais. « C'est Lucien, {petit|petite}. Cette nuit. Sur son fixe, il y avait encore ton numéro, écrit en majuscules, scotché au-dessus du combiné. » En bas, autour du banc, le quartier entier est déjà là. Personne ne parle. Même Kolosse a coupé son live.",
+      "choices": [
+        {
+          "label": "Rapper son premier couplet, a cappella",
+          "effects": {
+            "credibilite": 5,
+            "mental": -6
+          },
+          "xp": {
+            "plume": 40
+          },
+          "set_flags": [
+            "adieu_lucien",
+            "adieu_rappe"
+          ],
+          "give_items": [
+            "carnet_lucien"
+          ],
+          "consequence": "Tu ne connais que les huit premières mesures, celles qu'il répétait sur son banc. À la cinquième, ta voix casse. À la sixième, quelqu'un reprend derrière toi. Puis tout le quartier. Personne ne connaît la fin. Ce n'est pas grave : lui non plus ne la finissait jamais. Sa fille te tend un carnet à spirale de 1994, couverture cornée. « Il a dit que c'était pour toi. »",
+          "follow_up": "story_baron_obseques"
+        },
+        {
+          "label": "Laisser parler les autres, et tenir la main de ta mère",
+          "effects": {
+            "mental": -2
+          },
+          "relations": {
+            "maman": 8
+          },
+          "set_flags": [
+            "adieu_lucien"
+          ],
+          "give_items": [
+            "carnet_lucien"
+          ],
+          "consequence": "Big Nono parle de 1994. Momo parle d'un loyer que Lucien lui avait prêté et n'a jamais réclamé. Ta mère serre ta main si fort que tu sens ses bagues. Tu ne dis rien. Tu n'as pas besoin. Sa fille te tend un carnet à spirale de 1994, couverture cornée. « Il a dit que c'était pour toi. »",
+          "follow_up": "story_baron_obseques"
+        },
+        {
+          "label": "Composer son numéro, une dernière fois",
+          "effects": {
+            "mental": -8
+          },
+          "set_flags": [
+            "adieu_lucien",
+            "adieu_appel"
+          ],
+          "give_items": [
+            "carnet_lucien"
+          ],
+          "consequence": "Trois sonneries. À la quatrième, le répondeur : « Vous êtes bien chez Lucien. Je suis sur mon banc. Si c'est {le petit|la petite}, respire au bon endroit. » Tu raccroches. Tu rappelles. Tu rappelles encore. Sa fille te tend un carnet à spirale de 1994, couverture cornée. « Il a dit que c'était pour toi. »",
+          "follow_up": "story_baron_obseques"
+        }
+      ]
+    },
+    {
+      "id": "story_baron_obseques",
+      "title": "Au fond, des lunettes noires",
+      "location": "quartier",
+      "npc": "le_baron",
+      "weight": 0,
+      "text": "Au fond, contre le mur de la laverie, quelqu'un n'a pas osé s'approcher. Lunettes noires, costume sombre, et pour une fois pas un seul téléphone autour de lui. Le Baron. Quand tout le monde est parti, il s'avance vers le banc et pose la main dessus, longtemps. Puis il retire ses lunettes. « Il m'appelait Didier. Plus personne m'appelle Didier. 1996, ce banc. Il m'a dit que je respirais au mauvais endroit. Il te l'a dit aussi, hein ? Il le disait à tout le monde. C'était sa façon de dire “continue”. »",
+      "choices": [
+        {
+          "label": "Lui tendre la main",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "le_baron": 12
+          },
+          "set_flags": [
+            "baron_respect"
+          ],
+          "consequence": "Il la serre. Fort, sans frimer. « Ça change rien pour le Dôme. Je vais te détruire. » Il remet ses lunettes. « Mais proprement. Pour lui. »"
+        },
+        {
+          "label": "« Tu pouvais venir le voir. Il était seul, sur ce banc. »",
+          "effects": {
+            "credibilite": 3
+          },
+          "relations": {
+            "le_baron": -5
+          },
+          "set_flags": [
+            "baron_reproche"
+          ],
+          "consequence": "Le Baron encaisse. Il ne répond rien. Il remet ses lunettes, mais trop tard : tu as vu. « T'as raison. » Il remonte la rue à pied. Pour la première fois, il a l'air d'un type qui marche, et pas d'un roi."
+        },
+        {
+          "label": "T'asseoir sur le banc, à côté de lui, sans parler",
+          "effects": {
+            "mental": 5
+          },
+          "relations": {
+            "le_baron": 6
+          },
+          "set_flags": [
+            "baron_respect"
+          ],
+          "consequence": "Vous restez assis, deux rappeurs et une place vide entre vous. Un pigeon se pose, repart. Au bout d'un moment, il dit : « Il aurait détesté ce silence. » Tu réponds : « Il aurait dit qu'on respire mal. » Le Baron rit. Une seule fois."
+        }
+      ]
+    },
+    {
+      "id": "story_momo_photo",
+      "title": "La photo",
+      "location": "label",
+      "npc": "momo",
+      "weight": 0,
+      "text": "Sur le comptoir de la laverie, Momo a posé son téléphone, écran vers toi. Une photo floue, prise dans une cage d'escalier : toi, en train de monter chez le Baron. 40 000 partages. Légende : « Le petit de la laverie déménage ? » Momo plie un drap. Il le plie bien, pour une fois. C'est mauvais signe. « Je t'ai rien demandé, hein. Je plie. »",
+      "choices": [
+        {
+          "label": "Tout lui raconter, même le contrat",
+          "effects": {
+            "mental": 4
+          },
+          "relations": {
+            "momo": 8
+          },
+          "set_flags": [
+            "momo_verite"
+          ],
+          "clear_flags": [
+            "photo_baron"
+          ],
+          "consequence": "Tu racontes l'escalier, le canapé, le stylo en or, le banc vu d'en haut. Momo écoute sans s'arrêter de plier. À la fin, il pose le drap. « Moi aussi, il est venu me voir. En 2011. Il voulait racheter la laverie. J'ai dit non. Toi aussi. » Il sourit enfin. « On est pareils, alors. Des gens qui disent non aux stylos en or. »"
+        },
+        {
+          "label": "« C'était du business, Momo. Rien de perso. »",
+          "effects": {
+            "argent": 4
+          },
+          "relations": {
+            "momo": -15
+          },
+          "set_flags": [
+            "momo_blesse"
+          ],
+          "clear_flags": [
+            "photo_baron"
+          ],
+          "consequence": "« Du business. » Il répète le mot comme s'il le goûtait. Il a mauvais goût. « D'accord. » Il te rend la monnaie d'un billet que tu ne lui as pas donné. C'est sa façon de dire qu'il compte, maintenant. Ça fait plus mal que s'il avait crié."
+        },
+        {
+          "label": "Plier le drap avec lui, en silence",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "momo": 4
+          },
+          "clear_flags": [
+            "photo_baron"
+          ],
+          "consequence": "Vous pliez quatre draps, puis six. Au septième, il dit : « La 4 a refusé de tourner toute la semaine. Je savais que c'était grave. » Tu poses la main sur la machine. Elle repart. Momo hoche la tête. Ça suffira pour aujourd'hui."
+        }
+      ]
+    },
+    {
+      "id": "story_nuit_blanche",
+      "title": "3 h 12",
+      "location": "reseaux",
+      "weight": 0,
+      "text": "3 h 12. Dans quatre jours, le Baron. Dans dix, le Dôme. Tu fixes le plafond. Sous ton dernier son, quelqu'un a commenté : « sans le chat t'existes pas ». Tu as lu ce commentaire quarante fois. Et si c'était vrai ? Si c'était le chat, depuis le début ? Si Lucien s'était trompé sur toi ? Tu as envie de tout annuler. De partir à Miami, comme Lingot. Sans les bijoux.",
+      "choices": [
+        {
+          "label": "Appeler l'antenne de nuit de goslo radio, sans dire ton nom",
+          "set_flags": [
+            "nuit_traversee"
+          ],
+          "consequence": "Tu composes le numéro de l'antenne de nuit. Une seule sonnerie. « goslo radio, la nuit. Je t'écoute. »",
+          "follow_up": "story_antenne_nuit"
+        },
+        {
+          "label": "Sortir marcher jusqu'au banc de Lucien",
+          "set_flags": [
+            "nuit_traversee"
+          ],
+          "consequence": "Tu enfiles un sweat par-dessus ton pyjama. Le Bloc dort. Sauf un banc, où quelqu'un lit à la lumière d'un lampadaire.",
+          "follow_up": "story_banc_philosophe"
+        },
+        {
+          "label": "Poster « j'arrête » en story",
+          "effects": {
+            "streams": -2,
+            "mental": -3
+          },
+          "set_flags": [
+            "nuit_traversee",
+            "story_jarrete"
+          ],
+          "consequence": "Tu postes « j'arrête ». Tu supprimes au bout de trente secondes. 4 000 personnes l'ont vu. À 3 h 40, ton téléphone sonne : l'antenne de nuit de goslo radio. Évidemment.",
+          "follow_up": "story_antenne_nuit"
+        }
+      ]
+    },
+    {
+      "id": "story_antenne_nuit",
+      "title": "goslo radio, la nuit",
+      "location": "media",
+      "npc": "animateur_goslo",
+      "weight": 0,
+      "text": "« Je reconnais une voix au premier mot, et un menteur au deuxième. Toi, t'as pas encore menti, alors je dirai pas ton nom à l'antenne. » L'Animateur parle lentement, comme on parle à quelqu'un assis sur un rebord. « Tu sais combien de gens appellent cette ligne à 3 h, la semaine avant leur plus grand soir ? Tous. Les bons, en tout cas. Les mauvais dorment. Alors dis-moi. Qu'est-ce qui te fait peur ? »",
+      "choices": [
+        {
+          "label": "« Que ce soit le chat. Que moi, je sois rien. »",
+          "effects": {
+            "mental": 8
+          },
+          "set_flags": [
+            "doute_avoue"
+          ],
+          "consequence": "Il rit doucement. « Le chat a fait deux millions de vues. Toi, t'as fait pleurer Gégé. Gégé pleure pas. À son mariage, il a juste dit “un, deux”. Le chat a jamais rempli le Transfo. » Il passe un vieux morceau de Lucien, sans prévenir. « Maintenant, rentre chez ta mère. C'est un ordre de la radio. »",
+          "follow_up": "story_cuisine_maman"
+        },
+        {
+          "label": "« D'avoir oublié pourquoi je fais ça. »",
+          "effects": {
+            "mental": 6,
+            "credibilite": 2
+          },
+          "set_flags": [
+            "doute_avoue"
+          ],
+          "consequence": "« Alors on va te le rappeler. » Il lit à l'antenne le tout premier commentaire posté sous ton freestyle du Micro Ouvert. C'est ta mère : « bravo {mon fils|ma fille} c'est toi le meilleur je partage ». Sans ponctuation. « Tu vois ? C'est pour ça. Maintenant, va la voir. »",
+          "follow_up": "story_cuisine_maman"
+        },
+        {
+          "label": "Raccrocher sans un mot",
+          "effects": {
+            "mental": 2
+          },
+          "consequence": "Tu raccroches. Juste avant que la ligne coupe, tu l'entends dire : « Je laisse l'antenne ouverte. Toute la nuit. Au cas où. » Tu sors marcher.",
+          "follow_up": "story_banc_philosophe"
+        }
+      ]
+    },
+    {
+      "id": "story_banc_philosophe",
+      "title": "Le banc, à 4 h",
+      "location": "quartier",
+      "npc": "philosophe_goslo",
+      "weight": 0,
+      "text": "Sur le banc de Lucien, le Philosophe lit à la lumière d'un lampadaire. Il ne lève pas les yeux. « Camus disait qu'il faut imaginer Sisyphe heureux. J'ai toujours trouvé ça facile à dire, pour quelqu'un qui n'a jamais poussé de rocher. » Il tapote la place à côté de lui. Celle de Lucien. « Assieds-toi. Il dira rien. Il a toujours aimé qu'on s'assoie. »",
+      "choices": [
+        {
+          "label": "« Et si j'étais pas à la hauteur ? »",
+          "effects": {
+            "mental": 6
+          },
+          "xp": {
+            "plume": 30
+          },
+          "set_flags": [
+            "doute_avoue"
+          ],
+          "consequence": "« Personne n'est à la hauteur. C'est pour ça qu'on grimpe. » Il referme son livre. « Montaigne disait que sur le plus haut trône du monde, on n'est jamais assis que sur son derrière. Le Baron aussi. Surtout le Baron. » Tu ris pour la première fois depuis une semaine. « Va voir ta mère. Les philosophes, ça marche jusqu'à 5 h. Après, il faut une mère. »",
+          "follow_up": "story_cuisine_maman"
+        },
+        {
+          "label": "Lui lire une page du carnet de Lucien",
+          "effects": {
+            "mental": 5
+          },
+          "xp": {
+            "plume": 20
+          },
+          "set_flags": [
+            "doute_avoue",
+            "carnet_premiere_fin"
+          ],
+          "consequence": "Tu lis un début de phrase de Lucien : « Le jour où t'auras peur, c'est que… » Il n'y a pas de fin. Le Philosophe réfléchit longtemps. « …c'est que t'as enfin quelque chose à perdre. » Il hausse les épaules. « Je propose. Il m'aurait corrigé. » Tu l'écris dans la marge. C'est la première fin de phrase du carnet.",
+          "follow_up": "story_cuisine_maman"
+        }
+      ]
+    },
+    {
+      "id": "story_cuisine_maman",
+      "title": "Chez ta mère, 6 h",
+      "location": "chez_toi",
+      "npc": "maman",
+      "weight": 0,
+      "text": "Tu n'as pas sonné : tu as encore la clé, sur le même porte-clés qu'à quinze ans. Ta mère est déjà debout, en peignoir, la cafetière sur le feu, comme si elle t'attendait. Elle t'attendait. Sur le frigo, toutes tes affiches, même celle du Transfo avec trois places vendues. Elle pose un bol devant toi sans rien demander. Puis, en tournant son café : « Tu sais, pour ton premier concert, j'avais tellement peur que j'ai refait la pancarte trois fois. Les deux premières, ma main tremblait. »",
+      "choices": [
+        {
+          "label": "« Maman… Tu seras dans mon coin, au Dôme ? »",
+          "effects": {
+            "mental": 10
+          },
+          "relations": {
+            "maman": 10
+          },
+          "set_flags": [
+            "coin_maman"
+          ],
+          "consequence": "Elle pose la cafetière. « Je suis dans ton coin depuis que t'as deux ans et que tu rappais l'alphabet. » Puis, plus bas : « Mais je ferai une nouvelle pancarte. La plus grande. » Tu manges. Tu dors trois heures sur le canapé, sous la couverture qui sent comme avant. La meilleure nuit de ta vie."
+        },
+        {
+          "label": "« J'ai demandé à Lil Sauge d'être dans mon coin. »",
+          "requires": {
+            "relations": {
+              "lil_sauge": 60
+            }
+          },
+          "effects": {
+            "mental": 8
+          },
+          "relations": {
+            "lil_sauge": 10,
+            "maman": 4
+          },
+          "set_flags": [
+            "coin_sauge"
+          ],
+          "consequence": "Ta mère lève un sourcil. « Le petit qui se filme même quand il mange ? » Tu racontes : la marque qui l'a lâché, le texte sans filtre sur sa grand-mère. Elle réfléchit. « Bon. Il a toujours dit bonjour, celui-là. » Elle te ressert du café. « Mais moi, je serai au premier rang. Avec la pancarte. »"
+        },
+        {
+          "label": "« Je veux Fred dans mon coin. Comme au début. »",
+          "requires": {
+            "relations": {
+              "fred": 60
+            }
+          },
+          "effects": {
+            "mental": 8
+          },
+          "relations": {
+            "fred": 10,
+            "maman": 4
+          },
+          "set_flags": [
+            "coin_fred"
+          ],
+          "consequence": "« Fred, l'ingé du disque d'or ? » Elle sourit. « Il m'a appelée, tu sais. Après. Il pleurait au téléphone, il disait qu'il t'avait fait du mal. » Elle te ressert du café. « Les gens qui pleurent au téléphone, ils valent souvent mieux que ceux qui pleurent jamais. »"
+        }
+      ]
+    },
+    {
+      "id": "story_bunker_vendre",
+      "title": "À vendre",
+      "location": "studio",
+      "npc": "fred",
+      "weight": 0,
+      "text": "Sur la porte du Bunker, une affiche : « À VENDRE. Console, panneaux, canapé. Disque d'or non compris. » À l'intérieur, Fred emballe ses câbles un par un dans du papier journal, comme des verres en cristal. Il ne t'a pas entendu entrer. Sur le mur, il n'a laissé qu'une chose : la photo de ta première session. Toi, l'air terrifié, le micro réglé trop haut.",
+      "choices": [
+        {
+          "label": "« Le label a besoin d'un ingé. Le meilleur. Celui de 2009. »",
+          "effects": {
+            "mental": 6
+          },
+          "relations": {
+            "fred": 25
+          },
+          "set_flags": [
+            "fred_retrouve"
+          ],
+          "clear_flags": [
+            "fred_banni"
+          ],
+          "consequence": "Fred s'arrête, un câble à moitié emballé. « Le meilleur de 2009 ? » « Et de maintenant. » Il arrache l'affiche. Il l'arrache mal, il pleure trop. Le soir même, il mixe le premier single de la relève. Il dit que c'est le meilleur mix de sa vie. Cette fois, tu le crois tout de suite."
+        },
+        {
+          "label": "Racheter la console, sans lui",
+          "effects": {
+            "argent": -10
+          },
+          "set_flags": [
+            "fred_parti"
+          ],
+          "clear_flags": [
+            "fred_banni"
+          ],
+          "consequence": "Tu paies le prix affiché. Il ne négocie pas. Il te montre comment on allume la console, le fader 7, les petits secrets. Puis il part avec ses câbles dans un sac de courses. Sur la console, un post-it : « Respire au bon endroit. » Lucien avait dû lui dire, à lui aussi."
+        }
+      ]
     }
   ],
   "interviews": [
@@ -3835,6 +4543,25 @@
           }
         },
         {
+          "narration": "Au rappel, tu as composé un numéro de fixe, le téléphone collé au micro. Trois sonneries. À la quatrième, 300 personnes ont chanté ton refrain dans un combiné. Au bout du fil, quelqu'un a toussé. Puis applaudi.",
+          "when": {
+            "required_flags": [
+              "lucien_promesse"
+            ]
+          }
+        },
+        {
+          "narration": "En sortant, tu penses au banc de Lucien. Vide, à cette heure. Mais sa fenêtre était restée allumée tout le concert. Quelqu'un te l'a dit. Tu ne sais plus qui.",
+          "when": {
+            "required_flags": [
+              "lucien_ch3"
+            ],
+            "excluded_flags": [
+              "lucien_promesse"
+            ]
+          }
+        },
+        {
           "place": {
             "who": "victor_contrat",
             "x": 22,
@@ -4029,6 +4756,9 @@
             "who": "momo",
             "text": "Je pleure pas. C'est la lessive. Ça pique les yeux. Va, petit. Et dis bonjour."
           }
+        },
+        {
+          "narration": "Au Bunker, Fred range le vieux micro dans un carton. Hexagone en a envoyé un neuf, avec un ingé à eux. Fred n'a pas été invité à la signature. Il dit que ça ne fait rien. Il le dit trois fois, à personne."
         },
         {
           "camera": {
@@ -4235,6 +4965,22 @@
           "narration": "Sa story fait trois millions de vues en une heure. Le chat, lui, n'a rien posté. Il prépare quelque chose."
         },
         {
+          "narration": "Une heure plus tard, il supprime la story. Les experts ne comprennent pas. Toi, tu te souviens d'un téléphone qu'on raccroche.",
+          "when": {
+            "required_flags": [
+              "refus_baron"
+            ]
+          }
+        },
+        {
+          "narration": "Dans un coin de la story, on aperçoit une plante en plastique et un canapé usé. Le quartier cherche où c'est. Toi, tu sais.",
+          "when": {
+            "required_flags": [
+              "baron_secret"
+            ]
+          }
+        },
+        {
           "camera_reset": true
         }
       ]
@@ -4278,20 +5024,192 @@
         },
         {
           "say": {
+            "who": "le_baron",
+            "text": "Et pour toi, maintenant, c'est Didier. Mais seulement quand y a personne."
+          },
+          "when": {
+            "required_flags": [
+              "baron_respect"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "le_baron",
+            "text": "Demain, je vais m'asseoir sur son banc. Une heure. J'ai du retard à rattraper."
+          },
+          "when": {
+            "required_flags": [
+              "baron_reproche"
+            ]
+          }
+        },
+        {
+          "say": {
             "who": "momo",
             "text": "Je pleure pas. C'est la lessive. Programme délicat."
+          },
+          "when": {
+            "excluded_flags": [
+              "momo_blesse"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Je suis venu. Évidemment que je suis venu. On reparlera de la photo. Pas ce soir. Ce soir, je pleure."
+          },
+          "when": {
+            "required_flags": [
+              "momo_blesse"
+            ]
           }
         },
         {
           "say": {
             "who": "fred",
             "text": "Troisième disque d'or. Enfin, le tien. Mais j'étais là. Je l'écrirai dans mes mémoires."
+          },
+          "when": {
+            "excluded_flags": [
+              "fred_banni"
+            ]
+          }
+        },
+        {
+          "narration": "Le son du Dôme était parfait. Personne n'a vu qui tenait la console. Sur la table de mixage, un post-it : « Un, deux. — F. »",
+          "when": {
+            "required_flags": [
+              "fred_banni"
+            ]
           }
         },
         {
           "say": {
             "who": "scalpel",
             "text": "Rime finale correcte. Je mets 17. Je n'ai jamais mis 17."
+          }
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "J'ai pas filmé. Du concert entier. Pas une story. Je crois que c'est ça, grandir."
+          },
+          "when": {
+            "required_flags": [
+              "coin_sauge"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "kevlar_jr",
+            "text": "Mes minots t'ont vu. Maintenant ils veulent tous perdre contre toi. C'est le plus beau compliment de ma carrière."
+          },
+          "when": {
+            "required_flags": [
+              "kevlar_coach"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "lingot",
+            "text": "J'ai payé ma place. Plein tarif. C'est la première chose que j'achète sans la montrer à personne."
+          },
+          "when": {
+            "required_flags": [
+              "lingot_change"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "kenzo_livraison",
+            "text": "Six mille sushis livrés au Dôme ce soir. Le tien, je te l'ai fait sans attendre. Comme promis."
+          },
+          "cities": [
+            "Paris"
+          ]
+        },
+        {
+          "say": {
+            "who": "tatie_nadia",
+            "text": "Je t'ai gardé une barquette, {mon fils|ma fille}. Tu la paies double, comme promis. Non, je rigole. Triple."
+          },
+          "cities": [
+            "Marseille"
+          ]
+        },
+        {
+          "say": {
+            "who": "gaspard_pentes",
+            "text": "J'ai enregistré l'écho de la coupole. Neuf minutes. Ça fera un beat. Un jour. Pour toi."
+          },
+          "cities": [
+            "Lyon"
+          ]
+        },
+        {
+          "say": {
+            "who": "fifou_capitole",
+            "text": "T'as entendu le virage, au dernier refrain ? C'était moi. Enfin, moi et six mille personnes. Mais moi d'abord."
+          },
+          "cities": [
+            "Toulouse"
+          ]
+        },
+        {
+          "say": {
+            "who": "meme_ginette",
+            "text": "T'as dit bonjour à Ginette, au micro, devant tout le monde. J'ai pleuré dans ma barquette. Elle était déjà salée."
+          },
+          "cities": [
+            "Lille"
+          ]
+        },
+        {
+          "say": {
+            "who": "jean_mi_stoemp",
+            "text": "Ton album est en vitrine. Entre Tintin et un vieux vinyle, une fois. Je l'ai même pas mis en solde."
+          },
+          "cities": [
+            "Bruxelles"
+          ]
+        },
+        {
+          "say": {
+            "who": "ti_guy_deneigeur",
+            "text": "La haie d'honneur avec la souffleuse, c'était moi, devant l'entrée des artistes. La police a moyennement aimé."
+          },
+          "cities": [
+            "Montréal"
+          ]
+        },
+        {
+          "say": {
+            "who": "driss_taxi",
+            "text": "Ton son est passé à ma radio, {khoya|khti}. La course est gratuite. Toute ta vie. Enfin, jusqu'à la corniche."
+          },
+          "cities": [
+            "Casablanca"
+          ]
+        },
+        {
+          "narration": "Avant le dernier morceau, tu as composé un numéro de fixe, le téléphone collé au micro. Le répondeur a décroché à la quatrième sonnerie : « Vous êtes bien chez Lucien. Je suis sur mon banc. » Six mille personnes ont crié son nom. Quelque part au Bloc, un banc a dû entendre.",
+          "when": {
+            "required_flags": [
+              "lucien_promesse"
+            ]
+          }
+        },
+        {
+          "narration": "Au bord de la scène, toute la soirée, un tabouret vide. Dessus, une casquette et un carnet à spirale de 1994. Personne ne s'est assis.",
+          "when": {
+            "excluded_flags": [
+              "lucien_promesse"
+            ]
           }
         },
         {
@@ -4351,6 +5269,14 @@
           }
         },
         {
+          "narration": "Momo n'a pas dit « petit » au téléphone. Il le disait toujours. Depuis la photo, il cherche ses mots.",
+          "when": {
+            "required_flags": [
+              "momo_blesse"
+            ]
+          }
+        },
+        {
           "camera_reset": true
         }
       ]
@@ -4404,6 +5330,57 @@
           "say": {
             "who": "fred",
             "text": "Je les ai mixés. Ça me fait un disque d'or et deux espoirs. Je mettrai les deux dans mes mémoires."
+          },
+          "when": {
+            "excluded_flags": [
+              "fred_parti"
+            ]
+          }
+        },
+        {
+          "narration": "Le single a été mixé au Bunker, sur la console de Fred. Dans les remerciements, une seule ligne : « Fred. 2009. Et après. »",
+          "when": {
+            "required_flags": [
+              "fred_parti"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Pour la photo… J'ai plié le drap. Il est rangé. On en parle plus. Mais je le garde."
+          },
+          "when": {
+            "required_flags": [
+              "momo_blesse"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "J'ai sorti un son sans filtre. 3 000 vues. C'est le premier dont je suis fier. Ma grand-mère a mis un pouce."
+          },
+          "when": {
+            "required_flags": [
+              "sauge_change"
+            ]
+          }
+        },
+        {
+          "narration": "En bonus du premier projet de la relève : une cassette de 1998, remasterisée. Crédits : « Yanis T., 17 ans ». Yanis fait semblant d'être fâché. Il l'écoute en boucle.",
+          "when": {
+            "required_flags": [
+              "yanis_demo"
+            ]
+          }
+        },
+        {
+          "narration": "Le lendemain, un bouquet arrive à la laverie. Pas de carte. Juste une paire de lunettes noires posée dessus. Momo les essaie. Elles lui vont très mal.",
+          "when": {
+            "required_flags": [
+              "baron_respect"
+            ]
           }
         },
         {
@@ -4425,6 +5402,17 @@
           }
         },
         {
+          "narration": "Sur le banc de Lucien, quelqu'un a vissé une petite plaque : « Ici, on respire au bon endroit. » Personne ne sait qui. Tout le monde sait."
+        },
+        {
+          "narration": "Dans le carnet de Lucien, il y a maintenant onze fins de phrases. La première est d'un philosophe, une nuit, sur un banc. Les dix autres sont de toi.",
+          "when": {
+            "required_flags": [
+              "carnet_premiere_fin"
+            ]
+          }
+        },
+        {
           "narration": "Sur le toit d'en face, le chat regarde la rue. Il a neuf vies. Toi, tu viens d'en commencer une deuxième."
         },
         {
@@ -4441,6 +5429,145 @@
         },
         {
           "fade": true
+        }
+      ]
+    },
+    {
+      "id": "banc_vide",
+      "steps": [
+        {
+          "fade": true
+        },
+        {
+          "place": {
+            "who": "player",
+            "x": 11,
+            "y": 8,
+            "facing": "down"
+          }
+        },
+        {
+          "place": {
+            "who": "maman",
+            "x": 10,
+            "y": 8,
+            "facing": "right"
+          }
+        },
+        {
+          "place": {
+            "who": "momo",
+            "x": 12,
+            "y": 8,
+            "facing": "left"
+          }
+        },
+        {
+          "fade": false
+        },
+        {
+          "narration": "Le soir, sur le banc de Lucien, quelqu'un a posé une casquette, un combiné de téléphone fixe et un paquet de chips. Big Nono jure que ce n'est pas lui."
+        },
+        {
+          "say": {
+            "who": "maman",
+            "text": "Il venait acheter son pain le dimanche, au même moment que moi. Il disait que t'irais loin. Je lui répondais : “pas trop loin quand même”."
+          }
+        },
+        {
+          "say": {
+            "who": "momo",
+            "text": "Il m'a prêté le premier loyer de la laverie. Il a jamais voulu que je le rembourse. Il disait : “paye-moi en disques”. Je lui en dois encore douze."
+          }
+        },
+        {
+          "say": {
+            "who": "player",
+            "text": "Il m'a dit de respirer au bon endroit."
+          }
+        },
+        {
+          "narration": "Ce soir-là, sur goslo radio, une heure de Lucien. Sans pub, sans jingle.",
+          "when": {
+            "required_flags": [
+              "adieu_appel"
+            ]
+          }
+        },
+        {
+          "narration": "Plus tard, au snack, quelqu'un chante les huit mesures de Lucien. Puis quelqu'un d'autre invente la neuvième. Elle est mauvaise. Tout le monde applaudit.",
+          "when": {
+            "required_flags": [
+              "adieu_rappe"
+            ]
+          }
+        },
+        {
+          "narration": "Tu ouvres le carnet de 1994. Première page, d'une écriture penchée : « Pour celui ou celle qui viendra après. Finis mes phrases. » Le carnet est plein de débuts de phrases. Il n'y a pas une seule fin."
+        },
+        {
+          "fade": true
+        },
+        {
+          "despawn": "maman"
+        },
+        {
+          "despawn": "momo"
+        },
+        {
+          "fade": false
+        }
+      ]
+    },
+    {
+      "id": "aube_bloc",
+      "steps": [
+        {
+          "narration": "7 h. Tu sors de chez ta mère. Le Bloc se réveille : un rideau de fer, un scooter, l'odeur du pain. Personne ne sait que tu as failli tout arrêter cette nuit. Sauf une radio, un philosophe et une mère. C'est assez."
+        },
+        {
+          "narration": "Sous ton « j'arrête » supprimé, quelqu'un a reposté la capture avec un seul mot : « non ». 12 000 personnes ont répondu « non » aussi.",
+          "when": {
+            "required_flags": [
+              "story_jarrete"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "maman",
+            "text": "Et mets un manteau ! Les champions aussi, ça s'enrhume !"
+          },
+          "when": {
+            "required_flags": [
+              "coin_maman"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "lil_sauge",
+            "text": "Wesh. Ta mère m'a appelé. Elle m'a dit d'être là à 7 h, et de manger. Je suis là. J'ai pas mangé."
+          },
+          "when": {
+            "required_flags": [
+              "coin_sauge"
+            ]
+          }
+        },
+        {
+          "say": {
+            "who": "fred",
+            "text": "Ta mère m'a appelé à 6 h 30. Elle a juste dit “viens”. Je suis venu. J'ai apporté la console. Enfin, un câble. Le reste est dans la voiture."
+          },
+          "when": {
+            "required_flags": [
+              "coin_fred"
+            ]
+          }
+        },
+        {
+          "narration": "Tu remontes la rue. Tout en haut, la porte du Baron. Elle ne te fait plus peur. Elle te fait envie."
         }
       ]
     }
@@ -4505,7 +5632,12 @@
       }
     },
     {
-      "text": "Vieux Mic Lucien a été aperçu sur son banc. Comme hier. Comme en 1994."
+      "text": "Vieux Mic Lucien a été aperçu sur son banc. Comme hier. Comme en 1994.",
+      "conditions": {
+        "excluded_flags": [
+          "adieu_lucien"
+        ]
+      }
     },
     {
       "text": "Rappel de goslo radio : le terrain vague n'est pas un studio. Merci de ne plus clasher après 22 h."
@@ -4813,6 +5945,126 @@
     },
     {
       "text": "Ce soir sur goslo radio : le Philosophe dissèque la punchline de la semaine. Nietzsche est invité. Il n'a pas confirmé."
+    },
+    {
+      "text": "Vieux Mic Lucien a été aperçu sur son banc avec une couverture, en plein été. Il dit que c'est pour le style.",
+      "conditions": {
+        "min_chapter": 3,
+        "excluded_flags": [
+          "adieu_lucien"
+        ]
+      }
+    },
+    {
+      "text": "Ce soir, une heure de Vieux Mic Lucien sur goslo radio. Big Nono a éteint le néon ON AIR : Lucien trouvait qu'il clignotait trop.",
+      "conditions": {
+        "required_flags": [
+          "adieu_lucien"
+        ]
+      }
+    },
+    {
+      "text": "Le Baron sort un son sur une instru que tout le quartier reconnaît. Le Baron, lui, ne reconnaît rien.",
+      "conditions": {
+        "required_flags": [
+          "trahison_reglee"
+        ],
+        "max_chapter": 5
+      }
+    },
+    {
+      "text": "Le Bunker garde porte close depuis une semaine. Sur la sonnette, un mot : « Fermé pour inventaire. Inventaire de moi. »",
+      "conditions": {
+        "required_flags": [
+          "fred_banni"
+        ]
+      }
+    },
+    {
+      "text": "Fred, ingé du Bunker, aurait rendu une enveloppe au Baron, en main propre. Témoin : un pigeon. Il confirme.",
+      "conditions": {
+        "required_flags": [
+          "fred_pardonne"
+        ]
+      }
+    },
+    {
+      "text": "Photo floue : {nom} dans l'escalier du Baron. Le quartier hésite entre « trahison » et « il cherchait les toilettes ».",
+      "conditions": {
+        "required_flags": [
+          "rdv_baron"
+        ]
+      }
+    },
+    {
+      "text": "Le Baron aurait essuyé un refus au téléphone. Ça ne lui était jamais arrivé. Il a posté une photo de plante.",
+      "conditions": {
+        "required_flags": [
+          "refus_baron"
+        ]
+      }
+    },
+    {
+      "text": "3 h du matin sur goslo radio : un auditeur anonyme a parlé de sa peur. Des centaines d'appels ont suivi. L'antenne est restée ouverte jusqu'à l'aube.",
+      "conditions": {
+        "required_flags": [
+          "doute_avoue"
+        ]
+      }
+    },
+    {
+      "text": "Une pancarte de six mètres a été aperçue sur le périphérique, direction le Dôme. Elle dit : « C'EST {MON FILS|MA FILLE} ».",
+      "conditions": {
+        "required_flags": [
+          "coin_maman"
+        ],
+        "excluded_flags": [
+          "chapitre_6"
+        ]
+      }
+    },
+    {
+      "text": "Lil Sauge n'a rien posté depuis une semaine. Ses fans lancent un avis de recherche. Il est au Bunker. Il écrit.",
+      "conditions": {
+        "required_flags": [
+          "sauge_aide"
+        ],
+        "excluded_flags": [
+          "sauge_change"
+        ]
+      }
+    },
+    {
+      "text": "Lil Sauge sort un son sans filtre, sur sa grand-mère. 3 000 vues. Il dit que c'est son « premier vrai ». La grand-mère a mis un pouce.",
+      "conditions": {
+        "required_flags": [
+          "sauge_change"
+        ]
+      }
+    },
+    {
+      "text": "L'école du Ring de Kevlar Jr. affiche complet. Liste d'attente : quarante minots et un retraité.",
+      "conditions": {
+        "required_flags": [
+          "kevlar_coach"
+        ]
+      }
+    },
+    {
+      "text": "Lingot revient de Miami sans bijoux et annonce un projet : « Plaqué ». Le quartier est ému. Les bijoutiers, soulagés.",
+      "conditions": {
+        "required_flags": [
+          "lingot_change"
+        ]
+      }
+    },
+    {
+      "text": "Yanis Tracklist reporte son top de l'année « pour raisons personnelles ». On l'aurait entendu fredonner un morceau de 1998.",
+      "conditions": {
+        "required_flags": [
+          "yanis_demo"
+        ]
+      }
     }
   ],
   "items": [
@@ -4845,6 +6097,14 @@
         "name": "L'Annotation",
         "line": "Tu sors le stylo rouge et tu corriges le dernier couplet de ton adversaire, en direct : trois fautes, deux rimes pauvres, une métaphore volée. Le public compte les points à voix haute.",
         "fx": "redpen"
+      }
+    },
+    {
+      "id": "carnet_lucien",
+      "name": "Le carnet de Lucien",
+      "description": "Un carnet à spirale de 1994, couverture cornée. Que des débuts de phrases : Lucien t'a laissé les fins. +1 en Story.",
+      "clash_bonus": {
+        "story": 1
       }
     }
   ],
