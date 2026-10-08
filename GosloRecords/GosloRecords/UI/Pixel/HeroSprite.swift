@@ -8,18 +8,21 @@ import UIKit
 enum HeroSprite {
     static let width = 40
     static let height = 56
+    /// First row of the shoulders: the build reshapes everything from here down.
+    static let torsoTop = 23
 
     static func image(_ look: CharacterLook, facing: Direction, frame: Int = 0) -> UIImage {
         let back = facing == .up
         return PixelCache.image("hero-\(look.hashValue)-\(back)-\(frame)") {
-            (back ? backView(look, frame: frame) : front(look, frame: frame)).outlined().makeImage()
+            (back ? backView(look, frame: frame) : front(look, frame: frame))
+                .reshaped(fromRow: torsoTop, by: look.build.heroDelta).outlined().makeImage()
         }
     }
 
     /// Head and shoulders, for dialogue portraits.
     static func bust(_ look: CharacterLook) -> UIImage {
         PixelCache.image("hero-bust-\(look.hashValue)") {
-            let full = front(look, frame: 0).outlined()
+            let full = front(look, frame: 0).reshaped(fromRow: torsoTop, by: look.build.heroDelta).outlined()
             let crop = PixelCanvas(width: 34, height: 34)
             crop.stamp(full, at: -3, 0)
             return crop.makeImage()

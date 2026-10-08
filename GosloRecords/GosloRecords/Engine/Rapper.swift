@@ -97,6 +97,7 @@ struct Rapper: Codable, Equatable {
     var headphones: Bool?
     var outfit: CharacterLook.Outfit?
     var earrings: Bool?
+    var build: CharacterLook.Build?
     /// Index into Rapper.outfitColors (nil: the first one).
     var outfitColor: Int?
     /// Saves from before the look had its own page wore their style's outfit; new characters don't:
@@ -112,8 +113,9 @@ struct Rapper: Codable, Equatable {
     init(name: String, city: City, style: Style, skinTone: Int = 2, hairColor: Int? = nil,
          hairStyle: CharacterLook.HairStyle? = nil, hat: CharacterLook.Hat? = nil, glasses: Bool? = nil,
          beard: Bool? = nil, chain: Bool? = nil, headphones: Bool? = nil,
-         outfit: CharacterLook.Outfit? = nil, earrings: Bool? = nil, outfitColor: Int? = nil, gender: Gender = .rappeur,
-         heritage: Heritage? = nil) {
+         outfit: CharacterLook.Outfit? = nil, earrings: Bool? = nil, outfitColor: Int? = nil, build: CharacterLook.Build? = nil,
+         gender: Gender = .rappeur, heritage: Heritage? = nil) {
+        self.build = build
         self.heritage = heritage
         genderChoice = gender
         self.outfitColor = outfitColor
@@ -150,6 +152,7 @@ struct Rapper: Codable, Equatable {
         earrings = try c.decodeIfPresent(Bool.self, forKey: .earrings)
         genderChoice = try c.decodeIfPresent(Gender.self, forKey: .genderChoice)
         outfitColor = try c.decodeIfPresent(Int.self, forKey: .outfitColor)
+        build = try c.decodeIfPresent(CharacterLook.Build.self, forKey: .build)
         lookFromStyle = try c.decodeIfPresent(Bool.self, forKey: .lookFromStyle) ?? true
         heritage = try c.decodeIfPresent(Heritage.self, forKey: .heritage)
     }

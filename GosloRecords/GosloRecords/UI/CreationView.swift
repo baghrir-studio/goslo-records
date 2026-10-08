@@ -17,6 +17,7 @@ struct CreationView: View {
     @State private var outfit: CharacterLook.Outfit?
     @State private var earrings: Bool?
     @State private var outfitColor: Int?
+    @State private var build: CharacterLook.Build?
     @State private var heritage: Heritage?
     @State private var gender: Gender = .rappeur
     @State private var step: Step = .identity
@@ -37,7 +38,7 @@ struct CreationView: View {
 
     private var draft: Rapper {
         Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
-               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, gender: gender, heritage: heritage)
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, build: build, gender: gender, heritage: heritage)
     }
 
     /// Name used when the player leaves the field empty (the field's placeholder).
@@ -82,6 +83,7 @@ struct CreationView: View {
                         citySection
                     case .look:
                         skinSection
+                        buildSection
                         lookSection
                     case .style:
                         styleSection
@@ -182,6 +184,13 @@ struct CreationView: View {
                 .disabled(!open)
                 .opacity(open ? 1 : 0.55)
             }
+        }
+    }
+
+    private var buildSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Kicker(text: "Corpulence")
+            ChoiceRow(options: CharacterLook.Build.allCases, selected: build ?? .regular, label: \.label) { build = $0 }
         }
     }
 
@@ -390,6 +399,17 @@ private extension CharacterLook.Hat {
         case .hood: "Capuche"
         case .bucket: "Bob"
         case .bandana: "Bandana"
+        }
+    }
+}
+
+private extension CharacterLook.Build {
+    var label: String {
+        switch self {
+        case .slim: "Mince"
+        case .regular: "Moyen"
+        case .strong: "Costaud"
+        case .heavy: "Rond"
         }
     }
 }
