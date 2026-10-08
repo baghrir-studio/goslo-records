@@ -121,6 +121,15 @@ struct MapNPC: Codable, Equatable, Identifiable {
     }
 }
 
+/// A free spot on the map where the player can put a decoration bought in the shop (`Decor`).
+struct MapPlot: Codable, Equatable, Identifiable {
+    let id: String
+    let x: Int
+    let y: Int
+
+    var point: TilePoint { TilePoint(x: x, y: y) }
+}
+
 /// The neighbourhood (map.json).
 struct WorldMap: Codable, Equatable {
     let rows: [String]
@@ -129,6 +138,10 @@ struct WorldMap: Codable, Equatable {
     let npcs: [MapNPC]
     /// Metro entrance (a `TileKind.metro` tile), if the district has one.
     var metro: TilePoint? = nil
+    /// Spots for the player's decorations (none in older data).
+    var plots: [MapPlot]? = nil
+
+    var decorPlots: [MapPlot] { plots ?? [] }
 
     /// Where you come out of the metro (just below the entrance), or the spawn point.
     var arrival: TilePoint { metro?.moved(.down) ?? spawn }
@@ -160,7 +173,7 @@ struct WorldMap: Codable, Equatable {
     func forChapter(_ chapter: Int, flags: Set<String> = []) -> WorldMap {
         WorldMap(rows: rows, spawn: spawn, doors: doors, npcs: npcs.filter { npc in
             npc.fromChapter <= chapter && !(npc.hiddenIf.map(flags.contains) ?? false)
-        }, metro: metro)
+        }, metro: metro, plots: plots)
     }
 
     /// Symbols that aren't part of TileKind (used to validate the data).

@@ -1156,6 +1156,7 @@ struct GameEngine {
             if state.freeCareer { outcome.add(state.stats.apply(GameEngine.agingUpkeep(turn: state.turn))) }
             outcome.add(sellAlbums(in: &state))
             payChart(&outcome, in: &state)
+            outcome.add(decorIncome(in: &state))
             checkChallenges(&outcome, in: &state)
             let limit = turnLimit(in: state)
             if !isInEpilogue(state) { state.turn = state.freeCareer ? state.turn + 1 : min(state.turn + 1, limit) }
