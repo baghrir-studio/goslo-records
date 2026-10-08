@@ -56,6 +56,13 @@ struct WorldView: View {
                     }
                 }
 
+                if let spot = model.happening {
+                    HappeningMarker(kind: spot.kind)
+                        .position(spritePosition(spot.point))
+                        .zIndex(Double(spot.point.y) + 0.4)
+                        .transition(.scale.combined(with: .opacity))
+                }
+
                 ForEach(map.npcs.filter { !model.hiddenActors.contains($0.id) }) { npc in
                     npcSprite(npc.id, at: model.npcPositions[npc.id] ?? npc.point,
                               facing: model.npcFacing[npc.id] ?? npc.facing, isObjective: objectiveNPC == npc.id)
@@ -387,6 +394,31 @@ extension Location {
         case (.scene, .centre): "Le Transfo"
         case (.media, .hauts): "La Tour goslo"
         default: name
+        }
+    }
+}
+
+/// A street happening on the map: a bouncing bubble over a little crowd ring. Walk onto it.
+private struct HappeningMarker: View {
+    let kind: Happening
+    @State private var bounce = false
+
+    var body: some View {
+        ZStack {
+            Ellipse()
+                .fill(Color(red: 1, green: 0.85, blue: 0.3).opacity(0.25))
+                .frame(width: WorldView.tile * 0.9, height: WorldView.tile * 0.35)
+                .offset(y: WorldView.tile * 0.3)
+            Text(kind.emoji)
+                .font(.system(size: WorldView.tile * 0.55))
+                .padding(4)
+                .background(Circle().fill(Color.black.opacity(0.7)))
+                .overlay(Circle().stroke(Color(red: 1, green: 0.85, blue: 0.3), lineWidth: 2))
+                .offset(y: bounce ? -WorldView.tile * 0.35 : -WorldView.tile * 0.15)
+        }
+        .allowsHitTesting(false)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) { bounce = true }
         }
     }
 }

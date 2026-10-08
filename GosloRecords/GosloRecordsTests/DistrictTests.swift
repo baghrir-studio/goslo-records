@@ -58,7 +58,7 @@ final class DistrictTests: XCTestCase {
         var state = game(chapter: 3)
         let chapter = try XCTUnwrap(engine.story.chapter(3))
         state.objectiveIndex = try XCTUnwrap(chapter.objectives.firstIndex { $0.trigger?.npc == "dj_bobine" })
-        XCTAssertEqual(engine.objectiveDistrict(in: state), .centre, "DJ Bobine est en centre-ville")
+        XCTAssertEqual(engine.objectiveDistrict(in: state), .centre, "DJ Noize est en centre-ville")
         try engine.travel(to: .centre, in: &state)
         XCTAssertNil(engine.objectiveDistrict(in: state), "tu y es")
 

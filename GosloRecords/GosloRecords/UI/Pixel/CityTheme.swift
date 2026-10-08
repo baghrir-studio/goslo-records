@@ -39,6 +39,20 @@ struct CityTheme {
     var landmark: Landmark?
     /// Casablanca has a red tramway instead of the metro.
     var tram = false
+    /// Chimney stacks with clay pots on the pitched roofs.
+    var chimneys = true
+    /// Dormer windows in the roofs above the downtown façades.
+    var dormers = false
+    /// Flemish stepped gables over the downtown façades.
+    var gables = false
+    /// Horseshoe-arched windows and a zellige frieze at the foot of the walls.
+    var arches = false
+    /// Puddles on the pavement (the rainy cities).
+    var puddles = false
+    /// Shop awnings, striped with off-white.
+    var awnings = [PixelColor(hex: "#9a2a26"), PixelColor(hex: "#2f5a3a")]
+    /// The local shop downtown, by its sign (8 letters at most).
+    var signature = "TABAC"
 
     static func forCity(_ city: City) -> CityTheme {
         var t = CityTheme()
@@ -51,6 +65,10 @@ struct CityTheme {
             t.tree = .plane
             // An iron tower in the distance: the plain structure, no light show.
             t.landmark = .ironTower
+            // Zinc roofs with dormers, red and green awnings, the tabac on the corner.
+            t.dormers = true
+            t.awnings = [PixelColor(hex: "#9a2a26"), PixelColor(hex: "#2f5a3a"), PixelColor(hex: "#24304a")]
+            t.signature = "TABAC"
         case .marseille:
             // Ochre plaster, terracotta tiles, the harbour.
             t.facade = .plaster
@@ -65,6 +83,9 @@ struct CityTheme {
             t.boats = true
             // The old harbour: a stone quay, moorings and a forest of masts.
             t.landmark = .harbour
+            // Sea-blue and sun-yellow awnings, and the soap makers.
+            t.awnings = [PixelColor(hex: "#2a6a9a"), PixelColor(hex: "#c8902a"), PixelColor(hex: "#3f8a9a")]
+            t.signature = "SAVONS"
         case .lyon:
             // Old-town pinks and oranges, cobbles.
             t.facade = .plaster
@@ -74,18 +95,27 @@ struct CityTheme {
             t.pavement = .cobbles
             t.water = PixelColor(hex: "#244a4a"); t.ripple = PixelColor(hex: "#3a6a66")
             t.tree = .plane
+            t.awnings = [PixelColor(hex: "#7a2a3a"), PixelColor(hex: "#6a7a3a")]
+            t.signature = "BOUCHON"
         case .toulouse:
             // The pink city: pink brick everywhere.
             t.wall = PixelColor(hex: "#8a4a44"); t.wallLine = PixelColor(hex: "#6e3834")
             t.roof = PixelColor(hex: "#7a3626"); t.roofEdge = PixelColor(hex: "#94462e"); t.roofShadow = PixelColor(hex: "#56261a")
             t.shutters = PixelColor(hex: "#4a6a8a")
             t.water = PixelColor(hex: "#2a4a5a"); t.ripple = PixelColor(hex: "#3f6a7a")
+            t.awnings = [PixelColor(hex: "#6a4a8a"), PixelColor(hex: "#b85a6a")]
+            t.signature = "SAUCISSE"
         case .lille:
             // Dark red Flemish brick, slate roofs, wet cobbles.
             t.wall = PixelColor(hex: "#5a2a26"); t.wallLine = PixelColor(hex: "#44201c")
             t.roof = PixelColor(hex: "#24262c"); t.roofEdge = PixelColor(hex: "#34373f"); t.roofShadow = PixelColor(hex: "#18191d")
             t.pavement = .cobbles
             t.sidewalk = PixelColor(hex: "#3e4048"); t.sidewalkLine = PixelColor(hex: "#33353c")
+            // Stepped gables downtown, puddles everywhere.
+            t.gables = true
+            t.puddles = true
+            t.awnings = [PixelColor(hex: "#9a2a24"), PixelColor(hex: "#c8a03a")]
+            t.signature = "GAUFRES"
         case .bruxelles:
             // Sandstone and brick, cobbles, a bit of gold.
             t.facade = .stone
@@ -93,6 +123,11 @@ struct CityTheme {
             t.roof = PixelColor(hex: "#2e2c30"); t.roofEdge = PixelColor(hex: "#a08440"); t.roofShadow = PixelColor(hex: "#1e1c20")
             t.pavement = .cobbles
             t.tree = .plane
+            t.gables = true
+            t.dormers = true
+            t.puddles = true
+            t.awnings = [PixelColor(hex: "#b8902a"), PixelColor(hex: "#9a2a26"), PixelColor(hex: "#2a2a2e")]
+            t.signature = "FRITERIE"
         case .montreal:
             // Red brick, outdoor staircases, snow, frozen river.
             t.wall = PixelColor(hex: "#6a3028"); t.wallLine = PixelColor(hex: "#52241e")
@@ -102,6 +137,8 @@ struct CityTheme {
             t.ground = PixelColor(hex: "#c8ced8")
             t.tree = .pine; t.leaf = PixelColor(hex: "#1c3a2a"); t.leafLight = PixelColor(hex: "#e8eef6")
             t.water = PixelColor(hex: "#5a7a9a"); t.ripple = PixelColor(hex: "#a8c0d8")
+            t.awnings = [PixelColor(hex: "#24488a"), PixelColor(hex: "#9a2a26")]
+            t.signature = "POUTINE"
         case .casablanca:
             // White walls, zellige pavement, palm trees, the ocean.
             t.facade = .plaster
@@ -119,6 +156,11 @@ struct CityTheme {
             // A generic Moroccan-style minaret in the distance (not a copy of any real building).
             t.landmark = .minaret
             t.tram = true
+            // Flat roof terraces, arched windows over zellige, green and terracotta awnings.
+            t.chimneys = false
+            t.arches = true
+            t.awnings = [PixelColor(hex: "#1f7a6a"), PixelColor(hex: "#b85a34")]
+            t.signature = "HANOUT"
         }
         return t
     }

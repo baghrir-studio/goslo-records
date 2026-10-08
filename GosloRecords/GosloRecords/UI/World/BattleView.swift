@@ -167,6 +167,17 @@ struct BattleView: View {
                     }
                 }
                 .frame(width: w, height: arena)
+                // Yanis's tip sits over the stage, between the two panels: it never pushes the moves off screen.
+                .overlay {
+                    if stage == .menu, let tip = ClashTip.next(for: clash, seen: state.flags) {
+                        TipBubble(text: tip.line(crowd: clash.crowdFavorite)) {
+                            withAnimation(.easeOut(duration: 0.2)) { model.learn(tip) }
+                        }
+                        .id(tip)
+                        .padding(.horizontal, 14)
+                        .transition(.scale(scale: 0.9).combined(with: .opacity))
+                    }
+                }
                 .grayscale(drained ? 1 : 0)
                 .scaleEffect(zoom, anchor: zoomAnchor)
                 .clipped()
@@ -269,13 +280,6 @@ struct BattleView: View {
                         .overlay(Rectangle().stroke(Color(red: 1, green: 0.85, blue: 0.3), lineWidth: 1.5))
                     }
                     .buttonStyle(PressScaleStyle())
-                }
-                if let tip = ClashTip.next(for: clash, seen: state.flags) {
-                    TipBubble(text: tip.line(crowd: clash.crowdFavorite)) {
-                        withAnimation(.easeOut(duration: 0.2)) { model.learn(tip) }
-                    }
-                    .id(tip)
-                    .transition(.scale(scale: 0.9).combined(with: .opacity))
                 }
                 TacticsStrip(tell: telegraphed.map { $0.tell(opponentName) }, counter: telegraphed?.counter,
                              crowd: clash.crowdFavorite, combo: clash.lastPlayerMove.flatMap { ClashCombo.started(by: $0) })

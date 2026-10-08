@@ -193,7 +193,7 @@
         {
           "id": "dj",
           "label": "Trouve un DJ",
-          "hint": "DJ Bobine traîne dans le quartier. Il a une platine. Une seule.",
+          "hint": "DJ Noize traîne dans le quartier. Il a une platine. Une seule.",
           "trigger": {
             "npc": "dj_bobine"
           },
@@ -549,7 +549,7 @@
         {
           "id": "equipe",
           "label": "Prépare l'équipe du Dôme",
-          "hint": "DJ Bobine, au centre du quartier. Il a acheté une deuxième platine. Il doute.",
+          "hint": "DJ Noize, au centre du quartier. Il a acheté une deuxième platine. Il doute.",
           "trigger": {
             "npc": "dj_bobine"
           },
@@ -1169,11 +1169,11 @@
     },
     {
       "id": "story_dj",
-      "title": "DJ Bobine",
+      "title": "DJ Noize",
       "location": "quartier",
       "npc": "dj_bobine",
       "weight": 0,
-      "text": "DJ Bobine installe sa platine sur un banc. Une seule platine. « Deux platines, c'est pour les gens qui doutent. » Il passe ton son 2 % trop vite. Tu as l'air d'un écureuil sous pression.",
+      "text": "DJ Noize installe sa platine sur un banc. Une seule platine. « Deux platines, c'est pour les gens qui doutent. » Il passe ton son 2 % trop vite. Tu as l'air d'un écureuil sous pression.",
       "choices": [
         {
           "label": "Le recruter tel quel",
@@ -1225,7 +1225,7 @@
       "location": "studio",
       "npc": "fred",
       "weight": 0,
-      "text": "Répétition au Bunker. Fred a distribué des bouchons d'oreilles, DJ Bobine a branché sa platine sur une multiprise qui fume, et ton ingé retour, c'est ton cousin. Il ne sait pas ce qu'est un retour.",
+      "text": "Répétition au Bunker. Fred a distribué des bouchons d'oreilles, DJ Noize a branché sa platine sur une multiprise qui fume, et ton ingé retour, c'est ton cousin. Il ne sait pas ce qu'est un retour.",
       "choices": [
         {
           "label": "Répéter le set trois fois en entier",
@@ -1380,7 +1380,7 @@
       "location": "scene",
       "npc": "gege",
       "weight": 0,
-      "text": "20 h 58. Derrière le rideau, tu entends 300 personnes. Enfin, des gens. Ta mère a déjà sorti sa pancarte. DJ Bobine règle sa platine à 102 %. Gégé lève un pouce. Il ne l'avait jamais fait.",
+      "text": "20 h 58. Derrière le rideau, tu entends 300 personnes. Enfin, des gens. Ta mère a déjà sorti sa pancarte. DJ Noize règle sa platine à 102 %. Gégé lève un pouce. Il ne l'avait jamais fait.",
       "choices": [
         {
           "label": "Entrer en scène",
@@ -2064,7 +2064,7 @@
       "location": "quartier",
       "npc": "dj_bobine",
       "weight": 0,
-      "text": "DJ Bobine a acheté une deuxième platine. Il la regarde avec méfiance. « Pour le Dôme, j'ai cédé. Deux platines. Mais maintenant, je doute. C'est terrible, le doute. »",
+      "text": "DJ Noize a acheté une deuxième platine. Il la regarde avec méfiance. « Pour le Dôme, j'ai cédé. Deux platines. Mais maintenant, je doute. C'est terrible, le doute. »",
       "choices": [
         {
           "label": "Le rassurer : deux platines, deux fois plus d'énergie",
@@ -2090,14 +2090,14 @@
           "consequence": "« 100 %, pas plus. » Il a tenu deux minutes, puis il est passé à 101 %. C'est un progrès historique."
         },
         {
-          "label": "Faire répéter Gégé, Fred et Bobine ensemble",
+          "label": "Faire répéter Gégé, Fred et Noize ensemble",
           "xp": {
             "scene": 40
           },
           "set_flags": [
             "equipe_prete"
           ],
-          "consequence": "Gégé règle les lumières, Fred règle le son, Bobine dérègle tout. C'est l'équipe parfaite."
+          "consequence": "Gégé règle les lumières, Fred règle le son, Noize dérègle tout. C'est l'équipe parfaite."
         }
       ]
     },
@@ -2204,7 +2204,7 @@
       "location": "scene",
       "npc": "gege",
       "weight": 0,
-      "text": "Devant le Transfo, une navette t'emmène au Dôme. 6 000 places, toutes vendues. Ta mère a fait imprimer une pancarte de quatre mètres. Gégé, venu en renfort, lève les deux pouces. DJ Bobine allume ses deux platines, en doutant.",
+      "text": "Devant le Transfo, une navette t'emmène au Dôme. 6 000 places, toutes vendues. Ta mère a fait imprimer une pancarte de quatre mètres. Gégé, venu en renfort, lève les deux pouces. DJ Noize allume ses deux platines, en doutant.",
       "choices": [
         {
           "label": "Entrer en scène",
@@ -2260,7 +2260,7 @@
       "location": "scene",
       "npc": "dj_bobine",
       "weight": 0,
-      "text": "Le Transfo, un après-midi. Cinq jeunes attendent sur des chaises en plastique, chacun avec son téléphone, son carnet ou sa rage. DJ Bobine tient la platine. Tu as un budget, deux contrats, et le souvenir très précis de ton premier carnet.",
+      "text": "Le Transfo, un après-midi. Cinq jeunes attendent sur des chaises en plastique, chacun avec son téléphone, son carnet ou sa rage. DJ Noize tient la platine. Tu as un budget, deux contrats, et le souvenir très précis de ton premier carnet.",
       "choices": [
         {
           "label": "Lancer les auditions",
@@ -2273,7 +2273,7 @@
             "mental": -3
           },
           "minigame": "signing_releve",
-          "consequence": "« Encore une fois. » DJ Bobine soupire et relance le beat. Les jeunes adorent. Bobine, moins."
+          "consequence": "« Encore une fois. » DJ Noize soupire et relance le beat. Les jeunes adorent. Noize, moins."
         }
       ]
     },
@@ -5752,7 +5752,7 @@
       }
     },
     {
-      "text": "DJ Bobine affirme qu'une seule platine suffit. Les experts sont partagés. Les platines aussi.",
+      "text": "DJ Noize affirme qu'une seule platine suffit. Les experts sont partagés. Les platines aussi.",
       "conditions": {
         "min_chapter": 3
       }
@@ -5908,7 +5908,7 @@
       }
     },
     {
-      "text": "DJ Bobine passe à deux platines. Le milieu du DJing parle d'une « trahison idéologique ».",
+      "text": "DJ Noize passe à deux platines. Le milieu du DJing parle d'une « trahison idéologique ».",
       "conditions": {
         "required_flags": [
           "equipe_prete"
@@ -6112,7 +6112,7 @@
     {
       "id": "premier_concert",
       "venue": "Le Transfo · 300 places",
-      "intro": "Le rideau s'ouvre. DJ Bobine lance la prod, 2 % trop vite. Les notes tombent en rythme : tape PUNCH, FLOW ou HYPE quand elles touchent la ligne.",
+      "intro": "Le rideau s'ouvre. DJ Noize lance la prod, 2 % trop vite. Les notes tombent en rythme : tape PUNCH, FLOW ou HYPE quand elles touchent la ligne.",
       "start_hype": 35,
       "pass_hype": 65,
       "songs": [
@@ -6137,7 +6137,7 @@
               {
                 "label": "« Qui connaît les paroles ? » (personne ne les connaît)",
                 "hype": -8,
-                "reaction": "Silence total. Un verre tombe au bar. DJ Bobine relance la prod pour couvrir le malaise."
+                "reaction": "Silence total. Un verre tombe au bar. DJ Noize relance la prod pour couvrir le malaise."
               }
             ]
           }
@@ -6310,7 +6310,7 @@
         "set_flags": [
           "dome_reussi"
         ],
-        "consequence": "Le dernier son résonne sous le dôme. 6 000 personnes chantent ton refrain, celui du chat, devenu le tien. DJ Bobine a joué à 100 %. Pour la première fois de sa vie."
+        "consequence": "Le dernier son résonne sous le dôme. 6 000 personnes chantent ton refrain, celui du chat, devenu le tien. DJ Noize a joué à 100 %. Pour la première fois de sa vie."
       },
       "lose": {
         "effects": {
@@ -7256,7 +7256,7 @@
       "id": "platine_bobine",
       "kind": "platine",
       "title": "Cale la platine",
-      "intro": "DJ Bobine a encore poussé le pitch « pour l'énergie ». Arrête le curseur pile sur 100 %. Trois essais, et il accélère à chaque fois.",
+      "intro": "DJ Noize a encore poussé le pitch « pour l'énergie ». Arrête le curseur pile sur 100 %. Trois essais, et il accélère à chaque fois.",
       "pass_score": 0.5,
       "win": {
         "effects": {
@@ -7268,7 +7268,7 @@
         "relations": {
           "dj_bobine": 3
         },
-        "consequence": "Pile 100 %. DJ Bobine te fixe, ému : « Personne ne m'avait jamais calé. » Il remonte à 101 % dès que tu tournes le dos."
+        "consequence": "Pile 100 %. DJ Noize te fixe, ému : « Personne ne m'avait jamais calé. » Il remonte à 101 % dès que tu tournes le dos."
       },
       "lose": {
         "effects": {
@@ -7277,7 +7277,7 @@
         "xp": {
           "flow": 10
         },
-        "consequence": "Le pitch t'échappe. Bobine hausse les épaules : « 109 %, c'est une couleur. » Tu as un peu le tournis."
+        "consequence": "Le pitch t'échappe. Noize hausse les épaules : « 109 %, c'est une couleur. » Tu as un peu le tournis."
       }
     },
     {

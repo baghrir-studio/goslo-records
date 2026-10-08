@@ -57,6 +57,22 @@ struct RootView: View {
             }
             .transition(.opacity)
 
+            if let moment = model.celebration {
+                Text(moment)
+                    .font(.display(30))
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 10)
+                    .background(Color(red: 1, green: 0.85, blue: 0.3))
+                    .overlay(Rectangle().stroke(.black, lineWidth: 3))
+                    .shadow(color: Color(red: 1, green: 0.85, blue: 0.3).opacity(0.7), radius: 16)
+                    .rotationEffect(.degrees(-3))
+                    .frame(maxHeight: .infinity, alignment: .center)
+                    .allowsHitTesting(false)
+                    .transition(.scale(scale: 0.3).combined(with: .opacity))
+                    .zIndex(20)
+            }
+
             if let toast = model.achievementToast {
                 AchievementToast(achievement: toast)
                     .frame(maxHeight: .infinity, alignment: .top)

@@ -125,7 +125,7 @@ extension GameEngine {
                           cover: cover, releasedTurn: state.turn, sales: [])
         album.sales = [AlbumRules.firstSemester(quality: album.quality, stats: state.stats, fame: fame(in: state))]
         let respect = album.quality >= 7 ? 4 : (album.quality < 5 ? -2 : 1)
-        _ = state.stats.apply([.streams: Int(album.quality.rounded()), .credibilite: respect])
+        _ = state.applyStats([.streams: Int(album.quality.rounded()), .credibilite: respect])
         state.counters.increment(.projets)
         state.albums.append(album)
         return album

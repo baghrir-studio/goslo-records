@@ -86,6 +86,7 @@ struct SoundToggles: View {
     @State private var music = SoundEngine.shared.musicEnabled
     @State private var effects = SoundEngine.shared.effectsEnabled
     @State private var haptics = Haptics.shared.enabled
+    @State private var fastText = TypewriterText.fast
 
     var body: some View {
         Toggle("Musique", isOn: $music)
@@ -94,6 +95,8 @@ struct SoundToggles: View {
             .onChange(of: effects) { _, on in SoundEngine.shared.setEffectsEnabled(on) }
         Toggle("Vibrations", isOn: $haptics)
             .onChange(of: haptics) { _, on in Haptics.shared.setEnabled(on) }
+        Toggle("Texte rapide", isOn: $fastText)
+            .onChange(of: fastText) { _, on in TypewriterText.fast = on }
     }
 }
 

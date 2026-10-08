@@ -7,7 +7,7 @@ struct Minigame: Codable, Equatable, Identifiable {
         case punchliner
         /// Run through the crowd to the door.
         case fuite
-        /// Stop DJ Bobine's pitch on 100 %.
+        /// Stop DJ Noize's pitch on 100 %.
         case platine
         /// Epilogue: sign young artists to your label, within a budget.
         case signing
@@ -145,7 +145,7 @@ enum PunchlinerEngine {
 
 // MARK: - Cale la platine
 
-/// DJ Bobine's pitch drifts up and down; the player stops it as close to 100 % as they can.
+/// DJ Noize's pitch drifts up and down; the player stops it as close to 100 % as they can.
 enum PlatineEngine {
     static let runs = 3
     /// Points per run, by precision.
@@ -164,8 +164,8 @@ enum PlatineEngine {
         let gap = abs(pitch - 100)
         let shown = String(format: "%.1f", pitch).replacingOccurrences(of: ".", with: ",")
         switch gap {
-        case ..<0.6: return (3, "\(shown) %. Pile. DJ Bobine pose la main sur son cœur.")
-        case ..<2: return (2, "\(shown) %. Presque. Bobine dit que « presque, c'est l'énergie ».")
+        case ..<0.6: return (3, "\(shown) %. Pile. DJ Noize pose la main sur son cœur.")
+        case ..<2: return (2, "\(shown) %. Presque. Noize dit que « presque, c'est l'énergie ».")
         case ..<5: return (1, "\(shown) %. Ça s'entend. Un pigeon ralentit, perplexe.")
         default: return (0, "\(shown) %. Ta voix ressemble à un écureuil en retard.")
         }

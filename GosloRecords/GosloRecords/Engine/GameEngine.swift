@@ -28,14 +28,16 @@ struct TurnOutcome: Equatable {
     var minigame: MinigameState?
     /// True if this action closed the semester (upkeep applied).
     var semesterEnded = false
+    /// What the end of the turn brought (bookings, burn-out…), shown under the consequence.
+    var notes: [String] = []
     var ending: Ending?
 
-    fileprivate mutating func add(_ applied: [StatKind: Int]) {
+    mutating func add(_ applied: [StatKind: Int]) {
         deltas.merge(applied, uniquingKeysWith: +)
         deltas = deltas.filter { $0.value != 0 }
     }
 
-    fileprivate mutating func add(levelUps new: [Skill]) {
+    mutating func add(levelUps new: [Skill]) {
         for skill in new where !levelUps.contains(skill) { levelUps.append(skill) }
     }
 }
@@ -53,6 +55,8 @@ enum Resolution: Equatable {
 
 enum GameEngineError: Error, Equatable {
     case cannotVisit
+    case cannotBuy
+    case cannotRecord
     case locationLocked(Location)
     case noCurrentEvent
     case unknownEvent(String)
@@ -97,6 +101,8 @@ struct GameEngine {
         return upkeep
     }
     static let clashRelationPenalty = (win: -15, lose: -5)
+    /// Turns before a rival stops you on sight again (a year).
+    static let challengeCooldown = GameState.turnsPerYear
     /// The chroniqueur reveals weak spots from this relationship level.
     static let chroniqueurId = "yanis"
     static let scoutingRelation = 60
@@ -144,6 +150,7 @@ struct GameEngine {
         }
         state.pendingCinematic = world.story.chapter(1)?.intro
         if let heritage = rapper.heritage { applyHeritage(heritage, to: &state) }
+        refreshChallenges(in: &state)
         return state
     }
 
@@ -194,6 +201,8 @@ struct GameEngine {
     func canChallenge(_ castId: String, in state: GameState) -> Bool {
         guard canVisit(state), !state.challengedThisSemester.contains(castId) else { return false }
         if let trigger = currentObjective(in: state)?.trigger, trigger.npc == castId, trigger.spot { return true }
+        // Outside the story, a rival only stops you once a year: talk to them if you want more.
+        if let last = state.challengedAt[castId], state.turn - last < GameEngine.challengeCooldown { return false }
         return events(featuring: castId, in: state).contains { isChallenge($0, by: castId) }
     }
 
@@ -219,7 +228,10 @@ struct GameEngine {
         }
         guard let event = GameEngine.weightedPick(GameEngine.freshest(pool, in: state), using: &rng) else { return nil }
 
-        if challenge { state.challengedThisSemester.insert(castId) }
+        if challenge {
+            state.challengedThisSemester.insert(castId)
+            state.challengedAt[castId] = state.turn
+        }
         state.talkedAt[castId] = progressKey(in: state)
         state.actionsLeft -= 1
         state.currentLocation = event.location
@@ -386,7 +398,7 @@ struct GameEngine {
         guard choice.isAvailable(in: state) else { throw GameEngineError.requirementNotMet }
 
         var outcome = TurnOutcome(consequence: choice.consequence)
-        outcome.add(state.stats.apply(choice.effects))
+        outcome.add(state.applyStats(choice.effects))
         state.flags.subtract(choice.clearFlags)
         state.flags.formUnion(choice.setFlags)
         for (counter, amount) in choice.counters {
@@ -475,7 +487,7 @@ struct GameEngine {
             guard answer.isAvailable(in: state) else { throw GameEngineError.requirementNotMet }
             delta = answer.hype
             reaction = answer.reaction
-            state.stats.apply(answer.effects)
+            state.applyStats(answer.effects)
             for (castId, change) in answer.relations { state.changeRelation(castId, by: change) }
         }
         let before = running.hype
@@ -494,7 +506,7 @@ struct GameEngine {
         let result = running.passed ? interview.win : interview.lose
         var outcome = TurnOutcome(consequence: result.consequence)
         outcome.interview = running
-        outcome.add(state.stats.apply(result.effects))
+        outcome.add(state.applyStats(result.effects))
         outcome.add(levelUps: state.skills.gain(result.xp))
         state.flags.formUnion(result.setFlags)
         for (castId, delta) in result.relations {
@@ -553,7 +565,7 @@ struct GameEngine {
         let result = running.passed ? concert.win : concert.lose
         var outcome = TurnOutcome(consequence: result.consequence)
         outcome.concert = running
-        outcome.add(state.stats.apply(result.effects))
+        outcome.add(state.applyStats(result.effects))
         outcome.add(levelUps: state.skills.gain(result.xp))
         state.flags.formUnion(result.setFlags)
         for (castId, delta) in result.relations {
@@ -591,7 +603,7 @@ struct GameEngine {
         let result = running.passed ? negotiation.win : negotiation.lose
         var outcome = TurnOutcome(consequence: result.consequence)
         outcome.negotiation = running
-        outcome.add(state.stats.apply(result.effects))
+        outcome.add(state.applyStats(result.effects))
         outcome.add(levelUps: state.skills.gain(result.xp))
         state.flags.formUnion(result.setFlags)
         for (castId, delta) in result.relations {
@@ -648,7 +660,7 @@ struct GameEngine {
         let result = running.passed ? writing.win : writing.lose
         var outcome = TurnOutcome(consequence: result.consequence)
         outcome.writing = running
-        outcome.add(state.stats.apply(result.effects))
+        outcome.add(state.applyStats(result.effects))
         outcome.add(levelUps: state.skills.gain(result.xp))
         state.flags.formUnion(result.setFlags)
         for (castId, delta) in result.relations {
@@ -758,7 +770,7 @@ struct GameEngine {
         let result = minigameScore(running) >= minigame.passScore ? minigame.win : minigame.lose
         var outcome = TurnOutcome(consequence: result.consequence)
         outcome.minigame = running
-        outcome.add(state.stats.apply(result.effects))
+        outcome.add(state.applyStats(result.effects))
         outcome.add(levelUps: state.skills.gain(result.xp))
         state.flags.formUnion(result.setFlags)
         for (castId, delta) in result.relations {
@@ -959,7 +971,7 @@ struct GameEngine {
     // MARK: - Items
 
     func ownedItems(in state: GameState) -> [Item] {
-        story.items.filter { state.items.contains($0.id) }
+        (story.items + Shop.gear.map(\.item)).filter { state.items.contains($0.id) }
     }
 
     /// The secret technique: the one picked in the notebook, otherwise the last owned item that has one,
@@ -1003,8 +1015,9 @@ struct GameEngine {
     /// Effective level per skill in a clash (skill level + item bonuses, capped at 10).
     func clashLevels(in state: GameState) -> (Skill) -> Int {
         let skills = state.skills
-        let bonus = Dictionary(uniqueKeysWithValues: ClashMove.allCases.map { ($0.skill, itemBonus(for: $0, in: state)) })
-        return { skill in min(Skills.maxLevel, skills.level(skill) + bonus[skill, default: 0]) }
+        let difficulty = state.difficulty.clashLevelBonus
+        let bonus = Dictionary(uniqueKeysWithValues: ClashMove.allCases.map { ($0.skill, itemBonus(for: $0, in: state) + difficulty) })
+        return { skill in max(1, min(Skills.maxLevel, skills.level(skill) + bonus[skill, default: 0])) }
     }
 
     var wildOpponents: [CastMember] { world.cast.filter { $0.wild && $0.clash != nil } }
@@ -1076,10 +1089,11 @@ struct GameEngine {
         let result = won ? clash.spec.win : clash.spec.lose
         var outcome = TurnOutcome(consequence: result.consequence)
         outcome.clash = clash
-        outcome.add(state.stats.apply(result.effects))
+        outcome.add(state.applyStats(result.effects))
         state.flags.formUnion(result.setFlags)
         state.counters.increment(.beefs)
         if won {
+            ArtistLevel.gain(15, in: &state, outcome: &outcome)
             state.counters.increment(.clashsGagnes)
             state.flags.insert("clash_gagne_\(clash.opponentId)")
         }
@@ -1105,8 +1119,9 @@ struct GameEngine {
         let won = clash.playerWon
         var outcome = TurnOutcome(consequence: won ? clash.spec.win.consequence : clash.spec.lose.consequence)
         outcome.clash = clash
-        outcome.add(state.stats.apply(won ? clash.spec.win.effects : clash.spec.lose.effects))
+        outcome.add(state.applyStats(won ? clash.spec.win.effects : clash.spec.lose.effects))
         if won {
+            ArtistLevel.gain(4, in: &state, outcome: &outcome)
             state.counters.increment(.victoiresTerrain)
             state.flags.formUnion(clash.spec.win.setFlags)
         }
@@ -1116,6 +1131,7 @@ struct GameEngine {
         state.clash = nil
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
+        checkChallenges(&outcome, in: &state)
         state.ending = EndingResolver.prematureEnding(for: state.stats)
         outcome.ending = state.ending
         return outcome
@@ -1124,20 +1140,28 @@ struct GameEngine {
     // MARK: - End of action
 
     /// Quests, early ending, and end of semester when actions run out.
-    private func finishAction(_ outcome: TurnOutcome, in state: inout GameState) -> TurnOutcome {
+    func finishAction(_ outcome: TurnOutcome, in state: inout GameState) -> TurnOutcome {
         var outcome = outcome
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
         applyTechniqueUnlocks(&outcome, in: &state)
+        refreshChallenges(in: &state)
+        checkChallenges(&outcome, in: &state)
 
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
-            outcome.add(state.stats.apply(GameEngine.upkeep(for: state.stats)))
+            let turnEnd = Economy.turnEnd(for: state)
+            outcome.add(state.stats.apply(turnEnd.effects))
+            outcome.notes += turnEnd.notes
             if state.freeCareer { outcome.add(state.stats.apply(GameEngine.agingUpkeep(turn: state.turn))) }
             outcome.add(sellAlbums(in: &state))
+            payChart(&outcome, in: &state)
+            checkChallenges(&outcome, in: &state)
             let limit = turnLimit(in: state)
             if !isInEpilogue(state) { state.turn = state.freeCareer ? state.turn + 1 : min(state.turn + 1, limit) }
-            state.actionsLeft = GameState.actionsPerTurn
+            // Burn-out: one action only.
+            state.actionsLeft = state.stats.mental < Economy.burnout ? 1 : GameState.actionsPerTurn
+            refreshChallenges(in: &state)
             state.challengedThisSemester = []
             outcome.semesterEnded = true
             ending = EndingResolver.prematureEnding(for: state.stats)
@@ -1159,7 +1183,7 @@ struct GameEngine {
             if step >= quest.steps.count {
                 state.completedQuests.insert(quest.id)
                 state.flags.insert("quete_\(quest.id)")
-                outcome.add(state.stats.apply(quest.reward.effects))
+                outcome.add(state.applyStats(quest.reward.effects))
                 outcome.add(levelUps: state.skills.gain(quest.reward.xp))
                 outcome.completedQuests.append(quest)
             }

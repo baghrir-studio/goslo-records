@@ -8,6 +8,8 @@ struct GameState: Codable, Equatable {
     static let overtimeTurns = 10
     /// Visits per semester.
     static let actionsPerTurn = 2
+    /// Turns in a year of career (the year shown to the player; `year` stays the engine's pace for events).
+    static let turnsPerYear = 6
     static let recentMemory = 8
     static let relationRange = 0...100
 
@@ -41,6 +43,19 @@ struct GameState: Codable, Equatable {
     var albums: [Album] = []
     /// Free career: no time limit. It ends on a defeat or when the player hangs up the mic (`GameEngine.retire`).
     var freeCareer = false
+    /// Turn each rival last challenged you on sight (they come back once a year at most).
+    var challengedAt: [String: Int] = [:]
+    /// Turn each shop service was last bought.
+    var boughtAt: [String: Int] = [:]
+    /// Singles released, in order (they race in the Top goslo radio).
+    var singles: [Single] = []
+    /// Artist XP (`ArtistLevel`).
+    var artistXP = 0
+    /// The season's challenges, and the season they were drawn for (-1: none yet).
+    var challenges: [Challenge] = []
+    var challengeSeason = -1
+    /// Best rank of a single in the Top this season.
+    var seasonBestRank: Int?
     /// The finale is played: the player picks between retiring as a legend and carrying on.
     var finaleChoicePending = false
     var pendingFollowUp: String?
@@ -97,6 +112,7 @@ struct GameState: Codable, Equatable {
         case questProgress, completedQuests, ending, position, facing, district, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
         case seenEvents, talkedAt, smallTalk, hooks, albums, freeCareer, finaleChoicePending
+        case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -148,6 +164,13 @@ struct GameState: Codable, Equatable {
         albums = try c.decodeIfPresent([Album].self, forKey: .albums) ?? []
         freeCareer = try c.decodeIfPresent(Bool.self, forKey: .freeCareer) ?? false
         finaleChoicePending = try c.decodeIfPresent(Bool.self, forKey: .finaleChoicePending) ?? false
+        challengedAt = try c.decodeIfPresent([String: Int].self, forKey: .challengedAt) ?? [:]
+        boughtAt = try c.decodeIfPresent([String: Int].self, forKey: .boughtAt) ?? [:]
+        singles = try c.decodeIfPresent([Single].self, forKey: .singles) ?? []
+        artistXP = try c.decodeIfPresent(Int.self, forKey: .artistXP) ?? 0
+        challenges = try c.decodeIfPresent([Challenge].self, forKey: .challenges) ?? []
+        challengeSeason = try c.decodeIfPresent(Int.self, forKey: .challengeSeason) ?? -1
+        seasonBestRank = try c.decodeIfPresent(Int.self, forKey: .seasonBestRank)
     }
 
     /// Year 1 to 10 (no cap in a free career).
@@ -155,18 +178,27 @@ struct GameState: Codable, Equatable {
     /// Semester 1 or 2.
     var semester: Int { turn % 2 + 1 }
     var isOver: Bool { ending != nil }
-    var yearsActive: Int { max(1, Int((Double(turn) / 2).rounded(.up))) }
+    var yearsActive: Int { max(1, Int((Double(turn) / Double(GameState.turnsPerYear)).rounded(.up))) }
+    /// The year of career shown to the player: one every `turnsPerYear` turns.
+    var careerYear: Int { turn / GameState.turnsPerYear + 1 }
+    /// How far into the current year (0…1), actions included.
+    var yearProgress: Double {
+        let done = (turn % GameState.turnsPerYear) * GameState.actionsPerTurn + (GameState.actionsPerTurn - actionsLeft)
+        return min(1, max(0, Double(done) / Double(GameState.turnsPerYear * GameState.actionsPerTurn)))
+    }
+    /// This turn starts a new year (the year card shows).
+    var isNewYear: Bool { turn > 0 && turn % GameState.turnsPerYear == 0 }
     /// Past semester 20 with the finale still to play (see `GameEngine.turnLimit`).
     var isOvertime: Bool { turn >= GameState.totalTurns }
     /// "ANNÉE 4", or "PROLONGATION" in overtime.
-    var periodLabel: String { isOvertime && !freeCareer ? "PROLONGATION" : "ANNÉE \(year)" }
+    var periodLabel: String { isOvertime && !freeCareer ? "PROLONGATION" : "ANNÉE \(careerYear)" }
     /// "S2", or "3/10" in overtime.
     var semesterLabel: String {
         isOvertime && !freeCareer ? "\(turn - GameState.totalTurns + 1)/\(GameState.overtimeTurns)" : "S\(semester)"
     }
     /// Subtitle of the semester card.
     var semesterCardLabel: String {
-        isOvertime && !freeCareer ? "SEMESTRE \(turn - GameState.totalTurns + 1) SUR \(GameState.overtimeTurns)" : "SEMESTRE \(semester)"
+        isOvertime && !freeCareer ? "SEMESTRE \(turn - GameState.totalTurns + 1) SUR \(GameState.overtimeTurns)" : "UNE ANNÉE DE PLUS"
     }
 
     func relation(_ castId: String) -> Int {

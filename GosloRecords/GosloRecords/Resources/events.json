@@ -3173,14 +3173,14 @@
     },
     {
       "id": "bobine_vitesse",
-      "title": "DJ Bobine accélère",
+      "title": "DJ Noize accélère",
       "location": "studio",
       "npc": "dj_bobine",
       "weight": 8,
       "conditions": {
         "min_chapter": 3
       },
-      "text": "DJ Bobine passe ta prod pendant une session. 2 %, puis 4 %, puis 9 % trop vite. « C'est pour l'énergie. » Tu rappes comme une mitraillette sous caféine.",
+      "text": "DJ Noize passe ta prod pendant une session. 2 %, puis 4 %, puis 9 % trop vite. « C'est pour l'énergie. » Tu rappes comme une mitraillette sous caféine.",
       "choices": [
         {
           "label": "Suivre le rythme coûte que coûte",
@@ -3847,8 +3847,8 @@
     },
     {
       "id": "platine_bobine",
-      "title": "Bobine s'emballe",
-      "text": "DJ Bobine a installé sa platine sur le banc et poussé le pitch « pour l'énergie ». Le morceau ressemble à un dessin animé. « Cale-la à 100 %, si t'es si {fort|forte}. »",
+      "title": "Noize s'emballe",
+      "text": "DJ Noize a installé sa platine sur le banc et poussé le pitch « pour l'énergie ». Le morceau ressemble à un dessin animé. « Cale-la à 100 %, si t'es si {fort|forte}. »",
       "location": "quartier",
       "npc": "dj_bobine",
       "weight": 6,
@@ -3859,7 +3859,7 @@
         {
           "label": "Caler la platine",
           "minigame": "platine_bobine",
-          "consequence": "Tu poses deux doigts sur le curseur. Bobine retient son souffle."
+          "consequence": "Tu poses deux doigts sur le curseur. Noize retient son souffle."
         },
         {
           "label": "Rapper sur la version accélérée",
@@ -3869,7 +3869,7 @@
           "xp": {
             "flow": 10
           },
-          "consequence": "Tu rappes à 109 %. Ta langue fait un footing. Bobine trouve ça « très énergie »."
+          "consequence": "Tu rappes à 109 %. Ta langue fait un footing. Noize trouve ça « très énergie »."
         }
       ]
     },

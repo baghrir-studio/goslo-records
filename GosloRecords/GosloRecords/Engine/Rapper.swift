@@ -107,6 +107,10 @@ struct Rapper: Codable, Equatable {
     var heritage: Heritage?
     /// nil in saves from before the choice existed: rappeur.
     var genderChoice: Gender?
+    /// Picked at creation; nil in older saves: normal.
+    var difficultyChoice: Difficulty?
+
+    var difficulty: Difficulty { difficultyChoice ?? .normal }
 
     var gender: Gender { genderChoice ?? .rappeur }
 
@@ -114,7 +118,8 @@ struct Rapper: Codable, Equatable {
          hairStyle: CharacterLook.HairStyle? = nil, hat: CharacterLook.Hat? = nil, glasses: Bool? = nil,
          beard: Bool? = nil, chain: Bool? = nil, headphones: Bool? = nil,
          outfit: CharacterLook.Outfit? = nil, earrings: Bool? = nil, outfitColor: Int? = nil, build: CharacterLook.Build? = nil,
-         gender: Gender = .rappeur, heritage: Heritage? = nil) {
+         gender: Gender = .rappeur, heritage: Heritage? = nil, difficulty: Difficulty? = nil) {
+        difficultyChoice = difficulty
         self.build = build
         self.heritage = heritage
         genderChoice = gender
@@ -155,5 +160,6 @@ struct Rapper: Codable, Equatable {
         build = try c.decodeIfPresent(CharacterLook.Build.self, forKey: .build)
         lookFromStyle = try c.decodeIfPresent(Bool.self, forKey: .lookFromStyle) ?? true
         heritage = try c.decodeIfPresent(Heritage.self, forKey: .heritage)
+        difficultyChoice = try c.decodeIfPresent(Difficulty.self, forKey: .difficultyChoice)
     }
 }
