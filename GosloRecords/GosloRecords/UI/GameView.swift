@@ -31,7 +31,13 @@ struct GameView: View {
                             .transition(.opacity)
                     }
                     VStack(spacing: 0) {
-                        hud(state)
+                        if let daily = model.dailyClash {
+                            DailyHeader(challenge: daily, opponent: model.engine.castMember(daily.opponentId)?.name ?? "???")
+                        } else if let game = model.arcadePlaying {
+                            ArcadeHeader(game: game)
+                        } else {
+                            hud(state)
+                        }
                         if case .clash(let clash) = model.phase {
                             BattleView(clash: clash, state: state)
                                 .background(Color(red: 0.05, green: 0.05, blue: 0.06).ignoresSafeArea(edges: .bottom))
@@ -243,9 +249,14 @@ struct GameView: View {
             .opacity(model.transition == nil ? 1 : 0)
             .transition(.opacity)
         case .dialogue(let speaker, let lines):
-            LinesBox(speaker: speaker, lines: lines)
-                .id(lines.joined())
-                .transition(.move(edge: .bottom).combined(with: .opacity))
+            VStack(alignment: .trailing, spacing: 8) {
+                if let card = model.philosophyCard {
+                    PhilosophyShareButton(card: card)
+                }
+                LinesBox(speaker: speaker, lines: lines)
+                    .id(lines.joined())
+            }
+            .transition(.move(edge: .bottom).combined(with: .opacity))
         case .encounter(let event):
             EncounterBox(event: event, state: state)
                 .transition(.move(edge: .bottom).combined(with: .opacity))

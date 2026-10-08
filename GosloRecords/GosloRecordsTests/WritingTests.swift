@@ -162,6 +162,18 @@ final class WritingTests: XCTestCase {
         XCTAssertEqual(try engine.visit(.reseaux, in: &state, using: &rng).id, "story_sortie")
         _ = try engine.resolve(choiceAt: 1, in: &state)
 
+        // The leak: Fred sold the session to the Baron. Forgiven; then the Baron calls, and gets hung up on.
+        refill()
+        XCTAssertEqual(engine.currentObjective(in: state)?.id, "fuite")
+        XCTAssertEqual(try engine.visit(.studio, in: &state, using: &rng).id, "story_fuite")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertTrue(state.flags.isSuperset(of: ["trahison_reglee", "fred_pardonne"]))
+        XCTAssertEqual(try XCTUnwrap(engine.takeFollowUp(in: &state)).id, "story_appel_baron")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertTrue(state.flags.contains("refus_baron"))
+        XCTAssertNil(state.pendingFollowUp)
+        XCTAssertEqual(engine.currentObjective(in: state)?.id, "conteur")
+
         // Le Conteur: a clash, retried until won.
         refill()
         XCTAssertEqual(try engine.talk(to: "le_conteur", in: &state, using: &rng)?.id, "story_conteur")

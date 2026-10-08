@@ -168,6 +168,13 @@ final class ConcertTests: XCTestCase {
         _ = try engine.resolve(choiceAt: 2, in: &state)
         XCTAssertTrue(state.flags.contains("billets_fantomes"))
 
+        // Lucien won't climb the Transfo's stairs: a promise on his bench.
+        refill()
+        XCTAssertEqual(engine.currentObjective(in: state)?.id, "lucien_banc")
+        XCTAssertEqual(try engine.talk(to: "lucien", in: &state, using: &rng)?.id, "story_lucien_banc")
+        _ = try engine.resolve(choiceAt: 0, in: &state)
+        XCTAssertTrue(state.flags.isSuperset(of: ["lucien_ch3", "lucien_promesse"]))
+
         refill()
         XCTAssertEqual(try engine.visit(.scene, in: &state, using: &rng).id, "story_balance")
         _ = try engine.resolve(choiceAt: 0, in: &state)

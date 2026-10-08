@@ -24,6 +24,10 @@ enum Philosopher {
         "« {h} ». L'existence précède l'essence, disait Sartre. Ton refrain existe. Son essence, on la cherchera ensemble sur @goslo_radio.",
     ]
 
+    /// The thinker behind each reading (same order as `readings`).
+    static let thinkers = ["Nietzsche", "Camus", "Socrate", "Héraclite", "Spinoza", "Descartes",
+                           "Diogène", "Pascal", "Montaigne", "Épicure", "Ibn Khaldoun", "Sartre"]
+
     static let noRefrain = [
         "Une punchline, c'est un aphorisme qui a mis des baskets. Ramène-m'en une, je la lirai comme on lit les classiques : lentement, et en doutant de tout.",
         "Écris un refrain, au Punchliner ou ailleurs. Je l'analyserai pour goslo radio. Avec ta permission. Ou sans.",
@@ -35,16 +39,41 @@ enum Philosopher {
     ]
 
     /// Which thinker reads this refrain (always the same one for the same words).
-    static func reading(of hook: String) -> String {
-        let index = hook.unicodeScalars.reduce(0) { ($0 &* 31 &+ Int($1.value)) & 0x7fffffff } % readings.count
-        return readings[index].replacingOccurrences(of: "{h}", with: hook)
+    static func readingIndex(of hook: String) -> Int {
+        hook.unicodeScalars.reduce(0) { ($0 &* 31 &+ Int($1.value)) & 0x7fffffff } % readings.count
     }
+
+    static func reading(of hook: String) -> String {
+        readings[readingIndex(of: hook)].replacingOccurrences(of: "{h}", with: hook)
+    }
+
+    /// The analysis as a card to share: the punchline, the thinker, and the reading without the quote.
+    static func card(of hook: String, by artist: String) -> PhilosophyCard {
+        let index = readingIndex(of: hook)
+        let analysis = readings[index].replacingOccurrences(of: "« {h} ». ", with: "")
+        return PhilosophyCard(hook: hook, artist: artist, thinker: thinkers[index], analysis: analysis)
+    }
+}
+
+/// A punchline analysed by goslo radio's philosopher, shared as an image.
+struct PhilosophyCard: Equatable {
+    let hook: String
+    let artist: String
+    let thinker: String
+    let analysis: String
 }
 
 extension GameEngine {
     /// Talking to the philosopher: his reading of your newest refrain not yet analysed (pen XP the first time),
     /// or of your latest one again, or an invitation to write one.
     func philosopherReading(in state: inout GameState) -> [String] {
+        var lines = philosopherAnalysis(in: &state)
+        // Something happened in the story since: he has a thought about it, after the reading.
+        if let moment = takeFreshMoment(of: Philosopher.id, in: &state) { lines.append(moment) }
+        return lines
+    }
+
+    private func philosopherAnalysis(in state: inout GameState) -> [String] {
         guard !state.hooks.isEmpty else { return [Philosopher.noRefrain[state.flags.count % Philosopher.noRefrain.count]] }
         let fresh = state.hooks.indices.last { !state.flags.contains(Philosopher.readFlag($0)) }
         let index = fresh ?? state.hooks.count - 1
@@ -57,6 +86,13 @@ extension GameEngine {
             lines.append("Celle-là, je l'ai déjà disséquée. Écris-en une nouvelle, je t'attends sur mon banc.")
         }
         return lines
+    }
+
+    /// The card of the refrain the philosopher reads next time (nil without refrains).
+    func philosophyCard(in state: GameState) -> PhilosophyCard? {
+        guard !state.hooks.isEmpty else { return nil }
+        let index = state.hooks.indices.last { !state.flags.contains(Philosopher.readFlag($0)) } ?? state.hooks.count - 1
+        return Philosopher.card(of: state.hooks[index], by: state.rapper.name)
     }
 
     /// Refrains the philosopher has read.

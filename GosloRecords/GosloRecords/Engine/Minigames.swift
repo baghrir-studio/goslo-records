@@ -11,6 +11,8 @@ struct Minigame: Codable, Equatable, Identifiable {
         case platine
         /// Epilogue: sign young artists to your label, within a budget.
         case signing
+        /// Repeat the beatboxer's pattern, one sound longer each round.
+        case beatbox
     }
 
     let id: String
@@ -62,6 +64,7 @@ struct Minigame: Codable, Equatable, Identifiable {
         switch kind {
         case .punchliner: rounds.count
         case .platine: PlatineEngine.runs
+        case .beatbox: BeatboxEngine.rounds
         case .fuite, .signing: 1
         }
     }

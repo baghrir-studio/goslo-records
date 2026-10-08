@@ -9,6 +9,7 @@ enum Route: Equatable {
     case ending(CareerRecord)
     case history
     case achievements
+    case arcade
 }
 
 /// What triggered the current encounter (decides the backdrop and where you come back to).
@@ -131,6 +132,13 @@ final class AppModel {
     private var taxiRideOffered = false
     private var taxiTalks = 0
     private var bunkerKnocks = 0
+    /// The daily clash being played (the career waits in `careerAside`, untouched).
+    private(set) var dailyClash: DailyChallenge?
+    private var careerAside: GameState?
+    /// The arcade game being played (a throwaway game too).
+    private(set) var arcadePlaying: ArcadeGame?
+    /// The philosopher's analysis being read, to share as a card (cleared when the dialogue ends).
+    private(set) var philosophyCard: PhilosophyCard?
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
         self.engine = engine
@@ -385,6 +393,7 @@ final class AppModel {
             // goslo radio's philosopher reads your latest punchline.
             sound.play(.select)
             npcFacing[npc.id] = facing.opposite
+            philosophyCard = engine.philosophyCard(in: current)
             let lines = engine.philosopherReading(in: &current)
             state = current
             persist()
@@ -648,7 +657,11 @@ final class AppModel {
     }
 
     func finishConcert() {
-        guard var current = state, case .concert = phase else { return }
+        guard var current = state, case .concert(let running) = phase else { return }
+        if let game = arcadePlaying {
+            finishArcade(game, score: running.hype)
+            return
+        }
         let before = current.stats
         guard let outcome = try? engine.finishConcert(in: &current) else { return }
         state = current
@@ -789,6 +802,15 @@ final class AppModel {
         return result
     }
 
+    /// Beatbox Simon: the pattern was played back (or not).
+    func beatbox(repeated: Bool) {
+        guard var current = state, case .minigame = phase else { return }
+        guard (try? engine.beatbox(repeated: repeated, in: &current)) != nil else { return }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+    }
+
     /// Fuir la foule: the chase is over.
     func endChase(escaped: Bool) {
         guard var current = state, case .minigame = phase else { return }
@@ -808,7 +830,11 @@ final class AppModel {
     }
 
     func finishMinigame() {
-        guard var current = state, case .minigame = phase else { return }
+        guard var current = state, case .minigame(let running) = phase else { return }
+        if let game = arcadePlaying {
+            finishArcade(game, score: Arcade.score(of: running, engine: engine))
+            return
+        }
         let before = current.stats
         guard let outcome = try? engine.finishMinigame(in: &current) else { return }
         state = current
@@ -837,6 +863,10 @@ final class AppModel {
 
     func finishClash() {
         guard var current = state, case .clash = phase else { return }
+        if let challenge = dailyClash {
+            finishDaily(challenge, won: current.clash?.playerWon ?? false)
+            return
+        }
         let before = current.stats
         guard let outcome = try? engine.finishClash(in: &current) else { return }
         state = current
@@ -856,6 +886,7 @@ final class AppModel {
     func advance() {
         switch phase {
         case .dialogue:
+            philosophyCard = nil
             if taxiRideOffered {
                 // Driss drives you: same destinations as the tram.
                 taxiRideOffered = false
@@ -946,7 +977,7 @@ final class AppModel {
         phase = .cinematic
         withAnimation(.easeInOut(duration: 0.45)) { letterbox = true }
         try? await Task.sleep(for: .milliseconds(450))
-        for step in cinematic.steps where step.plays(for: state?.rapper.city) {
+        for step in cinematic.steps where step.plays(in: state) {
             guard route == .game else { return }
             await perform(step)
         }
@@ -1177,7 +1208,90 @@ final class AppModel {
         deltaToken += 1
     }
 
+    /// A clash tip has been read: it won't show again this career.
+    func learn(_ tip: ClashTip) {
+        guard var current = state else { return }
+        current.flags.insert(tip.flag)
+        state = current
+        persist()
+    }
+
+    // MARK: - Daily clash
+
+    /// Today's daily clash (the same for every player).
+    var dailyToday: DailyChallenge? { engine.dailyChallenge() }
+    var canPlayDaily: Bool { dailyToday.map { profile.daily.canPlay(on: $0.day) } ?? false }
+    var dailyStreak: Int {
+        profile.daily.currentStreak(today: DailyClash.dayKey(Date()), yesterday: DailyClash.yesterdayKey(Date()))
+    }
+
+    /// Starts today's clash. The attempt counts as soon as it starts: quitting doesn't give a second go.
+    func startDailyClash() {
+        guard dailyClash == nil, let challenge = dailyToday, profile.daily.canPlay(on: challenge.day) else { return }
+        profile.daily.start(on: challenge.day)
+        store.saveProfile(profile)
+        careerAside = state
+        let rapper = state?.rapper ?? history.last?.rapper ?? Rapper(name: "MC Personne", city: .paris, style: .boomBap)
+        let game = engine.dailyGame(challenge, rapper: rapper)
+        state = game
+        dailyClash = challenge
+        source = nil
+        philosophyCard = nil
+        if let clash = game.clash { phase = .clash(clash) }
+        sound.play(.select)
+        route = .game
+    }
+
+    private func finishDaily(_ challenge: DailyChallenge, won: Bool) {
+        profile.daily.finish(on: challenge.day, won: won, yesterday: DailyClash.yesterdayKey(Date()))
+        store.saveProfile(profile)
+        state = careerAside
+        careerAside = nil
+        dailyClash = nil
+        source = nil
+        phase = .overworld
+        route = .home
+    }
+
+    // MARK: - Arcade
+
+    func isUnlocked(_ game: ArcadeGame) -> Bool { Arcade.isUnlocked(game, in: profile) }
+
+    /// Starts an arcade mini-game in a throwaway game. The freestyle has no game: the arcade screen plays it.
+    func startArcade(_ game: ArcadeGame) {
+        guard dailyClash == nil, arcadePlaying == nil, isUnlocked(game), game.mode != .freestyle else { return }
+        let rapper = state?.rapper ?? history.last?.rapper ?? Rapper(name: "MC Personne", city: .paris, style: .boomBap)
+        guard let sandbox = engine.arcadeGame(game, rapper: rapper) else { return }
+        careerAside = state
+        state = sandbox
+        arcadePlaying = game
+        source = nil
+        philosophyCard = nil
+        if let running = sandbox.minigame { phase = .minigame(running) }
+        if let running = sandbox.concert { phase = .concert(running) }
+        sound.play(.select)
+        route = .game
+    }
+
+    /// Keeps the record of an arcade game.
+    func recordArcade(_ game: ArcadeGame, score: Int) {
+        profile.record(arcade: game, score: score)
+        store.saveProfile(profile)
+    }
+
+    private func finishArcade(_ game: ArcadeGame, score: Int) {
+        recordArcade(game, score: score)
+        state = careerAside
+        careerAside = nil
+        arcadePlaying = nil
+        source = nil
+        phase = .overworld
+        route = .arcade
+    }
+
     func persist() {
+        // The daily clash is a throwaway game: never saved over the career.
+        guard dailyClash == nil, arcadePlaying == nil else { return }
         guard var current = state, !current.isOver, finishedRecord == nil else { return }
         current.position = position
         current.facing = facing

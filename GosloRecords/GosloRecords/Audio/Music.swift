@@ -179,6 +179,8 @@ enum SoundEffect: String, CaseIterable {
     case micDrop
     /// Secret technique stings, one per animation (`SecretFX`).
     case fxBass, fxScratch, fxAdlib, fxTear, fxGlitch, fxPen, fxSpotlight, fxChat
+    /// Beatbox Simon's fourth sound (the others are the concert's kick, snare and hat).
+    case beatboxWiki
 
     /// Frequent, quiet sounds: they go to a dedicated player.
     var isTick: Bool { self == .blip || self == .step || self == .tap }
@@ -279,6 +281,8 @@ enum SoundEffect: String, CaseIterable {
             out = Synth.layer([(Synth.snare(seed: 61), 0, 1), (Synth.clap(seed: 63), 0.005, 0.6)])
         case .concertHat:
             out = Synth.hat(seed: 67)
+        case .beatboxWiki:
+            out = Synth.scratch(length: 0.22, seed: 29)
         case .concertHit:
             out = Synth.pulse(note: 88, length: 0.06, duty: 0.25, decay: 25)
         case .crowdCheer:

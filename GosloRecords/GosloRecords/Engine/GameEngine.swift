@@ -204,7 +204,7 @@ struct GameEngine {
         guard canVisit(state) else { throw GameEngineError.cannotVisit }
         if let story = storyEvent(forNPC: castId, in: state) {
             if challenge { state.challengedThisSemester.insert(castId) }
-            state.actionsLeft -= 1
+            if currentObjective(in: state)?.free != true { state.actionsLeft -= 1 }
             state.currentLocation = story.location
             state.currentEventId = story.id
             state.metCast.insert(castId)
@@ -266,7 +266,10 @@ struct GameEngine {
         let count = state.smallTalk[castId, default: 0]
         state.smallTalk[castId] = count + 1
         var lines: [String]
-        if count % 3 == 2, let memory = memoryLine(for: castId, in: state) {
+        if let moment = takeFreshMoment(of: castId, in: &state) {
+            // Something happened in the story since: they talk about that first.
+            lines = ["« \(moment) »"]
+        } else if count % 3 == 2, let memory = memoryLine(for: castId, in: state) {
             lines = ["« \(memory) »"]
         } else if let idle = member?.idle, !idle.isEmpty {
             lines = ["« \(idle[count % idle.count]) »"]
@@ -280,6 +283,21 @@ struct GameEngine {
             lines.append("En attendant : \(objective.label.prefix(1).lowercased() + objective.label.dropFirst()).")
         }
         return lines.map { TextTemplate.render($0, for: state.rapper) }
+    }
+
+    /// The newest story line (cast.json "moments") this character can say now and hasn't said yet.
+    func freshMoment(of castId: String, in state: GameState) -> Int? {
+        guard let moments = castMember(castId)?.moments else { return nil }
+        return moments.indices.last { index in
+            !state.flags.contains(CastMoment.heardFlag(castId, index)) && moments[index].conditions.isSatisfied(by: state)
+        }
+    }
+
+    /// Says the fresh story line, if any: it won't be said again.
+    func takeFreshMoment(of castId: String, in state: inout GameState) -> String? {
+        guard let index = freshMoment(of: castId, in: state), let member = castMember(castId) else { return nil }
+        state.flags.insert(CastMoment.heardFlag(castId, index))
+        return member.moments[index].text
     }
 
     // MARK: - Quests
@@ -311,14 +329,17 @@ struct GameEngine {
         guard isUnlocked(location, in: state) else { throw GameEngineError.locationLocked(location) }
 
         let chosen: GameEvent
+        var free = false
         if let story = storyEvent(at: location, in: state) {
             chosen = story
+            free = currentObjective(in: state)?.free == true
         } else {
             let eligible = eligibleEvents(at: location, in: state)
             chosen = GameEngine.weightedPick(GameEngine.freshest(eligible, in: state), using: &rng) ?? GameEngine.fallbackEvent
         }
 
-        state.actionsLeft -= 1
+        // A story scene (`Objective.free`) doesn't spend an action.
+        if !free { state.actionsLeft -= 1 }
         state.currentLocation = location
         state.currentEventId = chosen.id
         if let npc = chosen.npc { state.metCast.insert(npc) }
@@ -640,7 +661,7 @@ struct GameEngine {
 
     // MARK: - Mini-games
 
-    func minigame(_ id: String) -> Minigame? { story.minigame(id) }
+    func minigame(_ id: String) -> Minigame? { story.minigame(id) ?? (id == Arcade.beatbox.id ? Arcade.beatbox : nil) }
 
     /// Punchliner: the round being played, and the order its endings are shown in (stable).
     func punchlinerRound(in state: GameState) -> (round: PunchlinerRound, order: [Int])? {
@@ -721,6 +742,8 @@ struct GameEngine {
             return best > 0 ? Double(running.points) / Double(best) : 0
         case .platine:
             return Double(running.points) / Double(PlatineEngine.runs * PlatineEngine.maxPoints)
+        case .beatbox:
+            return Double(running.points) / Double(BeatboxEngine.rounds)
         case .fuite:
             return running.escaped == true ? 1 : 0
         case .signing:

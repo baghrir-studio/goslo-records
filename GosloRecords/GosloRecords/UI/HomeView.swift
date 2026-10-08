@@ -48,6 +48,7 @@ struct HomeView: View {
             Spacer()
 
             VStack(spacing: 12) {
+                DailyClashCard()
                 if let run = model.resumableRun {
                     Button {
                         model.resume()
@@ -71,6 +72,10 @@ struct HomeView: View {
                 }
                 .buttonStyle(model.resumableRun == nil ? AnyButtonStyle(PrimaryButtonStyle()) : AnyButtonStyle(SecondaryButtonStyle()))
                 .disabled(model.loadError != nil)
+
+                Button("Arcade · mini-jeux") { model.go(.arcade) }
+                    .buttonStyle(SecondaryButtonStyle())
+                    .disabled(model.loadError != nil)
 
                 HStack(spacing: 12) {
                     Button("Mes carrières") { model.go(.history) }

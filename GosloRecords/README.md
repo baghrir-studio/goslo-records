@@ -82,7 +82,14 @@ The main storyline lives in `GosloRecords/Resources/story.json`:
   of the automatic `clash_gagne_<id>`: useful when the rival may already have been beaten earlier.
 - `cinematics`: lists of steps, one field per step: `narration`, `say {who, text}`, `title {text, subtitle}`,
   `move` / `place {who, x, y, facing}`, `despawn`, `face`, `exclaim`, `camera {x, y}`, `camera_reset`, `fade`,
-  `wait`, `sound`. `who` is `"player"` or a cast id.
+  `wait`, `sound`. `who` is `"player"` or a cast id. A step can be limited to some cities (`"cities": ["Lille"]`)
+  and/or to an earlier choice with `"when"` (same format as event conditions), e.g.
+  `{"say": {...}, "when": {"required_flags": ["fred_banni"]}}`: that's how the outros change with what you did.
+  Keep `place`/`move` steps unconditional; gate the lines (`say`, `narration`).
+- An objective with `"free": true` is a story scene (a funeral, a sleepless night): playing its event doesn't spend
+  one of the semester's actions, so the story gets longer without eating into the 20-semester clock.
+- An objective done when a flag is *absent* (`"conditions": {"excluded_flags": ["photo_baron"]}`) is skipped
+  unless an earlier choice set that flag: a scene that only exists on one path (its choices `clear_flags` it).
 - `interviews`: host, show name, starting audience, pass mark, timed questions with answers (`hype` +/−,
   optional `requires`), win/lose results.
 - `radio`: "Flash goslo radio" headlines, each with optional conditions.
@@ -109,13 +116,18 @@ Map characters can appear from a given chapter with `"from_chapter": 2`, and lea
 
 Written so far: chapter 1 "En bas du bloc" (boss: Kevlar Jr.), chapter 2 "La laverie" (signing at goslo records,
 mixtape, clip, Lingot's exile to Miami, the American star who says no, boss: "Le Grand Débat" TV show) and
-chapter 3 "Première scène" (setlist, DJ Bobine, rehearsal, promo, soundcheck with Gégé, boss: the first concert)
+chapter 3 "Première scène" (setlist, DJ Bobine, rehearsal, promo, a promise on Vieux Mic Lucien's bench,
+soundcheck with Gégé, boss: the first concert)
 and chapter 4 "Le buzz" (a cat makes your chorus go viral, Lil Sauge's opportunistic feat, boss: Kolosse's live
 clash, Momo's blessing, reading the 84-page contract, boss: negotiating with Victor Contrat of Hexagone Music)
-and chapter 5 "Le game" (the image meeting, writing the single with Fred, release week, Le Conteur's diss series,
+and chapter 5 "Le game" (the image meeting, writing the single with Fred, release week, the leak: Fred sold the
+session to the Baron, forgive him or walk out, then the Baron's offer to sign with him, Le Conteur's diss series,
 Scalpel's live "autopsy" on goslo radio, boss: the pen duel against Scalpel) and chapter 6 "Le trône", the finale
-(the Dôme is booked, Scalpel's red pen, DJ Bobine's second turntable, then three final bosses: the clash against the
-Baron, "Le Face-à-face" on goslo radio, and the concert at the Dôme). A chapter with `"finale": true` ends the career
+(the Dôme is booked, Lucien's funeral and the Baron's real name, Momo and the photo if you went up to the Baron's,
+Scalpel's red pen, DJ Bobine's second turntable, the sleepless night before: goslo radio's night line, the
+Philosopher on Lucien's bench, mum's kitchen and who stands in your corner, then three final bosses: the clash
+against the Baron, "Le Face-à-face" on goslo radio, and the concert at the Dôme). The epilogue "Le label" adds Fred's
+Bunker for sale if you walked out on him. A chapter with `"finale": true` ends the career
 when its outro has been watched: the ending screen and the share card follow.
 Finishing chapter N sets the flag `chapitre_N`; after the last written chapter the game is free play.
 
@@ -234,6 +246,11 @@ GosloRecordsTests/
 }
 ```
 Leave out `clash` for a character that can't be clashed. Stats run 1–10 (9–10 = boss).
+
+`idle` lines take turns when a character has nothing new to say. `moments` are lines tied to the story:
+`"moments": [{ "text": "Je garde le rideau à moitié baissé…", "conditions": { "required_flags": ["adieu_lucien"] } }]`.
+When the player chats, the newest moment whose conditions hold and that hasn't been said yet comes first, once
+(the Philosopher adds his after his reading). That's how characters react to what just happened.
 
 ## Adding a quest (quests.json)
 

@@ -35,6 +35,7 @@ struct MinigameView: View {
                     case .platine: PlatineBoard(minigame: minigame)
                     case .fuite: ChaseBoard(look: state.rapper.look)
                     case .signing: SigningBoard()
+                    case .beatbox: BeatboxBoard(minigame: minigame)
                     }
                 }
             }
@@ -83,7 +84,7 @@ private struct MinigameResult: View {
                     .frame(maxWidth: .infinity, minHeight: 48)
                     .overlay(Rectangle().stroke(Theme.accent, lineWidth: 2))
             }
-            Button("Continuer") { model.finishMinigame() }
+            Button(model.arcadePlaying == nil ? "Continuer" : "Retour à l'arcade") { model.finishMinigame() }
                 .buttonStyle(PrimaryButtonStyle())
         }
         .fullScreenCover(isPresented: $listening) {

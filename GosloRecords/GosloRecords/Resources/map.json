@@ -95,7 +95,8 @@
       "id": "lucien",
       "x": 11,
       "y": 9,
-      "facing": "down"
+      "facing": "down",
+      "hidden_if": "adieu_lucien"
     },
     {
       "id": "orphee",
