@@ -94,6 +94,7 @@ final class EventsDataTests: XCTestCase {
         settable.formUnion((1...world.story.chapters.count).map { "chapitre_\($0)" })
         settable.formUnion((events + world.story.events).flatMap { $0.choices.compactMap { $0.clash.map { "clash_gagne_\($0.opponent)" } } })
         settable.formUnion(world.quests.map { "quete_\($0.id)" })
+        settable.formUnion(world.story.tournament.map(\.flag))
 
         var required: [(String, String)] = events.flatMap { e in e.conditions.requiredFlags.map { (e.id, $0) } }
         for quest in world.quests {

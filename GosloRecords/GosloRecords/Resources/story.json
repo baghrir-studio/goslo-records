@@ -6901,6 +6901,151 @@
           "contrat_signe"
         ]
       }
+    },
+    {
+      "id": "adlib_fantome",
+      "secret": {
+        "name": "L'Ad-Lib Fantôme",
+        "line": "Tu ne dis rien. Un « SKRRT » tombe du plafond, puis un « HEIN ? », puis un « OUAIS ». Personne ne sait d'où ils viennent. Ton adversaire perd le fil en cherchant le backeur.",
+        "prop": "waveform",
+        "fx": "adlib"
+      },
+      "unlock": {},
+      "min_artist_level": 3
+    },
+    {
+      "id": "feat_imaginaire",
+      "secret": {
+        "name": "Le Featuring Imaginaire",
+        "line": "Tu annonces un invité surprise. Les projecteurs balaient la scène. Personne ne monte. Tu fais les deux voix. Le lendemain, dix mille personnes jurent avoir vu quelqu'un.",
+        "prop": "person.2.fill",
+        "fx": "spotlight"
+      },
+      "unlock": {},
+      "min_artist_level": 5
+    },
+    {
+      "id": "silence_legende",
+      "secret": {
+        "name": "Le Silence de Légende",
+        "line": "Tu poses le micro. Tu regardes la salle. Dix secondes, en noir et blanc. Personne n'ose respirer. Ton adversaire s'excuse, sans savoir de quoi.",
+        "prop": "mic.slash.fill",
+        "fx": "tear"
+      },
+      "unlock": {},
+      "min_artist_level": 8
+    },
+    {
+      "id": "karaoke_sauvage",
+      "secret": {
+        "name": "Le Karaoké Sauvage",
+        "line": "Tu arraches la télécommande et lances l'instru préférée de ton adversaire. Les paroles défilent : c'est ton couplet, avec son nom à lui dans chaque rime. La salle chante par-dessus.",
+        "prop": "music.mic",
+        "fx": "adlib"
+      },
+      "unlock": {
+        "required_flags": [
+          "tournoi_lil_karaoke"
+        ]
+      }
+    },
+    {
+      "id": "piste_cachee",
+      "secret": {
+        "name": "La Piste Cachée",
+        "line": "Tu fais tourner un vieux vinyle. Après quatre minutes de silence, piste cachée : ton adversaire, enregistré en secret, en train de chanter du Lara Fabian dans sa voiture.",
+        "prop": "opticaldisc",
+        "fx": "vinyl"
+      },
+      "unlock": {
+        "required_flags": [
+          "tournoi_tonton_mixtape"
+        ]
+      }
+    },
+    {
+      "id": "encore_deux",
+      "secret": {
+        "name": "Encore Deux !",
+        "line": "Tu cries « ENCORE DEUX ! » et la salle entière fait des squats en rythme. La basse cogne à chaque descente. Ton adversaire, emporté par le mouvement, en fait trente et ne se relève pas.",
+        "prop": "figure.strengthtraining.traditional",
+        "fx": "bass"
+      },
+      "unlock": {
+        "required_flags": [
+          "tournoi_coach_burpee"
+        ]
+      }
+    },
+    {
+      "id": "plaidoirie_rouge",
+      "secret": {
+        "name": "La Plaidoirie Rouge",
+        "line": "Tu sors le dossier de ton adversaire et tu rayes ses arguments un par un, au stylo rouge, devant tout le monde. « Pas d'autres questions. » Le juge, c'est le public. Il a déjà tranché.",
+        "prop": "building.columns.fill",
+        "fx": "redpen"
+      },
+      "unlock": {
+        "required_flags": [
+          "tournoi_maitre_objection"
+        ]
+      }
+    },
+    {
+      "id": "lag_volontaire",
+      "secret": {
+        "name": "Le Lag Volontaire",
+        "line": "Tu te figes en plein mouvement, comme une vidéo qui charge. L'image saute, se dédouble, revient. Ton adversaire attend la suite. La suite, c'est une punchline qui arrive avec trois secondes de retard et aucune pitié.",
+        "prop": "wifi.exclamationmark",
+        "fx": "glitch"
+      },
+      "unlock": {
+        "required_flags": [
+          "tournoi_npc_404"
+        ]
+      }
+    },
+    {
+      "id": "grand_cru",
+      "secret": {
+        "name": "Le Grand Cru",
+        "line": "Un projecteur, un seul. Tu fais tourner ton couplet comme un grand vin, tu le humes, tu le sers à la salle. Notes de bitume, de laverie et de revanche. Ton adversaire demande la carte des desserts.",
+        "prop": "wineglass.fill",
+        "fx": "spotlight"
+      },
+      "unlock": {
+        "required_flags": [
+          "tournoi_le_sommelier"
+        ]
+      }
+    },
+    {
+      "id": "couronne_rangee",
+      "secret": {
+        "name": "La Couronne Rangée",
+        "line": "Tu sors une couronne d'une boîte à chaussures, tu la regardes, et tu la ranges. Tout passe en noir et blanc, sauf une larme. « Pas besoin. » Ton adversaire vient de comprendre qu'il joue contre une légende.",
+        "prop": "crown.fill",
+        "fx": "tear"
+      },
+      "unlock": {
+        "required_flags": [
+          "tournoi_la_duchesse"
+        ]
+      }
+    },
+    {
+      "id": "bug_humain",
+      "secret": {
+        "name": "Le Bug Humain",
+        "line": "Tu fais quelque chose qu'aucune machine n'a prévu : tu racontes ta mère, ta laverie, ton premier micro. Des rayons partout, la salle pleure, l'algorithme de ton adversaire plante. Erreur 404 : âme introuvable.",
+        "prop": "heart.circle.fill",
+        "fx": "rays"
+      },
+      "unlock": {
+        "required_flags": [
+          "tournoi_algo_rythme"
+        ]
+      }
     }
   ],
   "minigames": [
@@ -7773,6 +7918,192 @@
           "scene": 10
         },
         "consequence": "La déneigeuse t'a doublé. Tu as fait le show sur le trottoir pour trois personnes et un raton laveur. Il est resté jusqu'à la fin."
+      }
+    }
+  ],
+  "tournament": [
+    {
+      "opponent": "lil_karaoke",
+      "min_artist_level": 2,
+      "level_bonus": 0,
+      "rounds": 5,
+      "opponent_power": 1.15,
+      "xp": 35,
+      "technique": "karaoke_sauvage",
+      "intro": "DJ Noize lance l'instru, l'Animateur tend le micro : premier tour, Lil Karaoké. Il a déjà choisi la chanson. C'est la tienne, version karaoké.",
+      "win": {
+        "effects": {
+          "streams": 3,
+          "credibilite": 2
+        },
+        "consequence": "Lil Karaoké cherche ses paroles sur l'écran. Il n'y en a plus. Il repart en fredonnant. Premier tour passé : DJ Noize te checke par-dessus les platines."
+      },
+      "lose": {
+        "effects": {
+          "mental": -4
+        },
+        "consequence": "La salle a chanté avec lui, pas avec toi. Lil Karaoké te tend le micro « pour le refrain ». Reviens quand tu veux : le Tournoi t'attend."
+      }
+    },
+    {
+      "opponent": "tonton_mixtape",
+      "min_artist_level": 3,
+      "level_bonus": 1,
+      "rounds": 5,
+      "opponent_power": 1.3,
+      "xp": 45,
+      "technique": "piste_cachee",
+      "intro": "Deuxième tour. Tonton Mixtape arrive avec un cabas de CD gravés et en distribue au premier rang. « Volume 14, pour ceux qui veulent garder un souvenir de ta défaite. »",
+      "win": {
+        "effects": {
+          "streams": 3,
+          "credibilite": 3
+        },
+        "consequence": "Tonton Mixtape range ses CD, puis t'en tend un. Sur la pochette, au Bic : ta tête, et « le futur ». Il ne te le fait même pas payer. C'est la première fois depuis 2006."
+      },
+      "lose": {
+        "effects": {
+          "mental": -5
+        },
+        "consequence": "Tonton Mixtape te vend le CD de ta propre défaite. Cinq euros. Tu l'achètes. Le Tournoi t'attend pour la revanche."
+      }
+    },
+    {
+      "opponent": "coach_burpee",
+      "min_artist_level": 4,
+      "level_bonus": 2,
+      "rounds": 5,
+      "opponent_power": 1.45,
+      "xp": 55,
+      "technique": "encore_deux",
+      "intro": "Troisième tour. Coach Burpee monte sur scène en faisant des fentes. Il te tend une gourde. « Hydrate-toi. Ça va être long. Pour toi. »",
+      "win": {
+        "effects": {
+          "streams": 4,
+          "credibilite": 3
+        },
+        "consequence": "Coach Burpee s'effondre sur le dos et regarde le plafond. « Bonne séance. » Il te donne sa carte : « Si tu veux bosser le cardio. » Tu n'en as plus besoin."
+      },
+      "lose": {
+        "effects": {
+          "mental": -6
+        },
+        "consequence": "Tu finis à genoux, lui fait encore des sauts. « ENCORE DEUX ! » crie-t-il en partant. Reviens quand tu auras du souffle."
+      }
+    },
+    {
+      "opponent": "maitre_objection",
+      "min_artist_level": 5,
+      "level_bonus": 2,
+      "rounds": 6,
+      "opponent_power": 1.55,
+      "xp": 65,
+      "technique": "plaidoirie_rouge",
+      "intro": "Quatrième tour. Maître Objection pose sa robe d'avocate sur sa chaise et un dossier sur le pupitre. Il fait quarante pages. Il porte ton nom.",
+      "win": {
+        "effects": {
+          "streams": 4,
+          "credibilite": 4
+        },
+        "consequence": "Maître Objection referme son dossier. « La défense s'incline. » Elle te serre la main, puis t'envoie une facture pour le temps passé. Elle est barrée : « Offert. »"
+      },
+      "lose": {
+        "effects": {
+          "mental": -6
+        },
+        "consequence": "Verdict : coupable de mauvaise rime avec préméditation. Tu fais appel. Le Tournoi accepte de rejuger l'affaire quand tu veux."
+      }
+    },
+    {
+      "opponent": "npc_404",
+      "min_artist_level": 6,
+      "level_bonus": 3,
+      "rounds": 6,
+      "opponent_power": 1.5,
+      "xp": 75,
+      "technique": "lag_volontaire",
+      "intro": "Cinquième tour. NPC_404 n'est pas sur scène : il est sur l'écran géant, en avatar, en direct de sa chambre. Le chat défile à toute vitesse. Il a parié contre toi.",
+      "win": {
+        "effects": {
+          "streams": 6,
+          "credibilite": 3
+        },
+        "consequence": "L'avatar de NPC_404 se fige, puis disparaît. Dans le chat : « GG ». Trois cent mille personnes viennent de découvrir ton nom."
+      },
+      "lose": {
+        "effects": {
+          "mental": -7
+        },
+        "consequence": "NPC_404 fait un clip de ta défaite, au ralenti, avec de la musique triste. Un million de vues. Le Tournoi t'attend pour corriger ça."
+      }
+    },
+    {
+      "opponent": "le_sommelier",
+      "min_artist_level": 7,
+      "level_bonus": 3,
+      "rounds": 6,
+      "opponent_power": 1.55,
+      "xp": 85,
+      "technique": "grand_cru",
+      "intro": "Sixième tour. Le Sommelier fait tourner un verre vide sous son nez. « Je sens déjà ton couplet d'ici. Fruité. Trop jeune. »",
+      "win": {
+        "effects": {
+          "streams": 5,
+          "credibilite": 5
+        },
+        "consequence": "Le Sommelier goûte ta dernière punchline et ferme les yeux longtemps. « Grand cru. » Il pose son verre et quitte la scène sans un mot. C'est le plus beau compliment de sa carrière."
+      },
+      "lose": {
+        "effects": {
+          "mental": -7
+        },
+        "consequence": "« Pas encore prêt. À garder en cave quelques années. » Le Sommelier te range dans un coin. Reviens au Tournoi quand tu auras vieilli."
+      }
+    },
+    {
+      "opponent": "la_duchesse",
+      "min_artist_level": 8,
+      "level_bonus": 2,
+      "rounds": 6,
+      "opponent_power": 1.6,
+      "xp": 100,
+      "technique": "couronne_rangee",
+      "intro": "Demi-finale. La salle se lève toute seule : la Duchesse sort de sa retraite. Elle te regarde comme on regarde une vieille photo de soi.",
+      "win": {
+        "effects": {
+          "streams": 6,
+          "credibilite": 6
+        },
+        "consequence": "La Duchesse retire sa chaîne et te la passe autour du cou. « Elle pèse lourd. Fais-la briller. » Puis elle retourne à la retraite. Pour de vrai, cette fois. Peut-être."
+      },
+      "lose": {
+        "effects": {
+          "mental": -8
+        },
+        "consequence": "La Duchesse te tapote la joue. « Pas mal. Reviens dans dix ans. » Tu n'as pas dix ans. Le Tournoi t'attend."
+      }
+    },
+    {
+      "opponent": "algo_rythme",
+      "min_artist_level": 9,
+      "level_bonus": 3,
+      "rounds": 6,
+      "opponent_power": 1.8,
+      "xp": 140,
+      "technique": "bug_humain",
+      "intro": "Finale. Les lumières passent au bleu. Sur scène, une silhouette blanche, immobile, qui calcule. DJ Noize coupe l'instru : « Lui, il a pas besoin de beat. Toi, si. »",
+      "win": {
+        "effects": {
+          "streams": 8,
+          "credibilite": 8
+        },
+        "consequence": "L'Algo-Rythme affiche « Erreur ». Puis « Pourquoi ? ». Puis il s'éteint. La salle hurle ton nom. L'Animateur, à l'antenne : « Quinze ans de radio. Ce soir, l'humain a gagné. »"
+      },
+      "lose": {
+        "effects": {
+          "mental": -9
+        },
+        "consequence": "L'Algo-Rythme te remercie pour tes données. Le public, lui, ne te remercie pas. Mais il reste. Le Tournoi t'attend pour la revanche du siècle."
       }
     }
   ]

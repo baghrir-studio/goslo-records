@@ -100,6 +100,7 @@ struct WorldView: View {
             .overlay { WeatherLayer(weather: Weather.of(state.rapper.city)) }
         }
         .background(Color(red: 0.05, green: 0.05, blue: 0.06))
+        .tournamentSheet(model)
     }
 
     /// Casablanca's petit taxi waits on Le Bloc's main road.

@@ -420,13 +420,15 @@ final class StoryTests: XCTestCase {
 
     func testTechniquesDataIsConsistent() {
         let techniques = world.story.techniques
-        XCTAssertEqual(techniques.count, 6, "une technique par boss avant le chapitre 5")
+        XCTAssertEqual(techniques.filter { $0.minArtistLevel == nil && !$0.unlock.requiredFlags.contains { $0.hasPrefix("tournoi_") } }.count, 6,
+                       "une technique par boss avant le chapitre 5")
         XCTAssertEqual(Set(techniques.map(\.id)).count, techniques.count)
         for technique in techniques {
             XCTAssertFalse(technique.secret.name.isEmpty, technique.id)
             XCTAssertFalse(technique.secret.line.isEmpty, technique.id)
             XCTAssertFalse(technique.secret.prop?.isEmpty ?? true, "\(technique.id) : pas d'animation")
-            XCTAssertFalse(technique.unlock.requiredFlags.isEmpty, "\(technique.id) se débloquerait dès le début")
+            XCTAssertTrue(!technique.unlock.requiredFlags.isEmpty || (technique.minArtistLevel ?? 1) > 1,
+                          "\(technique.id) se débloquerait dès le début")
             XCTAssertNotEqual(technique.id, GameEngine.styleTechniqueId)
             XCTAssertNil(world.story.item(technique.id), "\(technique.id) : même id qu'un objet")
         }
