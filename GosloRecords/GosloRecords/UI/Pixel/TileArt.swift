@@ -55,21 +55,30 @@ enum TileArt {
 
     static func mapImage(_ map: WorldMap, city: City, district: District = .bloc) -> UIImage {
         PixelCache.image("map-\(city.rawValue)-\(district.rawValue)-\(map.rows.hashValue)") {
-            let theme = CityTheme.forCity(city).adapted(to: district)
+            let cityTheme = CityTheme.forCity(city)
+            let theme = cityTheme.adapted(to: district)
             let canvas = PixelCanvas(width: map.width * size, height: map.height * size)
             for y in 0..<map.height {
                 for x in 0..<map.width {
-                    canvas.stamp(tile(at: TilePoint(x: x, y: y), on: map, theme: theme), at: x * size, y * size)
+                    canvas.stamp(tile(at: TilePoint(x: x, y: y), on: map, theme: theme, district: district), at: x * size, y * size)
                 }
             }
+            // The district's architecture and street life (BuildingArt.swift, StreetArt.swift), then each place's façade.
+            dressBuildings(canvas, map: map, theme: theme, city: cityTheme, district: district)
+            dressStreets(canvas, map: map, theme: theme, district: district)
             if district == .dome { dome(on: canvas, map: map) }
-            for door in map.doors { storefront(door.location, at: TilePoint(x: door.x, y: door.y), on: canvas, map: map) }
-            if let landmark = theme.landmark { draw(landmark, on: canvas, map: map, theme: theme) }
+            for door in map.doors {
+                storefront(door.location, at: door.point, on: canvas, map: map, theme: theme, district: district)
+            }
+            // The harbour's masts belong to Le Bloc's waterfront, not to the fountain downtown.
+            if let landmark = theme.landmark, landmark != .harbour || district == .bloc {
+                draw(landmark, on: canvas, map: map, theme: theme)
+            }
             return canvas.makeImage()
         }
     }
 
-    private static func tile(at p: TilePoint, on map: WorldMap, theme t: CityTheme) -> PixelCanvas {
+    private static func tile(at p: TilePoint, on map: WorldMap, theme t: CityTheme, district: District) -> PixelCanvas {
         let kind = map.tile(at: p)
         let above = map.tile(at: p.moved(.up)), below = map.tile(at: p.moved(.down))
         var noise = PixelNoise(p.x, p.y)
@@ -135,18 +144,7 @@ enum TileArt {
                 c.fill(x, y0, x, y1, blue)
             }
         case .roof:
-            c.fill(0, 0, 15, 15, t.roof)
-            if t.facade == .plaster && !t.snow {
-                // Tiles: a row of scallops every 4 pixels.
-                for y in stride(from: 3, to: 16, by: 4) {
-                    for x in stride(from: (y / 4) % 2 * 2, to: 16, by: 4) { c.fill(x, y, x + 2, y, t.roofShadow) }
-                }
-            }
-            if above != .roof { c.fill(0, 0, 15, 1, t.snow ? PixelColor(hex: "#e8eef6") : t.roofEdge) }
-            if below != .roof { c.fill(0, 14, 15, 15, t.roofShadow) }
-            if t.snow {
-                for _ in 0..<5 { let x = noise.next(13); c.fill(x, noise.next(13), x + 2, noise.next(13) / 6 + 2, PixelColor(hex: "#dfe6f0")) }
-            }
+            roof(c, &noise, t, above: above, below: below)
             if noise.chance(25) { c.fill(4, 5, 10, 10, NightPalette.metal); c.fill(5, 6, 9, 9, NightPalette.metal.shaded(0.7)) }
             if noise.chance(t.pavement == .zellige ? 35 : 15) {
                 // Satellite dish.
@@ -170,20 +168,38 @@ enum TileArt {
             c.fill(12, 11, 13, 14, NightPalette.metal)
         case .lamp:
             sidewalk(c, &noise, p, t, curb: false)
-            c.fill(7, 4, 8, 15, NightPalette.metal)
-            c.fill(5, 1, 10, 3, NightPalette.metal.shaded(0.8))
-            c.fill(6, 3, 9, 4, NightPalette.lampLight)
+            switch district {
+            case .centre:
+                // A cast-iron lantern on a fluted post.
+                let iron = PixelColor(hex: "#1e1e24")
+                c.fill(7, 5, 8, 15, iron)
+                c.fill(6, 13, 9, 15, iron); c.fill(5, 15, 10, 15, iron)
+                c.fill(5, 1, 10, 5, iron)
+                c.fill(6, 2, 9, 4, NightPalette.lampLight)
+                c.fill(7, 0, 8, 0, iron); c.dot(6, 6, iron); c.dot(9, 6, iron)
+            case .hauts:
+                // A slim modern post with a cold LED arm.
+                c.fill(7, 3, 7, 15, NightPalette.metal.shaded(1.3))
+                c.fill(7, 2, 11, 2, NightPalette.metal.shaded(1.3))
+                c.fill(9, 3, 11, 3, PixelColor(hex: "#cfe8ff"))
+                c.fill(6, 15, 8, 15, NightPalette.metal)
+            case .bloc, .dome:
+                c.fill(7, 4, 8, 15, NightPalette.metal)
+                c.fill(5, 1, 10, 3, NightPalette.metal.shaded(0.8))
+                c.fill(6, 3, 9, 4, NightPalette.lampLight)
+            }
         case .water:
             c.fill(0, 0, 15, 15, t.water)
             for _ in 0..<3 {
                 let x = noise.next(12), y = noise.next(15)
                 c.fill(x, y, x + 3, y, t.ripple)
             }
-            if t.landmark == .harbour {
+            // Downtown's water is a fountain basin: no quay, no boats.
+            if t.landmark == .harbour, district == .bloc {
                 // Quay bollards and moorings along the edge.
                 if above != .water { c.fill(0, 0, 15, 2, PixelColor(hex: "#8a8070")); c.fill(3, 1, 4, 3, PixelColor(hex: "#3a3630")) }
             }
-            if t.boats, p.x % (t.landmark == .harbour ? 2 : 7) == (t.landmark == .harbour ? 1 : 3) {
+            if t.boats, district != .centre, p.x % (t.landmark == .harbour ? 2 : 7) == (t.landmark == .harbour ? 1 : 3) {
                 // A small boat, hull and mast.
                 c.fill(3, 9, 12, 11, PixelColor(hex: "#e8e4dc")); c.fill(4, 12, 11, 12, PixelColor(hex: "#b8b2a8"))
                 c.fill(7, 3, 7, 8, NightPalette.wood); c.fill(8, 4, 10, 7, PixelColor(hex: "#d8d4cc"))
@@ -191,163 +207,6 @@ enum TileArt {
             if above != .water { c.fill(0, 0, 15, 1, NightPalette.curb) }
         }
         return c
-    }
-
-    // MARK: Storefronts
-
-    /// Each place gets its own façade around its door, so it reads at a glance without the sign:
-    /// the Bunker's steel shutter, the radio's mast, the concert hall's marquee, the laundromat's window
-    /// (goslo records is in its back room), and home's balcony. Only paints over the building's own tiles.
-    private static func storefront(_ location: Location, at door: TilePoint, on c: PixelCanvas, map: WorldMap) {
-        let x = door.x * size, y = door.y * size
-        func isBuilding(_ dx: Int, _ dy: Int) -> Bool {
-            let kind = map.tile(at: TilePoint(x: door.x + dx, y: door.y + dy))
-            return kind == .wall || kind == .roof || kind == .door
-        }
-        let white = PixelColor(hex: "#f0eee8"), dark = PixelColor(hex: "#101014")
-        switch location {
-        case .studio:
-            // Steel roller shutter, half open on a red-lit room.
-            c.fill(x + 4, y + 4, x + 11, y + 15, PixelColor(hex: "#3a1a14"))
-            c.fill(x + 4, y + 13, x + 11, y + 15, location.neon.shaded(0.55))
-            c.fill(x + 4, y + 4, x + 11, y + 11, PixelColor(hex: "#6a6d76"))
-            for row in stride(from: y + 5, through: y + 11, by: 2) { c.fill(x + 4, row, x + 11, row, PixelColor(hex: "#4a4d56")) }
-            c.fill(x + 4, y + 12, x + 11, y + 12, PixelColor(hex: "#2a2a30"))
-            // The red recording light above the door.
-            if isBuilding(0, -1) {
-                c.fill(x + 5, y - 8, x + 10, y - 3, dark)
-                c.circle(cx: x + 7, cy: y - 6, radius: 1, PixelColor(hex: "#ff2a1a"))
-                c.dot(x + 7, y - 6, PixelColor(hex: "#ffb0a0"))
-                c.fill(x + 9, y - 7, x + 9, y - 4, white.shaded(0.6))
-            }
-            // Sandbags along the wall: it's a bunker, after all.
-            for dx in [1, 2] where isBuilding(dx, 0) {
-                for (bx, by) in [(0, 11), (5, 11), (10, 11), (2, 8), (7, 8)] {
-                    c.fill(x + dx * size + bx, y + by, x + dx * size + bx + 4, y + by + 3, PixelColor(hex: "#8a7a58"))
-                    c.fill(x + dx * size + bx, y + by + 3, x + dx * size + bx + 4, y + by + 3, PixelColor(hex: "#5e5238"))
-                }
-            }
-            // A spray-painted tag on the other side.
-            if isBuilding(-1, 0) {
-                let tag = [(2, 6), (3, 5), (4, 6), (5, 7), (6, 6), (7, 5), (8, 6), (9, 7), (10, 6), (11, 5), (12, 6)]
-                for (tx, ty) in tag {
-                    c.fill(x - size + tx, y + ty, x - size + tx, y + ty + 3, PixelColor(hex: "#e04fb0"))
-                    c.dot(x - size + tx, y + ty + 4, PixelColor(hex: "#4fd6e0"))
-                }
-            }
-            // A big air vent on the roof.
-            if isBuilding(0, -2) {
-                c.fill(x + 3, y - 30, x + 12, y - 21, PixelColor(hex: "#55565e"))
-                c.circle(cx: x + 7, cy: y - 26, radius: 3, PixelColor(hex: "#2a2b30"))
-                c.fill(x + 7, y - 29, x + 8, y - 23, PixelColor(hex: "#7a7b84"))
-                c.fill(x + 4, y - 26, x + 11, y - 26, PixelColor(hex: "#7a7b84"))
-            }
-        case .media:
-            // A tall lattice mast on the roof, a red light on top, waves going out.
-            if isBuilding(0, -2) {
-                let top = isBuilding(0, -3) ? y - 46 : y - 30
-                let mast = PixelColor(hex: "#9a9aa6")
-                c.fill(x + 6, top, x + 6, y - 17, mast)
-                c.fill(x + 9, top, x + 9, y - 17, mast)
-                for row in stride(from: top + 2, to: y - 17, by: 4) { c.dot(x + 7, row, mast); c.dot(x + 8, row + 2, mast) }
-                c.fill(x + 6, top - 1, x + 9, top - 1, mast)
-                c.fill(x + 7, top - 3, x + 8, top - 2, PixelColor(hex: "#ff2a1a"))
-                for (r, shade) in [(5, 1.0), (8, 0.7), (11, 0.45)] {
-                    for dy in (-r / 2)...(r / 2) {
-                        c.dot(x + 7 - r, top + 4 + dy, location.neon.shaded(shade))
-                        c.dot(x + 8 + r, top + 4 + dy, location.neon.shaded(shade))
-                    }
-                }
-            }
-            // ON AIR light above the door.
-            if isBuilding(0, -1) {
-                c.fill(x + 1, y - 9, x + 14, y - 3, dark)
-                c.fill(x + 2, y - 8, x + 13, y - 4, PixelColor(hex: "#c81e14"))
-                for px in [3, 5, 7, 9, 11, 12] { c.fill(x + px, y - 7, x + px, y - 5, white) }
-            }
-            // A satellite dish on the wall.
-            if isBuilding(1, 0) {
-                c.circle(cx: x + size + 7, cy: y + 7, radius: 4, PixelColor(hex: "#c8c8d0"))
-                c.circle(cx: x + size + 7, cy: y + 7, radius: 2, PixelColor(hex: "#9a9aa6"))
-                c.fill(x + size + 7, y + 11, x + size + 7, y + 14, PixelColor(hex: "#6b6b75"))
-            }
-        case .scene:
-            // A marquee over the door: a dark band edged with bulbs, neon underneath.
-            if isBuilding(0, -1) {
-                let left = isBuilding(-1, -1) ? x - 10 : x, right = isBuilding(1, -1) ? x + 25 : x + 15
-                c.fill(left, y - 8, right, y - 1, dark)
-                c.fill(left, y - 1, right, y - 1, location.neon)
-                for bx in stride(from: left + 1, through: right - 1, by: 3) {
-                    c.dot(bx, y - 7, NightPalette.lampLight)
-                    c.dot(bx + 1, y - 3, NightPalette.lampLight.shaded(0.7))
-                }
-                for (i, px) in [x + 2, x + 5, x + 8, x + 11].enumerated() {
-                    c.fill(px, y - 5, px + 1, y - 4, i % 2 == 0 ? location.neon : white)
-                }
-            }
-            // Gig posters on both sides of the door.
-            for (dx, color) in [(-1, location.neon), (1, PixelColor(hex: "#ffd27a"))] where isBuilding(dx, 0) {
-                let px = x + dx * size
-                c.fill(px + 3, y + 2, px + 12, y + 13, color)
-                c.circle(cx: px + 7, cy: y + 6, radius: 2, dark)
-                c.fill(px + 5, y + 8, px + 10, y + 11, dark)
-                c.fill(px + 4, y + 12, px + 11, y + 12, white)
-            }
-        case .label:
-            // The laundromat's front window: three washing machines, round doors, blue water.
-            let glass = PixelColor(hex: "#7fb8c8")
-            for dx in [-2, -1] where isBuilding(dx, 0) {
-                let px = x + dx * size
-                c.fill(px, y + 2, px + 15, y + 14, PixelColor(hex: "#2a2a30"))
-                c.fill(px + 1, y + 3, px + 14, y + 13, glass)
-                c.fill(px + 2, y + 6, px + 13, y + 13, white.shaded(0.92))
-                for mx in [px + 4, px + 11] {
-                    c.circle(cx: mx, cy: y + 10, radius: 2, PixelColor(hex: "#2f6fa0"))
-                    c.dot(mx - 1, y + 9, white)
-                }
-                c.fill(px + 7, y + 6, px + 8, y + 13, glass.shaded(0.7))
-            }
-            // A striped awning over the window and the door.
-            if isBuilding(0, -1) {
-                let left = isBuilding(-2, -1) ? x - 32 : x, right = x + 15
-                for px in left...right {
-                    let stripe = (px / 3) % 2 == 0 ? location.neon : white
-                    c.fill(px, y - 5, px, y - 1, stripe)
-                    if px % 3 == 1 { c.dot(px, y, stripe) }
-                }
-            }
-            // Soap bubbles drifting out of the door.
-            if isBuilding(1, 0) {
-                for (bx, by, r) in [(3, 9, 2), (7, 5, 1), (10, 10, 1), (12, 4, 2)] {
-                    c.circle(cx: x + size + bx, cy: y + by, radius: r, white.shaded(0.85))
-                    c.dot(x + size + bx, y + by, glass)
-                }
-            }
-        case .chezToi:
-            // A balcony above the door, with the washing out to dry.
-            if isBuilding(0, -1) {
-                let left = isBuilding(-1, -1) ? x - 16 : x, right = isBuilding(1, -1) ? x + 31 : x + 15
-                c.fill(left, y - 3, right, y - 2, PixelColor(hex: "#2a2a30"))
-                for px in stride(from: left, through: right, by: 3) { c.fill(px, y - 8, px, y - 3, PixelColor(hex: "#3a3a44")) }
-                c.fill(left, y - 8, right, y - 8, PixelColor(hex: "#4a4a55"))
-                c.fill(left + 1, y - 14, right - 1, y - 14, white.shaded(0.6))
-                for (i, px) in stride(from: left + 3, through: right - 6, by: 7).enumerated() {
-                    let colors = [PixelColor(hex: "#e04f4f"), PixelColor(hex: "#4f8ae0"), PixelColor(hex: "#f2c14e"), white]
-                    c.fill(px, y - 13, px + 4, y - 10, colors[i % colors.count])
-                    c.fill(px - 1, y - 13, px + 5, y - 13, colors[i % colors.count])
-                }
-            }
-            // A plant pot by the door, and the intercom.
-            c.fill(x + 13, y + 12, x + 15, y + 15, PixelColor(hex: "#8a4a2e"))
-            c.fill(x + 12, y + 9, x + 15, y + 11, NightPalette.leafLight)
-            c.dot(x + 13, y + 8, NightPalette.leaf)
-            if isBuilding(1, 0) {
-                c.fill(x + size + 1, y + 5, x + size + 4, y + 11, NightPalette.metal)
-                for row in [y + 6, y + 8, y + 10] { c.dot(x + size + 2, row, NightPalette.lampLight) }
-            }
-        case .quartier, .reseaux:
-            break
-        }
     }
 
     /// Le Dôme: a huge silver dome over the arena's roof, ribs, and a ring of lights at its base.
@@ -488,14 +347,30 @@ enum TileArt {
         c.fill(cx, 0, cx, top, PixelColor(hex: "#c8b070"))
     }
 
-    private static func asphalt(_ c: PixelCanvas, _ noise: inout PixelNoise) {
+    /// The bare roof: the city's covering, a lit top edge, a shadow along the bottom, snow.
+    static func roof(_ c: PixelCanvas, _ noise: inout PixelNoise, _ t: CityTheme, above: TileKind, below: TileKind) {
+        c.fill(0, 0, 15, 15, t.roof)
+        if t.facade == .plaster && !t.snow {
+            // Tiles: a row of scallops every 4 pixels.
+            for y in stride(from: 3, to: 16, by: 4) {
+                for x in stride(from: (y / 4) % 2 * 2, to: 16, by: 4) { c.fill(x, y, x + 2, y, t.roofShadow) }
+            }
+        }
+        if above != .roof { c.fill(0, 0, 15, 1, t.snow ? PixelColor(hex: "#e8eef6") : t.roofEdge) }
+        if below != .roof { c.fill(0, 14, 15, 15, t.roofShadow) }
+        if t.snow {
+            for _ in 0..<5 { let x = noise.next(13); c.fill(x, noise.next(13), x + 2, noise.next(13) / 6 + 2, PixelColor(hex: "#dfe6f0")) }
+        }
+    }
+
+    static func asphalt(_ c: PixelCanvas, _ noise: inout PixelNoise) {
         c.fill(0, 0, 15, 15, NightPalette.asphalt)
         for _ in 0..<10 {
             c.dot(noise.next(16), noise.next(16), noise.chance(50) ? NightPalette.asphaltLight : NightPalette.asphaltDark)
         }
     }
 
-    private static func sidewalk(_ c: PixelCanvas, _ noise: inout PixelNoise, _ p: TilePoint, _ t: CityTheme, curb: Bool) {
+    static func sidewalk(_ c: PixelCanvas, _ noise: inout PixelNoise, _ p: TilePoint, _ t: CityTheme, curb: Bool) {
         c.fill(0, 0, 15, 15, t.sidewalk)
         switch t.pavement {
         case .slabs:
@@ -520,7 +395,7 @@ enum TileArt {
         if curb { c.fill(0, 14, 15, 15, NightPalette.curb) }
     }
 
-    private static func grass(_ c: PixelCanvas, _ noise: inout PixelNoise, _ t: CityTheme) {
+    static func grass(_ c: PixelCanvas, _ noise: inout PixelNoise, _ t: CityTheme) {
         c.fill(0, 0, 15, 15, t.grass)
         for _ in 0..<7 {
             let x = noise.next(15), y = 3 + noise.next(12)
@@ -530,7 +405,7 @@ enum TileArt {
         }
     }
 
-    private static func facade(_ c: PixelCanvas, _ p: TilePoint, _ t: CityTheme) {
+    static func facade(_ c: PixelCanvas, _ p: TilePoint, _ t: CityTheme) {
         c.fill(0, 0, 15, 15, t.wall)
         switch t.facade {
         case .bricks:
@@ -551,11 +426,16 @@ enum TileArt {
         }
     }
 
-    private static func window(_ c: PixelCanvas, lit: Bool, _ t: CityTheme) {
+    static func window(_ c: PixelCanvas, lit: Bool, _ t: CityTheme) {
         c.fill(4, 3, 11, 11, NightPalette.windowFrame)
         c.fill(5, 4, 10, 10, lit ? NightPalette.windowLit : NightPalette.windowDark)
         c.fill(7, 4, 8, 10, NightPalette.windowFrame)
         if lit { c.dot(5, 4, NightPalette.windowLit.shaded(1.15)) }
+        if t.arches {
+            // A rounded, horseshoe-like top.
+            for (x, y) in [(4, 3), (5, 3), (10, 3), (11, 3), (4, 4), (11, 4)] { c.dot(x, y, t.wall) }
+            c.dot(5, 4, NightPalette.windowFrame); c.dot(10, 4, NightPalette.windowFrame)
+        }
         if let shutters = t.shutters {
             c.fill(2, 3, 3, 11, shutters); c.fill(12, 3, 13, 11, shutters)
         }
@@ -563,13 +443,13 @@ enum TileArt {
     }
 
     /// Montréal's outdoor iron staircase, climbing diagonally across the façade.
-    private static func stairs(_ c: PixelCanvas) {
+    static func stairs(_ c: PixelCanvas) {
         let iron = PixelColor(hex: "#1a1a1e")
         for step in 0..<5 { c.fill(1 + step * 3, 13 - step * 3, 3 + step * 3, 13 - step * 3, iron) }
         c.fill(0, 14, 15, 14, iron)
     }
 
-    private static func treeTile(_ c: PixelCanvas, _ t: CityTheme) {
+    static func treeTile(_ c: PixelCanvas, _ t: CityTheme) {
         c.fill(0, 0, 15, 15, t.ground)
         switch t.tree {
         case .round:
