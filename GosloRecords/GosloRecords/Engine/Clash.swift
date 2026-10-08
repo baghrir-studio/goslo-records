@@ -417,9 +417,10 @@ enum ClashEngine {
                                                    impact: .strong, line: secret.line, secret: secret))
                 }
             } else {
-                let move = ClashTactics.telegraphed(state, profile: opponent)
+                let tell = ClashTactics.telegraphed(state)
+                let move = tell ?? opponentMove(opponent, using: &rng)
                 // Saw it coming: the right answer takes most of the sting out.
-                let parried = playerSecret == nil && playerFreestyle == nil && playerMove == move.counter
+                let parried = tell != nil && playerSecret == nil && playerFreestyle == nil && playerMove == move.counter
                 var factor = state.damageFactor * (parried ? ClashTactics.parryFactor : 1)
                 if move == state.crowdFavorite { factor *= ClashTactics.crowdBonus }
                 let (opponentDamage, opponentImpact) = damage(move: move, level: opponent.stat(move),

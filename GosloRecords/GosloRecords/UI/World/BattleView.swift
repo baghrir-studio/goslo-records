@@ -311,10 +311,7 @@ struct BattleView: View {
     }
 
     /// The opponent's next move, as their tell gives it away.
-    private var telegraphed: ClashMove? {
-        guard let profile = opponent?.clash?.scaled(by: clash.levelBonus) else { return nil }
-        return ClashTactics.telegraphed(clash, profile: profile)
-    }
+    private var telegraphed: ClashMove? { ClashTactics.telegraphed(clash) }
 
     /// Little labels on a move: counters the tell, finishes a combo, loved by the crowd.
     private func badges(for move: ClashMove, combo: ClashCombo?) -> [String] {

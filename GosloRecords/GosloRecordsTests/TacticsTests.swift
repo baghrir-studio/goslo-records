@@ -51,8 +51,13 @@ final class TacticsTests: XCTestCase {
 
     func testEachDistrictHasItsCrowd() {
         XCTAssertEqual(Set(District.allCases.map { ClashTactics.crowdFavorite(in: $0) }).count, District.allCases.count)
-        let first = ClashTactics.telegraphed(clash(), profile: ClashProfile(stats: [.punchline: 2, .flow: 9, .presence: 3, .story: 1]))
-        XCTAssertEqual(first, .flow, "au premier tour, on annonce son meilleur coup")
+    }
+
+    func testTheOpeningBlowIsASurprise() {
+        var state = clash()
+        XCTAssertNil(ClashTactics.telegraphed(state), "au premier tour, l'adversaire te jauge")
+        round(&state, .punchline)
+        XCTAssertNotNil(ClashTactics.telegraphed(state), "ensuite, il se trahit")
     }
 
     func testOldSavesLoad() throws {

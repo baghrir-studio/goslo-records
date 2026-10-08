@@ -62,9 +62,7 @@ enum ClashTactics {
         }
     }
 
-    /// The opponent's next move as the player sees it coming: chosen after each round, or at the start
-    /// their strongest move.
-    static func telegraphed(_ state: ClashState, profile: ClashProfile) -> ClashMove {
-        state.nextOpponentMove ?? ClashMove.allCases.max { profile.stat($0) < profile.stat($1) } ?? .flow
-    }
+    /// The opponent's next move as the player sees it coming: chosen after each round. Nil on the first
+    /// round (the opponent sizes you up), so the opening blow stays a surprise.
+    static func telegraphed(_ state: ClashState) -> ClashMove? { state.nextOpponentMove }
 }
