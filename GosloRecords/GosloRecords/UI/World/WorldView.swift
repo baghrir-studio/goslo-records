@@ -24,6 +24,7 @@ struct WorldView: View {
                 PixelImage(TileArt.mapImage(map, city: state.rapper.city, district: state.district), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
 
                 LampGlows(map: map)
+                MapLights(map: map)
                 FameMarks(map: map, look: state.rapper.look, posters: model.engine.fame(in: state) * 2,
                           fresco: model.engine.hasFresco(in: state))
 
@@ -78,6 +79,7 @@ struct WorldView: View {
             .offset(x: camera.width, y: camera.height)
             .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
             .clipped()
+            .overlay { WeatherLayer(weather: Weather.of(state.rapper.city)) }
         }
         .background(Color(red: 0.05, green: 0.05, blue: 0.06))
     }
