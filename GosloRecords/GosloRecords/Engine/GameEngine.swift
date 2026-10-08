@@ -392,7 +392,7 @@ struct GameEngine {
         state.currentLocation = nil
 
         if choice.skipTurns > 0 {
-            state.turn = min(state.turn + choice.skipTurns, turnLimit(in: state) - 1)
+            state.turn = state.freeCareer ? state.turn + choice.skipTurns : min(state.turn + choice.skipTurns, turnLimit(in: state) - 1)
             state.actionsLeft = 0
         }
 
@@ -805,9 +805,14 @@ struct GameEngine {
         let finale = currentChapter(in: state)?.isFinale ?? false
         state.flags.insert("chapitre_\(state.chapter)")
         if finale {
-            // The story is over: the career ends on its best note.
-            state.ending = EndingResolver.finalEnding(for: state)
             state.pendingCinematic = nil
+            if state.freeCareer {
+                // The player decides: hang up the mic as a legend, or keep clashing the new generation.
+                state.finaleChoicePending = true
+            } else {
+                // The story is over: the career ends on its best note.
+                state.ending = EndingResolver.finalEnding(for: state)
+            }
             return
         }
         state.chapter += 1
@@ -1087,14 +1092,15 @@ struct GameEngine {
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
             outcome.add(state.stats.apply(GameEngine.upkeep(for: state.stats)))
+            if state.freeCareer { outcome.add(state.stats.apply(GameEngine.agingUpkeep(turn: state.turn))) }
             outcome.add(sellAlbums(in: &state))
             let limit = turnLimit(in: state)
-            if !isInEpilogue(state) { state.turn = min(state.turn + 1, limit) }
+            if !isInEpilogue(state) { state.turn = state.freeCareer ? state.turn + 1 : min(state.turn + 1, limit) }
             state.actionsLeft = GameState.actionsPerTurn
             state.challengedThisSemester = []
             outcome.semesterEnded = true
             ending = EndingResolver.prematureEnding(for: state.stats)
-                ?? (state.turn >= limit ? EndingResolver.finalEnding(for: state) : nil)
+                ?? (!state.freeCareer && state.turn >= limit ? EndingResolver.finalEnding(for: state) : nil)
         }
         state.ending = ending
         outcome.ending = ending

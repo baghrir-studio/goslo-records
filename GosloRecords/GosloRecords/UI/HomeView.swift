@@ -54,7 +54,7 @@ struct HomeView: View {
                     } label: {
                         VStack(spacing: 2) {
                             Text("Reprendre")
-                            Text("\(run.rapper.name) · \(run.isOvertime ? "Prolongation" : "Année \(run.year)")")
+                            Text("\(run.rapper.name) · \(run.isOvertime && !run.freeCareer ? "Prolongation" : "Année \(run.year)")")
                                 .font(.mono(11, weight: .semibold))
                                 .textCase(nil)
                         }

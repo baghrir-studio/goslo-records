@@ -39,6 +39,10 @@ struct GameState: Codable, Equatable {
     var hooks: [String] = []
     /// Albums released, in order (sales keep coming in for a few semesters).
     var albums: [Album] = []
+    /// Free career: no time limit. It ends on a defeat or when the player hangs up the mic (`GameEngine.retire`).
+    var freeCareer = false
+    /// The finale is played: the player picks between retiring as a legend and carrying on.
+    var finaleChoicePending = false
     var pendingFollowUp: String?
     /// Event shown and awaiting a choice (kept so a resume shows the same card).
     var currentEventId: String?
@@ -92,7 +96,7 @@ struct GameState: Codable, Equatable {
         case minigame
         case questProgress, completedQuests, ending, position, facing, district, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
-        case seenEvents, talkedAt, smallTalk, hooks, albums
+        case seenEvents, talkedAt, smallTalk, hooks, albums, freeCareer, finaleChoicePending
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -142,10 +146,12 @@ struct GameState: Codable, Equatable {
         smallTalk = try c.decodeIfPresent([String: Int].self, forKey: .smallTalk) ?? [:]
         hooks = try c.decodeIfPresent([String].self, forKey: .hooks) ?? []
         albums = try c.decodeIfPresent([Album].self, forKey: .albums) ?? []
+        freeCareer = try c.decodeIfPresent(Bool.self, forKey: .freeCareer) ?? false
+        finaleChoicePending = try c.decodeIfPresent(Bool.self, forKey: .finaleChoicePending) ?? false
     }
 
-    /// Year 1 to 10.
-    var year: Int { min(turn / 2 + 1, GameState.totalTurns / 2) }
+    /// Year 1 to 10 (no cap in a free career).
+    var year: Int { freeCareer ? turn / 2 + 1 : min(turn / 2 + 1, GameState.totalTurns / 2) }
     /// Semester 1 or 2.
     var semester: Int { turn % 2 + 1 }
     var isOver: Bool { ending != nil }
@@ -153,14 +159,14 @@ struct GameState: Codable, Equatable {
     /// Past semester 20 with the finale still to play (see `GameEngine.turnLimit`).
     var isOvertime: Bool { turn >= GameState.totalTurns }
     /// "ANNÉE 4", or "PROLONGATION" in overtime.
-    var periodLabel: String { isOvertime ? "PROLONGATION" : "ANNÉE \(year)" }
+    var periodLabel: String { isOvertime && !freeCareer ? "PROLONGATION" : "ANNÉE \(year)" }
     /// "S2", or "3/10" in overtime.
     var semesterLabel: String {
-        isOvertime ? "\(turn - GameState.totalTurns + 1)/\(GameState.overtimeTurns)" : "S\(semester)"
+        isOvertime && !freeCareer ? "\(turn - GameState.totalTurns + 1)/\(GameState.overtimeTurns)" : "S\(semester)"
     }
     /// Subtitle of the semester card.
     var semesterCardLabel: String {
-        isOvertime ? "SEMESTRE \(turn - GameState.totalTurns + 1) SUR \(GameState.overtimeTurns)" : "SEMESTRE \(semester)"
+        isOvertime && !freeCareer ? "SEMESTRE \(turn - GameState.totalTurns + 1) SUR \(GameState.overtimeTurns)" : "SEMESTRE \(semester)"
     }
 
     func relation(_ castId: String) -> Int {

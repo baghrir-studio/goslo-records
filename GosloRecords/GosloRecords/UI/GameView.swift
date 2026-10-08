@@ -5,6 +5,7 @@ struct GameView: View {
     @Environment(AppModel.self) private var model
     @State private var showCarnet = false
     @State private var showCalibration = false
+    @State private var confirmRetire = false
 
     var body: some View {
         if let state = model.state, let map = model.map {
@@ -90,6 +91,12 @@ struct GameView: View {
             .animation(.easeOut(duration: 0.25), value: model.phase)
             .animation(.easeInOut(duration: 0.3), value: model.interior)
             .sensoryFeedback(.impact(weight: .light), trigger: model.deltaToken)
+            .confirmationDialog("Raccrocher le micro ?", isPresented: $confirmRetire, titleVisibility: .visible) {
+                Button("Finir ma carrière maintenant", role: .destructive) { model.retire() }
+                Button("Pas encore", role: .cancel) {}
+            } message: {
+                Text("Ta fin dépend de là où tu en es : streams, respect, argent, mental, et ce que tu as accompli.")
+            }
             .sheet(isPresented: $showCalibration) {
                 CalibrationView().presentationBackground(Theme.background)
             }
@@ -184,6 +191,8 @@ struct GameView: View {
                     }
                     .disabled(!model.canMove)
                     #endif
+                    Button("Raccrocher le micro", role: .destructive) { confirmRetire = true }
+                        .disabled(!model.canRetire)
                     Button("Retour à l'accueil (sauvegardé)") { model.leaveGame() }
                 } label: {
                     Image(systemName: "ellipsis")
@@ -241,6 +250,9 @@ struct GameView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         case .consequence(_, let outcome):
             ConsequenceBox(outcome: outcome, state: state)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+        case .finaleChoice:
+            FinaleChoiceBox(retire: { model.retire() }, keepGoing: { model.keepGoing() })
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         case .metro:
             MetroMapView(current: state.district, open: model.engine.openDistricts(in: state),
