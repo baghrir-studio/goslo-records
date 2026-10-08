@@ -47,6 +47,15 @@ struct GameState: Codable, Equatable {
     var challengedAt: [String: Int] = [:]
     /// Turn each shop service was last bought.
     var boughtAt: [String: Int] = [:]
+    /// Singles released, in order (they race in the Top goslo radio).
+    var singles: [Single] = []
+    /// Artist XP (`ArtistLevel`).
+    var artistXP = 0
+    /// The season's challenges, and the season they were drawn for (-1: none yet).
+    var challenges: [Challenge] = []
+    var challengeSeason = -1
+    /// Best rank of a single in the Top this season.
+    var seasonBestRank: Int?
     /// The finale is played: the player picks between retiring as a legend and carrying on.
     var finaleChoicePending = false
     var pendingFollowUp: String?
@@ -103,7 +112,7 @@ struct GameState: Codable, Equatable {
         case questProgress, completedQuests, ending, position, facing, district, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
         case seenEvents, talkedAt, smallTalk, hooks, albums, freeCareer, finaleChoicePending
-        case challengedAt, boughtAt
+        case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -157,6 +166,11 @@ struct GameState: Codable, Equatable {
         finaleChoicePending = try c.decodeIfPresent(Bool.self, forKey: .finaleChoicePending) ?? false
         challengedAt = try c.decodeIfPresent([String: Int].self, forKey: .challengedAt) ?? [:]
         boughtAt = try c.decodeIfPresent([String: Int].self, forKey: .boughtAt) ?? [:]
+        singles = try c.decodeIfPresent([Single].self, forKey: .singles) ?? []
+        artistXP = try c.decodeIfPresent(Int.self, forKey: .artistXP) ?? 0
+        challenges = try c.decodeIfPresent([Challenge].self, forKey: .challenges) ?? []
+        challengeSeason = try c.decodeIfPresent(Int.self, forKey: .challengeSeason) ?? -1
+        seasonBestRank = try c.decodeIfPresent(Int.self, forKey: .seasonBestRank)
     }
 
     /// Year 1 to 10 (no cap in a free career).

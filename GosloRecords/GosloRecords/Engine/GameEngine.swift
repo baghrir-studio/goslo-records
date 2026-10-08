@@ -32,12 +32,12 @@ struct TurnOutcome: Equatable {
     var notes: [String] = []
     var ending: Ending?
 
-    fileprivate mutating func add(_ applied: [StatKind: Int]) {
+    mutating func add(_ applied: [StatKind: Int]) {
         deltas.merge(applied, uniquingKeysWith: +)
         deltas = deltas.filter { $0.value != 0 }
     }
 
-    fileprivate mutating func add(levelUps new: [Skill]) {
+    mutating func add(levelUps new: [Skill]) {
         for skill in new where !levelUps.contains(skill) { levelUps.append(skill) }
     }
 }
@@ -56,6 +56,7 @@ enum Resolution: Equatable {
 enum GameEngineError: Error, Equatable {
     case cannotVisit
     case cannotBuy
+    case cannotRecord
     case locationLocked(Location)
     case noCurrentEvent
     case unknownEvent(String)
@@ -149,6 +150,7 @@ struct GameEngine {
         }
         state.pendingCinematic = world.story.chapter(1)?.intro
         if let heritage = rapper.heritage { applyHeritage(heritage, to: &state) }
+        refreshChallenges(in: &state)
         return state
     }
 
@@ -1091,6 +1093,7 @@ struct GameEngine {
         state.flags.formUnion(result.setFlags)
         state.counters.increment(.beefs)
         if won {
+            ArtistLevel.gain(15, in: &state, outcome: &outcome)
             state.counters.increment(.clashsGagnes)
             state.flags.insert("clash_gagne_\(clash.opponentId)")
         }
@@ -1118,6 +1121,7 @@ struct GameEngine {
         outcome.clash = clash
         outcome.add(state.applyStats(won ? clash.spec.win.effects : clash.spec.lose.effects))
         if won {
+            ArtistLevel.gain(4, in: &state, outcome: &outcome)
             state.counters.increment(.victoiresTerrain)
             state.flags.formUnion(clash.spec.win.setFlags)
         }
@@ -1127,6 +1131,7 @@ struct GameEngine {
         state.clash = nil
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
+        checkChallenges(&outcome, in: &state)
         state.ending = EndingResolver.prematureEnding(for: state.stats)
         outcome.ending = state.ending
         return outcome
@@ -1135,11 +1140,13 @@ struct GameEngine {
     // MARK: - End of action
 
     /// Quests, early ending, and end of semester when actions run out.
-    private func finishAction(_ outcome: TurnOutcome, in state: inout GameState) -> TurnOutcome {
+    func finishAction(_ outcome: TurnOutcome, in state: inout GameState) -> TurnOutcome {
         var outcome = outcome
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
         applyTechniqueUnlocks(&outcome, in: &state)
+        refreshChallenges(in: &state)
+        checkChallenges(&outcome, in: &state)
 
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
@@ -1148,10 +1155,13 @@ struct GameEngine {
             outcome.notes += turnEnd.notes
             if state.freeCareer { outcome.add(state.stats.apply(GameEngine.agingUpkeep(turn: state.turn))) }
             outcome.add(sellAlbums(in: &state))
+            payChart(&outcome, in: &state)
+            checkChallenges(&outcome, in: &state)
             let limit = turnLimit(in: state)
             if !isInEpilogue(state) { state.turn = state.freeCareer ? state.turn + 1 : min(state.turn + 1, limit) }
             // Burn-out: one action only.
             state.actionsLeft = state.stats.mental < Economy.burnout ? 1 : GameState.actionsPerTurn
+            refreshChallenges(in: &state)
             state.challengedThisSemester = []
             outcome.semesterEnded = true
             ending = EndingResolver.prematureEnding(for: state.stats)

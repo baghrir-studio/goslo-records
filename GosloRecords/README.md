@@ -42,7 +42,7 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
   technique (same damage, its own gag and falling props). The notebook (Objets tab) picks the one to use.
 - **Mini-games** (`story.json` → `minigames`, started by an event choice `"minigame": id`): Punchliner (pick the
   ending of the line among four: the punchline, a decent line, a weak rhyme, a flop), Fuir la foule (run to the door through a crowd) and Cale la platine (stop DJ
-  Bobine's pitch on 100 %). Repeatable encounters with small rewards; rules in `Engine/Minigames.swift`.
+  Noize's pitch on 100 %). Repeatable encounters with small rewards; rules in `Engine/Minigames.swift`.
 - **Look**: hair (short, long, shaved, afro, braids, fade), hair colour, headwear (cap, beanie, hood, bucket hat,
   bandana), outfit (hoodie, jacket, jersey, puffer), glasses, beard, chain, earrings and headphones can be picked
   at creation (nil = the style's look).
@@ -116,7 +116,7 @@ Map characters can appear from a given chapter with `"from_chapter": 2`, and lea
 
 Written so far: chapter 1 "En bas du bloc" (boss: Kevlar Jr.), chapter 2 "La laverie" (signing at goslo records,
 mixtape, clip, Lingot's exile to Miami, the American star who says no, boss: "Le Grand Débat" TV show) and
-chapter 3 "Première scène" (setlist, DJ Bobine, rehearsal, promo, a promise on Vieux Mic Lucien's bench,
+chapter 3 "Première scène" (setlist, DJ Noize, rehearsal, promo, a promise on Vieux Mic Lucien's bench,
 soundcheck with Gégé, boss: the first concert)
 and chapter 4 "Le buzz" (a cat makes your chorus go viral, Lil Sauge's opportunistic feat, boss: Kolosse's live
 clash, Momo's blessing, reading the 84-page contract, boss: negotiating with Victor Contrat of Hexagone Music)
@@ -124,7 +124,7 @@ and chapter 5 "Le game" (the image meeting, writing the single with Fred, releas
 session to the Baron, forgive him or walk out, then the Baron's offer to sign with him, Le Conteur's diss series,
 Scalpel's live "autopsy" on goslo radio, boss: the pen duel against Scalpel) and chapter 6 "Le trône", the finale
 (the Dôme is booked, Lucien's funeral and the Baron's real name, Momo and the photo if you went up to the Baron's,
-Scalpel's red pen, DJ Bobine's second turntable, the sleepless night before: goslo radio's night line, the
+Scalpel's red pen, DJ Noize's second turntable, the sleepless night before: goslo radio's night line, the
 Philosopher on Lucien's bench, mum's kitchen and who stands in your corner, then three final bosses: the clash
 against the Baron, "Le Face-à-face" on goslo radio, and the concert at the Dôme). The epilogue "Le label" adds Fred's
 Bunker for sale if you walked out on him. A chapter with `"finale": true` ends the career

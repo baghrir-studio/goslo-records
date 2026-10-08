@@ -33,7 +33,7 @@ enum Arcade {
                    mode: .minigame(beatbox.id), unlockedBy: nil, unit: "motifs"),
         ArcadeGame(id: "freestyle", title: "Freestyle", pitch: "Enchaîne les rimes avant la fin du beat.",
                    mode: .freestyle, unlockedBy: nil, unit: "rimes"),
-        ArcadeGame(id: "platine", title: "Cale la platine", pitch: "Arrête le pitch de DJ Bobine pile sur 100 %.",
+        ArcadeGame(id: "platine", title: "Cale la platine", pitch: "Arrête le pitch de DJ Noize pile sur 100 %.",
                    mode: .minigame("platine_bobine"), unlockedBy: nil, unit: "%"),
         ArcadeGame(id: "punchliner", title: "Punchliner", pitch: "Trouve la vraie fin de la punchline avant le chrono.",
                    mode: .minigame("punchliner_carnet"), unlockedBy: .premierChapitre, unit: "%"),
