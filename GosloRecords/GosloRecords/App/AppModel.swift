@@ -802,6 +802,20 @@ final class AppModel {
         return result
     }
 
+    /// The shop: buys an offer. Returns why it failed, nil when it went through.
+    @discardableResult
+    func buy(_ offer: ShopOffer) -> String? {
+        guard var current = state else { return "Pas de carrière en cours" }
+        if let refusal = Shop.refusal(offer, in: current) { return refusal }
+        let before = current.stats
+        guard (try? engine.buy(offer, in: &current)) != nil else { return "Impossible pour l'instant" }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.statUp)
+        persist()
+        return nil
+    }
+
     /// Beatbox Simon: the pattern was played back (or not).
     func beatbox(repeated: Bool) {
         guard var current = state, case .minigame = phase else { return }
@@ -1163,7 +1177,8 @@ final class AppModel {
     private func show(_ outcome: TurnOutcome, for event: GameEvent?) {
         guard let current = state else { return }
         phase = .consequence(event, outcome)
-        if outcome.semesterEnded { pendingSemesterCard = true }
+        // The year card: once a year, not every turn.
+        if outcome.semesterEnded, state?.isNewYear == true { pendingSemesterCard = true }
         playOutcomeSound(outcome)
         if outcome.ending != nil {
             // Archive immediately so nothing is lost if the app is killed.

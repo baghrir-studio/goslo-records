@@ -4,6 +4,7 @@ import SwiftUI
 struct GameView: View {
     @Environment(AppModel.self) private var model
     @State private var showCarnet = false
+    @State private var showShop = false
     @State private var showCalibration = false
     @State private var confirmRetire = false
 
@@ -107,6 +108,12 @@ struct GameView: View {
             .sheet(isPresented: $showCalibration) {
                 CalibrationView().presentationBackground(Theme.background)
             }
+            .sheet(isPresented: $showShop) {
+                ShopView()
+                    .environment(model)
+                    .presentationBackground(Theme.background)
+                    .presentationDragIndicator(.visible)
+            }
             .sheet(isPresented: $showCarnet) {
                 CarnetView(state: state)
                     .environment(model)
@@ -155,18 +162,19 @@ struct GameView: View {
         VStack(spacing: 0) {
             StatsBar(stats: state.stats, deltas: model.lastDeltas, token: model.deltaToken, compact: true)
             HStack(spacing: 10) {
-                HStack(alignment: .lastTextBaseline, spacing: 6) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text(state.periodLabel).font(.display(20)).lineLimit(1).minimumScaleFactor(0.6)
-                    Text(state.semesterLabel).font(.mono(11, weight: .semibold)).foregroundStyle(Theme.muted)
-                }
-                HStack(spacing: 4) {
-                    ForEach(0..<GameState.actionsPerTurn, id: \.self) { index in
-                        Circle()
-                            .fill(index < state.actionsLeft ? Theme.accent : Color.white.opacity(0.2))
-                            .frame(width: 8, height: 8)
+                    // How far into the year.
+                    GeometryReader { bar in
+                        ZStack(alignment: .leading) {
+                            Rectangle().fill(Color.white.opacity(0.15))
+                            Rectangle().fill(Theme.accent).frame(width: bar.size.width * state.yearProgress)
+                        }
                     }
+                    .frame(width: 64, height: 3)
                 }
-                .accessibilityLabel("\(state.actionsLeft) actions restantes")
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("\(state.periodLabel), \(Int(state.yearProgress * 100)) % de l'année")
 
                 Spacer()
 
@@ -178,6 +186,8 @@ struct GameView: View {
                         }
                     }
                 hudButton(systemImage: "book.closed.fill", label: "Carnet") { showCarnet = true }
+                hudButton(systemImage: "bag.fill", label: "Boutique") { showShop = true }
+                    .disabled(!model.canMove)
                 Menu {
                     SoundToggles()
                     Button("Régler le timing des concerts") { showCalibration = true }
@@ -188,7 +198,7 @@ struct GameView: View {
                                 Button("Chapitre \(number)") { model.debug(.chapter(number)) }
                             }
                         }
-                        Button("Dernier semestre (prolongation)") { model.debug(.lastSemester) }
+                        Button("Dernière saison (prolongation)") { model.debug(.lastSemester) }
                         Button("Stats et compétences au max") { model.debug(.maxOut) }
                         Menu("Lancer un mini-jeu…") {
                             Button("Punchliner") { model.debug(.event("punchliner_fred")) }

@@ -23,7 +23,7 @@ struct AlbumSection: View {
                     .font(.system(size: 15)).foregroundStyle(Theme.muted)
             } else if let last = state.albums.last {
                 let wait = max(1, AlbumRules.cooldown - (state.turn - last.releasedTurn))
-                Text("Prochain album possible dans \(wait) semestre\(wait > 1 ? "s" : ""). Le public digère encore « \(last.title) ».")
+                Text("Prochain album possible dans \(wait) saison\(wait > 1 ? "s" : ""). Le public digère encore « \(last.title) ».")
                     .font(.system(size: 15)).foregroundStyle(Theme.muted)
             }
             ForEach(state.albums.reversed()) { album in
@@ -123,7 +123,7 @@ struct AlbumSection: View {
     private func releaseCard(_ album: Album) -> some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("C'EST DANS LES BACS").font(.display(28)).foregroundStyle(Theme.accent)
-            Text("« \(album.title) » : \(album.sales.first?.formatted() ?? "0") exemplaires le premier semestre.")
+            Text("« \(album.title) » : \(album.sales.first?.formatted() ?? "0") exemplaires la première saison.")
                 .font(.system(size: 15, weight: .semibold))
             Text(album.quality >= 7 ? "La critique adore. Le Bloc tourne ton album en boucle."
                  : album.quality < 5 ? "La critique est dure. Ta mère l'écoute quand même." : "Un bon album. Le public suit.")

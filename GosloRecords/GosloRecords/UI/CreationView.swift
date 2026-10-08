@@ -20,6 +20,7 @@ struct CreationView: View {
     @State private var outfitColor: Int?
     @State private var build: CharacterLook.Build?
     @State private var heritage: Heritage?
+    @State private var difficulty: Difficulty = .normal
     @State private var gender: Gender?
     @State private var step: Step = .identity
     @FocusState private var nameFocused: Bool
@@ -39,7 +40,7 @@ struct CreationView: View {
 
     private var draft: Rapper {
         Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city ?? .paris, style: style ?? .boomBap, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
-               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, build: build, gender: gender ?? .rappeur, heritage: heritage)
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, build: build, gender: gender ?? .rappeur, heritage: heritage, difficulty: difficulty)
     }
 
     /// Name used when the player leaves the field empty (the field's placeholder).
@@ -88,6 +89,7 @@ struct CreationView: View {
                         lookSection
                     case .style:
                         styleSection
+                        difficultySection
                         heritageSection
                     }
                 }
@@ -160,6 +162,18 @@ struct CreationView: View {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = previous }
         } else {
             model.go(.home)
+        }
+    }
+
+    /// Facile, Normal (default) or Difficile.
+    private var difficultySection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Kicker(text: "Difficulté")
+            ChoiceRow(options: Difficulty.allCases, selected: difficulty, label: \.label) { difficulty = $0 }
+            Text(difficulty.pitch)
+                .font(.system(size: 13))
+                .foregroundStyle(Theme.muted)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
