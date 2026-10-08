@@ -46,11 +46,11 @@ final class GameStore {
     }
 
     /// Achievements, kept across careers.
-    func loadProfile() -> Profile {
-        read(Profile.self, from: profileURL) ?? Profile()
+    func loadProfile() -> TrophyCase {
+        read(TrophyCase.self, from: profileURL) ?? TrophyCase()
     }
 
-    func saveProfile(_ profile: Profile) {
+    func saveProfile(_ profile: TrophyCase) {
         write(profile, to: profileURL)
     }
 

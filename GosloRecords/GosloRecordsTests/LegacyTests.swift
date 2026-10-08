@@ -71,12 +71,12 @@ final class LegacyTests: XCTestCase {
     }
 
     func testProfileSurvivesAndOldRappersHaveNoHeritage() throws {
-        var profile = Profile()
+        var profile = TrophyCase()
         profile.achievements[.rimeur] = Date(timeIntervalSince1970: 0)
-        let saved = try JSONDecoder().decode(Profile.self, from: JSONEncoder().encode(profile))
+        let saved = try JSONDecoder().decode(TrophyCase.self, from: JSONEncoder().encode(profile))
         XCTAssertEqual(saved, profile)
         XCTAssertEqual(saved.heritages, [.flow])
-        let future = try JSONDecoder().decode(Profile.self, from: Data(#"{"achievements": {"rimeur": 0, "inconnu": 0}}"#.utf8))
+        let future = try JSONDecoder().decode(TrophyCase.self, from: Data(#"{"achievements": {"rimeur": 0, "inconnu": 0}}"#.utf8))
         XCTAssertEqual(future.unlocked, [.rimeur], "un succès inconnu n'efface pas les autres")
         let old = try JSONDecoder().decode(Rapper.self, from: Data(#"{"name":"A","city":"Lyon","style":"Trap"}"#.utf8))
         XCTAssertNil(old.heritage)

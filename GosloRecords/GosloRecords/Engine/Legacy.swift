@@ -119,7 +119,7 @@ enum Heritage: String, Codable, CaseIterable, Identifiable {
 }
 
 /// Achievements unlocked on this device, with the date of each.
-struct Profile: Codable, Equatable {
+struct TrophyCase: Codable, Equatable {
     var achievements: [Achievement: Date] = [:]
 
     var unlocked: Set<Achievement> { Set(achievements.keys) }

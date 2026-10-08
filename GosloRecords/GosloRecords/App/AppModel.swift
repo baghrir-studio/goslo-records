@@ -121,7 +121,7 @@ final class AppModel {
     private var pendingSemesterCard = false
     private var stepsSinceSave = 0
     /// Achievements unlocked on this device (they unlock the legacy bonuses).
-    private(set) var profile: Profile
+    private(set) var profile: TrophyCase
     /// The achievement being announced at the top of the screen.
     private(set) var achievementToast: Achievement?
     private var toastQueue: [Achievement] = []
