@@ -73,9 +73,13 @@ struct HomeView: View {
                 .buttonStyle(model.resumableRun == nil ? AnyButtonStyle(PrimaryButtonStyle()) : AnyButtonStyle(SecondaryButtonStyle()))
                 .disabled(model.loadError != nil)
 
-                Button("Arcade · mini-jeux") { model.go(.arcade) }
-                    .buttonStyle(SecondaryButtonStyle())
-                    .disabled(model.loadError != nil)
+                HStack(spacing: 12) {
+                    Button("Le QG · 💿 \(model.profile.hq.discs)") { model.go(.hq) }
+                        .buttonStyle(SecondaryButtonStyle())
+                    Button("Arcade") { model.go(.arcade) }
+                        .buttonStyle(SecondaryButtonStyle())
+                }
+                .disabled(model.loadError != nil)
 
                 HStack(spacing: 12) {
                     Button("Mes carrières") { model.go(.history) }

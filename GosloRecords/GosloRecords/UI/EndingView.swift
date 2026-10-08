@@ -36,6 +36,22 @@ struct EndingView: View {
                 .opacity(revealed ? 1 : 0)
                 .offset(y: revealed ? 0 : 12)
 
+                if !isArchive, let discs = model.profile.hq.lastReward {
+                    Button { model.go(.hq) } label: {
+                        HStack {
+                            Text("💿 +\(discs) disque\(discs > 1 ? "s" : "") d'or pour ton QG")
+                                .font(.mono(13, weight: .heavy))
+                                .foregroundStyle(.black)
+                            Spacer()
+                            Text("VOIR LE QG ›").font(.mono(11, weight: .bold)).foregroundStyle(.black.opacity(0.7))
+                        }
+                        .padding(12)
+                        .background(Color(red: 1, green: 0.85, blue: 0.3))
+                    }
+                    .buttonStyle(PressScaleStyle())
+                    .opacity(revealed ? 1 : 0)
+                }
+
                 ScaledShareCard(record: record)
                     .frame(maxWidth: 340)
                     .frame(maxWidth: .infinity)

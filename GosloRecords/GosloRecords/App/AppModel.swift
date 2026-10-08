@@ -10,6 +10,7 @@ enum Route: Equatable {
     case history
     case achievements
     case arcade
+    case hq
 }
 
 /// What triggered the current encounter (decides the backdrop and where you come back to).
@@ -193,6 +194,7 @@ final class AppModel {
 
     func startCareer(_ rapper: Rapper) {
         var fresh = engine.newGame(rapper: rapper)
+        HQ.apply(profile.hq, to: &fresh)
         fresh.freeCareer = true
         fresh.position = engine.world.map?.spawn
         state = fresh
@@ -1135,6 +1137,7 @@ final class AppModel {
                 history.insert(record, at: 0)
                 store.saveHistory(history)
                 checkAchievements(in: current)
+                rewardHQ(for: current)
                 store.clearCurrentRun()
                 busy = false
                 phase = .overworld
@@ -1311,6 +1314,7 @@ final class AppModel {
             store.saveHistory(history)
             store.clearCurrentRun()
             checkAchievements(in: current)
+            rewardHQ(for: current)
         } else {
             persist()
         }
@@ -1391,6 +1395,27 @@ final class AppModel {
         route = .home
     }
 
+    // MARK: - HQ
+
+    /// A finished career brings gold records home.
+    private func rewardHQ(for career: GameState) {
+        let discs = HQ.reward(for: career)
+        profile.hq.discs += discs
+        profile.hq.earned += discs
+        profile.hq.lastReward = discs
+        store.saveProfile(profile)
+    }
+
+    /// Builds or improves a room of the laverie.
+    @discardableResult
+    func upgrade(_ room: HQRoom) -> Bool {
+        guard HQ.upgrade(room, in: &profile.hq) else { return false }
+        store.saveProfile(profile)
+        sound.play(.levelUp)
+        Haptics.shared.play(.victory)
+        return true
+    }
+
     // MARK: - Arcade
 
     func isUnlocked(_ game: ArcadeGame) -> Bool { Arcade.isUnlocked(game, in: profile) }
@@ -1454,6 +1479,7 @@ final class AppModel {
         store.saveHistory(history)
         store.clearCurrentRun()
         checkAchievements(in: current)
+        rewardHQ(for: current)
         heldDirection = nil
         radioTask?.cancel()
         radioHeadline = nil
