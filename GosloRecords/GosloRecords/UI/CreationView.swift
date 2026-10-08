@@ -3,8 +3,9 @@ import SwiftUI
 struct CreationView: View {
     @Environment(AppModel.self) private var model
     @State private var name = ""
-    @State private var city: City = .paris
-    @State private var style: Style = .boomBap
+    // Nothing preselected: the player has to pick (the button below says what's missing).
+    @State private var city: City?
+    @State private var style: Style?
     @State private var skinTone = 2
     // Look: nil keeps the style's default.
     @State private var hairColor: Int?
@@ -19,7 +20,7 @@ struct CreationView: View {
     @State private var outfitColor: Int?
     @State private var build: CharacterLook.Build?
     @State private var heritage: Heritage?
-    @State private var gender: Gender = .rappeur
+    @State private var gender: Gender?
     @State private var step: Step = .identity
     @FocusState private var nameFocused: Bool
 
@@ -37,8 +38,8 @@ struct CreationView: View {
     }
 
     private var draft: Rapper {
-        Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
-               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, build: build, gender: gender, heritage: heritage)
+        Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city ?? .paris, style: style ?? .boomBap, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, build: build, gender: gender ?? .rappeur, heritage: heritage)
     }
 
     /// Name used when the player leaves the field empty (the field's placeholder).
@@ -99,8 +100,11 @@ struct CreationView: View {
             }
             .scrollDismissesKeyboard(.interactively)
 
-            Button(step == .style ? "Lancer la carrière" : "Suivant") { next() }
+            Button(missing ?? (step == .style ? "Lancer la carrière" : "Suivant")) { next() }
                 .buttonStyle(PrimaryButtonStyle())
+                .disabled(missing != nil)
+                .opacity(missing == nil ? 1 : 0.45)
+                .animation(.easeOut(duration: 0.15), value: missing)
                 .padding(.horizontal, Theme.gutter)
                 .padding(.vertical, 12)
         }
@@ -126,7 +130,22 @@ struct CreationView: View {
         .animation(.easeOut(duration: 0.2), value: step)
     }
 
+    /// What's left to pick on this page before moving on (nil = all set).
+    private var missing: String? {
+        switch step {
+        case .identity:
+            if gender == nil { return "Choisis rappeur ou rappeuse" }
+            if city == nil { return "Choisis ta ville" }
+            return nil
+        case .look:
+            return nil
+        case .style:
+            return style == nil ? "Choisis ton style" : nil
+        }
+    }
+
     private func next() {
+        guard missing == nil else { return }
         nameFocused = false
         if let following = Step(rawValue: step.rawValue + 1) {
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) { step = following }
@@ -336,7 +355,7 @@ struct CreationView: View {
 /// One option per chip, the current one highlighted.
 private struct ChoiceRow<Option: Hashable>: View {
     let options: [Option]
-    let selected: Option
+    let selected: Option?
     let label: (Option) -> String
     let pick: (Option) -> Void
 

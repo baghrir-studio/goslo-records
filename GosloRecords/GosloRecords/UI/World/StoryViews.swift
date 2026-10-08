@@ -113,6 +113,7 @@ struct ObjectiveBanner: View {
     let objective: Objective?
     /// The objective is in another district: say which (take the metro).
     var elsewhere: District? = nil
+    var transit: Transit = .metro
     @State private var expanded = false
 
     var body: some View {
@@ -131,7 +132,7 @@ struct ObjectiveBanner: View {
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.leading)
                 if let elsewhere {
-                    Text("Ⓜ︎ \(elsewhere.name.uppercased()) · PRENDS LE MÉTRO")
+                    Text("\(transit.badge) \(elsewhere.name.uppercased()) · \(transit.takeIt)")
                         .font(.system(size: 9, weight: .heavy, design: .monospaced))
                         .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
                 }

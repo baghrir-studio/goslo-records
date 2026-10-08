@@ -84,11 +84,19 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.top, 18)
 
-            Text("@goslo_records")
-                .font(.mono(11, weight: .semibold))
-                .foregroundStyle(Theme.faint)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 24)
+            // Instagram: the game's account and the radio's.
+            HStack(spacing: 18) {
+                Link(destination: Socials.gameURL) {
+                    Label("@\(Socials.game)", systemImage: "gamecontroller.fill")
+                }
+                Link(destination: Socials.radioURL) {
+                    Label("@\(Socials.radio)", systemImage: "dot.radiowaves.left.and.right")
+                }
+            }
+            .font(.mono(11, weight: .semibold))
+            .foregroundStyle(Theme.muted)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 24)
         }
         .padding(.horizontal, Theme.gutter)
         .padding(.bottom, 12)
@@ -110,14 +118,14 @@ struct Logo: View {
             Text("goslo")
                 .foregroundStyle(Theme.text)
             HStack(alignment: .firstTextBaseline, spacing: 0) {
-                Text("records")
+                Text("radio")
                 Text(".").foregroundStyle(Theme.accent)
             }
             .foregroundStyle(Theme.text.opacity(0.92))
         }
         .font(.display(size))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("goslo records")
+        .accessibilityLabel("goslo radio")
     }
 }
 
@@ -132,4 +140,12 @@ struct AnyButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         make(configuration)
     }
+}
+
+/// The Instagram accounts: the game's, and goslo radio's.
+enum Socials {
+    static let game = "goslo_radio_lejeu"
+    static let radio = "goslo_radio"
+    static let gameURL = URL(string: "https://www.instagram.com/\(game)/")!
+    static let radioURL = URL(string: "https://www.instagram.com/\(radio)/")!
 }

@@ -61,7 +61,8 @@ struct GameView: View {
                                 VStack(alignment: .leading, spacing: 6) {
                                     if let chapter = model.chapter {
                                         ObjectiveBanner(chapter: chapter, objective: model.objective,
-                                                        elsewhere: model.objectiveDistrict)
+                                                        elsewhere: model.objectiveDistrict,
+                                                        transit: Transit.of(state.rapper.city))
                                     }
                                     if let headline = model.radioHeadline {
                                         RadioTicker(text: headline)
@@ -255,7 +256,7 @@ struct GameView: View {
             FinaleChoiceBox(retire: { model.retire() }, keepGoing: { model.keepGoing() })
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         case .metro:
-            MetroMapView(current: state.district, open: model.engine.openDistricts(in: state),
+            MetroMapView(transit: Transit.of(state.rapper.city), current: state.district, open: model.engine.openDistricts(in: state),
                          objective: model.objectiveDistrict) { model.travel(to: $0) } close: { model.closeMetro() }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
         case .clash, .interview, .concert, .negotiation, .writing, .minigame, .cinematic:

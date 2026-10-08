@@ -2,6 +2,7 @@ import SwiftUI
 
 /// The metro map: one line, four stations. Open districts can be picked; the others say when they open.
 struct MetroMapView: View {
+    let transit: Transit
     let current: District
     let open: [District]
     /// District holding the current objective (starred).
@@ -9,18 +10,17 @@ struct MetroMapView: View {
     let travel: (District) -> Void
     let close: () -> Void
 
-    private static let line = Color(red: 0.2, green: 0.5, blue: 1)
     private static let gold = Color(red: 1, green: 0.85, blue: 0.3)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 8) {
-                Text("Ⓜ︎")
+                Text(transit.badge)
                     .font(.system(size: 18, weight: .black))
                     .foregroundStyle(.white)
                     .frame(width: 30, height: 30)
-                    .background(Self.line)
-                Text("LIGNE GOSLO")
+                    .background(transit.color)
+                Text(transit == .tramway ? "TRAM · LIGNE GOSLO" : "MÉTRO · LIGNE GOSLO")
                     .font(.system(size: 13, weight: .heavy, design: .monospaced))
                     .tracking(2)
                     .foregroundStyle(.white)
@@ -38,7 +38,7 @@ struct MetroMapView: View {
         }
         .padding(14)
         .background(Color.black.opacity(0.92))
-        .overlay(Rectangle().stroke(Self.line, lineWidth: 2))
+        .overlay(Rectangle().stroke(transit.color, lineWidth: 2))
     }
 
     private func station(_ district: District, first: Bool, last: Bool) -> some View {
@@ -51,13 +51,13 @@ struct MetroMapView: View {
                 // The line and the station dot.
                 ZStack {
                     VStack(spacing: 0) {
-                        Rectangle().fill(first ? Color.clear : Self.line).frame(width: 6)
-                        Rectangle().fill(last ? Color.clear : Self.line).frame(width: 6)
+                        Rectangle().fill(first ? Color.clear : transit.color).frame(width: 6)
+                        Rectangle().fill(last ? Color.clear : transit.color).frame(width: 6)
                     }
                     Circle()
                         .fill(isHere ? Self.gold : (isOpen ? Color.white : Color.white.opacity(0.25)))
                         .frame(width: isHere ? 20 : 16, height: isHere ? 20 : 16)
-                        .overlay(Circle().stroke(Self.line, lineWidth: 3))
+                        .overlay(Circle().stroke(transit.color, lineWidth: 3))
                 }
                 .frame(width: 24)
 
@@ -90,5 +90,12 @@ struct MetroMapView: View {
         }
         .buttonStyle(.plain)
         .disabled(!isOpen || isHere)
+    }
+}
+
+extension Transit {
+    /// Blue for the metro, Casablanca's tram red.
+    var color: Color {
+        self == .tramway ? Color(red: 0.85, green: 0.16, blue: 0.12) : Color(red: 0.2, green: 0.5, blue: 1)
     }
 }

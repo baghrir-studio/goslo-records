@@ -15,7 +15,7 @@ enum Location: String, Codable, CaseIterable, Identifiable, CodingKeyRepresentab
     var name: String {
         switch self {
         case .studio: "Le Bunker"
-        case .label: "goslo records"
+        case .label: "La laverie"
         case .media: "goslo radio"
         case .quartier: "Le quartier"
         case .reseaux: "Ton téléphone"

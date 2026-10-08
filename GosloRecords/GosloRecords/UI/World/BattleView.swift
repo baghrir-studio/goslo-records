@@ -288,8 +288,8 @@ struct BattleView: View {
                     if let poster {
                         let image = Image(uiImage: poster)
                         ShareLink(item: image,
-                                  subject: Text("Clash sur goslo records"),
-                                  message: Text("\(state.rapper.name) a mis \(opponentName) K.O. @goslo_records"),
+                                  subject: Text("Clash sur goslo radio"),
+                                  message: Text("\(state.rapper.name) a mis \(opponentName) K.O. @goslo_radio_lejeu"),
                                   preview: SharePreview("\(state.rapper.name) bat \(opponentName)", image: image)) {
                             Label("Affiche", systemImage: "square.and.arrow.up")
                         }

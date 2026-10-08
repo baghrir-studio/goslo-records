@@ -122,6 +122,7 @@ struct InteriorView: View {
 
 /// A metro ride: the train rushes through the tunnel, then the district's name lands.
 private struct MetroRide: View {
+    @Environment(AppModel.self) private var model
     let district: District
     @State private var passing = false
     @State private var named = false
@@ -143,26 +144,14 @@ private struct MetroRide: View {
                         }
                     }
                 }
-                // The train: a long carriage with lit windows.
-                HStack(spacing: 0) {
-                    ForEach(0..<3, id: \.self) { _ in
-                        ZStack {
-                            Rectangle().fill(Color(red: 0.75, green: 0.78, blue: 0.82))
-                            HStack(spacing: 10) {
-                                ForEach(0..<5, id: \.self) { _ in
-                                    Rectangle().fill(Color(red: 1, green: 0.88, blue: 0.55)).frame(width: 34, height: 26)
-                                }
-                            }
-                            Rectangle().fill(Theme.accent).frame(height: 8).offset(y: 30)
-                        }
-                        .frame(width: 300, height: 90)
-                        .overlay(Rectangle().stroke(Color.black, lineWidth: 3))
-                    }
+                // The train (or Casablanca's red tram) crossing the screen.
+                Group {
+                    if transit == .tramway { tram } else { train }
                 }
                 .position(x: passing ? -500 : w + 500, y: h * 0.5)
 
                 VStack(spacing: 10) {
-                    Text("Ⓜ︎ \(district.name.uppercased())")
+                    Text("\(transit.badge) \(district.name.uppercased())")
                         .font(.display(60))
                         .lineLimit(1)
                         .minimumScaleFactor(0.4)
@@ -181,8 +170,72 @@ private struct MetroRide: View {
         }
         .ignoresSafeArea()
         .onAppear {
-            withAnimation(.easeInOut(duration: 1.1)) { passing = true }
+            withAnimation(.easeInOut(duration: transit == .tramway ? 1.4 : 1.1)) { passing = true }
             withAnimation(.spring(response: 0.5, dampingFraction: 0.75).delay(1.0)) { named = true }
         }
+    }
+
+    private var transit: Transit { Transit.of(model.state?.rapper.city ?? .paris) }
+
+    /// A long metro carriage with lit windows.
+    private var train: some View {
+        HStack(spacing: 0) {
+            ForEach(0..<3, id: \.self) { _ in
+                ZStack {
+                    Rectangle().fill(Color(red: 0.75, green: 0.78, blue: 0.82))
+                    HStack(spacing: 10) {
+                        ForEach(0..<5, id: \.self) { _ in
+                            Rectangle().fill(Color(red: 1, green: 0.88, blue: 0.55)).frame(width: 34, height: 26)
+                        }
+                    }
+                    Rectangle().fill(Theme.accent).frame(height: 8).offset(y: 30)
+                }
+                .frame(width: 300, height: 90)
+                .overlay(Rectangle().stroke(Color.black, lineWidth: 3))
+            }
+        }
+    }
+
+    /// Casablanca's tram: red, rounded nose, dark tinted windows, a pantograph on the roof.
+    private var tram: some View {
+        let red = Color(red: 0.85, green: 0.16, blue: 0.12)
+        return HStack(spacing: 3) {
+            // The nose, leading the way.
+            UnevenRoundedRectangle(topLeadingRadius: 40, bottomLeadingRadius: 26)
+                .fill(red)
+                .overlay(alignment: .top) {
+                    UnevenRoundedRectangle(topLeadingRadius: 30)
+                        .fill(Color(red: 0.12, green: 0.14, blue: 0.18))
+                        .frame(height: 46)
+                        .padding(.top, 10).padding(.leading, 14)
+                }
+                .overlay(alignment: .bottomLeading) {
+                    Circle().fill(Color(red: 1, green: 0.95, blue: 0.7)).frame(width: 9, height: 9).padding(.leading, 18).padding(.bottom, 16)
+                }
+                .frame(width: 120, height: 96)
+            ForEach(0..<4, id: \.self) { index in
+                ZStack(alignment: .top) {
+                    Rectangle().fill(red)
+                    Rectangle().fill(Color(red: 0.12, green: 0.14, blue: 0.18)).frame(height: 48).padding(.top, 10).padding(.horizontal, 6)
+                    HStack(spacing: 22) {
+                        ForEach(0..<3, id: \.self) { _ in
+                            Rectangle().fill(Color(red: 1, green: 0.85, blue: 0.55).opacity(0.25)).frame(width: 30, height: 40)
+                        }
+                    }
+                    .padding(.top, 14)
+                    if index == 1 {
+                        // The pantograph.
+                        Path { path in
+                            path.move(to: CGPoint(x: 70, y: 0)); path.addLine(to: CGPoint(x: 110, y: -26))
+                            path.addLine(to: CGPoint(x: 150, y: 0))
+                            path.move(to: CGPoint(x: 90, y: -26)); path.addLine(to: CGPoint(x: 130, y: -26))
+                        }
+                        .stroke(Color(white: 0.75), lineWidth: 3)
+                    }
+                }
+                .frame(width: 220, height: 96)
+            }
+        }
+        .overlay(alignment: .top) { Rectangle().fill(Color(white: 0.7)).frame(height: 5).offset(y: -2) }
     }
 }

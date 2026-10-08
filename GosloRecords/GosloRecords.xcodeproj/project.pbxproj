@@ -264,7 +264,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "goslo records";
+				INFOPLIST_KEY_CFBundleDisplayName = "goslo radio";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Pour enregistrer ta carte de fin de carrière dans tes photos.";
@@ -299,7 +299,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "goslo records";
+				INFOPLIST_KEY_CFBundleDisplayName = "goslo radio";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Pour enregistrer ta carte de fin de carrière dans tes photos.";
