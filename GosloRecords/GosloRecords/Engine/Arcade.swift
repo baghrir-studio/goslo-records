@@ -20,7 +20,7 @@ struct ArcadeGame: Identifiable, Equatable {
 }
 
 enum Arcade {
-    /// Beatbox Simon only lives in the arcade (and in a career scene, see story.json).
+    /// Beatbox Simon lives in the arcade (no story.json entry).
     static let beatbox = Minigame(
         id: "arcade_beatbox", kind: .beatbox, title: "Beatbox Simon",
         intro: "Le beatboxeur du square lance un motif. Tu le rejoues, son par son. À chaque tour, un son de plus. Une erreur et c'est fini.",
