@@ -985,10 +985,17 @@ struct GameEngine {
 
     var wildOpponents: [CastMember] { world.cast.filter { $0.wild && $0.clash != nil } }
 
+    /// Who you can bump into in this city's terrain vague. The locals turn up twice as often as the
+    /// characters you meet everywhere.
+    func wildOpponents(in city: City) -> [CastMember] {
+        let pool = wildOpponents.filter { $0.belongs(to: city) }
+        return pool + pool.filter { $0.cities != nil }
+    }
+
     /// Starts a wild clash in the terrain vague (no action spent).
     func startWildClash<R: RandomNumberGenerator>(in state: inout GameState, using rng: inout R) -> ClashState? {
         guard !state.isOver, state.currentEventId == nil, state.clash == nil,
-              let opponent = wildOpponents.randomElement(using: &rng) else { return nil }
+              let opponent = wildOpponents(in: state.rapper.city).randomElement(using: &rng) else { return nil }
         let spec = ClashSpec(
             opponent: opponent.id,
             win: ClashResultSpec(effects: GameEngine.wildRewards.win,

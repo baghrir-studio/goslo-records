@@ -85,16 +85,19 @@ struct CastMember: Codable, Equatable, Identifiable {
     let secret: SecretTechnique?
     /// Small talk once they have nothing new to say (they take turns, see `GameEngine.smallTalk`).
     let idle: [String]
+    /// Only met in these cities (nil = everywhere). Wild opponents use it to belong to their city.
+    let cities: [City]?
 
     enum CodingKeys: String, CodingKey {
-        case id, name, role, bio, clash, wild, look, secret, idle
+        case id, name, role, bio, clash, wild, look, secret, idle, cities
         case startRelation = "start_relation"
     }
 
     init(id: String, name: String, role: String, bio: String = "", startRelation: Int = defaultRelation,
          clash: ClashProfile? = nil, wild: Bool = false, look: CharacterLook = CharacterLook(),
-         secret: SecretTechnique? = nil, idle: [String] = []) {
+         secret: SecretTechnique? = nil, idle: [String] = [], cities: [City]? = nil) {
         self.idle = idle
+        self.cities = cities
         self.id = id
         self.name = name
         self.role = role
@@ -118,7 +121,10 @@ struct CastMember: Codable, Equatable, Identifiable {
         look = try c.decodeIfPresent(CharacterLook.self, forKey: .look) ?? CharacterLook()
         secret = try c.decodeIfPresent(SecretTechnique.self, forKey: .secret)
         idle = try c.decodeIfPresent([String].self, forKey: .idle) ?? []
+        cities = try c.decodeIfPresent([City].self, forKey: .cities)
     }
+
+    func belongs(to city: City) -> Bool { cities?.contains(city) ?? true }
 }
 
 /// An opponent's clash profile. Stats run 1–10, like the player's levels.

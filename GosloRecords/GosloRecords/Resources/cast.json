@@ -1353,6 +1353,668 @@
         "Mon taxi a 400 000 kilomètres. Et toujours le meilleur son de la ville.",
         "Un client m'a dit qu'il était producteur. Il est descendu sans payer. Comme un producteur."
       ]
+    },
+    {
+      "id": "parisien_presse",
+      "name": "Le Parisien Pressé",
+      "role": "Clashe entre deux métros",
+      "bio": "Rappe en marchant vite, en soupirant, et en regardant sa montre. Il a quatre minutes.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#1b1b1f",
+        "top": "#2b2b33",
+        "bottom": "#3a3a44",
+        "shoes": "#141418",
+        "accent": "#c8a165",
+        "outfit": "jacket",
+        "glasses": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 4,
+          "presence": 2,
+          "story": 2
+        },
+        "weakness": "presence",
+        "resistance": "flow",
+        "taunts": [
+          "Pardon, je peux passer ?",
+          "T'as un ticket pour ce clash ?",
+          "Je suis en retard, finissons vite."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Paris"
+      ],
+      "secret": {
+        "name": "Le Changement à Châtelet",
+        "line": "Il t'embarque dans les couloirs de Châtelet. Quarante minutes plus tard, tu ne sais plus où tu es, ni qui tu es.",
+        "fx": "glitch"
+      }
+    },
+    {
+      "id": "critique_rive_gauche",
+      "name": "La Critique Rive Gauche",
+      "role": "Note chaque rime comme un croissant",
+      "bio": "Tient un blog où elle note les rappeurs sur vingt. Personne n'a jamais eu plus de 12.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#9a4a24",
+        "top": "#e8e4dc",
+        "bottom": "#1a1a1f",
+        "shoes": "#7a1f24",
+        "accent": "#7a1f24",
+        "hair_style": "bun",
+        "feminine": true,
+        "glasses": true,
+        "earrings": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 2,
+          "presence": 2,
+          "story": 3
+        },
+        "weakness": "flow",
+        "resistance": "punchline",
+        "taunts": [
+          "C'est… intéressant.",
+          "On sent l'influence, hein.",
+          "Je mets 9. C'est généreux."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Paris"
+      ],
+      "secret": {
+        "name": "La Note sur Vingt",
+        "line": "Elle note ton couplet sur vingt, à voix haute. Tu as eu 7, avec une remarque sur ta posture.",
+        "fx": "redpen"
+      }
+    },
+    {
+      "id": "minot_vieux_port",
+      "name": "Le Minot du Vieux-Port",
+      "role": "Freestyle plus vite que le mistral",
+      "bio": "Quinze ans, trois chaînes en or (une vraie), et un flow qui a déjà fait pleurer un poissonnier.",
+      "look": {
+        "skin": "#c68642",
+        "hair": "#1b1b1f",
+        "top": "#3f7ac8",
+        "bottom": "#f2f2f2",
+        "shoes": "#f2f2f2",
+        "accent": "#f2f2f2",
+        "outfit": "jersey",
+        "chain": true,
+        "hair_style": "fade"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 4,
+          "presence": 3,
+          "story": 1
+        },
+        "weakness": "story",
+        "resistance": "flow",
+        "taunts": [
+          "Oh fada, tu rappes ou tu pêches ?",
+          "Ici c'est le Vieux-Port, mon frère.",
+          "Allez, viens, on se met une raclée."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Marseille"
+      ],
+      "secret": {
+        "name": "Le Mistral",
+        "line": "Il fait claquer une rafale de rimes si forte que ta casquette finit à l'Estaque.",
+        "fx": "bass"
+      }
+    },
+    {
+      "id": "mamie_petanque",
+      "name": "Mamie Pétanque",
+      "role": "Ne rate jamais un tir, ni une rime",
+      "bio": "Championne du boulodrome depuis 1974. A tiré sur des rappeurs plus coriaces que toi.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#9a9aa6",
+        "top": "#e8e4dc",
+        "bottom": "#2f4a7a",
+        "shoes": "#e8e8e8",
+        "accent": "#3f7ac8",
+        "hair_style": "bun",
+        "feminine": true,
+        "hat": "bucket"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 2,
+          "presence": 4,
+          "story": 1
+        },
+        "weakness": "flow",
+        "resistance": "presence",
+        "taunts": [
+          "Tu tires ou tu pointes ?",
+          "J'ai connu ton grand-père. Il rappait mieux.",
+          "Allez, mon petit, montre-moi."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Marseille"
+      ],
+      "secret": {
+        "name": "Le Carreau",
+        "line": "Elle tire. Carreau. Ta punchline roule jusqu'au caniveau sous les applaudissements du boulodrome.",
+        "fx": "spotlight",
+        "prop": "circle.fill"
+      }
+    },
+    {
+      "id": "gone_traboules",
+      "name": "Le Gone des Traboules",
+      "role": "Apparaît et disparaît par les traboules",
+      "bio": "Connaît chaque passage secret du Vieux Lyon. On ne le voit jamais arriver. On ne le voit jamais partir.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#5a3a22",
+        "top": "#4a4a52",
+        "bottom": "#23232a",
+        "shoes": "#3a3a44",
+        "accent": "#c81e14",
+        "hat": "hood"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 3,
+          "presence": 2,
+          "story": 3
+        },
+        "weakness": "presence",
+        "resistance": "story",
+        "taunts": [
+          "Par ici… ou par là ?",
+          "J'étais derrière toi depuis le début.",
+          "Les traboules, c'est mon studio."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Lyon"
+      ],
+      "secret": {
+        "name": "La Traboule",
+        "line": "Il disparaît dans une traboule et ressort derrière toi. Trois fois. Tu ne sais plus d'où viennent les rimes.",
+        "fx": "glitch"
+      }
+    },
+    {
+      "id": "cheffe_bouchon",
+      "name": "La Cheffe de Bouchon",
+      "role": "Rime comme elle cuisine : copieux",
+      "bio": "Tient un bouchon où chaque plat est un couplet. Le tablier de sapeur, c'est son flow.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#1b1b1f",
+        "top": "#f2efe8",
+        "bottom": "#3a3a44",
+        "shoes": "#141418",
+        "accent": "#c81e14",
+        "hair_style": "bun",
+        "feminine": true,
+        "hat": "bandana"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 3,
+          "presence": 4,
+          "story": 2
+        },
+        "weakness": "punchline",
+        "resistance": "presence",
+        "taunts": [
+          "Tu reprendras bien un couplet ?",
+          "Chez moi, on finit son assiette.",
+          "Trop maigre, ta rime."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Lyon"
+      ],
+      "secret": {
+        "name": "Le Tablier de Sapeur",
+        "line": "Elle te sert un couplet si copieux que tu demandes l'addition au deuxième vers.",
+        "fx": "emojis",
+        "prop": "fork.knife"
+      }
+    },
+    {
+      "id": "pilier_rugby",
+      "name": "Le Pilier",
+      "role": "Plaque les rimes adverses",
+      "bio": "Cent vingt kilos de muscles et de poésie. Pleure en écoutant du rap mélancolique.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#5a3a22",
+        "top": "#b02a3a",
+        "bottom": "#1a1a1f",
+        "shoes": "#141418",
+        "accent": "#141418",
+        "outfit": "jersey",
+        "beard": true,
+        "build": "heavy",
+        "hair_style": "fade"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 2,
+          "presence": 5,
+          "story": 2
+        },
+        "weakness": "flow",
+        "resistance": "presence",
+        "taunts": [
+          "Mêlée !",
+          "Je te plaque en deux rimes.",
+          "Après, on boit un coup, hein."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Toulouse"
+      ],
+      "secret": {
+        "name": "La Mêlée",
+        "line": "Il lance la mêlée. Ton couplet recule de dix mètres. L'arbitre siffle, pour lui.",
+        "fx": "bass"
+      }
+    },
+    {
+      "id": "violette_garonne",
+      "name": "Violette de la Garonne",
+      "role": "Accent chantant, flow assassin",
+      "bio": "Chante chaque fin de rime avec l'accent. Même les insultes sonnent comme une chanson.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#1b1b1f",
+        "top": "#7a3fb0",
+        "bottom": "#23232a",
+        "shoes": "#f2f2f2",
+        "accent": "#e8c547",
+        "hair_style": "long",
+        "feminine": true,
+        "earrings": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 4,
+          "presence": 3,
+          "story": 1
+        },
+        "weakness": "story",
+        "resistance": "flow",
+        "taunts": [
+          "Peuchère, c'est tout ?",
+          "Écoute un peu, té.",
+          "Tu chantes faux, {mon beau|ma belle}."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Toulouse"
+      ],
+      "secret": {
+        "name": "L'Accent qui Chante",
+        "line": "Son accent transforme chaque rime en refrain. Toute la place chante avec elle. Toi aussi, malgré toi.",
+        "fx": "adlib"
+      }
+    },
+    {
+      "id": "chti_braderie",
+      "name": "Le Ch'ti de la Braderie",
+      "role": "Négocie chaque rime comme à la braderie",
+      "bio": "Vend des rimes d'occasion sur un tapis, rue de Paris. Trois pour cinq euros.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#d9bf73",
+        "top": "#c81e14",
+        "bottom": "#2f4a7a",
+        "shoes": "#3a3a44",
+        "accent": "#e8c547",
+        "outfit": "puffer",
+        "hat": "beanie",
+        "build": "strong"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 2,
+          "presence": 2,
+          "story": 4
+        },
+        "weakness": "punchline",
+        "resistance": "story",
+        "taunts": [
+          "Allez, je te fais un prix.",
+          "Biloute, t'es sûr de toi ?",
+          "Trois rimes, cinq euros."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Lille"
+      ],
+      "secret": {
+        "name": "La Braderie",
+        "line": "Il te revend tes propres rimes, en lot de trois, à moitié prix. Le public achète.",
+        "fx": "emojis",
+        "prop": "tag.fill"
+      }
+    },
+    {
+      "id": "geante_carnaval",
+      "name": "La Géante du Carnaval",
+      "role": "Trois mètres de haut un jour de carnaval",
+      "bio": "Déguisée toute l'année, au cas où. A gagné un clash rien qu'en entrant dans la pièce.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#9a4a24",
+        "top": "#e04fb0",
+        "bottom": "#3f7ac8",
+        "shoes": "#e8c547",
+        "accent": "#7fe0a0",
+        "hair_style": "puff",
+        "feminine": true,
+        "glasses": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 3,
+          "presence": 5,
+          "story": 1
+        },
+        "weakness": "story",
+        "resistance": "presence",
+        "taunts": [
+          "Place à la Géante !",
+          "On ch'ante, on danse, on clash !",
+          "T'es {tout petit|toute petite}, toi."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Lille"
+      ],
+      "secret": {
+        "name": "Le Lancer de Harengs",
+        "line": "Elle lance des harengs depuis le balcon. Le public se bat pour les attraper. Plus personne ne t'écoute.",
+        "fx": "emojis",
+        "prop": "fish.fill"
+      }
+    },
+    {
+      "id": "zinneke",
+      "name": "Le Zinneke",
+      "role": "Fier de ses rimes, une fois",
+      "bio": "Rappeur de rue au flow surréaliste. Personne ne comprend ses textes. Tout le monde les adore.",
+      "look": {
+        "skin": "#c68642",
+        "hair": "#1b1b1f",
+        "top": "#e8c547",
+        "bottom": "#141418",
+        "shoes": "#c81e14",
+        "accent": "#c81e14",
+        "hat": "cap",
+        "beard": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 3,
+          "presence": 2,
+          "story": 2
+        },
+        "weakness": "presence",
+        "resistance": "punchline",
+        "taunts": [
+          "Ceci n'est pas un clash.",
+          "Allez, une fois.",
+          "T'as compris ? Moi non plus."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Bruxelles"
+      ],
+      "secret": {
+        "name": "Le Surréalisme",
+        "line": "Il rappe un couplet où une pipe n'est pas une pipe. Tu réfléchis trop longtemps. C'est fini.",
+        "fx": "glitch"
+      }
+    },
+    {
+      "id": "reine_sablon",
+      "name": "La Reine du Sablon",
+      "role": "Rimes pralinées, coups de griffe",
+      "bio": "Tient une chocolaterie et un compte de clash. Les deux sont redoutables.",
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#1b1b1f",
+        "top": "#5a3a22",
+        "bottom": "#e8e4dc",
+        "shoes": "#5a3a22",
+        "accent": "#e8c547",
+        "hair_style": "braids",
+        "feminine": true,
+        "earrings": true,
+        "chain": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 3,
+          "presence": 3,
+          "story": 1
+        },
+        "weakness": "flow",
+        "resistance": "story",
+        "taunts": [
+          "Une praline ?",
+          "C'est doux… au début.",
+          "Tu fonds, {chéri|chérie}."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Bruxelles"
+      ],
+      "secret": {
+        "name": "La Praline Piégée",
+        "line": "Elle t'offre une praline. Tu l'acceptes par politesse. Elle était fourrée à la punchline.",
+        "fx": "spotlight",
+        "prop": "gift.fill"
+      }
+    },
+    {
+      "id": "draveur",
+      "name": "Le Draveur",
+      "role": "Flow froid comme le Saint-Laurent",
+      "bio": "Descend la rivière sur des troncs l'été, rappe dans la tempête l'hiver. Ne porte jamais de tuque.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#5a3a22",
+        "top": "#c81e14",
+        "bottom": "#2f4a7a",
+        "shoes": "#5a3a22",
+        "accent": "#141418",
+        "outfit": "jacket",
+        "beard": true,
+        "build": "strong"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 2,
+          "presence": 4,
+          "story": 2
+        },
+        "weakness": "punchline",
+        "resistance": "presence",
+        "taunts": [
+          "Y fait frette, hein ?",
+          "T'es pas game.",
+          "Envoye, rappe !"
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Montréal"
+      ],
+      "secret": {
+        "name": "La Tempête de Verglas",
+        "line": "Il souffle une tempête de verglas sur la scène. Ton flow glisse et tombe dans la poudreuse.",
+        "fx": "bass"
+      }
+    },
+    {
+      "id": "josee_poutine",
+      "name": "Josée Poutine",
+      "role": "Sacre plus vite que son ombre",
+      "bio": "Tient un casse-croûte ouvert 24 h. A un mot coloré pour chaque client, et deux pour les rappeurs.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#d9bf73",
+        "top": "#e86a2a",
+        "bottom": "#23232a",
+        "shoes": "#3a3a44",
+        "accent": "#f2f2f2",
+        "hair_style": "long",
+        "feminine": true,
+        "outfit": "puffer",
+        "hat": "beanie"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 3,
+          "presence": 2,
+          "story": 2
+        },
+        "weakness": "presence",
+        "resistance": "punchline",
+        "taunts": [
+          "Voyons donc !",
+          "T'as-tu fini, là ?",
+          "Une poutine pis un clash."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Montréal"
+      ],
+      "secret": {
+        "name": "Le Sacre Ultime",
+        "line": "Elle enchaîne douze sacres sans respirer. Les enfants se bouchent les oreilles, les grands-parents applaudissent.",
+        "fx": "adlib"
+      }
+    },
+    {
+      "id": "hlayqi",
+      "name": "Le Hlayqi de la Place",
+      "role": "Conteur de place publique",
+      "bio": "Forme un cercle de spectateurs en trente secondes. Raconte des histoires depuis avant ta naissance.",
+      "look": {
+        "skin": "#c68642",
+        "hair": "#9a9aa6",
+        "top": "#e8e4dc",
+        "bottom": "#e8e4dc",
+        "shoes": "#c8a165",
+        "accent": "#1f7a6a",
+        "beard": true,
+        "hat": "bandana",
+        "build": "strong"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 3,
+          "presence": 3,
+          "story": 4
+        },
+        "weakness": "punchline",
+        "resistance": "story",
+        "taunts": [
+          "Approchez, approchez !",
+          "Laisse-moi te raconter ta défaite.",
+          "Il était une fois… toi, {perdant|perdante}."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Casablanca"
+      ],
+      "secret": {
+        "name": "La Halqa",
+        "line": "Il forme un cercle autour de lui et raconte ta défaite avant même qu'elle arrive. Tout le monde y croit.",
+        "fx": "spotlight"
+      }
+    },
+    {
+      "id": "lalla_darija",
+      "name": "Lalla Darija",
+      "role": "Trois langues dans chaque vers",
+      "bio": "Passe du darija au français à l'espagnol au milieu d'une rime. Personne ne la suit, tout le monde l'applaudit.",
+      "look": {
+        "skin": "#c68642",
+        "hair": "#1b1b1f",
+        "top": "#1f7a6a",
+        "bottom": "#141418",
+        "shoes": "#e8c547",
+        "accent": "#e8c547",
+        "hair_style": "long",
+        "feminine": true,
+        "earrings": true,
+        "glasses": true
+      },
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 4,
+          "presence": 2,
+          "story": 2
+        },
+        "weakness": "presence",
+        "resistance": "flow",
+        "taunts": [
+          "Wakha, vas-y.",
+          "T'as compris ? Normal que non.",
+          "Yallah, montre-moi."
+        ]
+      },
+      "wild": true,
+      "cities": [
+        "Casablanca"
+      ],
+      "secret": {
+        "name": "Le Code Switch",
+        "line": "Elle passe du darija au français, puis à l'espagnol, en pleine rime. Tu suis la moitié. Le public suit tout.",
+        "fx": "adlib"
+      }
     }
   ]
 }

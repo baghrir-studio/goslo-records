@@ -11,11 +11,12 @@ enum CharacterSprite {
     }
 
     static func canvas(_ look: CharacterLook, facing: Direction, frame: Int) -> PixelCanvas {
+        let shape = { (c: PixelCanvas) in c.reshaped(fromRow: 8, by: look.build.mapDelta) }
         switch facing {
-        case .down: front(look, frame: frame).outlined()
-        case .up: back(look, frame: frame).outlined()
-        case .right: side(look, frame: frame).outlined()
-        case .left: side(look, frame: frame).outlined().mirrored()
+        case .down: return shape(front(look, frame: frame)).outlined()
+        case .up: return shape(back(look, frame: frame)).outlined()
+        case .right: return shape(side(look, frame: frame)).outlined()
+        case .left: return shape(side(look, frame: frame)).outlined().mirrored()
         }
     }
 
@@ -326,5 +327,27 @@ private extension CharacterLook {
         copy.earrings = false
         if copy.outfit == .jacket { copy.outfit = .hoodie }
         return copy
+    }
+}
+
+extension CharacterLook.Build {
+    /// Pixels added (or taken) on each side of the 16×16 map sprite's body.
+    var mapDelta: Int {
+        switch self {
+        case .slim: -1
+        case .regular: 0
+        case .strong: 1
+        case .heavy: 2
+        }
+    }
+
+    /// Same for the 40×56 detailed sprite.
+    var heroDelta: Int {
+        switch self {
+        case .slim: -2
+        case .regular: 0
+        case .strong: 2
+        case .heavy: 4
+        }
     }
 }

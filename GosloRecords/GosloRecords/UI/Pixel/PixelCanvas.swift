@@ -94,6 +94,27 @@ final class PixelCanvas {
         return result
     }
 
+    /// Widens (delta > 0) or narrows (delta < 0) every row from `y0` down, symmetrically around the centre:
+    /// the body gets heavier or slimmer while the head above stays as drawn.
+    func reshaped(fromRow y0: Int, by delta: Int) -> PixelCanvas {
+        guard delta != 0 else { return self }
+        let result = PixelCanvas(width: width, height: height)
+        result.pixels = pixels
+        let cx = width / 2
+        for y in max(0, y0)..<height {
+            for x in 0..<width {
+                let source: Int
+                if delta > 0 {
+                    source = x < cx - delta ? x + delta : (x >= cx + delta ? x - delta : (x < cx ? cx - 1 : cx))
+                } else {
+                    source = x < cx ? x + delta : x - delta
+                }
+                result[x, y] = self[source, y]
+            }
+        }
+        return result
+    }
+
     func mirrored() -> PixelCanvas {
         let result = PixelCanvas(width: width, height: height)
         for y in 0..<height { for x in 0..<width { result[width - 1 - x, y] = self[x, y] } }
