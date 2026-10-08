@@ -109,6 +109,8 @@ struct Rapper: Codable, Equatable {
     var genderChoice: Gender?
     /// Picked at creation; nil in older saves: normal.
     var difficultyChoice: Difficulty?
+    /// Clothes bought in the shop and worn (`Wardrobe`).
+    var wearing: [String]?
 
     var difficulty: Difficulty { difficultyChoice ?? .normal }
 
@@ -161,5 +163,6 @@ struct Rapper: Codable, Equatable {
         lookFromStyle = try c.decodeIfPresent(Bool.self, forKey: .lookFromStyle) ?? true
         heritage = try c.decodeIfPresent(Heritage.self, forKey: .heritage)
         difficultyChoice = try c.decodeIfPresent(Difficulty.self, forKey: .difficultyChoice)
+        wearing = try c.decodeIfPresent([String].self, forKey: .wearing)
     }
 }

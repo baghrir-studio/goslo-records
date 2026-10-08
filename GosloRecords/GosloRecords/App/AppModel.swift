@@ -885,6 +885,45 @@ final class AppModel {
         return true
     }
 
+    /// The shop's clothes: buys a piece and puts it on.
+    @discardableResult
+    func buy(_ item: Wearable) -> String? {
+        guard var current = state else { return "Pas de carrière en cours" }
+        if let refusal = Wardrobe.refusal(item, in: current) { return refusal }
+        let before = current.stats
+        guard (try? engine.buy(item, in: &current)) != nil else { return "Impossible pour l'instant" }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.statUp)
+        Haptics.shared.play(.good)
+        persist()
+        return nil
+    }
+
+    /// Puts on (or takes off) an owned piece.
+    func wear(_ item: Wearable) {
+        guard var current = state else { return }
+        engine.wear(item, in: &current)
+        state = current
+        sound.play(.select)
+        persist()
+    }
+
+    /// The shop's decorations: buys one and puts it on a free spot of the map.
+    @discardableResult
+    func placeDecor(_ decor: Decor, plot: String) -> String? {
+        guard var current = state else { return "Pas de carrière en cours" }
+        if let refusal = engine.decorRefusal(decor, plot: plot, in: current) { return refusal }
+        let before = current.stats
+        guard (try? engine.placeDecor(decor, plot: plot, in: &current)) != nil else { return "Impossible pour l'instant" }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.levelUp)
+        Haptics.shared.play(.good)
+        persist()
+        return nil
+    }
+
     /// The shop: buys an offer. Returns why it failed, nil when it went through.
     @discardableResult
     func buy(_ offer: ShopOffer) -> String? {
