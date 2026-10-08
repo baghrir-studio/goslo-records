@@ -132,6 +132,11 @@ final class AppModel {
     private var taxiRideOffered = false
     private var taxiTalks = 0
     private var bunkerKnocks = 0
+    /// Something going on a few steps away on the map (walk onto it to join in).
+    private(set) var happening: StreetHappening?
+    private var happeningTurn = -1
+    /// A big moment to celebrate at the top of the screen (level up, n°1, challenge).
+    private(set) var celebration: String?
     /// The daily clash being played (the career waits in `careerAside`, untouched).
     private(set) var dailyClash: DailyChallenge?
     private var careerAside: GameState?
@@ -352,12 +357,75 @@ final class AppModel {
         } else if let door = map.door(at: point) {
             heldDirection = nil
             await enter(door)
+        } else if let spot = happening, spot.point == point {
+            heldDirection = nil
+            await join(spot)
         } else if let rival = OverworldRules.spotter(of: point, on: map, canChallenge: { engine.canChallenge($0, in: current) }) {
             heldDirection = nil
             await challenge(by: rival)
         } else if OverworldRules.rollWild(on: map.tile(at: point), stepsSinceLast: current.stepsSinceWild, using: &rng) {
             heldDirection = nil
             await startWild()
+        } else {
+            spawnHappening(near: point, on: map)
+        }
+    }
+
+    // MARK: - Street happenings
+
+    /// Now and then (once a turn at most), something starts a few steps away.
+    private func spawnHappening(near point: TilePoint, on map: WorldMap) {
+        guard let current = state, dailyClash == nil, arcadePlaying == nil, phase == .overworld,
+              engine.canVisit(current), current.chapter >= 2 else { return }
+        if let spot = happening, happeningTurn != current.turn || spot.point == point { happening = nil }
+        guard happening == nil, happeningTurn != current.turn,
+              Int.random(in: 0..<100, using: &rng) < Happenings.chancePercent,
+              let spot = Happenings.spot(near: point, on: map, city: current.rapper.city, using: &rng) else { return }
+        let kind = Happenings.pick(canClash: !engine.wildOpponents(in: current.rapper.city).isEmpty, using: &rng)
+        happeningTurn = current.turn
+        sound.play(.exclaim)
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.6)) { happening = StreetHappening(kind: kind, point: spot) }
+    }
+
+    private func join(_ spot: StreetHappening) async {
+        happening = nil
+        guard var current = state, engine.canVisit(current) else { return }
+        switch spot.kind {
+        case .cypher:
+            // A rapper from the terrain vague takes the mic: a wild clash, no action spent.
+            await startWild()
+        case .selfie:
+            let before = current.stats
+            let selfie = engine.takeSelfie(in: &current, using: &rng)
+            state = current
+            publishDeltas(from: before, to: current.stats)
+            sound.play(.statUp)
+            Haptics.shared.play(.good)
+            phase = .dialogue(speaker: selfie.fan, lines: [spot.kind.intro, selfie.line,
+                                                           "Elle poste la photo : « vu en vrai !! » Ça tourne dans le quartier."])
+            persist()
+        case .beatbox:
+            guard let running = try? engine.startStreetBeatbox(in: &current) else { return }
+            state = current
+            source = nil
+            phase = .minigame(running)
+            persist()
+        }
+    }
+
+    /// Shows the biggest moment of an outcome as a banner, with a fanfare.
+    private func celebrate(_ outcome: TurnOutcome) {
+        let notes = outcome.notes
+        let moment = notes.first { $0.hasPrefix("NIVEAU") }
+            ?? notes.first { $0.contains("n°1") }.map { _ in "N°1 DU TOP GOSLO RADIO !" }
+            ?? notes.first { $0.hasPrefix("Défi réussi") }.map { _ in "DÉFI RÉUSSI !" }
+        guard let moment else { return }
+        sound.play(.levelUp)
+        Haptics.shared.play(.victory)
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) { celebration = moment }
+        Task {
+            try? await Task.sleep(for: .seconds(2.6))
+            withAnimation(.easeIn(duration: 0.3)) { if celebration == moment { celebration = nil } }
         }
     }
 
@@ -491,6 +559,7 @@ final class AppModel {
             return
         }
         guard (try? engine.travel(to: district, in: &current)) != nil else { return }
+        happening = nil
         let arrived = current
         busy = true
         heldDirection = nil
@@ -1191,6 +1260,7 @@ final class AppModel {
     private func show(_ outcome: TurnOutcome, for event: GameEvent?) {
         guard let current = state else { return }
         phase = .consequence(event, outcome)
+        celebrate(outcome)
         // The year card: once a year, not every turn.
         if outcome.semesterEnded, state?.isNewYear == true { pendingSemesterCard = true }
         playOutcomeSound(outcome)

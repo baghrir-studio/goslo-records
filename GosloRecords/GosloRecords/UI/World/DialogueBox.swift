@@ -2,8 +2,14 @@ import SwiftUI
 
 /// Text that appears letter by letter. Tapping shows everything at once.
 struct TypewriterText: View {
-    /// Seconds per letter: slow enough to read along.
-    static let defaultSpeed = 0.032
+    static let fastKey = "texte_rapide"
+    /// Fast text (on by default): two letters at a time, quicker. Set in the menu.
+    static var fast: Bool {
+        get { UserDefaults.standard.object(forKey: fastKey) as? Bool ?? true }
+        set { UserDefaults.standard.set(newValue, forKey: fastKey) }
+    }
+    /// Seconds per step: slow enough to read along, or quick.
+    static var defaultSpeed: Double { fast ? 0.014 : 0.03 }
 
     let text: String
     var font: Font = .system(size: 17, weight: .semibold, design: .monospaced)
@@ -41,10 +47,11 @@ struct TypewriterText: View {
         task?.cancel()
         visible = 0
         task = Task { @MainActor in
+            let step = TypewriterText.fast ? 2 : 1
             while visible < text.count {
                 try? await Task.sleep(for: .seconds(speed))
                 if Task.isCancelled { return }
-                visible += 1
+                visible = min(text.count, visible + step)
                 if visible % 3 == 0, visible <= text.count, text[text.index(text.startIndex, offsetBy: visible - 1)] != " " {
                     SoundEngine.shared.play(.blip)
                 }
@@ -369,6 +376,18 @@ struct LinesBox: View {
     var body: some View {
         DialogueFrame(speaker: speaker, showsArrow: done) {
             TypewriterText(text: lines.isEmpty ? "" : lines[index], revealAll: done) { done = true }
+        }
+        .overlay(alignment: .topTrailing) {
+            // Several bubbles left: skip them all.
+            if lines.count - index > 1 {
+                Button("Passer ›") { model.advance() }
+                    .font(.mono(11, weight: .bold))
+                    .foregroundStyle(.white.opacity(0.75))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(Color.black.opacity(0.7))
+                    .offset(y: -30)
+            }
         }
         .contentShape(Rectangle())
         .onTapGesture {
