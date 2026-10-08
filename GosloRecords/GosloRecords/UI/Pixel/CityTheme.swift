@@ -37,6 +37,8 @@ struct CityTheme {
     /// Small boats on the water.
     var boats = false
     var landmark: Landmark?
+    /// Casablanca has a red tramway instead of the metro.
+    var tram = false
 
     static func forCity(_ city: City) -> CityTheme {
         var t = CityTheme()
@@ -116,6 +118,7 @@ struct CityTheme {
             t.boats = true
             // A generic Moroccan-style minaret in the distance (not a copy of any real building).
             t.landmark = .minaret
+            t.tram = true
         }
         return t
     }

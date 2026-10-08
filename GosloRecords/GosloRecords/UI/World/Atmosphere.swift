@@ -98,6 +98,7 @@ struct WeatherLayer: View {
 /// and light ripples run across the water.
 struct MapLights: View {
     let map: WorldMap
+    var transit: Transit = .metro
 
     var body: some View {
         let tile = WorldView.tile
@@ -116,7 +117,7 @@ struct MapLights: View {
                 }
                 if let metro = map.metro {
                     halo(glow, at: CGPoint(x: (CGFloat(metro.x) + 0.5) * tile, y: (CGFloat(metro.y) + 0.8) * tile),
-                         radius: tile * 1.4, color: Color(red: 0.25, green: 0.5, blue: 1).opacity(0.35))
+                         radius: tile * 1.4, color: transit.color.opacity(0.35))
                 }
                 // Moonlight on the water: short bright dashes drifting along each water tile.
                 var ripples = Path()

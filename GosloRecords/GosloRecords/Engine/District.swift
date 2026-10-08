@@ -130,3 +130,29 @@ extension GameEngine {
         return event
     }
 }
+
+/// How you get from one district to another: the metro, or Casablanca's red tramway.
+enum Transit: Equatable {
+    case metro, tramway
+
+    static func of(_ city: City) -> Transit { city == .casablanca ? .tramway : .metro }
+
+    var name: String { self == .tramway ? "Tramway" : "Métro" }
+    /// Sign over the stop.
+    var sign: String { self == .tramway ? "Ⓣ TRAM" : "Ⓜ︎ MÉTRO" }
+    var badge: String { self == .tramway ? "Ⓣ" : "Ⓜ︎" }
+    /// "PRENDS LE MÉTRO" / "PRENDS LE TRAM".
+    var takeIt: String { self == .tramway ? "PRENDS LE TRAM" : "PRENDS LE MÉTRO" }
+
+    /// What you hear when the line isn't open yet.
+    var closedLines: [String] {
+        switch self {
+        case .metro:
+            ["Les grilles sont baissées. Une affiche : « Ligne fermée pour travaux. »",
+             "Quelqu'un a écrit au feutre en dessous : « Réouverture quand t'auras un vrai nom. »"]
+        case .tramway:
+            ["L'arrêt est vide. Un panneau : « Prolongement de la ligne en travaux. »",
+             "Un vieux sur le banc : « Le tram passera quand tu seras connu, {khoya|khti}. Moi j'attends depuis 2012. »"]
+        }
+    }
+}

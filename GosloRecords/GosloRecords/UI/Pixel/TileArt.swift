@@ -110,6 +110,17 @@ enum TileArt {
                 c.fill(3, 1, 12, 1, neon)
                 c.fill(2, 2, 13, 2, neon.shaded(0.45))
             }
+        case .metro where t.tram:
+            // Tram stop: a glass shelter under a red roof, the round red "T" sign on its pole.
+            facade(c, p, t)
+            let red = PixelColor(hex: "#d42a1e"), glass = PixelColor(hex: "#7fb8c8")
+            c.fill(1, 5, 14, 6, red)
+            c.fill(2, 7, 13, 15, glass.shaded(0.55))
+            c.fill(2, 7, 2, 15, NightPalette.metal); c.fill(13, 7, 13, 15, NightPalette.metal)
+            c.fill(4, 12, 11, 13, NightPalette.wood)
+            c.fill(7, 0, 8, 4, NightPalette.metal)
+            c.circle(cx: 8, cy: 2, radius: 2, red)
+            c.fill(7, 1, 9, 1, PixelColor(hex: "#f0eee8")); c.fill(8, 1, 8, 3, PixelColor(hex: "#f0eee8"))
         case .metro:
             // Metro entrance: steps going down under a blue frame, the big white M above.
             facade(c, p, t)

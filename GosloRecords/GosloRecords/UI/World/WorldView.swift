@@ -24,7 +24,7 @@ struct WorldView: View {
                 PixelImage(TileArt.mapImage(map, city: state.rapper.city, district: state.district), width: CGFloat(map.width) * tile, height: CGFloat(map.height) * tile)
 
                 LampGlows(map: map)
-                MapLights(map: map)
+                MapLights(map: map, transit: Transit.of(state.rapper.city))
                 FameMarks(map: map, look: state.rapper.look, posters: model.engine.fame(in: state) * 2,
                           fresco: model.engine.hasFresco(in: state))
 
@@ -45,7 +45,7 @@ struct WorldView: View {
                         .allowsHitTesting(false)
                 }
                 if let metro = map.metro {
-                    MetroSign(isObjective: model.objectiveDistrict != nil)
+                    MetroSign(transit: Transit.of(state.rapper.city), isObjective: model.objectiveDistrict != nil)
                         .position(x: (CGFloat(metro.x) + 0.5) * tile, y: CGFloat(metro.y) * tile - 2)
                 }
 
@@ -359,19 +359,20 @@ private struct FameMarks: View {
 
 /// The metro entrance's sign (marked when the objective is in another district).
 private struct MetroSign: View {
+    let transit: Transit
     let isObjective: Bool
 
     var body: some View {
         VStack(spacing: 2) {
             if isObjective { ObjectiveMarker() }
-            Text("Ⓜ︎ MÉTRO")
+            Text(transit.sign)
                 .font(.system(size: 8, weight: .heavy, design: .monospaced))
                 .foregroundStyle(.white)
                 .lineLimit(1)
                 .fixedSize()
                 .padding(.horizontal, 4)
                 .padding(.vertical, 2)
-                .background(Color(red: 0.1, green: 0.35, blue: 0.75))
+                .background(transit.color)
                 .overlay(Rectangle().stroke(Color.white, lineWidth: 1))
         }
         .allowsHitTesting(false)

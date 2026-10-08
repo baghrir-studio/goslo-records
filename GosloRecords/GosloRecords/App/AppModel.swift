@@ -127,6 +127,9 @@ final class AppModel {
     /// The achievement being announced at the top of the screen.
     private(set) var achievementToast: Achievement?
     private var toastQueue: [Achievement] = []
+    /// Driss offered a ride: the next tap opens the destinations.
+    private var taxiRideOffered = false
+    private var taxiTalks = 0
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
         self.engine = engine
@@ -354,6 +357,11 @@ final class AppModel {
     /// "A" button: talk to whoever is in front of you, or sit on the bench.
     func interact() {
         guard canMove, let map, var current = state else { return }
+        if current.rapper.city == .casablanca, current.district == .bloc,
+           OverworldRules.parkedTaxi.contains(position.moved(facing)) {
+            talkToTaxi(current)
+            return
+        }
         switch OverworldRules.interaction(from: position, facing: facing, on: map) {
         case .npc(let npc):
             sound.play(.select)
@@ -399,13 +407,30 @@ final class AppModel {
         guard let current = state else { return }
         sound.play(.door)
         if engine.openDistricts(in: current).count < 2 {
-            phase = .dialogue(speaker: "Métro", lines: [
-                "Les grilles sont baissées. Une affiche : « Ligne fermée pour travaux. »",
-                "Quelqu'un a écrit au feutre en dessous : « Réouverture quand t'auras un vrai nom. »",
-            ])
+            let transit = Transit.of(current.rapper.city)
+            phase = .dialogue(speaker: transit.name,
+                              lines: transit.closedLines.map { TextTemplate.render($0, for: current.rapper) })
         } else {
             phase = .metro
         }
+    }
+
+    /// Casablanca: the petit taxi parked on the main road. Driss, its driver, has a word for you,
+    /// and once other districts are open he takes you there.
+    private func talkToTaxi(_ current: GameState) {
+        sound.play(.select)
+        let driss = engine.castMember("driss_taxi")
+        let idle = driss?.idle ?? []
+        var lines = idle.isEmpty ? [] : [idle[taxiTalks % idle.count]]
+        taxiTalks += 1
+        if engine.openDistricts(in: current).count > 1 {
+            lines.append("Monte, je t'emmène où tu veux. Le compteur est cassé depuis 2009, c'est gratuit.")
+            taxiRideOffered = true
+        } else {
+            lines.append("Le jour où t'auras des endroits où aller, {khoya|khti}, je t'y emmène. En attendant, je fais le tour du rond-point.")
+        }
+        phase = .dialogue(speaker: driss?.name ?? "Le taxi",
+                          lines: lines.map { TextTemplate.render($0, for: current.rapper) })
     }
 
     func closeMetro() {
@@ -795,7 +820,13 @@ final class AppModel {
     func advance() {
         switch phase {
         case .dialogue:
-            phase = .overworld
+            if taxiRideOffered {
+                // Driss drives you: same destinations as the tram.
+                taxiRideOffered = false
+                phase = .metro
+            } else {
+                phase = .overworld
+            }
         case .consequence:
             continueAfterConsequence()
         default:
