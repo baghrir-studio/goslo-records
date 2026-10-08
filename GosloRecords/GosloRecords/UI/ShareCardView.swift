@@ -83,7 +83,7 @@ struct ShareCardView: View {
                     .font(.display(20))
                     .foregroundStyle(.white)
                     Spacer()
-                    Text("@goslo_records")
+                    Text("@goslo_radio_lejeu")
                         .font(.mono(10, weight: .semibold))
                         .foregroundStyle(Theme.muted)
                 }

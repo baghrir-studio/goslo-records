@@ -99,7 +99,7 @@ struct ClashPoster: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 10)
 
-                Text("@goslo_records")
+                Text("@goslo_radio_lejeu")
                     .font(.system(size: 11, weight: .bold, design: .monospaced))
                     .foregroundStyle(.white.opacity(0.6))
                     .padding(.bottom, 20)
