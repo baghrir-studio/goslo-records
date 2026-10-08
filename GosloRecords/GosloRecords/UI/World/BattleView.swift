@@ -270,10 +270,14 @@ struct BattleView: View {
                     }
                     .buttonStyle(PressScaleStyle())
                 }
+                TacticsStrip(tell: telegraphed.map { $0.tell(opponentName) }, counter: telegraphed?.counter,
+                             crowd: clash.crowdFavorite, combo: clash.lastPlayerMove.flatMap { ClashCombo.started(by: $0) })
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
                     let levels = model.engine.clashLevels(for: clash, in: state)
+                    let combo = clash.lastPlayerMove.flatMap { ClashCombo.started(by: $0) }
                     ForEach(ClashMove.allCases) { move in
-                        MoveButton(move: move, level: levels(move.skill)) { play(.move(move)) }
+                        MoveButton(move: move, level: levels(move.skill),
+                                   badges: badges(for: move, combo: combo)) { play(.move(move)) }
                     }
                 }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -304,6 +308,21 @@ struct BattleView: View {
             }
         }
         .animation(.spring(response: 0.35, dampingFraction: 0.8), value: stage)
+    }
+
+    /// The opponent's next move, as their tell gives it away.
+    private var telegraphed: ClashMove? {
+        guard let profile = opponent?.clash?.scaled(by: clash.levelBonus) else { return nil }
+        return ClashTactics.telegraphed(clash, profile: profile)
+    }
+
+    /// Little labels on a move: counters the tell, finishes a combo, loved by the crowd.
+    private func badges(for move: ClashMove, combo: ClashCombo?) -> [String] {
+        var badges: [String] = []
+        if telegraphed?.counter == move { badges.append("CONTRE") }
+        if combo?.then == move { badges.append("COMBO") }
+        if clash.crowdFavorite == move { badges.append("♥ PUBLIC") }
+        return badges
     }
 
     private func intelText(_ profile: ClashProfile) -> String {
@@ -494,7 +513,11 @@ struct BattleView: View {
             withAnimation(.easeOut(duration: 0.5)) {
                 if entry.byPlayer { playerMeter += Double(entry.damage) } else { opponentMeter += Double(entry.damage) }
             }
-            if let rhymes = entry.freestyle {
+            if let combo = entry.combo {
+                await showBanner(combo.uppercased() + " !")
+            } else if entry.parried == true {
+                await showBanner("PARÉ !")
+            } else if let rhymes = entry.freestyle {
                 await showBanner("\(rhymes) RIME\(rhymes > 1 ? "S" : "") !")
             } else {
                 switch entry.impact {
@@ -827,6 +850,7 @@ private struct InfoPanel: View {
 private struct MoveButton: View {
     let move: ClashMove
     let level: Int
+    var badges: [String] = []
     let action: () -> Void
 
     var body: some View {
@@ -842,17 +866,30 @@ private struct MoveButton: View {
                         .font(.system(size: 9, weight: .heavy, design: .monospaced))
                         .foregroundStyle(Theme.accent)
                 }
-                Text(move.hint)
-                    .font(.system(size: 11))
-                    .foregroundStyle(.white.opacity(0.6))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
+                if badges.isEmpty {
+                    Text(move.hint)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.white.opacity(0.6))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                } else {
+                    HStack(spacing: 4) {
+                        ForEach(badges, id: \.self) { badge in
+                            Text(badge)
+                                .font(.system(size: 9, weight: .heavy, design: .monospaced))
+                                .padding(.horizontal, 4).padding(.vertical, 1)
+                                .background(badge == "CONTRE" ? Color(red: 0.2, green: 0.6, blue: 1)
+                                            : badge == "COMBO" ? Theme.accent : Color(red: 1, green: 0.85, blue: 0.3))
+                                .foregroundStyle(.black)
+                        }
+                    }
+                }
             }
             .foregroundStyle(.white)
             .padding(10)
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(red: 0.1, green: 0.1, blue: 0.12))
-            .overlay(Rectangle().stroke(Color.white.opacity(0.8), lineWidth: 2))
+            .overlay(Rectangle().stroke(badges.isEmpty ? Color.white.opacity(0.8) : Color(red: 1, green: 0.85, blue: 0.3), lineWidth: 2))
             .contentShape(Rectangle())
         }
         .buttonStyle(PressScaleStyle())
@@ -1245,5 +1282,33 @@ private struct BeatCounterOverlay: View {
         } else {
             SoundEngine.shared.play(.tap)
         }
+    }
+}
+
+/// Above the moves: what the opponent is about to do, what the crowd loves, the combo you can finish.
+private struct TacticsStrip: View {
+    let tell: String?
+    let counter: ClashMove?
+    let crowd: ClashMove?
+    let combo: ClashCombo?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            if let tell, let counter {
+                Text("👁 \(tell) → \(counter.label.uppercased()) pour contrer")
+                    .foregroundStyle(Color(red: 0.55, green: 0.8, blue: 1))
+            }
+            if let combo {
+                Text("⚡ \(combo.then.label.uppercased()) maintenant : combo « \(combo.name) »")
+                    .foregroundStyle(Theme.accent)
+            }
+            if let crowd {
+                Text("♥ Ce public adore : \(crowd.label.uppercased())")
+                    .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+            }
+        }
+        .font(.system(size: 10, weight: .bold, design: .monospaced))
+        .lineLimit(2)
+        .minimumScaleFactor(0.8)
     }
 }

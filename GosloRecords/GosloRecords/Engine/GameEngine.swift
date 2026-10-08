@@ -400,6 +400,7 @@ struct GameEngine {
            EndingResolver.prematureEnding(for: state.stats) == nil {
             var clash = ClashState(spec: spec)
             clash.playerMeter = startingMeter(in: state)
+            clash.crowdFavorite = ClashTactics.crowdFavorite(in: state.district)
             state.clash = clash
             return .clash(clash)
         }
@@ -1011,6 +1012,7 @@ struct GameEngine {
         )
         var clash = ClashState(spec: spec, isWild: true, levelBonus: (state.year - 1) / 2)
         clash.playerMeter = startingMeter(in: state)
+        clash.crowdFavorite = ClashTactics.crowdFavorite(in: state.district)
         state.clash = clash
         state.stepsSinceWild = 0
         return clash
