@@ -31,7 +31,11 @@ struct GameView: View {
                             .transition(.opacity)
                     }
                     VStack(spacing: 0) {
-                        hud(state)
+                        if let daily = model.dailyClash {
+                            DailyHeader(challenge: daily, opponent: model.engine.castMember(daily.opponentId)?.name ?? "???")
+                        } else {
+                            hud(state)
+                        }
                         if case .clash(let clash) = model.phase {
                             BattleView(clash: clash, state: state)
                                 .background(Color(red: 0.05, green: 0.05, blue: 0.06).ignoresSafeArea(edges: .bottom))

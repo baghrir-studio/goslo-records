@@ -140,6 +140,8 @@ enum Heritage: String, Codable, CaseIterable, Identifiable {
 /// Achievements unlocked on this device, with the date of each.
 struct TrophyCase: Codable, Equatable {
     var achievements: [Achievement: Date] = [:]
+    /// The daily clash: attempts and streak.
+    var daily = DailyRecord()
 
     var unlocked: Set<Achievement> { Set(achievements.keys) }
     var heritages: [Heritage] { Heritage.allCases.filter { unlocked.contains($0.unlockedBy) } }
@@ -151,6 +153,7 @@ struct TrophyCase: Codable, Equatable {
         // Unknown achievement ids (from a newer version) are dropped instead of losing the whole profile.
         let raw = try c.decodeIfPresent([String: Date].self, forKey: .achievements) ?? [:]
         achievements = Dictionary(uniqueKeysWithValues: raw.compactMap { key, date in Achievement(rawValue: key).map { ($0, date) } })
+        daily = try c.decodeIfPresent(DailyRecord.self, forKey: .daily) ?? DailyRecord()
     }
 }
 

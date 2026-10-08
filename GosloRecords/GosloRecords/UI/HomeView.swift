@@ -48,6 +48,7 @@ struct HomeView: View {
             Spacer()
 
             VStack(spacing: 12) {
+                DailyClashCard()
                 if let run = model.resumableRun {
                     Button {
                         model.resume()

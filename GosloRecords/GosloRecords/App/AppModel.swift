@@ -131,6 +131,9 @@ final class AppModel {
     private var taxiRideOffered = false
     private var taxiTalks = 0
     private var bunkerKnocks = 0
+    /// The daily clash being played (the career waits in `careerBeforeDaily`, untouched).
+    private(set) var dailyClash: DailyChallenge?
+    private var careerBeforeDaily: GameState?
     /// The philosopher's analysis being read, to share as a card (cleared when the dialogue ends).
     private(set) var philosophyCard: PhilosophyCard?
 
@@ -840,6 +843,10 @@ final class AppModel {
 
     func finishClash() {
         guard var current = state, case .clash = phase else { return }
+        if let challenge = dailyClash {
+            finishDaily(challenge, won: current.clash?.playerWon ?? false)
+            return
+        }
         let before = current.stats
         guard let outcome = try? engine.finishClash(in: &current) else { return }
         state = current
@@ -1189,7 +1196,46 @@ final class AppModel {
         persist()
     }
 
+    // MARK: - Daily clash
+
+    /// Today's daily clash (the same for every player).
+    var dailyToday: DailyChallenge? { engine.dailyChallenge() }
+    var canPlayDaily: Bool { dailyToday.map { profile.daily.canPlay(on: $0.day) } ?? false }
+    var dailyStreak: Int {
+        profile.daily.currentStreak(today: DailyClash.dayKey(Date()), yesterday: DailyClash.yesterdayKey(Date()))
+    }
+
+    /// Starts today's clash. The attempt counts as soon as it starts: quitting doesn't give a second go.
+    func startDailyClash() {
+        guard dailyClash == nil, let challenge = dailyToday, profile.daily.canPlay(on: challenge.day) else { return }
+        profile.daily.start(on: challenge.day)
+        store.saveProfile(profile)
+        careerBeforeDaily = state
+        let rapper = state?.rapper ?? history.last?.rapper ?? Rapper(name: "MC Personne", city: .paris, style: .boomBap)
+        let game = engine.dailyGame(challenge, rapper: rapper)
+        state = game
+        dailyClash = challenge
+        source = nil
+        philosophyCard = nil
+        if let clash = game.clash { phase = .clash(clash) }
+        sound.play(.select)
+        route = .game
+    }
+
+    private func finishDaily(_ challenge: DailyChallenge, won: Bool) {
+        profile.daily.finish(on: challenge.day, won: won, yesterday: DailyClash.yesterdayKey(Date()))
+        store.saveProfile(profile)
+        state = careerBeforeDaily
+        careerBeforeDaily = nil
+        dailyClash = nil
+        source = nil
+        phase = .overworld
+        route = .home
+    }
+
     func persist() {
+        // The daily clash is a throwaway game: never saved over the career.
+        guard dailyClash == nil else { return }
         guard var current = state, !current.isOver, finishedRecord == nil else { return }
         current.position = position
         current.facing = facing
