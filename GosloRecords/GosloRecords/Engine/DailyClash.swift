@@ -86,9 +86,9 @@ enum DailyClash {
     }
 
     /// Who can be the opponent of the day (sorted, so every device draws from the same list).
-    static func pool(_ cast: [CastMember]) -> [CastMember] {
+    static func pool(_ cast: [CastMember], excluding: Set<String> = []) -> [CastMember] {
         cast.filter { member in
-            guard !member.wild, member.cities == nil, let profile = member.clash else { return false }
+            guard !member.wild, member.cities == nil, !excluding.contains(member.id), let profile = member.clash else { return false }
             let average = Double(ClashMove.allCases.map(profile.stat).reduce(0, +)) / Double(ClashMove.allCases.count)
             return averageStats.contains(average)
         }
@@ -96,8 +96,8 @@ enum DailyClash {
     }
 
     /// The challenge of `day`: the same on every device.
-    static func challenge(for day: String, cast: [CastMember]) -> DailyChallenge? {
-        let pool = pool(cast)
+    static func challenge(for day: String, cast: [CastMember], excluding: Set<String> = []) -> DailyChallenge? {
+        let pool = pool(cast, excluding: excluding)
         guard !pool.isEmpty else { return nil }
         // FNV-1a: a stable seed from the date (Swift's own hash changes on every launch).
         var seed: UInt64 = 0xcbf2_9ce4_8422_2325
@@ -115,8 +115,11 @@ enum DailyClash {
 }
 
 extension GameEngine {
+    /// The tournament's bosses stay in the tournament (the daily clash keeps its usual rivals).
+    var tournamentOpponents: Set<String> { Set(story.tournament.map(\.opponent)) }
+
     func dailyChallenge(on date: Date = Date()) -> DailyChallenge? {
-        DailyClash.challenge(for: DailyClash.dayKey(date), cast: world.cast)
+        DailyClash.challenge(for: DailyClash.dayKey(date), cast: world.cast, excluding: tournamentOpponents)
     }
 
     /// A throwaway game for the daily clash: the player's look, the standard level, the clash ready.
