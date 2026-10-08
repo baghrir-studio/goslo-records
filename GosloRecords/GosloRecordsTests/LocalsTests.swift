@@ -38,7 +38,7 @@ final class LocalsTests: XCTestCase {
         XCTAssertEqual(rapper.look.build, .heavy)
         XCTAssertEqual(Rapper(name: "R", city: .lille, style: .drill).look.build, .regular)
         XCTAssertEqual(try JSONDecoder().decode(Rapper.self, from: JSONEncoder().encode(rapper)).look.build, .heavy)
-        let old = try JSONDecoder().decode(CharacterLook.self, from: Data(#"{"skin": "#c68642"}"#.utf8))
+        let old = try JSONDecoder().decode(CharacterLook.self, from: Data(##"{"skin": "#c68642"}"##.utf8))
         XCTAssertEqual(old.build, .regular)
     }
 }
