@@ -995,11 +995,17 @@ struct GameEngine {
     /// Starts a wild clash in the terrain vague (no action spent).
     func startWildClash<R: RandomNumberGenerator>(in state: inout GameState, using rng: inout R) -> ClashState? {
         guard !state.isOver, state.currentEventId == nil, state.clash == nil,
-              let opponent = wildOpponents(in: state.rapper.city).randomElement(using: &rng) else { return nil }
+              var opponent = wildOpponents(in: state.rapper.city).randomElement(using: &rng) else { return nil }
+        // Now and then, a rare local turns up instead (the pigeon of Lille…).
+        if let rare = Secrets.rareWild[state.rapper.city].flatMap({ castMember($0) }), rare.clash != nil,
+           Int.random(in: 0..<Secrets.rareWildOdds, using: &rng) == 0 {
+            opponent = rare
+        }
         let spec = ClashSpec(
             opponent: opponent.id,
             win: ClashResultSpec(effects: GameEngine.wildRewards.win,
-                                 consequence: "\(opponent.name) repart la tête basse. Trois passants ont filmé, un a mis la musique."),
+                                 consequence: "\(opponent.name) repart la tête basse. Trois passants ont filmé, un a mis la musique.",
+                                 setFlags: ["sauvage_battu_\(opponent.id)"]),
             lose: ClashResultSpec(effects: GameEngine.wildRewards.lose,
                                   consequence: "\(opponent.name) t'a mis à l'amende devant tout le monde. Ton ego boite jusqu'à chez toi.")
         )
@@ -1075,7 +1081,10 @@ struct GameEngine {
         var outcome = TurnOutcome(consequence: won ? clash.spec.win.consequence : clash.spec.lose.consequence)
         outcome.clash = clash
         outcome.add(state.stats.apply(won ? clash.spec.win.effects : clash.spec.lose.effects))
-        if won { state.counters.increment(.victoiresTerrain) }
+        if won {
+            state.counters.increment(.victoiresTerrain)
+            state.flags.formUnion(clash.spec.win.setFlags)
+        }
         let amount = won ? GameEngine.wildXP.win : GameEngine.wildXP.lose
         let gains = Dictionary(uniqueKeysWithValues: clash.movesUsed.map { ($0.skill, amount) })
         outcome.add(levelUps: state.skills.gain(gains))

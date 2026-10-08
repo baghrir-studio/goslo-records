@@ -2015,6 +2015,70 @@
         "line": "Elle passe du darija au français, puis à l'espagnol, en pleine rime. Tu suis la moitié. Le public suit tout.",
         "fx": "adlib"
       }
+    },
+    {
+      "id": "pigeon_lille",
+      "name": "Le Pigeon de la Grand-Place",
+      "role": "Roucoule en 6/8",
+      "bio": "Personne ne sait comment il tient un micro. Personne n'ose demander. Invaincu depuis 2017.",
+      "look": {
+        "skin": "#9a9aa6",
+        "hair": "#6b6b75",
+        "top": "#6b6b75",
+        "bottom": "#4a4a52",
+        "shoes": "#e8a040",
+        "accent": "#3f8a6a",
+        "hair_style": "bald",
+        "build": "heavy"
+      },
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 5,
+          "presence": 3,
+          "story": 1
+        },
+        "weakness": "presence",
+        "resistance": "flow",
+        "taunts": [
+          "Rrrou… rrrou.",
+          "*picore ta punchline*",
+          "Rrrrrou ?!"
+        ]
+      },
+      "cities": [
+        "Lille"
+      ],
+      "secret": {
+        "name": "Le Roucoulement",
+        "line": "Il roucoule une minute entière. Le public, hypnotisé, lui jette des miettes. Tu perds le fil.",
+        "fx": "adlib",
+        "prop": "bird.fill"
+      }
+    },
+    {
+      "id": "animateur_goslo",
+      "name": "L'Animateur de goslo radio",
+      "role": "La voix de la nuit",
+      "bio": "Anime l'antenne depuis quinze ans. Reconnaît une voix au premier mot. Et un menteur au deuxième.",
+      "look": {
+        "skin": "#c68642",
+        "hair": "#1b1b1f",
+        "top": "#16161a",
+        "bottom": "#23232a",
+        "shoes": "#f2f2f2",
+        "accent": "#ffd27a",
+        "headphones": true,
+        "glasses": true,
+        "beard": true,
+        "outfit": "jacket"
+      },
+      "idle": [
+        "Toi… je t'ai déjà vu quelque part. Dans un jeu ? Attends. C'est toi, le jeu.",
+        "La vraie antenne, c'est @goslo_radio. Passe dire bonjour, et dis-leur que tu viens du jeu.",
+        "Je fais de la radio depuis quinze ans. Toi, du rap depuis quinze minutes. On va bien s'entendre.",
+        "Le jingle, tu l'as trouvé ? Non ? Regarde mieux l'affiche, dans le studio."
+      ]
     }
   ]
 }

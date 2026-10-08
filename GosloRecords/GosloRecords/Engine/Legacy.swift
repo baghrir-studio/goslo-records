@@ -5,6 +5,10 @@ enum Achievement: String, Codable, CaseIterable, Identifiable, CodingKeyRepresen
     case premierChapitre, ringDesMots, premiereScene, rimeur, frappeParfaite, touriste
     case disqueOr, disquePlatine, disqueDiamant, tombeurDuBaron
     case carriereComplete, legende, patron, deuxMicros, tourDeFrance, toutesLesVilles, tousLesStyles
+    case maison, auditeur, roucoulade, archeologue
+
+    /// Hidden until found: the list shows "???".
+    var isSecret: Bool { [.maison, .auditeur, .roucoulade, .archeologue].contains(self) }
 
     var id: String { rawValue }
 
@@ -27,6 +31,10 @@ enum Achievement: String, Codable, CaseIterable, Identifiable, CodingKeyRepresen
         case .tourDeFrance: "Tournée"
         case .toutesLesVilles: "Partout chez toi"
         case .tousLesStyles: "Tous les styles"
+        case .maison: "Tu connais la maison"
+        case .auditeur: "Fidèle auditeur"
+        case .roucoulade: "Roucoulade"
+        case .archeologue: "Archéologue du Bunker"
         }
     }
 
@@ -49,6 +57,10 @@ enum Achievement: String, Codable, CaseIterable, Identifiable, CodingKeyRepresen
         case .tourDeFrance: "Finir des carrières dans 4 villes différentes."
         case .toutesLesVilles: "Finir une carrière dans chacune des 8 villes."
         case .tousLesStyles: "Finir une carrière dans chacun des 4 styles."
+        case .maison: "Porter le nom de la maison."
+        case .auditeur: "Trouver le jingle caché de goslo radio."
+        case .roucoulade: "Battre le pigeon de Lille. Oui, un pigeon."
+        case .archeologue: "Trouver ce que Fred cache derrière le Bunker."
         }
     }
 
@@ -69,6 +81,10 @@ enum Achievement: String, Codable, CaseIterable, Identifiable, CodingKeyRepresen
         case .tourDeFrance: "map.fill"
         case .toutesLesVilles: "globe.europe.africa.fill"
         case .tousLesStyles: "square.grid.2x2.fill"
+        case .maison: "house.fill"
+        case .auditeur: "radio.fill"
+        case .roucoulade: "bird.fill"
+        case .archeologue: "shippingbox.fill"
         }
     }
 
@@ -156,6 +172,10 @@ enum AchievementRules {
             (.disquePlatine, best >= AlbumRules.platinum),
             (.disqueDiamant, best >= AlbumRules.diamond),
             (.tombeurDuBaron, flags.contains("baron_tombe") || flags.contains("clash_gagne_le_baron")),
+            (.maison, state.rapper.isHouseMember),
+            (.auditeur, flags.contains(Secrets.jingleFlag)),
+            (.roucoulade, flags.contains(Secrets.pigeonFlag)),
+            (.archeologue, flags.contains(Secrets.archiveFlag)),
         ]
         return Set(rules.filter { $0.1 }.map { $0.0 })
     }
