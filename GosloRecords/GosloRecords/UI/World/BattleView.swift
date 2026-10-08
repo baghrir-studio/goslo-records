@@ -869,7 +869,8 @@ private struct Platform: View {
     }
 }
 
-/// Stage backdrop: dark gradient and swinging light beams.
+/// Stage backdrop: an LED wall pumping with the beat, swinging light beams, haze, and a crowd
+/// with raised hands and phone lights.
 private struct BattleBackdrop: View {
     @State private var swing = false
 
@@ -877,6 +878,25 @@ private struct BattleBackdrop: View {
         ZStack {
             LinearGradient(colors: [Color(red: 0.16, green: 0.05, blue: 0.1), Color(red: 0.04, green: 0.04, blue: 0.06)],
                            startPoint: .top, endPoint: .bottom)
+            // LED wall: columns of squares rising and falling like an equalizer.
+            TimelineView(.animation) { timeline in
+                let t = timeline.date.timeIntervalSinceReferenceDate
+                Canvas { context, size in
+                    let cell: CGFloat = 9, gap: CGFloat = 3
+                    let columns = Int(size.width / (cell + gap)), rows = 9
+                    for column in 0..<columns {
+                        let level = 0.25 + 0.75 * abs(sin(t * (2.1 + Double(column % 5) * 0.37) + Double(column) * 0.6))
+                        let lit = Int(Double(rows) * level)
+                        for row in 0..<rows {
+                            let on = rows - row <= lit
+                            let x = CGFloat(column) * (cell + gap) + gap, y = 14 + CGFloat(row) * (cell + gap)
+                            let color = row < 2 ? Color(red: 1, green: 0.85, blue: 0.3) : Theme.accent
+                            context.fill(Path(CGRect(x: x, y: y, width: cell, height: cell)),
+                                         with: .color(color.opacity(on ? 0.32 : 0.05)))
+                        }
+                    }
+                }
+            }
             ForEach(0..<3, id: \.self) { index in
                 LinearGradient(colors: [Theme.accent.opacity(0.28), .clear], startPoint: .top, endPoint: .bottom)
                     .frame(width: 70, height: 600)
@@ -884,16 +904,45 @@ private struct BattleBackdrop: View {
                     .offset(x: CGFloat(index - 1) * 130, y: -40)
                     .blendMode(.screen)
             }
-            // Crowd silhouettes at the bottom.
-            HStack(spacing: 2) {
-                ForEach(0..<16, id: \.self) { index in
-                    Capsule()
-                        .fill(Color.black.opacity(0.6))
-                        .frame(width: 22, height: CGFloat(26 + (index * 37) % 18))
-                        .offset(y: swing && index % 3 == 0 ? -4 : 0)
+            // Haze rolling over the stage.
+            LinearGradient(colors: [.clear, Color.white.opacity(0.07), Color.white.opacity(0.12)], startPoint: .center, endPoint: .bottom)
+                .offset(x: swing ? 20 : -20)
+                .blendMode(.screen)
+            // The crowd: heads, raised hands, phones filming.
+            TimelineView(.animation) { timeline in
+                let t = timeline.date.timeIntervalSinceReferenceDate
+                Canvas { context, size in
+                    let count = 18
+                    let step = size.width / CGFloat(count - 1)
+                    for row in 0..<2 {
+                        let base = size.height - CGFloat(row) * 14
+                        let shade = Color.black.opacity(row == 0 ? 0.85 : 0.6)
+                        for index in 0..<count {
+                            let x = CGFloat(index) * step + (row == 1 ? step / 2 : 0)
+                            let bob = CGFloat(sin(t * 3 + Double(index * 3 + row))) * 2.5
+                            let head = 7 + CGFloat((index * 37 + row * 11) % 4)
+                            context.fill(Path(roundedRect: CGRect(x: x - 13, y: base - 22 + bob, width: 26, height: 30),
+                                              cornerRadius: 10), with: .color(shade))
+                            context.fill(Path(ellipseIn: CGRect(x: x - head, y: base - 34 - head + bob, width: head * 2, height: head * 2)),
+                                         with: .color(shade))
+                            if (index + row) % 3 == 0 {
+                                // A raised arm, waving.
+                                let wave = CGFloat(sin(t * 4 + Double(index))) * 6
+                                var arm = Path()
+                                arm.move(to: CGPoint(x: x + 8, y: base - 18 + bob))
+                                arm.addLine(to: CGPoint(x: x + 14 + wave, y: base - 52 + bob))
+                                context.stroke(arm, with: .color(shade), lineWidth: 6)
+                                if (index + row) % 2 == 0 {
+                                    // A phone screen, glowing.
+                                    let flash = 0.5 + 0.5 * sin(t * 5 + Double(index * 7))
+                                    context.fill(Path(CGRect(x: x + 10 + wave, y: base - 62 + bob, width: 7, height: 11)),
+                                                 with: .color(Color(red: 0.85, green: 0.92, blue: 1).opacity(0.5 + 0.5 * flash)))
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            .frame(maxHeight: .infinity, alignment: .bottom)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .clipped()
