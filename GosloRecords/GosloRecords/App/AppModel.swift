@@ -381,6 +381,14 @@ final class AppModel {
             return
         }
         switch OverworldRules.interaction(from: position, facing: facing, on: map) {
+        case .npc(let npc) where npc.id == Philosopher.id:
+            // goslo radio's philosopher reads your latest punchline.
+            sound.play(.select)
+            npcFacing[npc.id] = facing.opposite
+            let lines = engine.philosopherReading(in: &current)
+            state = current
+            persist()
+            phase = .dialogue(speaker: engine.castMember(npc.id)?.name, lines: lines.map { TextTemplate.render($0, for: current.rapper) })
         case .npc(let npc):
             sound.play(.select)
             npcFacing[npc.id] = facing.opposite

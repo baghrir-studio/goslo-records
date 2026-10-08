@@ -5,7 +5,7 @@ enum Achievement: String, Codable, CaseIterable, Identifiable, CodingKeyRepresen
     case premierChapitre, ringDesMots, premiereScene, rimeur, frappeParfaite, touriste
     case disqueOr, disquePlatine, disqueDiamant, tombeurDuBaron
     case carriereComplete, legende, patron, deuxMicros, tourDeFrance, toutesLesVilles, tousLesStyles
-    case maison, auditeur, roucoulade, archeologue
+    case maison, auditeur, roucoulade, archeologue, maieutique
 
     /// Hidden until found: the list shows "???".
     var isSecret: Bool { [.maison, .auditeur, .roucoulade, .archeologue].contains(self) }
@@ -35,6 +35,7 @@ enum Achievement: String, Codable, CaseIterable, Identifiable, CodingKeyRepresen
         case .auditeur: "Fidèle auditeur"
         case .roucoulade: "Roucoulade"
         case .archeologue: "Archéologue du Bunker"
+        case .maieutique: "Maïeutique"
         }
     }
 
@@ -61,6 +62,7 @@ enum Achievement: String, Codable, CaseIterable, Identifiable, CodingKeyRepresen
         case .auditeur: "Trouver le jingle caché de goslo radio."
         case .roucoulade: "Battre le pigeon de Lille. Oui, un pigeon."
         case .archeologue: "Trouver ce que Fred cache derrière le Bunker."
+        case .maieutique: "Faire analyser 3 de tes punchlines par le Philosophe de goslo radio."
         }
     }
 
@@ -85,6 +87,7 @@ enum Achievement: String, Codable, CaseIterable, Identifiable, CodingKeyRepresen
         case .auditeur: "radio.fill"
         case .roucoulade: "bird.fill"
         case .archeologue: "shippingbox.fill"
+        case .maieutique: "book.closed.fill"
         }
     }
 
@@ -176,6 +179,7 @@ enum AchievementRules {
             (.auditeur, flags.contains(Secrets.jingleFlag)),
             (.roucoulade, flags.contains(Secrets.pigeonFlag)),
             (.archeologue, flags.contains(Secrets.archiveFlag)),
+            (.maieutique, state.hooks.indices.filter { flags.contains(Philosopher.readFlag($0)) }.count >= 3),
         ]
         return Set(rules.filter { $0.1 }.map { $0.0 })
     }

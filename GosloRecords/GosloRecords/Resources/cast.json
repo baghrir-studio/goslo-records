@@ -2079,6 +2079,30 @@
         "Je fais de la radio depuis quinze ans. Toi, du rap depuis quinze minutes. On va bien s'entendre.",
         "Le jingle, tu l'as trouvé ? Non ? Regarde mieux l'affiche, dans le studio."
       ]
+    },
+    {
+      "id": "philosophe_goslo",
+      "name": "Le Philosophe",
+      "role": "Analyste de punchlines pour goslo radio",
+      "bio": "Lit les refrains comme d'autres lisent Spinoza. Publie ses analyses sur @goslo_radio. A un banc attitré, et un avis sur tout.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#9a9aa6",
+        "top": "#5a3a22",
+        "bottom": "#3a3a44",
+        "shoes": "#5a3a22",
+        "accent": "#c8a165",
+        "glasses": true,
+        "beard": true,
+        "hair_style": "short",
+        "outfit": "jacket",
+        "hat": "bucket"
+      },
+      "idle": [
+        "Une punchline, c'est un aphorisme qui a mis des baskets.",
+        "Le rap, c'est de la philosophie qui a eu le temps de s'entraîner.",
+        "Je lis tout. Même les commentaires. Surtout les commentaires."
+      ]
     }
   ]
 }
