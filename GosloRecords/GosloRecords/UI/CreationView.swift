@@ -16,6 +16,7 @@ struct CreationView: View {
     @State private var headphones: Bool?
     @State private var outfit: CharacterLook.Outfit?
     @State private var earrings: Bool?
+    @State private var outfitColor: Int?
     @State private var gender: Gender = .rappeur
     @State private var step: Step = .identity
     @FocusState private var nameFocused: Bool
@@ -35,7 +36,7 @@ struct CreationView: View {
 
     private var draft: Rapper {
         Rapper(name: trimmedName.isEmpty ? CreationView.defaultName : trimmedName, city: city, style: style, skinTone: skinTone, hairColor: hairColor, hairStyle: hairStyle,
-               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, gender: gender)
+               hat: hat, glasses: glasses, beard: beard, chain: chain, headphones: headphones, outfit: outfit, earrings: earrings, outfitColor: outfitColor, gender: gender)
     }
 
     /// Name used when the player leaves the field empty (the field's placeholder).
@@ -215,6 +216,26 @@ struct CreationView: View {
             ChoiceRow(options: CharacterLook.HairStyle.allCases, selected: look.hairStyle, label: \.label) { hairStyle = $0 }
             ChoiceRow(options: CharacterLook.Hat.allCases, selected: look.hat, label: \.label) { hat = $0 }
             ChoiceRow(options: CharacterLook.Outfit.allCases, selected: look.outfit, label: \.label) { outfit = $0 }
+            HStack(spacing: 12) {
+                ForEach(Rapper.outfitColors.indices, id: \.self) { index in
+                    let colors = Rapper.outfitColors[index]
+                    let picked = (outfitColor ?? 0) == index
+                    Button {
+                        outfitColor = index
+                    } label: {
+                        VStack(spacing: 0) {
+                            Color(uiColor: PixelColor(hex: colors.top).uiColor)
+                            Color(uiColor: PixelColor(hex: colors.bottom).uiColor)
+                        }
+                        .frame(width: 30, height: 30)
+                        .clipShape(Circle())
+                        .overlay(Circle().fill(Color(uiColor: PixelColor(hex: colors.accent).uiColor)).frame(width: 8, height: 8))
+                        .overlay(Circle().stroke(picked ? Theme.accent : Theme.line, lineWidth: picked ? 3 : 1))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Couleur de tenue \(index + 1)")
+                }
+            }
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 8)], spacing: 8) {
                 ToggleChip(title: "Lunettes", isOn: look.glasses) { glasses = !look.glasses }
                 ToggleChip(title: "Barbe", isOn: look.beard) { beard = !look.beard }

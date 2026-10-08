@@ -480,7 +480,9 @@ final class GameEngineTests: XCTestCase {
 
     func testCreationPicksOverrideTheStyleLook() throws {
         let plain = Rapper(name: "A", city: .lyon, style: .trap)
-        XCTAssertEqual(plain.look, Style.trap.outfit.with(skin: Rapper.skinTones[2]))
+        XCTAssertEqual(plain.look, Rapper(name: "A", city: .lyon, style: .drill).look, "le style ne change pas le look")
+        XCTAssertEqual(plain.look.top, Rapper.outfitColors[0].top)
+        XCTAssertEqual(Rapper(name: "A", city: .lyon, style: .trap, outfitColor: 3).look.top, Rapper.outfitColors[3].top)
         let custom = Rapper(name: "A", city: .lyon, style: .trap, hairColor: 3, hairStyle: .long, hat: .beanie,
                             glasses: false, beard: true, chain: false, headphones: true)
         let look = custom.look
@@ -491,7 +493,7 @@ final class GameEngineTests: XCTestCase {
         XCTAssertTrue(look.beard)
         XCTAssertFalse(look.chain)
         XCTAssertTrue(look.headphones)
-        // Saved and reloaded, and older saves without these fields keep the style's look.
+        // Saved and reloaded, and older saves without these fields keep their style's look.
         XCTAssertEqual(try JSONDecoder().decode(Rapper.self, from: JSONEncoder().encode(custom)), custom)
         let old = try JSONDecoder().decode(Rapper.self, from: Data(#"{"name":"A","city":"Lyon","style":"Trap"}"#.utf8))
         XCTAssertEqual(old.look, Style.trap.outfit.with(skin: Rapper.skinTones[2]))

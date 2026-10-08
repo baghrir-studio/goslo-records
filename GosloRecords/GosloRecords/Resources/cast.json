@@ -1178,6 +1178,181 @@
         "Un refrain, c'est quatre mots et douze secondes de souffle. Tu veux que je t'apprenne ?",
         "J'ai essayé de chuchoter une fois. Les voisins ont appelé les pompiers."
       ]
+    },
+    {
+      "id": "kenzo_livraison",
+      "name": "Kenzo",
+      "role": "Livreur à vélo, roi du périph'",
+      "bio": "Livre des sushis dans tout Paris depuis six ans. Connaît chaque code de porte du quartier, et chaque rappeur qui n'a jamais percé.",
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#1b1b1f",
+        "top": "#1f8a5a",
+        "bottom": "#23232a",
+        "shoes": "#f2f2f2",
+        "accent": "#f2c14e",
+        "hat": "cap",
+        "outfit": "jacket"
+      },
+      "idle": [
+        "Le périph' à minuit, c'est mon studio. Le vent, c'est l'instru.",
+        "J'ai livré un rappeur connu une fois. Il a pas laissé de pourboire. Toi t'en laisseras.",
+        "Six ans de livraison, zéro accident. Bon. Un accident. Avec un pigeon."
+      ]
+    },
+    {
+      "id": "tatie_nadia",
+      "name": "Tatie Nadia",
+      "role": "Le snack en bas du bloc",
+      "bio": "Tient le snack depuis vingt ans. A nourri trois générations de rappeurs du quartier, dont deux qui ne l'ont jamais remboursée.",
+      "look": {
+        "skin": "#c68642",
+        "hair": "#5a3a22",
+        "top": "#e04f4f",
+        "bottom": "#2a2a30",
+        "shoes": "#3a3a44",
+        "accent": "#f2f2f2",
+        "hair_style": "bun",
+        "feminine": true,
+        "earrings": true,
+        "outfit": "jacket"
+      },
+      "idle": [
+        "Le snack, c'est le vrai studio du quartier. Tout le monde y passe.",
+        "Une barquette, une canette, et un conseil gratuit : arrête de rapper la bouche pleine.",
+        "Vingt ans que je tiens le snack. J'ai vu passer des stars. Elles me doivent toutes des sous."
+      ]
+    },
+    {
+      "id": "gaspard_pentes",
+      "name": "Gaspard",
+      "role": "Beatmaker des Pentes",
+      "bio": "Étudiant en philo, beatmaker la nuit sur les pentes de la Croix-Rousse. Sample des disques que personne d'autre n'a écoutés.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#9a4a24",
+        "top": "#6a4a8a",
+        "bottom": "#2f4a7a",
+        "shoes": "#c8a165",
+        "accent": "#f2c14e",
+        "glasses": true,
+        "headphones": true,
+        "hair_style": "long"
+      },
+      "idle": [
+        "J'ai samplé une cloche de Fourvière. On m'a demandé de ne plus jamais le refaire.",
+        "Les traboules, c'est parfait pour enregistrer. Sauf quand quelqu'un passe.",
+        "Mon dernier beat dure neuf minutes. C'est un voyage."
+      ]
+    },
+    {
+      "id": "fifou_capitole",
+      "name": "Fifou",
+      "role": "Supporter de tout, tout le temps",
+      "bio": "Chante dans les tribunes le samedi et sous ta fenêtre le reste de la semaine. A une voix qui porte jusqu'au Capitole.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#1b1b1f",
+        "top": "#b02a3a",
+        "bottom": "#1a1a1f",
+        "shoes": "#f2f2f2",
+        "accent": "#f2f2f2",
+        "beard": true,
+        "outfit": "jersey"
+      },
+      "idle": [
+        "J'ai perdu ma voix trois fois cette saison. Elle revient toujours.",
+        "Les briques roses, la nuit, ça fait comme une scène géante.",
+        "Si ton refrain passe pas en tribune, c'est pas un refrain."
+      ]
+    },
+    {
+      "id": "meme_ginette",
+      "name": "Mémé Ginette",
+      "role": "La friterie du coin",
+      "bio": "Tient la friterie depuis 1987. Connaît la météo, les ragots et le prénom de chaque pigeon de la place.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#9a9aa6",
+        "top": "#4f8ae0",
+        "bottom": "#3a3a44",
+        "shoes": "#3a3a44",
+        "accent": "#f2c14e",
+        "hair_style": "bun",
+        "feminine": true,
+        "glasses": true,
+        "outfit": "puffer"
+      },
+      "idle": [
+        "Une barquette, mayo, et un conseil : écris des textes qui réchauffent.",
+        "Depuis 1987, j'ai tout vu. Même un rappeur qui payait comptant.",
+        "La bruine, c'est pas de la pluie. C'est de l'ambiance."
+      ]
+    },
+    {
+      "id": "jean_mi_stoemp",
+      "name": "Jean-Mi",
+      "role": "Vendeur de BD d'occasion",
+      "bio": "Tient un bouquiniste qui ne ferme jamais vraiment. A une opinion sur chaque album de rap depuis 1994, une fois.",
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#d9bf73",
+        "top": "#2f4a7a",
+        "bottom": "#6b4a2e",
+        "shoes": "#3a3a44",
+        "accent": "#ff4d2e",
+        "hat": "bucket",
+        "beard": true
+      },
+      "idle": [
+        "J'ai un album de 1994 signé par personne de connu. Il vaut une fortune, pour moi.",
+        "Il pleut, une fois. C'est bon pour vendre des BD.",
+        "Un bon texte, c'est comme une bonne case : tout est dans le cadrage."
+      ]
+    },
+    {
+      "id": "ti_guy_deneigeur",
+      "name": "Ti-Guy",
+      "role": "Déneigeur de nuit",
+      "bio": "Conduit la souffleuse du quartier toute la nuit, toute l'hiver. A écouté plus de rap dans sa cabine que n'importe quel DJ.",
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#5a3a22",
+        "top": "#e86a2a",
+        "bottom": "#23232a",
+        "shoes": "#3a3a44",
+        "accent": "#f2f2f2",
+        "hat": "beanie",
+        "beard": true,
+        "outfit": "puffer"
+      },
+      "idle": [
+        "Dans la souffleuse, le son est parfait. Personne m'entend chanter.",
+        "Moins vingt-deux ce matin. Une belle journée.",
+        "Une bonne rime, ça fond même la glace sur le trottoir."
+      ]
+    },
+    {
+      "id": "driss_taxi",
+      "name": "Driss",
+      "role": "Chauffeur de petit taxi rouge",
+      "bio": "Conduit son petit taxi rouge sur la corniche depuis quinze ans. Sa radio ne passe que du rap, et il a un avis sur chaque couplet.",
+      "look": {
+        "skin": "#c68642",
+        "hair": "#1b1b1f",
+        "top": "#e8e4dc",
+        "bottom": "#3a3a44",
+        "shoes": "#3a3a44",
+        "accent": "#c81e14",
+        "hat": "cap",
+        "beard": true,
+        "outfit": "jacket"
+      },
+      "idle": [
+        "La corniche la nuit, c'est mon clip. Tous les soirs.",
+        "Mon taxi a 400 000 kilomètres. Et toujours le meilleur son de la ville.",
+        "Un client m'a dit qu'il était producteur. Il est descendu sans payer. Comme un producteur."
+      ]
     }
   ]
 }
