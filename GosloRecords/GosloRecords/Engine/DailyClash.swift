@@ -13,7 +13,8 @@ struct DailyChallenge: Equatable {
     var spec: ClashSpec {
         ClashSpec(opponent: opponentId,
                   win: ClashResultSpec(consequence: "Le Clash du jour est à toi."),
-                  lose: ClashResultSpec(consequence: "Le public a choisi l'autre. Reviens demain."))
+                  lose: ClashResultSpec(consequence: "Le public a choisi l'autre. Reviens demain."),
+                  levelBonus: DailyClash.opponentBonus)
     }
 }
 
@@ -69,7 +70,9 @@ struct DailyRecord: Codable, Equatable {
 
 enum DailyClash {
     /// Everyone plays at this level in every skill.
-    static let playerLevel = 7
+    static let playerLevel = 4
+    /// Added to the opponent's stats: about 4 wins in 5 with good tactics, 1 in 3 by mashing buttons.
+    static let opponentBonus = 2
     /// Rivals hard enough to be a challenge, never the final boss nor the street extras.
     static let averageStats: ClosedRange<Double> = 4...7
 

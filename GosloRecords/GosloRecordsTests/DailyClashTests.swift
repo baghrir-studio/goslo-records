@@ -109,8 +109,8 @@ final class DailyClashTests: XCTestCase {
         let smart = try winRate(smart: true)
         let random = try winRate(smart: false)
         print("Clash du jour — tactique : \(smart), hasard : \(random)")
-        XCTAssertGreaterThan(smart, 0.45, "le clash du jour doit se gagner en jouant bien")
-        XCTAssertLessThan(smart, 0.97, "et rester un défi")
-        XCTAssertGreaterThan(smart, random, "la tactique doit payer")
+        XCTAssertGreaterThan(smart, 0.6, "le clash du jour doit se gagner en jouant bien")
+        XCTAssertLessThan(smart, 0.95, "et rester un défi")
+        XCTAssertLessThan(random, 0.45, "au hasard, on perd le plus souvent")
     }
 }
