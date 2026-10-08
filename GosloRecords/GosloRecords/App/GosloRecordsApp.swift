@@ -49,9 +49,18 @@ struct RootView: View {
                 case .game: GameView()
                 case .ending(let record): EndingView(record: record)
                 case .history: HistoryView()
+                case .achievements: AchievementsView()
                 }
             }
             .transition(.opacity)
+
+            if let toast = model.achievementToast {
+                AchievementToast(achievement: toast)
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .padding(.top, 8)
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .zIndex(20)
+            }
         }
         .animation(.easeInOut(duration: 0.25), value: model.route)
         .foregroundStyle(Theme.text)

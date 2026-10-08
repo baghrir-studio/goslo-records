@@ -8,6 +8,7 @@ enum Route: Equatable {
     case game
     case ending(CareerRecord)
     case history
+    case achievements
 }
 
 /// What triggered the current encounter (decides the backdrop and where you come back to).
@@ -119,13 +120,21 @@ final class AppModel {
     private var walkTask: Task<Void, Never>?
     private var pendingSemesterCard = false
     private var stepsSinceSave = 0
+    /// Achievements unlocked on this device (they unlock the legacy bonuses).
+    private(set) var profile: TrophyCase
+    /// The achievement being announced at the top of the screen.
+    private(set) var achievementToast: Achievement?
+    private var toastQueue: [Achievement] = []
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
         self.engine = engine
         self.store = store
         self.loadError = loadError
         history = store.loadHistory()
+        profile = store.loadProfile()
         state = store.loadCurrentRun().flatMap { $0.isOver ? nil : $0 }
+        // Careers finished before achievements existed still count.
+        checkAchievements(in: state, announce: false)
     }
 
     static func live() -> AppModel {
@@ -884,6 +893,7 @@ final class AppModel {
                 let record = CareerRecord(state: current)
                 history.insert(record, at: 0)
                 store.saveHistory(history)
+                checkAchievements(in: current)
                 store.clearCurrentRun()
                 busy = false
                 phase = .overworld
@@ -1057,6 +1067,7 @@ final class AppModel {
             history.insert(record, at: 0)
             store.saveHistory(history)
             store.clearCurrentRun()
+            checkAchievements(in: current)
         } else {
             persist()
         }
@@ -1099,5 +1110,35 @@ final class AppModel {
         state = current
         stepsSinceSave = 0
         store.saveCurrentRun(current)
+        checkAchievements(in: current)
+    }
+
+    // MARK: - Achievements
+
+    /// Unlocks what this career and the finished ones have earned; new ones are announced one at a time.
+    func checkAchievements(in current: GameState? = nil, announce: Bool = true) {
+        var earned = AchievementRules.earned(from: history)
+        if let current { earned.formUnion(AchievementRules.earned(in: current)) }
+        let new = Achievement.allCases.filter { earned.contains($0) && !profile.unlocked.contains($0) }
+        guard !new.isEmpty else { return }
+        for achievement in new { profile.achievements[achievement] = Date() }
+        store.saveProfile(profile)
+        guard announce else { return }
+        toastQueue.append(contentsOf: new)
+        if achievementToast == nil { showNextToast() }
+    }
+
+    private func showNextToast() {
+        guard !toastQueue.isEmpty else { return }
+        let next = toastQueue.removeFirst()
+        Task {
+            sound.play(.quest)
+            Haptics.shared.play(.victory)
+            withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) { achievementToast = next }
+            try? await Task.sleep(for: .seconds(3.2))
+            withAnimation(.easeIn(duration: 0.3)) { achievementToast = nil }
+            try? await Task.sleep(for: .milliseconds(400))
+            showNextToast()
+        }
     }
 }
