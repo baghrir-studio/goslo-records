@@ -181,7 +181,7 @@ final class GameEngineTests: XCTestCase {
     func testEmptyLocationUsesFallback() throws {
         let engine = GameEngine(events: [event("ailleurs", at: .label)])
         var s = neutralState(engine)
-        XCTAssertEqual(try engine.visit(.media, in: &s, using: &rng).id, GameEngine.fallbackEvent.id)
+        XCTAssertEqual(try engine.visit(.studio, in: &s, using: &rng).id, GameEngine.fallbackEvent.id)
         XCTAssertNoThrow(try engine.resolve(choiceAt: 0, in: &s))
     }
 

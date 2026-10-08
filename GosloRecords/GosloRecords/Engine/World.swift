@@ -58,8 +58,17 @@ enum Location: String, Codable, CaseIterable, Identifiable, CodingKeyRepresentab
         }
     }
 
+    /// Artist level needed to get in (outside story scenes): the radio only has artists who count.
+    var minArtistLevel: Int {
+        switch self {
+        case .media: 3
+        default: 1
+        }
+    }
+
     var lockedHint: String {
         switch self {
+        case .media: "goslo radio ne reçoit que les artistes qui comptent. Reviens au niveau \(minArtistLevel) d'artiste."
         case .scene: "Sors un projet pour qu'on te programme."
         case .label: "La laverie est fermée. Un mot sur la porte : « De retour bientôt. — Momo »"
         default: ""

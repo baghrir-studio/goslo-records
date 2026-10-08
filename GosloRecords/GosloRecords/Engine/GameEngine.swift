@@ -157,7 +157,18 @@ struct GameEngine {
     // MARK: - Map
 
     func isUnlocked(_ location: Location, in state: GameState) -> Bool {
-        location.unlock?.isSatisfied(by: state) ?? true
+        guard location.unlock?.isSatisfied(by: state) ?? true else { return false }
+        // The story always gets through; otherwise some doors wait for the artist level.
+        return ArtistLevel.level(xp: state.artistXP) >= location.minArtistLevel || storyEvent(at: location, in: state) != nil
+    }
+
+    /// Going back to the same place again and again in a year pays less and less (no farming).
+    static let freshVisits = 2
+
+    func fatigue(at location: Location?, in state: GameState) -> Double {
+        guard let location, location != .chezToi else { return 1 }
+        let visits = state.visitsThisYear[location.rawValue, default: 0]
+        return visits <= GameEngine.freshVisits ? 1 : max(0.25, 1 - 0.25 * Double(visits - GameEngine.freshVisits))
     }
 
     /// The player can pick a location (no card awaiting, no clash, actions left).
@@ -352,6 +363,9 @@ struct GameEngine {
 
         // A story scene (`Objective.free`) doesn't spend an action.
         if !free { state.actionsLeft -= 1 }
+        if storyEvent(at: location, in: state) == nil || chosen.id != storyEvent(at: location, in: state)?.id {
+            state.visitsThisYear[location.rawValue, default: 0] += 1
+        }
         state.currentLocation = location
         state.currentEventId = chosen.id
         if let npc = chosen.npc { state.metCast.insert(npc) }
@@ -398,7 +412,12 @@ struct GameEngine {
         guard choice.isAvailable(in: state) else { throw GameEngineError.requirementNotMet }
 
         var outcome = TurnOutcome(consequence: choice.consequence)
-        outcome.add(state.applyStats(choice.effects))
+        let tired = fatigue(at: state.currentLocation, in: state)
+        let effects = tired < 1 ? choice.effects.mapValues { $0 > 0 ? max(1, Int((Double($0) * tired).rounded())) : $0 } : choice.effects
+        outcome.add(state.applyStats(effects))
+        if tired < 1, choice.effects.values.contains(where: { $0 > 0 }) {
+            outcome.notes.append("Ici, tout le monde t'a déjà vu cette année : ça rapporte moins. Va voir ailleurs.")
+        }
         state.flags.subtract(choice.clearFlags)
         state.flags.formUnion(choice.setFlags)
         for (counter, amount) in choice.counters {
@@ -1162,6 +1181,7 @@ struct GameEngine {
             if !isInEpilogue(state) { state.turn = state.freeCareer ? state.turn + 1 : min(state.turn + 1, limit) }
             // Burn-out: one action only.
             state.actionsLeft = state.stats.mental < Economy.burnout ? 1 : GameState.actionsPerTurn
+            if state.isNewYear { state.visitsThisYear = [:] }
             refreshChallenges(in: &state)
             state.challengedThisSemester = []
             outcome.semesterEnded = true

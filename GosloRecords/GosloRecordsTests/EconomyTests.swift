@@ -127,4 +127,23 @@ final class EconomyTests: XCTestCase {
         XCTAssertEqual(old.difficulty, .normal)
         XCTAssertTrue(old.challengedAt.isEmpty)
     }
+
+    func testTheRadioWaitsForTheArtistLevel() {
+        var state = game()
+        state.chapter = 3
+        XCTAssertFalse(engine.isUnlocked(.media, in: state), "pas de radio au niveau 1")
+        state.artistXP = ArtistLevel.thresholds[Location.media.minArtistLevel - 1]
+        XCTAssertTrue(engine.isUnlocked(.media, in: state))
+        XCTAssertFalse(Location.media.lockedHint.isEmpty)
+    }
+
+    func testFarmingAPlacePaysLess() {
+        var state = game()
+        XCTAssertEqual(engine.fatigue(at: .studio, in: state), 1)
+        state.visitsThisYear[Location.studio.rawValue] = GameEngine.freshVisits + 2
+        XCTAssertLessThan(engine.fatigue(at: .studio, in: state), 1, "trop de passages : ça rapporte moins")
+        XCTAssertEqual(engine.fatigue(at: .chezToi, in: state), 1, "chez toi, on se repose sans compter")
+        state.visitsThisYear[Location.studio.rawValue] = 50
+        XCTAssertGreaterThan(engine.fatigue(at: .studio, in: state), 0)
+    }
 }
