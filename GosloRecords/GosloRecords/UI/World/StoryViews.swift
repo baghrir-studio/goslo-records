@@ -478,3 +478,38 @@ private struct TimerBar: View {
         .frame(height: 6)
     }
 }
+
+/// After the finale: hang up the mic as a legend, or keep clashing the new generation.
+struct FinaleChoiceBox: View {
+    let retire: () -> Void
+    let keepGoing: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("LE TRÔNE EST À TOI")
+                .font(.system(size: 11, weight: .heavy, design: .monospaced))
+                .tracking(3)
+                .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+            Text("Tout le monde te regarde. Tu pars au sommet, ou tu restes pour défendre ta couronne ?")
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundStyle(.white)
+            Button(action: retire) {
+                VStack(spacing: 2) {
+                    Text("Raccrocher en légende")
+                    Text("Fin de carrière, au sommet").font(.mono(10, weight: .semibold)).textCase(nil)
+                }
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            Button(action: keepGoing) {
+                VStack(spacing: 2) {
+                    Text("Clasher les petits nouveaux")
+                    Text("Carrière libre, sans limite de temps").font(.mono(10, weight: .semibold)).textCase(nil)
+                }
+            }
+            .buttonStyle(SecondaryButtonStyle())
+        }
+        .padding(16)
+        .background(Color.black.opacity(0.9))
+        .overlay(Rectangle().stroke(Color(red: 1, green: 0.85, blue: 0.3), lineWidth: 2))
+    }
+}

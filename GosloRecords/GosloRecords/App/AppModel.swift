@@ -37,6 +37,8 @@ enum GamePhase: Equatable {
     case cinematic
     /// The metro map: pick a district.
     case metro
+    /// The finale is played: retire as a legend, or keep clashing the new generation.
+    case finaleChoice
 }
 
 /// What a cinematic shows at the bottom of the screen.
@@ -133,6 +135,8 @@ final class AppModel {
         history = store.loadHistory()
         profile = store.loadProfile()
         state = store.loadCurrentRun().flatMap { $0.isOver ? nil : $0 }
+        // Careers saved before the free career get it too: no clock will end them any more.
+        state?.freeCareer = true
         // Careers finished before achievements existed still count.
         checkAchievements(in: state, announce: false)
     }
@@ -172,6 +176,7 @@ final class AppModel {
 
     func startCareer(_ rapper: Rapper) {
         var fresh = engine.newGame(rapper: rapper)
+        fresh.freeCareer = true
         fresh.position = engine.world.map?.spawn
         state = fresh
         finishedRecord = nil
@@ -205,6 +210,8 @@ final class AppModel {
             phase = .encounter(event)
         } else if current.pendingCinematic != nil {
             Task { await playPendingCinematic() }
+        } else if current.finaleChoicePending {
+            phase = .finaleChoice
         }
         route = .game
     }
@@ -902,7 +909,7 @@ final class AppModel {
                 return
             }
         }
-        phase = .overworld
+        phase = state?.finaleChoicePending == true ? .finaleChoice : .overworld
         busy = false
         persist()
         // A new chapter's intro can follow an outro.
@@ -1111,6 +1118,43 @@ final class AppModel {
         stepsSinceSave = 0
         store.saveCurrentRun(current)
         checkAchievements(in: current)
+    }
+
+    // MARK: - Hanging up the mic
+
+    var canRetire: Bool {
+        guard let state, phase == .overworld || phase == .finaleChoice, transition == nil, !busy else { return false }
+        return engine.canRetire(state)
+    }
+
+    /// Ends the career now: the ending its stats and story give, then the ending screen.
+    func retire() {
+        guard canRetire, var current = state, (try? engine.retire(in: &current)) != nil else { return }
+        let record = CareerRecord(state: current)
+        history.insert(record, at: 0)
+        store.saveHistory(history)
+        store.clearCurrentRun()
+        checkAchievements(in: current)
+        heldDirection = nil
+        radioTask?.cancel()
+        radioHeadline = nil
+        finishedRecord = nil
+        state = nil
+        phase = .overworld
+        route = .ending(record)
+    }
+
+    /// After the finale: the career goes on, and the new generation comes for your crown.
+    func keepGoing() {
+        guard phase == .finaleChoice, var current = state else { return }
+        engine.keepGoing(in: &current)
+        state = current
+        persist()
+        sound.play(.exclaim)
+        phase = .dialogue(speaker: nil, lines: [
+            "Une nouvelle génération débarque au Bloc : filtres chien, refrains de quatre mots, et une seule ambition. Te faire tomber.",
+            "La carrière continue, sans limite de temps. Le jour où tu veux partir, « Raccrocher le micro » est dans le menu.",
+        ])
     }
 
     // MARK: - Achievements
