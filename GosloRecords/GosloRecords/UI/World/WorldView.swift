@@ -33,6 +33,17 @@ struct WorldView: View {
                              hasQuest: markers.contains(door.location), isObjective: objectiveDoor == door.location)
                         .position(x: (CGFloat(door.x) + 0.5) * tile, y: CGFloat(door.y) * tile - 2)
                 }
+                // goslo radio's pixel logo glowing on the radio's roof.
+                ForEach(map.doors.filter { $0.location == .media }, id: \.location) { door in
+                    let neon = Color(uiColor: Location.media.neon.uiColor)
+                    RadioLogo(pixel: 1.6, color: neon)
+                        .shadow(color: neon.opacity(0.8), radius: 6)
+                        .padding(5)
+                        .background(Color.black.opacity(0.55))
+                        .overlay(Rectangle().stroke(neon.opacity(0.6), lineWidth: 1))
+                        .position(x: (CGFloat(door.x) + 0.5) * tile, y: (CGFloat(door.y) - 2.6) * tile)
+                        .allowsHitTesting(false)
+                }
                 if let metro = map.metro {
                     MetroSign(isObjective: model.objectiveDistrict != nil)
                         .position(x: (CGFloat(metro.x) + 0.5) * tile, y: CGFloat(metro.y) * tile - 2)

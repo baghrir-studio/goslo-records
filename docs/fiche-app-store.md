@@ -1,12 +1,12 @@
-# Fiche App Store et TestFlight — goslo records
+# Fiche App Store et TestFlight — goslo radio
 
 Textes prêts à coller dans App Store Connect. Les limites de caractères d'Apple sont indiquées entre parenthèses et respectées.
 
 ## Nom (30 max)
 
-**Goslo Records – Le jeu du rap** (29)
+**Goslo Radio – Le jeu du rap** (27)
 
-Sur l'écran d'accueil de l'iPhone, l'app garde le nom court `goslo records` (`CFBundleDisplayName`).
+Sur l'écran d'accueil de l'iPhone, l'app garde le nom court `goslo radio` (`CFBundleDisplayName`).
 
 ## Sous-titre (30 max)
 
@@ -20,7 +20,7 @@ Signe dans une laverie, survis à un débat télé, remplis le Dôme et fais tom
 
 Tu as un carnet à spirale, zéro abonné et une certitude : un jour, tout le quartier connaîtra ton nom.
 
-Goslo Records est un jeu de rôle sur la carrière d'un rappeur, avec de l'humour qui pique. Tu pars d'en bas du bloc. Tu signes chez goslo records, un label installé dans l'arrière-boutique d'une laverie. Tu montes jusqu'au trône, marche après marche.
+Goslo Radio est un jeu de rôle sur la carrière d'un rappeur, avec de l'humour qui pique. Tu pars d'en bas du bloc. Tu signes chez goslo records, un label installé dans l'arrière-boutique d'une laverie. Tu montes jusqu'au trône, marche après marche.
 
 UNE HISTOIRE EN 6 CHAPITRES ET UN ÉPILOGUE
 • Ton premier texte, ton premier freestyle à la radio, ton premier boss au Ring des Mots
@@ -72,7 +72,7 @@ Testeurs **internes**, ajoutés par e-mail dans App Store Connect › TestFlight
 
 ### Que tester (« What to Test », 4 000 max)
 
-Merci de tester goslo records !
+Merci de tester goslo radio !
 
 Ce qui nous aide le plus :
 1. Jouer le plus loin possible dans l'histoire. Dites-nous à quel chapitre vous vous êtes arrêté, et pourquoi.

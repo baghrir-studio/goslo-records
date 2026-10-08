@@ -110,14 +110,14 @@ struct Logo: View {
             Text("goslo")
                 .foregroundStyle(Theme.text)
             HStack(alignment: .firstTextBaseline, spacing: 0) {
-                Text("records")
+                Text("radio")
                 Text(".").foregroundStyle(Theme.accent)
             }
             .foregroundStyle(Theme.text.opacity(0.92))
         }
         .font(.display(size))
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("goslo records")
+        .accessibilityLabel("goslo radio")
     }
 }
 

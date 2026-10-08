@@ -46,7 +46,7 @@ struct EndingView: View {
                     if let image {
                         let shareImage = Image(uiImage: image)
                         ShareLink(item: shareImage,
-                                  subject: Text("Ma carrière sur goslo records"),
+                                  subject: Text("Ma carrière sur goslo radio"),
                                   message: Text("\(record.rapper.name) — \(TextTemplate.agree(record.ending.title, record.rapper.gender)). @goslo_records"),
                                   preview: SharePreview("\(record.rapper.name) — \(TextTemplate.agree(record.ending.title, record.rapper.gender))", image: shareImage)) {
                             Text("Partager")

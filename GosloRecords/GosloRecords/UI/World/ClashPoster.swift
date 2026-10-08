@@ -36,7 +36,7 @@ struct ClashPoster: View {
 
             VStack(spacing: 0) {
                 HStack {
-                    Text("GOSLO RECORDS · CLASH")
+                    Text("GOSLO RADIO · CLASH")
                         .font(.system(size: 11, weight: .heavy, design: .monospaced))
                         .tracking(2)
                         .foregroundStyle(.white.opacity(0.8))
