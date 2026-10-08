@@ -28,7 +28,8 @@ final class FreeCareerTests: XCTestCase {
         XCTAssertNil(state.ending, "aucune limite de temps")
         XCTAssertEqual(state.turn, GameState.totalTurns + GameState.overtimeTurns + 4)
         XCTAssertEqual(state.year, (GameState.totalTurns + GameState.overtimeTurns + 4) / 2 + 1)
-        XCTAssertEqual(state.periodLabel, "ANNÉE \(state.year)")
+        XCTAssertEqual(state.periodLabel, "ANNÉE \(state.careerYear)")
+        XCTAssertEqual(state.careerYear, state.turn / GameState.turnsPerYear + 1, "une année = \(GameState.turnsPerYear) tours")
         XCTAssertTrue(engine.canVisit(state))
     }
 
