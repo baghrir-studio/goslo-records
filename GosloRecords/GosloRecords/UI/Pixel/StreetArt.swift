@@ -72,11 +72,26 @@ extension TileArt {
     }
 
     /// Downtown's basin: a stone rim all round, a fountain in the middle, its spray caught in the light.
+    /// (The basin is the stretch of water that doesn't reach the sides of the map: the river runs from one to the other.)
     private static func fountain(_ c: PixelCanvas, map: WorldMap, theme t: CityTheme) {
-        var water: [TilePoint] = []
+        var pools: [[TilePoint]] = [], seen = Set<TilePoint>()
         for y in 0..<map.height {
-            for x in 0..<map.width where map.tile(at: TilePoint(x: x, y: y)) == .water { water.append(TilePoint(x: x, y: y)) }
+            for x in 0..<map.width {
+                let start = TilePoint(x: x, y: y)
+                guard map.tile(at: start) == .water, !seen.contains(start) else { continue }
+                var pool: [TilePoint] = [], stack = [start]
+                seen.insert(start)
+                while let p = stack.popLast() {
+                    pool.append(p)
+                    for direction in Direction.allCases {
+                        let next = p.moved(direction)
+                        if map.tile(at: next) == .water, !seen.contains(next) { seen.insert(next); stack.append(next) }
+                    }
+                }
+                pools.append(pool)
+            }
         }
+        guard let water = pools.first(where: { pool in !pool.contains { $0.x <= 1 || $0.x >= map.width - 2 } }) else { return }
         guard let minX = water.map(\.x).min(), let maxX = water.map(\.x).max(),
               let minY = water.map(\.y).min(), let maxY = water.map(\.y).max() else { return }
         let stone = PixelColor(hex: "#8a8478"), stoneLight = PixelColor(hex: "#aaa498")

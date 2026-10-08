@@ -67,6 +67,8 @@ enum TileArt {
             dressBuildings(canvas, map: map, theme: theme, city: cityTheme, district: district)
             dressStreets(canvas, map: map, theme: theme, district: district)
             if district == .dome { dome(on: canvas, map: map) }
+            // The district's own corners (map data "scenery"): city stade, market, belvedere, backstage…
+            dressScenery(canvas, map: map, theme: theme, district: district)
             for door in map.doors {
                 storefront(door.location, at: door.point, on: canvas, map: map, theme: theme, district: district)
             }
@@ -211,11 +213,10 @@ enum TileArt {
 
     /// Le Dôme: a huge silver dome over the arena's roof, ribs, and a ring of lights at its base.
     private static func dome(on c: PixelCanvas, map: WorldMap) {
-        // The arena is the big roof at the top of the map.
-        var top: [TilePoint] = []
-        for y in 0..<min(4, map.height) {
-            for x in 0..<map.width where map.tile(at: TilePoint(x: x, y: y)) == .roof { top.append(TilePoint(x: x, y: y)) }
-        }
+        // The arena is the building with the stage door (the biggest one if there is none).
+        let all = buildings(of: map)
+        let arena = all.first { $0.door?.location == .scene } ?? all.max { $0.tiles.count < $1.tiles.count }
+        let top = (arena?.tiles ?? []).filter { map.tile(at: $0) == .roof }
         guard let minX = top.map(\.x).min(), let maxX = top.map(\.x).max(), let minY = top.map(\.y).min(),
               let maxY = top.map(\.y).max() else { return }
         let left = minX * size, right = (maxX + 1) * size - 1
@@ -254,7 +255,8 @@ enum TileArt {
             // Masts above the boats, a few with a furled sail: the old harbour at night.
             guard let row = map.rows.firstIndex(where: { $0.contains("W") }) else { return }
             let y = row * size
-            for x in stride(from: 1 * size + 7, to: (map.width - 1) * size, by: 2 * size) {
+            for x in stride(from: 1 * size + 7, to: (map.width - 1) * size, by: 2 * size)
+            where map.tile(at: TilePoint(x: x / size, y: row)) == .water {
                 c.fill(x, y - 10, x, y + 8, PixelColor(hex: "#c8c0b0"))
                 if (x / size) % 3 == 1 { c.fill(x + 1, y - 8, x + 4, y - 2, PixelColor(hex: "#e8e4dc")) }
                 c.dot(x, y - 11, NightPalette.lampLight)
