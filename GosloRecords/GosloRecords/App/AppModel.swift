@@ -802,6 +802,20 @@ final class AppModel {
         return result
     }
 
+    /// The studio: records and releases a single (1 action), then shows how it went.
+    @discardableResult
+    func releaseSingle(sourceId: String, perfectTakes: Int, clip: Bool, feat: String?) -> Bool {
+        guard var current = state, canMove else { return false }
+        let before = current.stats
+        guard let outcome = try? engine.releaseSingle(sourceId: sourceId, perfectTakes: perfectTakes, clip: clip,
+                                                      feat: feat, in: &current) else { return false }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.levelUp)
+        show(outcome, for: nil)
+        return true
+    }
+
     /// The shop: buys an offer. Returns why it failed, nil when it went through.
     @discardableResult
     func buy(_ offer: ShopOffer) -> String? {

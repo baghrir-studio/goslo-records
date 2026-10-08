@@ -5,6 +5,7 @@ struct GameView: View {
     @Environment(AppModel.self) private var model
     @State private var showCarnet = false
     @State private var showShop = false
+    @State private var showStudio = false
     @State private var showCalibration = false
     @State private var confirmRetire = false
 
@@ -108,6 +109,12 @@ struct GameView: View {
             .sheet(isPresented: $showCalibration) {
                 CalibrationView().presentationBackground(Theme.background)
             }
+            .sheet(isPresented: $showStudio) {
+                StudioView()
+                    .environment(model)
+                    .presentationBackground(Theme.background)
+                    .presentationDragIndicator(.visible)
+            }
             .sheet(isPresented: $showShop) {
                 ShopView()
                     .environment(model)
@@ -163,7 +170,12 @@ struct GameView: View {
             StatsBar(stats: state.stats, deltas: model.lastDeltas, token: model.deltaToken, compact: true)
             HStack(spacing: 10) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(state.periodLabel).font(.display(20)).lineLimit(1).minimumScaleFactor(0.6)
+                    HStack(alignment: .lastTextBaseline, spacing: 6) {
+                        Text(state.periodLabel).font(.display(20)).lineLimit(1).minimumScaleFactor(0.6)
+                        Text("NIV.\(ArtistLevel.level(xp: state.artistXP))")
+                            .font(.mono(10, weight: .heavy))
+                            .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                    }
                     // How far into the year.
                     GeometryReader { bar in
                         ZStack(alignment: .leading) {
@@ -186,6 +198,8 @@ struct GameView: View {
                         }
                     }
                 hudButton(systemImage: "book.closed.fill", label: "Carnet") { showCarnet = true }
+                hudButton(systemImage: "music.mic", label: "Studio") { showStudio = true }
+                    .disabled(!model.canMove)
                 hudButton(systemImage: "bag.fill", label: "Boutique") { showShop = true }
                     .disabled(!model.canMove)
                 Menu {

@@ -295,6 +295,8 @@ struct ConsequenceBox: View {
                     Text("Le temps passe : loyer payé, l'algorithme t'oublie un peu.")
                         .font(.system(size: 11, design: .monospaced))
                         .foregroundStyle(.white.opacity(0.6))
+                }
+                if textDone && outcome.ending == nil {
                     ForEach(outcome.notes, id: \.self) { note in
                         Text(note)
                             .font(.system(size: 11, weight: .semibold, design: .monospaced))
