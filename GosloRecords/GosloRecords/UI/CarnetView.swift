@@ -15,12 +15,21 @@ struct CarnetView: View {
     }
 
     @State private var tab: Tab = .quetes
+    @State private var showTournament = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Text("CARNET").font(.display(40))
                 Spacer()
+                Button {
+                    showTournament = true
+                } label: {
+                    Label("Tournoi", systemImage: "trophy.fill")
+                        .font(.mono(12, weight: .bold))
+                        .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                }
+                .padding(.trailing, 14)
                 Button("Fermer") { dismiss() }
                     .font(.mono(13, weight: .semibold))
                     .foregroundStyle(Theme.muted)
@@ -66,6 +75,17 @@ struct CarnetView: View {
             .scrollIndicators(.hidden)
         }
         .foregroundStyle(Theme.text)
+        .sheet(isPresented: $showTournament) {
+            // Challenging a boss closes the notebook too: the clash starts on the map.
+            TournamentView { id in
+                showTournament = false
+                dismiss()
+                model.startTournament(id)
+            }
+            .environment(model)
+            .presentationBackground(Theme.background)
+            .presentationDragIndicator(.visible)
+        }
     }
 
     // MARK: Quêtes
@@ -262,7 +282,7 @@ struct CarnetView: View {
             .buttonStyle(.plain)
             .accessibilityAddTraits(isOn ? .isSelected : [])
         }
-        Text("Les boss battus en laissent d'autres. Toutes frappent aussi fort : choisis celle qui te fait rire.")
+        Text("Les boss battus en laissent d'autres, ceux du Tournoi goslo radio aussi, et ton niveau d'artiste en débloque. Toutes frappent aussi fort : choisis celle qui te fait rire.")
             .font(.system(size: 12)).foregroundStyle(Theme.muted)
         Rectangle().fill(Theme.line).frame(height: 1).padding(.bottom, 8)
     }

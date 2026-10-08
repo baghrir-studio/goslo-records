@@ -56,6 +56,12 @@ struct GameState: Codable, Equatable {
     var challengeSeason = -1
     /// Best rank of a single in the Top this season.
     var seasonBestRank: Int?
+    /// Decorations on the map, by spot id (`MapPlot`).
+    var decor: [String: Decor] = [:]
+    /// Clothes bought in the shop (worn ones: `Rapper.wearing`).
+    var wardrobe: Set<String> = []
+    /// Visits per place this year (they pay less after a few: `GameEngine.fatigue`).
+    var visitsThisYear: [String: Int] = [:]
     /// The finale is played: the player picks between retiring as a legend and carrying on.
     var finaleChoicePending = false
     var pendingFollowUp: String?
@@ -112,7 +118,7 @@ struct GameState: Codable, Equatable {
         case questProgress, completedQuests, ending, position, facing, district, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
         case seenEvents, talkedAt, smallTalk, hooks, albums, freeCareer, finaleChoicePending
-        case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank
+        case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank, decor, visitsThisYear, wardrobe
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -171,6 +177,9 @@ struct GameState: Codable, Equatable {
         challenges = try c.decodeIfPresent([Challenge].self, forKey: .challenges) ?? []
         challengeSeason = try c.decodeIfPresent(Int.self, forKey: .challengeSeason) ?? -1
         seasonBestRank = try c.decodeIfPresent(Int.self, forKey: .seasonBestRank)
+        decor = try c.decodeIfPresent([String: Decor].self, forKey: .decor) ?? [:]
+        visitsThisYear = try c.decodeIfPresent([String: Int].self, forKey: .visitsThisYear) ?? [:]
+        wardrobe = try c.decodeIfPresent(Set<String>.self, forKey: .wardrobe) ?? []
     }
 
     /// Year 1 to 10 (no cap in a free career).

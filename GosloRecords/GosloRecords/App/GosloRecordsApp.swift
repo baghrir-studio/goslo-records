@@ -53,6 +53,7 @@ struct RootView: View {
                 case .history: HistoryView()
                 case .achievements: AchievementsView()
                 case .arcade: ArcadeView()
+                case .hq: HQView()
                 }
             }
             .transition(.opacity)

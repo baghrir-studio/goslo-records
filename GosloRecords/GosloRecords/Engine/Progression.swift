@@ -148,7 +148,7 @@ enum Challenges {
             pool.append(Challenge(kind: .single, target: 1, baseline: value(.single, in: state)))
             pool.append(Challenge(kind: .topRank, target: level >= 6 ? 1 : (level >= 3 ? 3 : 5), baseline: 0))
         }
-        let count = ArtistLevel.unlocks(.radio, in: state) ? 4 : 3
+        let count = 3 + (ArtistLevel.unlocks(.radio, in: state) ? 1 : 0) + (state.flags.contains(HQ.radioFlag) ? 1 : 0)
         let seed = GameEngine.fnv("\(state.id.uuidString)\(season)")
         return pool.enumerated()
             .sorted { GameEngine.fnv("\(seed)\($0.offset)") < GameEngine.fnv("\(seed)\($1.offset)") }

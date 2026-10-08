@@ -10,6 +10,7 @@ enum Route: Equatable {
     case history
     case achievements
     case arcade
+    case hq
 }
 
 /// What triggered the current encounter (decides the backdrop and where you come back to).
@@ -144,6 +145,11 @@ final class AppModel {
     private(set) var arcadePlaying: ArcadeGame?
     /// The philosopher's analysis being read, to share as a card (cleared when the dialogue ends).
     private(set) var philosophyCard: PhilosophyCard?
+    /// « Le Tournoi goslo radio » is open (talking to the radio host opens it).
+    var showingTournament = false
+    /// The radio host's dialogue ends on the Tournoi's ladder.
+    private var tournamentAfterDialogue = false
+    static let tournamentInvite = "Le Tournoi goslo radio t'attend. DJ Noize est aux platines, le tableau est affiché. On regarde qui tu peux défier ?"
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
         self.engine = engine
@@ -193,6 +199,7 @@ final class AppModel {
 
     func startCareer(_ rapper: Rapper) {
         var fresh = engine.newGame(rapper: rapper)
+        HQ.apply(profile.hq, to: &fresh)
         fresh.freeCareer = true
         fresh.position = engine.world.map?.spawn
         state = fresh
@@ -466,6 +473,17 @@ final class AppModel {
             state = current
             persist()
             phase = .dialogue(speaker: engine.castMember(npc.id)?.name, lines: lines.map { TextTemplate.render($0, for: current.rapper) })
+        case .npc(let npc) where npc.id == GameEngine.tournamentHostId && engine.storyEvent(forNPC: npc.id, in: current) == nil:
+            // The radio host runs the Tournoi goslo radio (the story still comes first when it needs them):
+            // a word from them, then the ladder.
+            sound.play(.select)
+            npcFacing[npc.id] = facing.opposite
+            current.metCast.insert(npc.id)
+            let lines = engine.smallTalk(with: npc.id, in: &current) + [AppModel.tournamentInvite]
+            state = current
+            tournamentAfterDialogue = true
+            phase = .dialogue(speaker: engine.castMember(npc.id)?.name, lines: lines)
+            persist()
         case .npc(let npc):
             sound.play(.select)
             npcFacing[npc.id] = facing.opposite
@@ -643,6 +661,37 @@ final class AppModel {
         withAnimation(.easeOut(duration: 0.4)) { transition = nil }
         busy = false
         persist()
+    }
+
+    // MARK: - Tournoi goslo radio
+
+    /// Opens the Tournoi's ladder.
+    func openTournament() {
+        guard state != nil, dailyClash == nil, arcadePlaying == nil else { return }
+        sound.play(.radioJingle)
+        showingTournament = true
+    }
+
+    /// Challenges a Tournoi boss: one action, then the clash, like a story clash. `finishClash` records the win.
+    func startTournament(_ opponentId: String) {
+        guard dailyClash == nil, arcadePlaying == nil, phase == .overworld, !busy, var current = state,
+              let clash = try? engine.startTournamentClash(opponentId, in: &current) else { return }
+        showingTournament = false
+        state = current
+        source = nil
+        philosophyCard = nil
+        persist()
+        busy = true
+        Task {
+            // Let the sheet slide away before the battle wipe.
+            try? await Task.sleep(for: .milliseconds(350))
+            sound.play(.wipe)
+            withAnimation(.easeIn(duration: 0.5)) { transition = .battle }
+            try? await Task.sleep(for: .milliseconds(650))
+            phase = .clash(clash)
+            withAnimation(.easeOut(duration: 0.4)) { transition = nil }
+            busy = false
+        }
     }
 
     // MARK: - Encounters & clashes
@@ -885,6 +934,45 @@ final class AppModel {
         return true
     }
 
+    /// The shop's clothes: buys a piece and puts it on.
+    @discardableResult
+    func buy(_ item: Wearable) -> String? {
+        guard var current = state else { return "Pas de carrière en cours" }
+        if let refusal = Wardrobe.refusal(item, in: current) { return refusal }
+        let before = current.stats
+        guard (try? engine.buy(item, in: &current)) != nil else { return "Impossible pour l'instant" }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.statUp)
+        Haptics.shared.play(.good)
+        persist()
+        return nil
+    }
+
+    /// Puts on (or takes off) an owned piece.
+    func wear(_ item: Wearable) {
+        guard var current = state else { return }
+        engine.wear(item, in: &current)
+        state = current
+        sound.play(.select)
+        persist()
+    }
+
+    /// The shop's decorations: buys one and puts it on a free spot of the map.
+    @discardableResult
+    func placeDecor(_ decor: Decor, plot: String) -> String? {
+        guard var current = state else { return "Pas de carrière en cours" }
+        if let refusal = engine.decorRefusal(decor, plot: plot, in: current) { return refusal }
+        let before = current.stats
+        guard (try? engine.placeDecor(decor, plot: plot, in: &current)) != nil else { return "Impossible pour l'instant" }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.levelUp)
+        Haptics.shared.play(.good)
+        persist()
+        return nil
+    }
+
     /// The shop: buys an offer. Returns why it failed, nil when it went through.
     @discardableResult
     func buy(_ offer: ShopOffer) -> String? {
@@ -984,7 +1072,11 @@ final class AppModel {
         switch phase {
         case .dialogue:
             philosophyCard = nil
-            if taxiRideOffered {
+            if tournamentAfterDialogue {
+                tournamentAfterDialogue = false
+                phase = .overworld
+                openTournament()
+            } else if taxiRideOffered {
                 // Driss drives you: same destinations as the tram.
                 taxiRideOffered = false
                 phase = .metro
@@ -1096,6 +1188,7 @@ final class AppModel {
                 history.insert(record, at: 0)
                 store.saveHistory(history)
                 checkAchievements(in: current)
+                rewardHQ(for: current)
                 store.clearCurrentRun()
                 busy = false
                 phase = .overworld
@@ -1272,6 +1365,7 @@ final class AppModel {
             store.saveHistory(history)
             store.clearCurrentRun()
             checkAchievements(in: current)
+            rewardHQ(for: current)
         } else {
             persist()
         }
@@ -1352,6 +1446,27 @@ final class AppModel {
         route = .home
     }
 
+    // MARK: - HQ
+
+    /// A finished career brings gold records home.
+    private func rewardHQ(for career: GameState) {
+        let discs = HQ.reward(for: career)
+        profile.hq.discs += discs
+        profile.hq.earned += discs
+        profile.hq.lastReward = discs
+        store.saveProfile(profile)
+    }
+
+    /// Builds or improves a room of the laverie.
+    @discardableResult
+    func upgrade(_ room: HQRoom) -> Bool {
+        guard HQ.upgrade(room, in: &profile.hq) else { return false }
+        store.saveProfile(profile)
+        sound.play(.levelUp)
+        Haptics.shared.play(.victory)
+        return true
+    }
+
     // MARK: - Arcade
 
     func isUnlocked(_ game: ArcadeGame) -> Bool { Arcade.isUnlocked(game, in: profile) }
@@ -1415,6 +1530,7 @@ final class AppModel {
         store.saveHistory(history)
         store.clearCurrentRun()
         checkAchievements(in: current)
+        rewardHQ(for: current)
         heldDirection = nil
         radioTask?.cancel()
         radioHeadline = nil

@@ -56,6 +56,13 @@ struct WorldView: View {
                     }
                 }
 
+                // The free spots for decorations: a chalk outline while empty, the decoration once bought.
+                ForEach(map.decorPlots) { plot in
+                    DecorSpot(decor: state.decor[plot.id])
+                        .position(decorPosition(plot, decor: state.decor[plot.id]))
+                        .zIndex(Double(plot.y) + 0.3)
+                }
+
                 if let spot = model.happening {
                     HappeningMarker(kind: spot.kind)
                         .position(spritePosition(spot.point))
@@ -100,6 +107,7 @@ struct WorldView: View {
             .overlay { WeatherLayer(weather: Weather.of(state.rapper.city)) }
         }
         .background(Color(red: 0.05, green: 0.05, blue: 0.06))
+        .tournamentSheet(model)
     }
 
     /// Casablanca's petit taxi waits on Le Bloc's main road.
@@ -129,6 +137,19 @@ struct WorldView: View {
             .zIndex(Double(point.y))
             .animation(.spring(response: 0.25, dampingFraction: 0.5), value: model.exclaiming)
         }
+    }
+
+    /// A decoration stands on its tile (bottom edges together); a wide one (the food truck) starts at the tile's
+    /// left edge and runs over the next tile. An empty spot's outline is centred on the tile.
+    private func decorPosition(_ plot: MapPlot, decor: Decor?) -> CGPoint {
+        let tile = WorldView.tile
+        // The painted piece lies flat on the ground: centred like the empty outline.
+        guard let decor, decor != .fresque else {
+            return CGPoint(x: (CGFloat(plot.x) + 0.5) * tile, y: (CGFloat(plot.y) + 0.5) * tile)
+        }
+        let size = DecorSpot.size(of: decor)
+        let x = size.width > tile ? CGFloat(plot.x) * tile + size.width / 2 : (CGFloat(plot.x) + 0.5) * tile
+        return CGPoint(x: x, y: CGFloat(plot.y + 1) * tile - size.height / 2 - 2)
     }
 
     private func spritePosition(_ point: TilePoint) -> CGPoint {
@@ -395,6 +416,41 @@ extension Location {
         case (.media, .hauts): "La Tour goslo"
         default: name
         }
+    }
+}
+
+/// A free spot for a decoration: a dashed chalk square while it's empty, the decoration's sprite once it's bought.
+/// You walk over it either way (it never blocks a path).
+private struct DecorSpot: View {
+    let decor: Decor?
+
+    /// The sprite's size on the map (16 pixels per tile).
+    static func size(of decor: Decor) -> CGSize {
+        let image = DecorArt.image(decor)
+        let scale = WorldView.tile / CGFloat(TileArt.size)
+        return CGSize(width: image.size.width * scale, height: image.size.height * scale)
+    }
+
+    var body: some View {
+        Group {
+            if let decor {
+                let size = DecorSpot.size(of: decor)
+                let glow = DecorArt.glow(decor).map { Color(uiColor: $0.uiColor) } ?? .clear
+                PixelImage(DecorArt.image(decor), width: size.width, height: size.height)
+                    .shadow(color: glow.opacity(0.75), radius: 6)
+            } else {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color.white.opacity(0.32), style: StrokeStyle(lineWidth: 2, dash: [5, 4]))
+                    Text("+")
+                        .font(.system(size: 12, weight: .heavy, design: .monospaced))
+                        .foregroundStyle(Color.white.opacity(0.32))
+                }
+                .frame(width: WorldView.tile * 0.74, height: WorldView.tile * 0.74)
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 

@@ -16,11 +16,13 @@ struct Story: Codable, Equatable {
     var techniques: [UnlockableTechnique]
     /// Repeatable mini-games started from event choices.
     var minigames: [Minigame]
+    /// « Le Tournoi goslo radio »: the ladder of bosses, in order.
+    var tournament: [TournamentBoss]
 
     init(chapters: [Chapter] = [], events: [GameEvent] = [], cinematics: [Cinematic] = [],
          interviews: [Interview] = [], radio: [RadioHeadline] = [], items: [Item] = [], concerts: [Concert] = [],
          negotiations: [Negotiation] = [], writings: [Writing] = [], techniques: [UnlockableTechnique] = [],
-         minigames: [Minigame] = []) {
+         minigames: [Minigame] = [], tournament: [TournamentBoss] = []) {
         self.chapters = chapters
         self.events = events
         self.cinematics = cinematics
@@ -32,6 +34,7 @@ struct Story: Codable, Equatable {
         self.writings = writings
         self.techniques = techniques
         self.minigames = minigames
+        self.tournament = tournament
     }
 
     init(from decoder: Decoder) throws {
@@ -47,6 +50,7 @@ struct Story: Codable, Equatable {
         writings = try c.decodeIfPresent([Writing].self, forKey: .writings) ?? []
         techniques = try c.decodeIfPresent([UnlockableTechnique].self, forKey: .techniques) ?? []
         minigames = try c.decodeIfPresent([Minigame].self, forKey: .minigames) ?? []
+        tournament = try c.decodeIfPresent([TournamentBoss].self, forKey: .tournament) ?? []
     }
 
     func chapter(_ number: Int) -> Chapter? { chapters.first { $0.number == number } }
@@ -437,6 +441,33 @@ struct UnlockableTechnique: Codable, Equatable, Identifiable {
     let id: String
     let secret: SecretTechnique
     let unlock: EventConditions
+    /// Artist level needed on top of `unlock` (nil = none): techniques earned by the career itself.
+    let minArtistLevel: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case id, secret, unlock
+        case minArtistLevel = "min_artist_level"
+    }
+
+    init(id: String, secret: SecretTechnique, unlock: EventConditions = EventConditions(), minArtistLevel: Int? = nil) {
+        self.id = id
+        self.secret = secret
+        self.unlock = unlock
+        self.minArtistLevel = minArtistLevel
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(String.self, forKey: .id)
+        secret = try c.decode(SecretTechnique.self, forKey: .secret)
+        unlock = try c.decodeIfPresent(EventConditions.self, forKey: .unlock) ?? EventConditions()
+        minArtistLevel = try c.decodeIfPresent(Int.self, forKey: .minArtistLevel)
+    }
+
+    func isUnlocked(in state: GameState) -> Bool {
+        if let minArtistLevel, ArtistLevel.level(xp: state.artistXP) < minArtistLevel { return false }
+        return unlock.isSatisfied(by: state)
+    }
 }
 
 struct Item: Codable, Equatable, Identifiable {

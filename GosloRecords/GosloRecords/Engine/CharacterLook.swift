@@ -121,6 +121,7 @@ extension Rapper {
         if let outfit { look.outfit = outfit }
         if let earrings { look.earrings = earrings }
         if let build { look.build = build }
+        look = dressed(look)
         if isHouseMember {
             // "Tu connais la maison": all gold.
             look.top = "#e8c547"; look.accent = "#f2f2f2"; look.bottom = "#16161a"; look.chain = true

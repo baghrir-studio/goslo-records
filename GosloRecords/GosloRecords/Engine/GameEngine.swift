@@ -157,7 +157,18 @@ struct GameEngine {
     // MARK: - Map
 
     func isUnlocked(_ location: Location, in state: GameState) -> Bool {
-        location.unlock?.isSatisfied(by: state) ?? true
+        guard location.unlock?.isSatisfied(by: state) ?? true else { return false }
+        // The story always gets through; otherwise some doors wait for the artist level.
+        return ArtistLevel.level(xp: state.artistXP) >= location.minArtistLevel || storyEvent(at: location, in: state) != nil
+    }
+
+    /// Going back to the same place again and again in a year pays less and less (no farming).
+    static let freshVisits = 2
+
+    func fatigue(at location: Location?, in state: GameState) -> Double {
+        guard let location, location != .chezToi else { return 1 }
+        let visits = state.visitsThisYear[location.rawValue, default: 0]
+        return visits <= GameEngine.freshVisits ? 1 : max(0.25, 1 - 0.25 * Double(visits - GameEngine.freshVisits))
     }
 
     /// The player can pick a location (no card awaiting, no clash, actions left).
@@ -352,6 +363,9 @@ struct GameEngine {
 
         // A story scene (`Objective.free`) doesn't spend an action.
         if !free { state.actionsLeft -= 1 }
+        if storyEvent(at: location, in: state) == nil || chosen.id != storyEvent(at: location, in: state)?.id {
+            state.visitsThisYear[location.rawValue, default: 0] += 1
+        }
         state.currentLocation = location
         state.currentEventId = chosen.id
         if let npc = chosen.npc { state.metCast.insert(npc) }
@@ -398,7 +412,12 @@ struct GameEngine {
         guard choice.isAvailable(in: state) else { throw GameEngineError.requirementNotMet }
 
         var outcome = TurnOutcome(consequence: choice.consequence)
-        outcome.add(state.applyStats(choice.effects))
+        let tired = fatigue(at: state.currentLocation, in: state)
+        let effects = tired < 1 ? choice.effects.mapValues { $0 > 0 ? max(1, Int((Double($0) * tired).rounded())) : $0 } : choice.effects
+        outcome.add(state.applyStats(effects))
+        if tired < 1, choice.effects.values.contains(where: { $0 > 0 }) {
+            outcome.notes.append("Ici, tout le monde t'a déjà vu cette année : ça rapporte moins. Va voir ailleurs.")
+        }
         state.flags.subtract(choice.clearFlags)
         state.flags.formUnion(choice.setFlags)
         for (counter, amount) in choice.counters {
@@ -987,7 +1006,7 @@ struct GameEngine {
     func availableTechniques(in state: GameState) -> [EquippableTechnique] {
         [EquippableTechnique(id: GameEngine.styleTechniqueId, secret: state.rapper.style.secret)]
             + ownedItems(in: state).compactMap { item in item.secret.map { EquippableTechnique(id: item.id, secret: $0) } }
-            + story.techniques.filter { $0.unlock.isSatisfied(by: state) }.map { EquippableTechnique(id: $0.id, secret: $0.secret) }
+            + story.techniques.filter { $0.isUnlocked(in: state) }.map { EquippableTechnique(id: $0.id, secret: $0.secret) }
     }
 
     static let styleTechniqueId = "style"
@@ -1000,7 +1019,7 @@ struct GameEngine {
     /// Announces (and equips) techniques whose unlock conditions just came true.
     private func applyTechniqueUnlocks(_ outcome: inout TurnOutcome, in state: inout GameState) {
         for technique in story.techniques
-        where !state.knownTechniques.contains(technique.id) && technique.unlock.isSatisfied(by: state) {
+        where !state.knownTechniques.contains(technique.id) && technique.isUnlocked(in: state) {
             state.knownTechniques.insert(technique.id)
             state.equippedTechnique = technique.id
             outcome.unlockedTechniques.append(technique.secret.name)
@@ -1096,6 +1115,7 @@ struct GameEngine {
             ArtistLevel.gain(15, in: &state, outcome: &outcome)
             state.counters.increment(.clashsGagnes)
             state.flags.insert("clash_gagne_\(clash.opponentId)")
+            if let boss = tournamentBoss(for: clash) { applyTournamentWin(boss, &outcome, in: &state) }
         }
         let penalty = won ? GameEngine.clashRelationPenalty.win : GameEngine.clashRelationPenalty.lose
         let applied = state.changeRelation(clash.opponentId, by: penalty)
@@ -1132,6 +1152,7 @@ struct GameEngine {
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
         checkChallenges(&outcome, in: &state)
+        applyTechniqueUnlocks(&outcome, in: &state)
         state.ending = EndingResolver.prematureEnding(for: state.stats)
         outcome.ending = state.ending
         return outcome
@@ -1156,17 +1177,21 @@ struct GameEngine {
             if state.freeCareer { outcome.add(state.stats.apply(GameEngine.agingUpkeep(turn: state.turn))) }
             outcome.add(sellAlbums(in: &state))
             payChart(&outcome, in: &state)
+            outcome.add(decorIncome(in: &state))
             checkChallenges(&outcome, in: &state)
             let limit = turnLimit(in: state)
             if !isInEpilogue(state) { state.turn = state.freeCareer ? state.turn + 1 : min(state.turn + 1, limit) }
             // Burn-out: one action only.
             state.actionsLeft = state.stats.mental < Economy.burnout ? 1 : GameState.actionsPerTurn
+            if state.isNewYear { state.visitsThisYear = [:] }
             refreshChallenges(in: &state)
             state.challengedThisSemester = []
             outcome.semesterEnded = true
             ending = EndingResolver.prematureEnding(for: state.stats)
                 ?? (!state.freeCareer && state.turn >= limit ? EndingResolver.finalEnding(for: state) : nil)
         }
+        // XP from the challenges can reach a level that unlocks a technique.
+        applyTechniqueUnlocks(&outcome, in: &state)
         state.ending = ending
         outcome.ending = ending
         return outcome

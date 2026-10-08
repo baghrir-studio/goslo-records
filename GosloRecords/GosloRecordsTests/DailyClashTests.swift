@@ -22,12 +22,13 @@ final class DailyClashTests: XCTestCase {
         let keys = days(40)
         XCTAssertEqual(keys[0], "2026-10-01")
         XCTAssertEqual(keys[31], "2026-11-01")
-        let challenges = try keys.map { try XCTUnwrap(DailyClash.challenge(for: $0, cast: world.cast)) }
-        XCTAssertEqual(DailyClash.challenge(for: keys[3], cast: world.cast), challenges[3], "même jour, même clash")
+        let challenges = try keys.map { try XCTUnwrap(DailyClash.challenge(for: $0, cast: world.cast, excluding: engine.tournamentOpponents)) }
+        XCTAssertEqual(DailyClash.challenge(for: keys[3], cast: world.cast, excluding: engine.tournamentOpponents), challenges[3], "même jour, même clash")
         XCTAssertGreaterThan(Set(challenges.map(\.opponentId)).count, 5, "ça change d'un jour à l'autre")
         XCTAssertGreaterThan(Set(challenges.map(\.district)).count, 2)
 
-        let pool = Set(DailyClash.pool(world.cast).map(\.id))
+        let pool = Set(DailyClash.pool(world.cast, excluding: engine.tournamentOpponents).map(\.id))
+        XCTAssertTrue(pool.isDisjoint(with: engine.tournamentOpponents), "les boss du Tournoi restent au Tournoi")
         XCTAssertFalse(pool.contains("le_baron"), "pas le boss final")
         XCTAssertFalse(pool.contains("pigeon_lille"))
         XCTAssertFalse(pool.contains("hater_anonyme"), "pas les figurants du terrain vague")
@@ -68,7 +69,7 @@ final class DailyClashTests: XCTestCase {
     }
 
     func testTheDailyGameIsTheSameForEveryone() throws {
-        let challenge = try XCTUnwrap(DailyClash.challenge(for: "2026-10-08", cast: world.cast))
+        let challenge = try XCTUnwrap(DailyClash.challenge(for: "2026-10-08", cast: world.cast, excluding: engine.tournamentOpponents))
         let game = engine.dailyGame(challenge, rapper: Rapper(name: "A", city: .lyon, style: .trap))
         XCTAssertTrue(Skill.allCases.allSatisfy { game.skills.level($0) == DailyClash.playerLevel })
         XCTAssertEqual(game.clash?.opponentId, challenge.opponentId)
@@ -82,7 +83,7 @@ final class DailyClashTests: XCTestCase {
         func winRate(smart: Bool) throws -> Double {
             var wins = 0, total = 0
             for (index, day) in days(60).enumerated() {
-                let challenge = try XCTUnwrap(DailyClash.challenge(for: day, cast: world.cast))
+                let challenge = try XCTUnwrap(DailyClash.challenge(for: day, cast: world.cast, excluding: engine.tournamentOpponents))
                 let profile = try XCTUnwrap(engine.castMember(challenge.opponentId)?.clash)
                 for run in 0..<10 {
                     var state = engine.dailyGame(challenge, rapper: Rapper(name: "T", city: .paris, style: Style.allCases[(index + run) % 4]))

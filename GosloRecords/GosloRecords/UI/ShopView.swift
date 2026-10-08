@@ -1,14 +1,28 @@
 import SwiftUI
 
-/// The shop: gear that stays (a level more in a clash move) and services (once a year). Paid in Argent.
+private let shopGold = Color(red: 1, green: 0.85, blue: 0.3)
+
+/// The shop: clothes you see on your character, gear for clashes, services, and decorations for the map.
+/// Everything is shown, not just listed: the character wearing the piece, the object in pixel art.
 struct ShopView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.dismiss) private var dismiss
+
+    enum Tab: String, CaseIterable, Identifiable {
+        case fringues = "Fringues", matos = "Matos", services = "Services", deco = "Déco"
+        var id: String { rawValue }
+    }
+
+    @State private var tab: Tab = .fringues
     @State private var message: String?
+    /// Decoration picked, waiting for a spot.
+    @State private var placing: Decor?
+
+    private let columns = [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HStack {
+            HStack(alignment: .center) {
                 Text("Boutique").font(.display(44))
                 Spacer()
                 Button("Fermer") { dismiss() }
@@ -19,70 +33,198 @@ struct ShopView: View {
             .padding(.top, 18)
 
             if let state = model.state {
-                Text("ARGENT : \(state.stats.argent) · à 0, c'est le retour au taf")
-                    .font(.mono(11, weight: .bold))
-                    .foregroundStyle(Theme.accent)
-                    .padding(.horizontal, Theme.gutter)
+                HStack(spacing: 12) {
+                    PixelImage(HeroSprite.bust(state.rapper.look), width: 54)
+                        .background(Color.white.opacity(0.06))
+                        .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("ARGENT \(state.stats.argent)")
+                            .font(.display(26))
+                            .foregroundStyle(shopGold)
+                        Text("NIV. \(ArtistLevel.level(xp: state.artistXP)) · à 0, c'est le retour au taf")
+                            .font(.mono(10, weight: .bold))
+                            .foregroundStyle(Theme.muted)
+                    }
+                }
+                .padding(.horizontal, Theme.gutter)
+
+                HStack(spacing: 6) {
+                    ForEach(Tab.allCases) { item in
+                        Button { tab = item; placing = nil } label: {
+                            Text(item.rawValue.uppercased())
+                                .font(.mono(11, weight: .bold))
+                                .foregroundStyle(tab == item ? Theme.background : Theme.text)
+                                .frame(maxWidth: .infinity, minHeight: 32)
+                                .background(tab == item ? Theme.accent : Color.clear)
+                                .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, Theme.gutter)
+                .padding(.top, 12)
+
                 if let message {
                     Text(message)
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                        .foregroundStyle(shopGold)
                         .padding(.horizontal, Theme.gutter)
-                        .padding(.top, 6)
+                        .padding(.top, 8)
                         .transition(.opacity)
                 }
 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Kicker(text: "Matos (pour toujours)")
-                        ForEach(Shop.gear) { offer in row(offer, in: state) }
-                        Kicker(text: "Services (une fois par an)")
-                            .padding(.top, 10)
-                        ForEach(Shop.services) { offer in row(offer, in: state) }
+                    Group {
+                        if let placing {
+                            plotPicker(for: placing, in: state)
+                        } else {
+                            LazyVGrid(columns: columns, spacing: 10) {
+                                switch tab {
+                                case .fringues: ForEach(Wardrobe.items) { wearableCard($0, in: state) }
+                                case .matos: ForEach(Shop.gear) { offerCard($0, in: state) }
+                                case .services: ForEach(Shop.services) { offerCard($0, in: state) }
+                                case .deco: ForEach(Decor.allCases) { decorCard($0, in: state) }
+                                }
+                            }
+                        }
                     }
                     .padding(.horizontal, Theme.gutter)
-                    .padding(.vertical, 16)
+                    .padding(.vertical, 14)
                 }
             }
         }
         .background(Theme.background.ignoresSafeArea())
     }
 
-    private func row(_ offer: ShopOffer, in state: GameState) -> some View {
-        let refusal = Shop.refusal(offer, in: state)
-        return Button {
-            if let refusal = model.buy(offer) {
-                withAnimation { message = refusal }
+    private func say(_ text: String) {
+        withAnimation { message = text }
+    }
+
+    // MARK: Cards
+
+    private func wearableCard(_ item: Wearable, in state: GameState) -> some View {
+        let owned = state.wardrobe.contains(item.id)
+        let worn = state.rapper.wearing?.contains(item.id) == true
+        var preview = state.rapper
+        preview.wearing = ((preview.wearing ?? []).filter { Wardrobe.item($0)?.slot != item.slot }) + [item.id]
+        let refusal = Wardrobe.refusal(item, in: state)
+        return card(image: HeroSprite.image(preview.look, facing: .down, frame: 0), imageWidth: 60,
+                    title: item.name, pitch: item.pitch,
+                    price: owned ? (worn ? "PORTÉ" : "À TOI") : "\(item.price)",
+                    locked: owned ? nil : refusal, highlighted: worn) {
+            if owned {
+                model.wear(item)
+                say(worn ? "Tu retires « \(item.name) »." : "Tu enfiles « \(item.name) ».")
             } else {
-                withAnimation { message = "« \(offer.name) » : c'est fait." }
+                say(model.buy(item) ?? "« \(item.name) » : c'est sur toi.")
             }
-        } label: {
-            HStack(alignment: .center, spacing: 12) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(offer.name.uppercased())
-                        .font(.mono(13, weight: .bold))
-                        .foregroundStyle(refusal == nil ? Theme.text : Theme.faint)
-                    Text(offer.pitch)
-                        .font(.system(size: 13))
-                        .foregroundStyle(Theme.muted)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                    if let refusal {
-                        Text(refusal.uppercased())
-                            .font(.mono(10, weight: .bold))
-                            .foregroundStyle(Theme.accent.opacity(0.8))
-                    }
+        }
+    }
+
+    private func offerCard(_ offer: ShopOffer, in state: GameState) -> some View {
+        let refusal = Shop.refusal(offer, in: state)
+        return card(image: ShopIcons.gear(offer.id), imageWidth: 56, title: offer.name, pitch: offer.pitch,
+                    price: refusal == "Déjà à toi" ? "À TOI" : "\(offer.price)", locked: refusal, highlighted: false) {
+            say(model.buy(offer) ?? "« \(offer.name) » : c'est fait.")
+        }
+    }
+
+    private func decorCard(_ decor: Decor, in state: GameState) -> some View {
+        let placed = state.decor.values.filter { $0 == decor }.count
+        let levelLock = ArtistLevel.level(xp: state.artistXP) < decor.minLevel ? "Niveau \(decor.minLevel) requis" : nil
+        let moneyLock = state.stats.argent <= decor.price ? "Pas assez d'argent" : nil
+        return card(image: ShopIcons.decor(decor), imageWidth: 56, title: decor.name, pitch: decor.pitch,
+                    price: "\(decor.price)", locked: levelLock ?? moneyLock, highlighted: placed > 0) {
+            withAnimation { placing = decor }
+        }
+    }
+
+    private func card(image: UIImage, imageWidth: CGFloat, title: String, pitch: String, price: String,
+                      locked: String?, highlighted: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                ZStack {
+                    Rectangle().fill(Color.white.opacity(0.05))
+                    PixelImage(image, width: imageWidth)
+                        .opacity(locked == nil ? 1 : 0.45)
                 }
+                .frame(height: 86)
+                Text(title.uppercased())
+                    .font(.mono(11, weight: .bold))
+                    .foregroundStyle(locked == nil ? Theme.text : Theme.faint)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                Text(pitch)
+                    .font(.system(size: 11))
+                    .foregroundStyle(Theme.muted)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 0)
-                Text("\(offer.price)")
-                    .font(.display(28))
-                    .foregroundStyle(refusal == nil ? Color(red: 1, green: 0.85, blue: 0.3) : Theme.faint)
+                Text(locked.map { "🔒 \($0)" } ?? price)
+                    .font(locked == nil ? .display(22) : .mono(10, weight: .bold))
+                    .foregroundStyle(locked == nil ? shopGold : Theme.accent.opacity(0.8))
             }
-            .padding(12)
-            .overlay(Rectangle().stroke(refusal == nil ? Theme.line : Theme.line.opacity(0.5), lineWidth: 1))
+            .padding(10)
+            .frame(maxWidth: .infinity, minHeight: 210)
+            .overlay(Rectangle().stroke(highlighted ? shopGold : Theme.line, lineWidth: highlighted ? 2 : 1))
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
-        .disabled(refusal != nil)
+        .buttonStyle(PressScaleStyle())
+        .disabled(locked != nil && locked != "Déjà à toi")
+    }
+
+    // MARK: Decorations
+
+    /// Where to put the decoration: the free spots of the districts you can reach.
+    private func plotPicker(for decor: Decor, in state: GameState) -> some View {
+        let open = Set(model.engine.openDistricts(in: state))
+        let spots = model.engine.decorPlots(in: state).filter { open.contains($0.district) }
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 12) {
+                PixelImage(ShopIcons.decor(decor), width: 48)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(decor.name.uppercased()).font(.mono(13, weight: .bold)).foregroundStyle(Theme.text)
+                    Text("Choisis où la poser · \(decor.price) d'argent").font(.system(size: 12)).foregroundStyle(Theme.muted)
+                }
+            }
+            if spots.isEmpty {
+                Text("Aucun emplacement libre pour l'instant.").font(.system(size: 13)).foregroundStyle(Theme.muted)
+            }
+            ForEach(Array(spots.enumerated()), id: \.element.plot.id) { index, spot in
+                let taken = state.decor[spot.plot.id]
+                Button {
+                    if let refusal = model.placeDecor(decor, plot: spot.plot.id) {
+                        say(refusal)
+                    } else {
+                        say("« \(decor.name) » est posée à \(spot.district.name). Va voir !")
+                        withAnimation { placing = nil }
+                    }
+                } label: {
+                    HStack {
+                        Text("\(spot.district.name.uppercased()) · EMPLACEMENT \(index + 1)")
+                            .font(.mono(12, weight: .bold))
+                            .foregroundStyle(taken == nil ? Theme.text : Theme.faint)
+                        Spacer()
+                        if let taken {
+                            PixelImage(ShopIcons.decor(taken), width: 22)
+                            Text("PRIS").font(.mono(10, weight: .bold)).foregroundStyle(Theme.faint)
+                        } else {
+                            Text("POSER ›").font(.mono(11, weight: .bold)).foregroundStyle(shopGold)
+                        }
+                    }
+                    .padding(12)
+                    .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .disabled(taken != nil)
+            }
+            Button("‹ Retour aux décos") { withAnimation { placing = nil } }
+                .font(.mono(12, weight: .bold))
+                .foregroundStyle(Theme.muted)
+                .padding(.top, 6)
+        }
     }
 }

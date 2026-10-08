@@ -247,16 +247,6 @@ struct BattleView: View {
 
             switch stage {
             case .menu:
-                if let intel = model.engine.scoutingReport(for: clash.opponentId, in: state) {
-                    Text(intelText(intel))
-                        .font(.system(size: 11, weight: .bold, design: .monospaced))
-                        .foregroundStyle(Theme.accent)
-                }
-                if clash.isBoss, case let bonus = model.engine.bossExperience(against: clash.opponentId, in: state), bonus > 0 {
-                    Text("TU CONNAIS SON JEU : +\(bonus) \(bonus > 1 ? "NIVEAUX" : "NIVEAU")")
-                        .font(.system(size: 11, weight: .bold, design: .monospaced))
-                        .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
-                }
                 if clash.playerSecretReady {
                     SecretButton(technique: model.engine.playerSecret(in: state)) { play(.secret) }
                         .transition(.scale(scale: 0.6).combined(with: .opacity))
@@ -281,8 +271,6 @@ struct BattleView: View {
                     }
                     .buttonStyle(PressScaleStyle())
                 }
-                TacticsStrip(tell: telegraphed.map { $0.tell(opponentName) }, counter: telegraphed?.counter,
-                             crowd: clash.crowdFavorite, combo: clash.lastPlayerMove.flatMap { ClashCombo.started(by: $0) })
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)], spacing: 8) {
                     let levels = model.engine.clashLevels(for: clash, in: state)
                     let combo = clash.lastPlayerMove.flatMap { ClashCombo.started(by: $0) }
@@ -330,14 +318,9 @@ struct BattleView: View {
         if telegraphed?.counter == move { badges.append("CONTRE") }
         if combo?.then == move { badges.append("COMBO") }
         if clash.crowdFavorite == move { badges.append("♥ PUBLIC") }
+        // What Yanis found out about the opponent (no more text above the moves: it's on the button).
+        if model.engine.scoutingReport(for: clash.opponentId, in: state)?.weakness == move { badges.append("FAIBLE") }
         return badges
-    }
-
-    private func intelText(_ profile: ClashProfile) -> String {
-        var parts: [String] = []
-        if let weakness = profile.weakness { parts.append("Point faible : \(weakness.label)") }
-        if let resistance = profile.resistance { parts.append("résiste à : \(resistance.label)") }
-        return "YANIS : " + parts.joined(separator: " · ")
     }
 
     // MARK: Sequencing
@@ -1322,30 +1305,3 @@ private struct TipBubble: View {
     }
 }
 
-/// Above the moves: what the opponent is about to do, what the crowd loves, the combo you can finish.
-private struct TacticsStrip: View {
-    let tell: String?
-    let counter: ClashMove?
-    let crowd: ClashMove?
-    let combo: ClashCombo?
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            if let tell, let counter {
-                Text("👁 \(tell) → \(counter.label.uppercased()) pour contrer")
-                    .foregroundStyle(Color(red: 0.55, green: 0.8, blue: 1))
-            }
-            if let combo {
-                Text("⚡ \(combo.then.label.uppercased()) maintenant : combo « \(combo.name) »")
-                    .foregroundStyle(Theme.accent)
-            }
-            if let crowd {
-                Text("♥ Ce public adore : \(crowd.label.uppercased())")
-                    .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
-            }
-        }
-        .font(.system(size: 10, weight: .bold, design: .monospaced))
-        .lineLimit(2)
-        .minimumScaleFactor(0.8)
-    }
-}
