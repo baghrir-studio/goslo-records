@@ -76,11 +76,11 @@ enum ClashTip: String, CaseIterable {
     func line(crowd: ClashMove?) -> String {
         switch self {
         case .counter:
-            "Regarde, il se trahit (la ligne 👁). Joue le coup marqué CONTRE : il ne fera qu'un tiers de ses dégâts."
+            "Il se trahit : le coup marqué CONTRE sur tes boutons le coupe net. Il ne fera qu'un tiers de ses dégâts."
         case .combo:
-            "Ton dernier coup prépare un combo. Enchaîne le coup marqué COMBO : il frappe plus fort et ne rate jamais."
+            "Ton dernier coup prépare un combo : enchaîne le coup marqué COMBO, il frappe plus fort et ne rate jamais."
         case .crowd:
-            "Chaque quartier a son public. Ici, il adore le coup \(crowd?.label.uppercased() ?? "PUBLIC") : il frappe 20 % plus fort. Pour l'adversaire aussi."
+            "Chaque quartier a son public. Ici, il adore le coup marqué ♥ PUBLIC (\(crowd?.label.uppercased() ?? "")) : 20 % plus fort. Pour l'adversaire aussi."
         }
     }
 
