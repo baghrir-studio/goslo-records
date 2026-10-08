@@ -1006,7 +1006,7 @@ struct GameEngine {
     func availableTechniques(in state: GameState) -> [EquippableTechnique] {
         [EquippableTechnique(id: GameEngine.styleTechniqueId, secret: state.rapper.style.secret)]
             + ownedItems(in: state).compactMap { item in item.secret.map { EquippableTechnique(id: item.id, secret: $0) } }
-            + story.techniques.filter { $0.unlock.isSatisfied(by: state) }.map { EquippableTechnique(id: $0.id, secret: $0.secret) }
+            + story.techniques.filter { $0.isUnlocked(in: state) }.map { EquippableTechnique(id: $0.id, secret: $0.secret) }
     }
 
     static let styleTechniqueId = "style"
@@ -1019,7 +1019,7 @@ struct GameEngine {
     /// Announces (and equips) techniques whose unlock conditions just came true.
     private func applyTechniqueUnlocks(_ outcome: inout TurnOutcome, in state: inout GameState) {
         for technique in story.techniques
-        where !state.knownTechniques.contains(technique.id) && technique.unlock.isSatisfied(by: state) {
+        where !state.knownTechniques.contains(technique.id) && technique.isUnlocked(in: state) {
             state.knownTechniques.insert(technique.id)
             state.equippedTechnique = technique.id
             outcome.unlockedTechniques.append(technique.secret.name)
@@ -1115,6 +1115,7 @@ struct GameEngine {
             ArtistLevel.gain(15, in: &state, outcome: &outcome)
             state.counters.increment(.clashsGagnes)
             state.flags.insert("clash_gagne_\(clash.opponentId)")
+            if let boss = tournamentBoss(for: clash) { applyTournamentWin(boss, &outcome, in: &state) }
         }
         let penalty = won ? GameEngine.clashRelationPenalty.win : GameEngine.clashRelationPenalty.lose
         let applied = state.changeRelation(clash.opponentId, by: penalty)
@@ -1151,6 +1152,7 @@ struct GameEngine {
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
         checkChallenges(&outcome, in: &state)
+        applyTechniqueUnlocks(&outcome, in: &state)
         state.ending = EndingResolver.prematureEnding(for: state.stats)
         outcome.ending = state.ending
         return outcome
@@ -1188,6 +1190,8 @@ struct GameEngine {
             ending = EndingResolver.prematureEnding(for: state.stats)
                 ?? (!state.freeCareer && state.turn >= limit ? EndingResolver.finalEnding(for: state) : nil)
         }
+        // XP from the challenges can reach a level that unlocks a technique.
+        applyTechniqueUnlocks(&outcome, in: &state)
         state.ending = ending
         outcome.ending = ending
         return outcome

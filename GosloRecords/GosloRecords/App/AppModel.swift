@@ -145,6 +145,11 @@ final class AppModel {
     private(set) var arcadePlaying: ArcadeGame?
     /// The philosopher's analysis being read, to share as a card (cleared when the dialogue ends).
     private(set) var philosophyCard: PhilosophyCard?
+    /// « Le Tournoi goslo radio » is open (talking to the radio host opens it).
+    var showingTournament = false
+    /// The radio host's dialogue ends on the Tournoi's ladder.
+    private var tournamentAfterDialogue = false
+    static let tournamentInvite = "Le Tournoi goslo radio t'attend. DJ Noize est aux platines, le tableau est affiché. On regarde qui tu peux défier ?"
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
         self.engine = engine
@@ -468,6 +473,17 @@ final class AppModel {
             state = current
             persist()
             phase = .dialogue(speaker: engine.castMember(npc.id)?.name, lines: lines.map { TextTemplate.render($0, for: current.rapper) })
+        case .npc(let npc) where npc.id == GameEngine.tournamentHostId && engine.storyEvent(forNPC: npc.id, in: current) == nil:
+            // The radio host runs the Tournoi goslo radio (the story still comes first when it needs them):
+            // a word from them, then the ladder.
+            sound.play(.select)
+            npcFacing[npc.id] = facing.opposite
+            current.metCast.insert(npc.id)
+            let lines = engine.smallTalk(with: npc.id, in: &current) + [AppModel.tournamentInvite]
+            state = current
+            tournamentAfterDialogue = true
+            phase = .dialogue(speaker: engine.castMember(npc.id)?.name, lines: lines)
+            persist()
         case .npc(let npc):
             sound.play(.select)
             npcFacing[npc.id] = facing.opposite
@@ -645,6 +661,37 @@ final class AppModel {
         withAnimation(.easeOut(duration: 0.4)) { transition = nil }
         busy = false
         persist()
+    }
+
+    // MARK: - Tournoi goslo radio
+
+    /// Opens the Tournoi's ladder.
+    func openTournament() {
+        guard state != nil, dailyClash == nil, arcadePlaying == nil else { return }
+        sound.play(.radioJingle)
+        showingTournament = true
+    }
+
+    /// Challenges a Tournoi boss: one action, then the clash, like a story clash. `finishClash` records the win.
+    func startTournament(_ opponentId: String) {
+        guard dailyClash == nil, arcadePlaying == nil, phase == .overworld, !busy, var current = state,
+              let clash = try? engine.startTournamentClash(opponentId, in: &current) else { return }
+        showingTournament = false
+        state = current
+        source = nil
+        philosophyCard = nil
+        persist()
+        busy = true
+        Task {
+            // Let the sheet slide away before the battle wipe.
+            try? await Task.sleep(for: .milliseconds(350))
+            sound.play(.wipe)
+            withAnimation(.easeIn(duration: 0.5)) { transition = .battle }
+            try? await Task.sleep(for: .milliseconds(650))
+            phase = .clash(clash)
+            withAnimation(.easeOut(duration: 0.4)) { transition = nil }
+            busy = false
+        }
     }
 
     // MARK: - Encounters & clashes
@@ -1025,7 +1072,11 @@ final class AppModel {
         switch phase {
         case .dialogue:
             philosophyCard = nil
-            if taxiRideOffered {
+            if tournamentAfterDialogue {
+                tournamentAfterDialogue = false
+                phase = .overworld
+                openTournament()
+            } else if taxiRideOffered {
                 // Driss drives you: same destinations as the tram.
                 taxiRideOffered = false
                 phase = .metro

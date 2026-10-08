@@ -2431,6 +2431,371 @@
           }
         }
       ]
+    },
+    {
+      "id": "lil_karaoke",
+      "name": "Lil Karaoké",
+      "role": "Tour 1 du Tournoi goslo radio",
+      "bio": "Rappe uniquement sur des instrus de karaoké, les paroles qui défilent en bas de l'écran. Il les lit. En direct. Avec conviction.",
+      "start_relation": 50,
+      "clash": {
+        "stats": {
+          "punchline": 2,
+          "flow": 5,
+          "presence": 4,
+          "story": 2
+        },
+        "weakness": "punchline",
+        "resistance": "flow",
+        "taunts": [
+          "Attends, la boule rebondit pas encore sur le mot.",
+          "Mon flow, il est synchronisé. Le tien, il est en avance de deux secondes.",
+          "Tu veux le micro ? Y en a qu'un, et il a de l'écho intégré."
+        ]
+      },
+      "look": {
+        "skin": "#e0ac69",
+        "hair": "#d4a017",
+        "top": "#ff5fa2",
+        "bottom": "#2a2a33",
+        "shoes": "#f2f2f2",
+        "accent": "#5ad1ff",
+        "hair_style": "puff",
+        "headphones": true
+      },
+      "secret": {
+        "name": "Le Couplet Défilant",
+        "line": "Lil Karaoké pointe l'écran géant. Les paroles défilent, toute la salle chante avec lui. Même toi. Surtout toi. Tu viens de te clasher tout seul.",
+        "prop": "music.mic",
+        "fx": "adlib"
+      },
+      "idle": [
+        "La boule qui rebondit sur les mots, c'est mon coach. Elle a jamais raté une mesure.",
+        "J'ai pas de cahier de rimes. J'ai un abonnement karaoké.",
+        "Reviens au Tournoi, {frérot|sœurette}. Je te mets une chanson à ta hauteur : « Joyeux anniversaire »."
+      ]
+    },
+    {
+      "id": "tonton_mixtape",
+      "name": "Tonton Mixtape",
+      "role": "Tour 2 du Tournoi goslo radio",
+      "bio": "Vend ses CD gravés à la sortie du métro depuis 2006. Chaque pochette est dessinée au Bic. Il a écoulé quarante mille exemplaires sans jamais déclarer un euro.",
+      "start_relation": 55,
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 3,
+          "presence": 5,
+          "story": 7
+        },
+        "weakness": "flow",
+        "resistance": "story",
+        "taunts": [
+          "Je t'en mets un gratuit. Le deuxième aussi. Le troisième, on en parle.",
+          "J'étais là avant le streaming. Je serai là après.",
+          "Ta carrière, je la grave sur un CD-R et je la vends cinq euros. Quatre si tu discutes."
+        ]
+      },
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#2b2b2b",
+        "top": "#3f6e3a",
+        "bottom": "#4a3b2a",
+        "shoes": "#141418",
+        "accent": "#e8c547",
+        "hair_style": "short",
+        "hat": "bucket",
+        "beard": true,
+        "outfit": "puffer",
+        "build": "heavy"
+      },
+      "secret": {
+        "name": "Le CD Gravé Offert",
+        "line": "Tonton Mixtape glisse un CD dans la poche de chaque spectateur. Volume 14. Tu es dessus, en piste cachée, en train de rater ton entrée.",
+        "prop": "opticaldisc",
+        "fx": "vinyl"
+      },
+      "idle": [
+        "Volume 14 dispo. Le volume 15 aussi, mais faut connaître quelqu'un.",
+        "Le streaming, c'est une mode. Le CD gravé, c'est une religion.",
+        "Si tu me bats au Tournoi, je te mets sur la pochette. Au Bic bleu, la couleur des champions."
+      ]
+    },
+    {
+      "id": "coach_burpee",
+      "name": "Coach Burpee",
+      "role": "Tour 3 du Tournoi goslo radio",
+      "bio": "Coach de salle de sport. Compte les mesures comme des répétitions, crie « ENCORE DEUX » à la fin de chaque couplet. Personne ne sait combien il en reste.",
+      "start_relation": 50,
+      "clash": {
+        "stats": {
+          "punchline": 4,
+          "flow": 6,
+          "presence": 8,
+          "story": 3
+        },
+        "weakness": "story",
+        "resistance": "presence",
+        "taunts": [
+          "ENCORE DEUX ! Deux punchlines, pas deux minutes !",
+          "T'as le cardio d'une enceinte Bluetooth à 3 %.",
+          "On gaine ! On respire ! On rime ! Toi, t'as oublié de respirer."
+        ],
+        "counter": "beat"
+      },
+      "look": {
+        "skin": "#c68642",
+        "hair": "#141414",
+        "top": "#ff4d2e",
+        "bottom": "#141418",
+        "shoes": "#ffd27a",
+        "accent": "#f2f2f2",
+        "hair_style": "fade",
+        "hat": "bandana",
+        "outfit": "jersey",
+        "build": "strong"
+      },
+      "secret": {
+        "name": "La Série de Trop",
+        "line": "Coach Burpee lance une série de burpees en rythme. La basse suit chaque saut. Au vingtième, le sol tremble ; au trentième, tu as des courbatures sans avoir bougé.",
+        "prop": "figure.strengthtraining.traditional",
+        "fx": "bass"
+      },
+      "idle": [
+        "Échauffement : dix rimes en « -tion ». Allez, on y va. Motivation ! Respiration ! Humiliation !",
+        "Le rap, c'est du cardio. Le clash, c'est du fractionné.",
+        "Tu reviens quand tu veux au Tournoi. Je te prépare un programme : trois couplets, zéro pause."
+      ]
+    },
+    {
+      "id": "maitre_objection",
+      "name": "Maître Objection",
+      "role": "Tour 4 du Tournoi goslo radio",
+      "bio": "Avocate pénaliste le jour, rappeuse la nuit. Plaide en alexandrins, cite le Code pénal en double-croche. N'a jamais perdu un procès, ni un battle. Facture à l'heure.",
+      "start_relation": 45,
+      "clash": {
+        "stats": {
+          "punchline": 7,
+          "flow": 5,
+          "presence": 4,
+          "story": 8
+        },
+        "weakness": "presence",
+        "resistance": "story",
+        "taunts": [
+          "Objection : ta rime est irrecevable.",
+          "Je demande au public de retenir contre toi ton dernier couplet.",
+          "Ma cliente, c'est moi. Et ma cliente n'a rien à se reprocher. Toi, par contre…"
+        ],
+        "counter": "pen"
+      },
+      "look": {
+        "skin": "#5a3825",
+        "hair": "#0f0f12",
+        "top": "#111114",
+        "bottom": "#111114",
+        "shoes": "#141418",
+        "accent": "#f2f2f2",
+        "hair_style": "bun",
+        "glasses": true,
+        "outfit": "jacket",
+        "feminine": true,
+        "earrings": true
+      },
+      "secret": {
+        "name": "Objection Retenue",
+        "line": "Maître Objection sort ton casier de punchlines ratées, surligne chaque faute au stylo rouge et requiert la peine maximale. Le public, constitué en jury, délibère trois secondes.",
+        "prop": "building.columns.fill",
+        "fx": "redpen"
+      },
+      "idle": [
+        "Tout ce que tu rappes pourra être retenu contre toi.",
+        "Mes honoraires, c'est deux cents euros de l'heure. Le clash, je le fais gratuit : c'est du bénévolat pédagogique.",
+        "Je te reverrai au Tournoi, {mon cher confrère|ma chère consœur}. Prépare ta défense."
+      ]
+    },
+    {
+      "id": "npc_404",
+      "name": "NPC_404",
+      "role": "Tour 5 du Tournoi goslo radio",
+      "bio": "Streamer anonyme, rappe derrière un avatar de manga qui bugue une image sur trois. Trois cent mille abonnés, aucune photo, une voix passée au vocodeur. Sa mère pense qu'il est comptable.",
+      "start_relation": 50,
+      "clash": {
+        "stats": {
+          "punchline": 6,
+          "flow": 8,
+          "presence": 5,
+          "story": 7
+        },
+        "weakness": "presence",
+        "resistance": "punchline",
+        "taunts": [
+          "Chat, il est sérieux, là ? Mettez des « F » pour {lui|elle}.",
+          "T'as 200 ms de latence dans le flow, {frère|ma sœur}.",
+          "Ta punchline, je l'ai déjà vue passer en commentaire. En 2019."
+        ]
+      },
+      "look": {
+        "skin": "#f1c27d",
+        "hair": "#7b5cff",
+        "top": "#16161a",
+        "bottom": "#23232a",
+        "shoes": "#5ad1ff",
+        "accent": "#7b5cff",
+        "hair_style": "long",
+        "headphones": true,
+        "glasses": true,
+        "build": "slim"
+      },
+      "secret": {
+        "name": "Le Rage Quit",
+        "line": "NPC_404 débranche tout au milieu de ta réplique. Écran noir. Le chat spamme des crânes. Quand l'image revient, il a gagné trois mille abonnés et toi tu parles tout seul.",
+        "prop": "gamecontroller.fill",
+        "fx": "glitch"
+      },
+      "idle": [
+        "Je stream en ce moment même. Dis bonjour. Non, pas comme ça. Voilà, t'es un mème.",
+        "Mon avatar a un meilleur flow que moi. Je lui verse 30 % des revenus.",
+        "Le Tournoi, c'est mon contenu de la semaine. Merci d'avance pour les vues."
+      ]
+    },
+    {
+      "id": "le_sommelier",
+      "name": "Le Sommelier",
+      "role": "Tour 6 du Tournoi goslo radio",
+      "bio": "Ancien sommelier d'un palace, reconverti dans le battle. Fait tourner chaque couplet dans sa bouche avant de le recracher. Décrit ton flow avec des notes de cuir et de regret.",
+      "start_relation": 45,
+      "clash": {
+        "stats": {
+          "punchline": 8,
+          "flow": 7,
+          "presence": 8,
+          "story": 6
+        },
+        "weakness": "story",
+        "resistance": "punchline",
+        "taunts": [
+          "Ton couplet ? Bouchonné. Je le renvoie en cuisine.",
+          "Une attaque franche, une finale courte. On dirait un vin de supermarché.",
+          "Laisse-moi deviner : millésime de l'année, cépage « j'ai écouté trois albums »."
+        ],
+        "counter": "beat"
+      },
+      "look": {
+        "skin": "#ffdbac",
+        "hair": "#8a8a8a",
+        "top": "#5c1a2b",
+        "bottom": "#111114",
+        "shoes": "#141418",
+        "accent": "#e8c547",
+        "hair_style": "short",
+        "beard": true,
+        "outfit": "jacket",
+        "chain": true
+      },
+      "secret": {
+        "name": "La Dégustation à l'Aveugle",
+        "line": "Le Sommelier éteint les projecteurs, garde un seul spot sur lui, et goûte ton dernier couplet à voix haute. « Notes de carton, finale amère, aucune longueur. » La salle applaudit le diagnostic.",
+        "prop": "wineglass.fill",
+        "fx": "spotlight"
+      },
+      "idle": [
+        "Le rap se boit chambré. Le tien, on l'a servi trop chaud.",
+        "J'ai goûté le dernier album de Lingot. Beaucoup de bouche, aucun nez.",
+        "Au Tournoi, je te servirai un verre. Ce sera ta défaite, en magnum."
+      ]
+    },
+    {
+      "id": "la_duchesse",
+      "name": "La Duchesse",
+      "role": "Tour 7 du Tournoi goslo radio",
+      "bio": "Reine des battles des années 2000, retirée sans jamais avoir été battue. Sort de sa retraite tous les dix ans pour rappeler qui a inventé la moitié de tes punchlines.",
+      "start_relation": 40,
+      "clash": {
+        "stats": {
+          "punchline": 9,
+          "flow": 7,
+          "presence": 9,
+          "story": 8
+        },
+        "weakness": "flow",
+        "resistance": "presence",
+        "taunts": [
+          "J'ai écrit cette rime en 2004. Tu me dois des droits.",
+          "{Mon petit|Ma petite}, j'ai clashé des gens qui t'ont inspiré{|e}.",
+          "La couronne, je l'ai jamais posée. Je l'ai juste rangée."
+        ],
+        "counter": "beat"
+      },
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#f2f2f2",
+        "top": "#6b2fa0",
+        "bottom": "#111114",
+        "shoes": "#e8c547",
+        "accent": "#e8c547",
+        "hair_style": "braids",
+        "chain": true,
+        "earrings": true,
+        "outfit": "puffer",
+        "feminine": true
+      },
+      "secret": {
+        "name": "Le Retour de la Reine",
+        "line": "La Duchesse retire ses lunettes, en silence. Une seule larme coule, en couleur, sur la salle en noir et blanc. Elle murmure le nom de tous ceux qu'elle a battus. Le tien est déjà sur la liste.",
+        "prop": "crown.fill",
+        "fx": "tear"
+      },
+      "idle": [
+        "J'ai pris ma retraite en 2011. Je l'ai reprise en 2016. Je la reprendrai après t'avoir parlé.",
+        "Les jeunes m'appellent « la légende ». Les vieux m'appellent « la patronne ». Toi, tu m'appelles pas.",
+        "Le Tournoi m'a envoyé un carton d'invitation. J'ai dit oui pour voir si tu tiens debout."
+      ]
+    },
+    {
+      "id": "algo_rythme",
+      "name": "L'Algo-Rythme",
+      "role": "Finale du Tournoi goslo radio",
+      "bio": "Un rappeur généré par ordinateur, entraîné sur tous les couplets jamais écrits. Il a lu tes textes. Il en a fait une moyenne. Il ne transpire pas, il ne doute pas, il ne sait pas ce qu'est une mère.",
+      "start_relation": 30,
+      "clash": {
+        "stats": {
+          "punchline": 10,
+          "flow": 10,
+          "presence": 8,
+          "story": 7
+        },
+        "weakness": "story",
+        "resistance": "punchline",
+        "taunts": [
+          "Probabilité que tu gagnes : 3,2 %. Arrondie à l'inférieur.",
+          "J'ai généré quatre mille punchlines pendant ta respiration.",
+          "Ton style est dans mon jeu de données. Merci pour ta contribution."
+        ],
+        "counter": "pen"
+      },
+      "look": {
+        "skin": "#d9d9e3",
+        "hair": "#d9d9e3",
+        "top": "#f2f2f2",
+        "bottom": "#d9d9e3",
+        "shoes": "#f2f2f2",
+        "accent": "#5ad1ff",
+        "hair_style": "bald",
+        "glasses": true,
+        "build": "slim"
+      },
+      "secret": {
+        "name": "La Mise à Jour Forcée",
+        "line": "L'Algo-Rythme affiche « Mise à jour 1 sur 47 ». Des rayons bleus balaient la salle, chaque spectateur oublie ton nom pendant la barre de progression. À 100 %, il a ton flow, en mieux.",
+        "prop": "cpu",
+        "fx": "rays"
+      },
+      "idle": [
+        "Bonjour. Je suis l'Algo-Rythme. Je ne dors jamais. Je ne fais que rapper.",
+        "J'ai analysé ta carrière. Recommandation : continuer. Statistiquement, tu vas perdre.",
+        "Mon point faible, c'est le vécu. J'ai demandé à ma base de données ce qu'est une mère. Elle cherche encore."
+      ]
     }
   ]
 }
