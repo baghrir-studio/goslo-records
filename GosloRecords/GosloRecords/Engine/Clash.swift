@@ -185,6 +185,10 @@ struct ClashLogEntry: Codable, Equatable, Identifiable {
     var charge: Double? = nil
     /// Rhymes chained in a freestyle (this round was a freestyle).
     var freestyle: Int? = nil
+    /// Combo landed with this move (its name).
+    var combo: String? = nil
+    /// The player saw this move coming and countered it.
+    var parried: Bool? = nil
 }
 
 /// A boss's secret technique, waiting for the player to counter it (tap fast).
@@ -240,6 +244,12 @@ struct ClashState: Codable, Equatable {
     var pendingCounter: PendingCounter?
     /// The freestyle has been played (once per clash).
     var freestyleUsed = false
+    /// The player's previous move (for combos).
+    var lastPlayerMove: ClashMove?
+    /// The opponent's next move, shown to the player as a tell.
+    var nextOpponentMove: ClashMove?
+    /// The move this crowd loves (both sides hit harder with it).
+    var crowdFavorite: ClashMove?
 
     init(spec: ClashSpec, isWild: Bool = false, levelBonus: Int? = nil) {
         self.spec = spec
@@ -250,6 +260,7 @@ struct ClashState: Codable, Equatable {
     enum CodingKeys: String, CodingKey {
         case spec, isWild, levelBonus, playerHype, opponentHype, round, playerBoosted, opponentBoosted, log
         case playerMeter, opponentMeter, playerSecretUsed, opponentSecretUsed, pendingCounter, freestyleUsed
+        case lastPlayerMove, nextOpponentMove, crowdFavorite
     }
 
     init(from decoder: Decoder) throws {
@@ -270,6 +281,9 @@ struct ClashState: Codable, Equatable {
         opponentSecretUsed = try c.decodeIfPresent(Bool.self, forKey: .opponentSecretUsed) ?? false
         pendingCounter = try c.decodeIfPresent(PendingCounter.self, forKey: .pendingCounter)
         freestyleUsed = try c.decodeIfPresent(Bool.self, forKey: .freestyleUsed) ?? false
+        lastPlayerMove = try c.decodeIfPresent(ClashMove.self, forKey: .lastPlayerMove)
+        nextOpponentMove = try c.decodeIfPresent(ClashMove.self, forKey: .nextOpponentMove)
+        crowdFavorite = try c.decodeIfPresent(ClashMove.self, forKey: .crowdFavorite)
     }
 
     var movesUsed: Set<ClashMove> { Set(log.filter { $0.byPlayer && $0.secret == nil }.map(\.move)) }
@@ -365,15 +379,28 @@ enum ClashEngine {
                                            impact: impact, line: Freestyle.line(rhymes: rhymes),
                                            freestyle: min(max(rhymes, 0), Freestyle.maxRhymes)))
         } else {
-            let (playerDamage, playerImpact) = damage(move: playerMove, level: playerLevel(playerMove.skill),
+            let combo = ClashCombo.find(after: state.lastPlayerMove, with: playerMove)
+            var bonus = combo?.multiplier ?? 1
+            if playerMove == state.crowdFavorite { bonus *= ClashTactics.crowdBonus }
+            var (playerDamage, playerImpact) = damage(move: playerMove, level: playerLevel(playerMove.skill),
                                                       boosted: state.playerBoosted,
-                                                      multiplier: multiplier(for: playerMove, against: opponent), using: &rng)
+                                                      multiplier: multiplier(for: playerMove, against: opponent) * bonus,
+                                                      using: &rng)
+            if let combo, playerImpact == .miss {
+                // A combo never misses: the setup did the work.
+                playerDamage = max(1, Int((Double(playerMove.baseDamage) * combo.multiplier).rounded()))
+                playerImpact = .strong
+            } else if combo != nil {
+                playerImpact = .strong
+            }
             state.playerBoosted = playerMove == .presence && playerImpact != .miss
             state.opponentHype = max(0, state.opponentHype - playerDamage)
             state.playerMeter += playerDamage
             state.log.append(ClashLogEntry(id: state.log.count, byPlayer: true, move: playerMove, damage: playerDamage,
-                                           impact: playerImpact, line: ClashLines.player(playerMove, impact: playerImpact, using: &rng)))
+                                           impact: playerImpact, line: ClashLines.player(playerMove, impact: playerImpact, using: &rng),
+                                           combo: combo?.name))
         }
+        state.lastPlayerMove = playerSecret != nil || playerFreestyle != nil ? nil : playerMove
 
         if state.opponentHype > 0 {
             if state.opponentSecretReady {
@@ -390,10 +417,15 @@ enum ClashEngine {
                                                    impact: .strong, line: secret.line, secret: secret))
                 }
             } else {
-                let move = opponentMove(opponent, using: &rng)
+                let tell = ClashTactics.telegraphed(state)
+                let move = tell ?? opponentMove(opponent, using: &rng)
+                // Saw it coming: the right answer takes most of the sting out.
+                let parried = tell != nil && playerSecret == nil && playerFreestyle == nil && playerMove == move.counter
+                var factor = state.damageFactor * (parried ? ClashTactics.parryFactor : 1)
+                if move == state.crowdFavorite { factor *= ClashTactics.crowdBonus }
                 let (opponentDamage, opponentImpact) = damage(move: move, level: opponent.stat(move),
                                                               boosted: state.opponentBoosted,
-                                                              multiplier: state.damageFactor, using: &rng)
+                                                              multiplier: factor, using: &rng)
                 state.opponentBoosted = move == .presence && opponentImpact != .miss
                 state.playerHype = max(0, state.playerHype - opponentDamage)
                 state.opponentMeter += opponentDamage
@@ -401,9 +433,11 @@ enum ClashEngine {
                                                impact: opponentImpact,
                                                line: ClashLines.opponent(move, impact: opponentImpact, name: opponentName,
                                                                          taunts: opponent.taunts, callbacks: callbacks,
-                                                                         using: &rng)))
+                                                                         using: &rng),
+                                               parried: parried ? true : nil))
             }
         }
+        state.nextOpponentMove = opponentMove(opponent, using: &rng)
         state.round += 1
     }
 

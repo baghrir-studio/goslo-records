@@ -171,6 +171,12 @@
       "y": 8,
       "facing": "up",
       "from_chapter": 2
+    },
+    {
+      "id": "philosophe_goslo",
+      "x": 13,
+      "y": 10,
+      "facing": "left"
     }
   ],
   "metro": {

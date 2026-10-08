@@ -80,11 +80,14 @@ private struct SemesterCard: View {
 
 /// Inside a building: the pixel room, the character you meet, you at the entrance.
 struct InteriorView: View {
+    @Environment(AppModel.self) private var model
     let location: Location
     let npc: CharacterLook?
     let player: CharacterLook
     var showsBanner = true
     @State private var bannerIn = false
+    @State private var posterTaps = 0
+    @State private var onAir = false
 
     var body: some View {
         GeometryReader { geo in
@@ -102,8 +105,41 @@ struct InteriorView: View {
                     }
                     SpriteView(look: player, facing: .up, size: tile * 1.3)
                         .position(x: tile * 5, y: tile * 6.2)
+                    if location == .media {
+                        // goslo radio's poster on the studio wall. Tap it: something might happen.
+                        Button {
+                            posterTaps += 1
+                            if posterTaps == Secrets.jingleTaps {
+                                model.playSecretJingle()
+                                withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) { onAir = true }
+                            }
+                        } label: {
+                            VStack(spacing: 3) {
+                                RadioLogo(pixel: 0.9, color: Color(uiColor: Location.media.neon.uiColor))
+                                Text("@goslo_radio").font(.system(size: 7, weight: .heavy, design: .monospaced))
+                                    .foregroundStyle(.white.opacity(0.8))
+                            }
+                            .padding(6)
+                            .background(Color.black.opacity(0.85))
+                            .overlay(Rectangle().stroke(Color(uiColor: Location.media.neon.uiColor), lineWidth: 1))
+                            .rotationEffect(.degrees(-3))
+                        }
+                        .buttonStyle(.plain)
+                        .position(x: tile * 8.2, y: tile * 1.9)
+                    }
                 }
                 .offset(y: top)
+                if onAir {
+                    VStack(spacing: 4) {
+                        Text("● ON AIR").font(.system(size: 12, weight: .heavy, design: .monospaced)).foregroundStyle(.red)
+                        Text("goslo radio, la vraie : @goslo_radio").font(.system(size: 13, weight: .bold)).foregroundStyle(.white)
+                    }
+                    .padding(10)
+                    .background(Color.black.opacity(0.9))
+                    .overlay(Rectangle().stroke(Color.red, lineWidth: 2))
+                    .position(x: geo.size.width / 2, y: top + tile * 4.6)
+                    .transition(.scale.combined(with: .opacity))
+                }
                 Text(location.name.uppercased())
                     .font(.system(size: 13, weight: .heavy, design: .monospaced))
                     .foregroundStyle(.white)

@@ -130,6 +130,7 @@ final class AppModel {
     /// Driss offered a ride: the next tap opens the destinations.
     private var taxiRideOffered = false
     private var taxiTalks = 0
+    private var bunkerKnocks = 0
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
         self.engine = engine
@@ -362,7 +363,32 @@ final class AppModel {
             talkToTaxi(current)
             return
         }
+        // Secret: knock on the Bunker's wall, right next to its door, until a brick gives way.
+        let front = position.moved(facing)
+        if current.district == .bloc, !current.flags.contains(Secrets.archiveFlag), let studio = map.door(for: .studio),
+           map.tile(at: front) == .wall, front.y == studio.y, abs(front.x - studio.x) == 1 {
+            bunkerKnocks += 1
+            sound.play(.tap)
+            if bunkerKnocks >= Secrets.bunkerKnocks {
+                current.flags.insert(Secrets.archiveFlag)
+                state = current
+                persist()
+                sound.play(.quest)
+                phase = .dialogue(speaker: nil, lines: Secrets.archiveLines)
+            } else if bunkerKnocks == Secrets.bunkerKnocks / 2 {
+                phase = .dialogue(speaker: nil, lines: ["Toc. Toc. Ce mur sonne creux…"])
+            }
+            return
+        }
         switch OverworldRules.interaction(from: position, facing: facing, on: map) {
+        case .npc(let npc) where npc.id == Philosopher.id:
+            // goslo radio's philosopher reads your latest punchline.
+            sound.play(.select)
+            npcFacing[npc.id] = facing.opposite
+            let lines = engine.philosopherReading(in: &current)
+            state = current
+            persist()
+            phase = .dialogue(speaker: engine.castMember(npc.id)?.name, lines: lines.map { TextTemplate.render($0, for: current.rapper) })
         case .npc(let npc):
             sound.play(.select)
             npcFacing[npc.id] = facing.opposite
@@ -431,6 +457,16 @@ final class AppModel {
         }
         phase = .dialogue(speaker: driss?.name ?? "Le taxi",
                           lines: lines.map { TextTemplate.render($0, for: current.rapper) })
+    }
+
+    /// Secret: the goslo radio poster in the studio, tapped enough times, plays the hidden jingle.
+    func playSecretJingle() {
+        sound.play(.radioJingle)
+        Haptics.shared.play(.victory)
+        guard var current = state, !current.flags.contains(Secrets.jingleFlag) else { return }
+        current.flags.insert(Secrets.jingleFlag)
+        state = current
+        persist()
     }
 
     func closeMetro() {

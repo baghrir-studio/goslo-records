@@ -58,10 +58,10 @@ private struct AchievementRow: View {
                 .background(done ? gold : Color.clear)
                 .overlay(Rectangle().stroke(done ? gold : Theme.line, lineWidth: 1))
             VStack(alignment: .leading, spacing: 3) {
-                Text(achievement.title.uppercased())
+                Text(done || !achievement.isSecret ? achievement.title.uppercased() : "SUCCÈS SECRET")
                     .font(.mono(13, weight: .bold))
                     .foregroundStyle(done ? Theme.text : Theme.muted)
-                Text(achievement.detail)
+                Text(done || !achievement.isSecret ? achievement.detail : "???")
                     .font(.system(size: 13))
                     .foregroundStyle(Theme.muted)
                 if let heritage = achievement.heritage {
