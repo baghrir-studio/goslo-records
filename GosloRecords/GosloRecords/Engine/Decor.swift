@@ -109,8 +109,14 @@ struct PlacedDecor: Codable, Equatable, Identifiable {
     let decor: Decor
     let district: District
     /// Bottom-left tile of the footprint.
-    let x: Int
-    let y: Int
+    var x: Int
+    var y: Int
+    /// Buildings go up to `Decor.maxLevel`; each level pays more.
+    var level: Int = 1
+    /// Money it made, waiting for the player to come and pick it up (capped).
+    var stored: Int = 0
+    /// Everything spent on it (purchase and upgrades), for the resale price.
+    var invested: Int = 0
 
     var anchor: TilePoint { TilePoint(x: x, y: y) }
 
@@ -119,6 +125,58 @@ struct PlacedDecor: Codable, Equatable, Identifiable {
         let size = decor.footprint
         return (0..<size.height).flatMap { dy in (0..<size.width).map { dx in TilePoint(x: x + dx, y: y - dy) } }
     }
+
+    /// What it gives each turn at its level.
+    var perTurn: [StatKind: Int] { decor.perTurn(level: level) }
+
+    /// The most money it keeps waiting: three periods' worth. Come back or it's lost.
+    var storageCap: Int { (perTurn[.argent] ?? 0) * 3 }
+
+    /// What you get back when you sell it: half of what you put in.
+    var resale: Int { invested / 2 }
+
+    init(id: Int, decor: Decor, district: District, x: Int, y: Int, level: Int = 1, stored: Int = 0, invested: Int? = nil) {
+        self.id = id
+        self.decor = decor
+        self.district = district
+        self.x = x
+        self.y = y
+        self.level = level
+        self.stored = stored
+        self.invested = invested ?? decor.price
+    }
+
+    private enum CodingKeys: String, CodingKey { case id, decor, district, x, y, level, stored, invested }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(Int.self, forKey: .id)
+        decor = try c.decode(Decor.self, forKey: .decor)
+        district = try c.decode(District.self, forKey: .district)
+        x = try c.decode(Int.self, forKey: .x)
+        y = try c.decode(Int.self, forKey: .y)
+        level = try c.decodeIfPresent(Int.self, forKey: .level) ?? 1
+        stored = try c.decodeIfPresent(Int.self, forKey: .stored) ?? 0
+        invested = try c.decodeIfPresent(Int.self, forKey: .invested) ?? decor.price
+    }
+}
+
+extension Decor {
+    static let maxLevel = 3
+
+    /// Income at a level: ×1.5 at level 2, ×2 at level 3 (rounded up).
+    func perTurn(level: Int) -> [StatKind: Int] {
+        perTurn.mapValues { ($0 * (level + 1) + 1) / 2 }
+    }
+
+    /// Price to go from `level` to `level + 1` (nil: can't go higher, or it's not a building).
+    func upgradeCost(from level: Int) -> Int? {
+        guard isBuilding, level < Decor.maxLevel else { return nil }
+        return (price * (level + 1) + 2) / 3
+    }
+
+    /// Artist level needed to upgrade to `level + 1`.
+    func upgradeMinLevel(from level: Int) -> Int { min(minLevel + level, ArtistLevel.thresholds.count) }
 }
 
 /// Buying goslo radio itself: the end of the road for a career.
@@ -164,9 +222,16 @@ extension GameEngine {
 
     /// Why the decoration can't go there (nil: it can). The player's tile and the way to every door,
     /// character and the metro must stay free.
-    func placementRefusal(_ decor: Decor, at anchor: TilePoint, in state: GameState, player: TilePoint) -> String? {
-        if ArtistLevel.level(xp: state.artistXP) < decor.minLevel { return "Niveau \(decor.minLevel) requis" }
-        if state.stats.argent <= decor.price { return "Pas assez d'argent" }
+    /// `moving`: a decoration already owned being moved (no price, its old spot counts as free).
+    func placementRefusal(_ decor: Decor, at anchor: TilePoint, in original: GameState, player: TilePoint,
+                          moving: Int? = nil) -> String? {
+        var state = original
+        if let moving {
+            state.placed.removeAll { $0.id == moving }
+        } else {
+            if ArtistLevel.level(xp: state.artistXP) < decor.minLevel { return "Niveau \(decor.minLevel) requis" }
+            if state.stats.argent <= decor.price { return "Pas assez d'argent" }
+        }
         guard let map = currentMap(in: state) else { return "Pas de carte" }
         let probe = PlacedDecor(id: 0, decor: decor, district: state.district, x: anchor.x, y: anchor.y)
         let taken = decorTiles(in: state.district, state: state)
@@ -223,6 +288,62 @@ extension GameEngine {
         state.placed.removeAll { $0.id == id }
     }
 
+    /// Picks up the money a decoration made. Returns how much.
+    @discardableResult
+    func collect(_ id: Int, in state: inout GameState) -> Int {
+        guard let index = state.placed.firstIndex(where: { $0.id == id }), state.placed[index].stored > 0 else { return 0 }
+        let amount = state.placed[index].stored
+        state.placed[index].stored = 0
+        return state.stats.apply([.argent: amount])[.argent] ?? 0
+    }
+
+    /// Why it can't be upgraded now (nil: it can).
+    func upgradeRefusal(_ id: Int, in state: GameState) -> String? {
+        guard let item = state.placed.first(where: { $0.id == id }) else { return "Introuvable" }
+        guard item.decor.isBuilding else { return "Seuls les bâtiments s'améliorent" }
+        guard let cost = item.decor.upgradeCost(from: item.level) else { return "Niveau max" }
+        let needed = item.decor.upgradeMinLevel(from: item.level)
+        if ArtistLevel.level(xp: state.artistXP) < needed { return "Niveau \(needed) requis" }
+        if state.stats.argent <= cost { return "Pas assez d'argent" }
+        return nil
+    }
+
+    /// Upgrades a building one level.
+    @discardableResult
+    func upgrade(_ id: Int, in state: inout GameState) throws -> [StatKind: Int] {
+        guard !state.isOver, upgradeRefusal(id, in: state) == nil,
+              let index = state.placed.firstIndex(where: { $0.id == id }),
+              let cost = state.placed[index].decor.upgradeCost(from: state.placed[index].level) else {
+            throw GameEngineError.cannotBuy
+        }
+        state.placed[index].level += 1
+        state.placed[index].invested += cost
+        return state.stats.apply([.argent: -cost])
+    }
+
+    /// Sells a decoration: half of what you put in, plus what it had waiting.
+    @discardableResult
+    func sell(_ id: Int, in state: inout GameState) -> [StatKind: Int] {
+        guard let item = state.placed.first(where: { $0.id == id }) else { return [:] }
+        state.placed.removeAll { $0.id == id }
+        return state.stats.apply([.argent: item.resale + item.stored])
+    }
+
+    /// Why a decoration you already own can't move there (nil: it can). Same rules as a new one, without paying.
+    func moveRefusal(_ id: Int, to anchor: TilePoint, in state: GameState, player: TilePoint) -> String? {
+        guard let item = state.placed.first(where: { $0.id == id }) else { return "Introuvable" }
+        return placementRefusal(item.decor, at: anchor, in: state, player: player, moving: id)
+    }
+
+    /// Moves a decoration to another spot of the current district (free).
+    func move(_ id: Int, to anchor: TilePoint, in state: inout GameState, player: TilePoint) throws {
+        guard moveRefusal(id, to: anchor, in: state, player: player) == nil,
+              let index = state.placed.firstIndex(where: { $0.id == id }) else { throw GameEngineError.cannotBuy }
+        let old = state.placed[index]
+        state.placed[index] = PlacedDecor(id: old.id, decor: old.decor, district: state.district, x: anchor.x, y: anchor.y,
+                                          level: old.level, stored: old.stored, invested: old.invested)
+    }
+
     /// Buys goslo radio.
     func buyRadio(in state: inout GameState) throws -> [StatKind: Int] {
         guard RadioDeal.refusal(in: state) == nil else { throw GameEngineError.cannotBuy }
@@ -256,11 +377,21 @@ extension GameEngine {
         return state.stats.apply([.argent: -decor.price])
     }
 
-    /// End of a turn: what the decorations bring.
+    /// End of a turn: what the decorations bring. Money from placed ones waits on the spot until you pick it up.
     func decorIncome(in state: inout GameState) -> [StatKind: Int] {
         var total: [StatKind: Int] = [:]
-        for decor in Array(state.decor.values) + state.placed.map(\.decor) {
+        for decor in state.decor.values {
             for (kind, value) in decor.perTurn { total[kind, default: 0] += value }
+        }
+        for index in state.placed.indices {
+            let item = state.placed[index]
+            for (kind, value) in item.perTurn {
+                if kind == .argent {
+                    state.placed[index].stored = min(item.stored + value, item.storageCap)
+                } else {
+                    total[kind, default: 0] += value
+                }
+            }
         }
         if state.flags.contains(RadioDeal.flag) {
             for (kind, value) in RadioDeal.perTurn { total[kind, default: 0] += value }

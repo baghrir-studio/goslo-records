@@ -72,7 +72,11 @@ final class PlacementTests: XCTestCase {
         try engine.place(.boutiqueMerch, at: spot, in: &state, player: map.spawn)
         state.stats = Stats(streams: 50, credibilite: 50, argent: 50, mental: 50)
         let income = engine.decorIncome(in: &state)
-        XCTAssertEqual(income[.argent], Decor.boutiqueMerch.perTurn[.argent], "la boutique rapporte chaque période")
+        XCTAssertNil(income[.argent], "l'argent attend dans la boutique")
+        XCTAssertEqual(state.placed[0].stored, Decor.boutiqueMerch.perTurn[.argent], "la boutique rapporte chaque période")
+        XCTAssertEqual(engine.collect(state.placed[0].id, in: &state), 4)
+        XCTAssertEqual(state.stats.argent, 54)
+        XCTAssertEqual(state.placed[0].stored, 0)
         XCTAssertTrue(Decor.allCases.filter(\.isBuilding).allSatisfy { $0.price >= 40 }, "les bâtiments sont chers")
     }
 
@@ -90,7 +94,59 @@ final class PlacementTests: XCTestCase {
         XCTAssertGreaterThan(engine.singleScore(single, in: state), engine.singleScore(single, in: plain), "ta radio pousse tes sons")
     }
 
+    func testMoneyWaitsButNotForever() throws {
+        var state = game()
+        let map = try XCTUnwrap(engine.currentMap(in: state))
+        let spot = try XCTUnwrap(freeSpots(for: .studioPerso, in: state, player: map.spawn).first)
+        try engine.place(.studioPerso, at: spot, in: &state, player: map.spawn)
+        for _ in 0..<10 { engine.decorIncome(in: &state) }
+        XCTAssertEqual(state.placed[0].stored, 6, "trois périodes au maximum : passe récupérer")
+    }
+
+    func testUpgradeMoveAndSell() throws {
+        var state = game()
+        let map = try XCTUnwrap(engine.currentMap(in: state))
+        let spots = freeSpots(for: .studioPerso, in: state, player: map.spawn)
+        try engine.place(.studioPerso, at: try XCTUnwrap(spots.first), in: &state, player: map.spawn)
+        let id = state.placed[0].id
+
+        state.stats = Stats(streams: 50, credibilite: 50, argent: 99, mental: 50)
+        let cost = try XCTUnwrap(Decor.studioPerso.upgradeCost(from: 1))
+        try engine.upgrade(id, in: &state)
+        XCTAssertEqual(state.placed[0].level, 2)
+        XCTAssertEqual(state.stats.argent, 99 - cost)
+        XCTAssertEqual(state.placed[0].perTurn[.argent], 3, "×1,5 au niveau 2")
+        state.stats = Stats(streams: 50, credibilite: 50, argent: 99, mental: 50)
+        try engine.upgrade(id, in: &state)
+        XCTAssertEqual(state.placed[0].perTurn[.argent], 4, "×2 au niveau 3")
+        XCTAssertEqual(engine.upgradeRefusal(id, in: state), "Niveau max")
+
+        // Moving is free, and its old spot doesn't count as taken.
+        let before = state.stats.argent
+        let target = try XCTUnwrap(spots.last { engine.moveRefusal(id, to: $0, in: state, player: map.spawn) == nil })
+        XCTAssertNotEqual(target, state.placed[0].anchor)
+        XCTAssertNil(engine.moveRefusal(id, to: state.placed[0].anchor, in: state, player: map.spawn))
+        try engine.move(id, to: target, in: &state, player: map.spawn)
+        XCTAssertEqual(state.placed[0].anchor, target)
+        XCTAssertEqual(state.placed[0].level, 3)
+        XCTAssertEqual(state.stats.argent, before)
+
+        state.stats = Stats(streams: 50, credibilite: 50, argent: 10, mental: 50)
+        let invested = state.placed[0].invested
+        engine.sell(id, in: &state)
+        XCTAssertTrue(state.placed.isEmpty)
+        XCTAssertEqual(state.stats.argent, 10 + invested / 2)
+        XCTAssertNil(Decor.palmier.upgradeCost(from: 1), "les petites décos ne s'améliorent pas")
+    }
+
     func testOldSavesLoad() throws {
+        var placed = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(
+            PlacedDecor(id: 1, decor: .sono, district: .bloc, x: 3, y: 4))) as? [String: Any])
+        placed["level"] = nil; placed["stored"] = nil; placed["invested"] = nil
+        let oldItem = try JSONDecoder().decode(PlacedDecor.self, from: JSONSerialization.data(withJSONObject: placed))
+        XCTAssertEqual(oldItem.level, 1)
+        XCTAssertEqual(oldItem.invested, Decor.sono.price)
+
         var json = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(game())) as? [String: Any])
         json["placed"] = nil
         let old = try JSONDecoder().decode(GameState.self, from: JSONSerialization.data(withJSONObject: json))

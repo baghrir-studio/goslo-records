@@ -28,6 +28,8 @@ struct TurnOutcome: Equatable {
     var minigame: MinigameState?
     /// True if this action closed the semester (upkeep applied).
     var semesterEnded = false
+    /// What the closing turn paid and cost, by source (set with `semesterEnded`).
+    var period: PeriodSummary?
     /// What the end of the turn brought (bookings, burn-out…), shown under the consequence.
     var notes: [String] = []
     var ending: Ending?
@@ -728,6 +730,7 @@ struct GameEngine {
         record(written.text.isEmpty ? "…" : written.text, points: written.points,
                log: "« \(written.text) » — \(written.feedback) \(written.reaction)",
                round: current.round, running: &running, rapper: rapper)
+        running.noteRhyme(written)
         state.minigame = running
         return written
     }
@@ -1195,12 +1198,25 @@ struct GameEngine {
         var ending = EndingResolver.prematureEnding(for: state.stats)
         if ending == nil && state.pendingFollowUp == nil && state.actionsLeft <= 0 {
             let turnEnd = Economy.turnEnd(for: state)
-            outcome.add(state.stats.apply(turnEnd.effects))
+            var period = PeriodSummary(rent: state.difficulty.rent)
+            period.upkeep = state.stats.apply(turnEnd.effects)
+            outcome.add(period.upkeep)
             outcome.notes += turnEnd.notes
-            if state.freeCareer { outcome.add(state.stats.apply(GameEngine.agingUpkeep(turn: state.turn))) }
-            outcome.add(sellAlbums(in: &state))
+            if state.freeCareer {
+                let aging = state.stats.apply(GameEngine.agingUpkeep(turn: state.turn))
+                period.upkeep.merge(aging, uniquingKeysWith: +)
+                outcome.add(aging)
+            }
+            period.albums = sellAlbums(in: &state)
+            outcome.add(period.albums)
+            // The Top pays straight into the stats: measure it, and keep its lines.
+            let beforeChart = state.stats, notesBefore = outcome.notes.count
             payChart(&outcome, in: &state)
-            outcome.add(decorIncome(in: &state))
+            period.chart = state.stats.changes(since: beforeChart)
+            period.chartNotes = outcome.notes[notesBefore...].filter { $0.hasPrefix("Top goslo radio") }
+            period.income = decorIncome(in: &state)
+            outcome.add(period.income)
+            outcome.period = period
             checkChallenges(&outcome, in: &state)
             let limit = turnLimit(in: state)
             if !isInEpilogue(state) { state.turn = state.freeCareer ? state.turn + 1 : min(state.turn + 1, limit) }

@@ -74,6 +74,9 @@ private struct MinigameResult: View {
                     .font(.mono(13, weight: .bold))
                     .foregroundStyle(Theme.muted)
             }
+            if minigame.kind == .punchliner {
+                PunchlinerRecordsPanel(minigame: minigame)
+            }
             ScrollView {
                 VStack(alignment: .leading, spacing: 8) {
                     ForEach(Array(minigame.log.enumerated()), id: \.offset) { _, line in
@@ -184,6 +187,8 @@ private struct PunchlinerBoard: View {
                     .foregroundStyle(Theme.text.opacity(0.9))
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 0)
+                PunchlineCrowd(mood: PunchlinerEngine.crowdMood(points: answered.points))
+                    .id(answered.number)
                 Button(minigame.isOver ? "Résultat" : "Couplet suivant") { next() }
                     .buttonStyle(PrimaryButtonStyle())
             } else if let current {
@@ -489,13 +494,7 @@ private struct ChaseBoard: View {
     @State private var held: Direction?
     @State private var reported = false
 
-    private static let fanLooks: [CharacterLook] = [
-        CharacterLook(skin: "#e0ac7e", top: "#c0392b", bottom: "#23232a", hat: .cap),
-        CharacterLook(skin: "#8d5524", top: "#2f4a9a", bottom: "#141418", hairStyle: .puff),
-        CharacterLook(skin: "#f1c9a5", top: "#e8c547", bottom: "#2f4a7a", hairStyle: .long),
-        CharacterLook(skin: "#5a3825", top: "#4fd6e0", bottom: "#23232a", hat: .beanie),
-        CharacterLook(skin: "#c68642", top: "#e04fb0", bottom: "#141418", glasses: true),
-    ]
+    private static let fanLooks = CharacterLook.streetCrowd
 
     var body: some View {
         VStack(spacing: 10) {

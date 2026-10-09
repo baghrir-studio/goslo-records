@@ -25,8 +25,10 @@ struct WorldView: View {
 
                 LampGlows(map: map)
                 MapLights(map: map, transit: Transit.of(state.rapper.city))
-                FameMarks(map: map, look: state.rapper.look, posters: model.engine.fame(in: state) * 2,
+                let buzz = model.engine.streetBuzz(in: state)
+                FameMarks(map: map, look: state.rapper.look, posters: buzz.posters,
                           fresco: model.engine.hasFresco(in: state))
+                StreetLife(map: map, buzz: buzz, name: state.rapper.name, people: !model.letterbox)
 
                 ForEach(map.doors, id: \.location) { door in
                     DoorSign(location: door.location, name: door.location.name(in: state.district),
@@ -63,10 +65,27 @@ struct WorldView: View {
                         .zIndex(Double(plot.y) + 0.3)
                 }
                 // Decorations and buildings put where the player chose.
-                ForEach(state.placed.filter { $0.district == state.district }) { item in
+                ForEach(state.placed.filter { $0.district == state.district && $0.id != model.movingDecorId }) { item in
+                    let spot = placedPosition(item.decor, at: item.anchor)
+                    let height = DecorSpot.size(of: item.decor).height
                     DecorSpot(decor: item.decor)
-                        .position(placedPosition(item.decor, at: item.anchor))
+                        .overlay(alignment: .bottom) {
+                            if item.decor.isBuilding && item.level > 1 {
+                                Text(String(repeating: "★", count: item.level))
+                                    .font(.system(size: 8, weight: .black))
+                                    .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                                    .shadow(color: .black, radius: 0, x: 1, y: 1)
+                                    .offset(y: 4)
+                            }
+                        }
+                        .position(spot)
                         .zIndex(Double(item.anchor.y) + 0.3)
+                    // Money waiting: walk up and press A to pick it up.
+                    if item.stored > 0 {
+                        CoinBubble(amount: item.stored, full: item.stored >= item.storageCap)
+                            .position(x: spot.x, y: spot.y - height / 2 - 10)
+                            .zIndex(Double(item.anchor.y) + 0.32)
+                    }
                 }
                 // Construction mode: the decoration in front of the player, green where it fits, red where it doesn't.
                 if let decor = model.placingDecor, let anchor = model.placementAnchor {
@@ -362,25 +381,16 @@ struct ObjectiveMarker: View {
     }
 }
 
-/// The career on the walls: posters of the player (more as the streams grow), and a fresco on the
-/// laundromat once the Baron has fallen. Only on front walls, away from the shop fronts.
+/// The career on the walls: posters of the player (more as the streams and the artist level grow, see
+/// `StreetBuzz`), and a fresco on the laundromat once the Baron has fallen. Only on front walls, away from
+/// the shop fronts (`WorldMap.fameWalls`); the tags go on the others (`StreetLife`).
 private struct FameMarks: View {
     let map: WorldMap
     let look: CharacterLook
     let posters: Int
     let fresco: Bool
 
-    private var spots: [TilePoint] {
-        (0..<map.height).flatMap { y in
-            (0..<map.width).compactMap { x -> TilePoint? in
-                let point = TilePoint(x: x, y: y), below = map.tile(at: point.moved(.down))
-                guard map.tile(at: point) == .wall, below != .wall, below != .door, below != .metro,
-                      !map.doors.contains(where: { $0.y == y && abs($0.x - x) <= 2 }),
-                      !(map.metro.map { $0.y == y && abs($0.x - x) <= 2 } ?? false) else { return nil }
-                return point
-            }
-        }
-    }
+    private var spots: [TilePoint] { map.fameWalls }
 
     var body: some View {
         let tile = WorldView.tile
@@ -508,5 +518,32 @@ private struct HappeningMarker: View {
         .onAppear {
             withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) { bounce = true }
         }
+    }
+}
+
+/// Bobbing coin over a building with money to pick up (red when it's full and earning nothing more).
+private struct CoinBubble: View {
+    let amount: Int
+    let full: Bool
+    @State private var up = false
+
+    var body: some View {
+        HStack(spacing: 2) {
+            Circle()
+                .fill(Color(red: 1, green: 0.8, blue: 0.2))
+                .overlay(Circle().stroke(Color(red: 0.6, green: 0.4, blue: 0.05), lineWidth: 1))
+                .frame(width: 8, height: 8)
+            Text("+\(amount)")
+                .font(.system(size: 8, weight: .black, design: .monospaced))
+                .foregroundStyle(.white)
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)
+        .background(full ? Color(red: 0.75, green: 0.15, blue: 0.1) : Color.black.opacity(0.75))
+        .offset(y: up ? -2 : 1)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) { up = true }
+        }
+        .allowsHitTesting(false)
     }
 }

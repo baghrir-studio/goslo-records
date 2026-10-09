@@ -86,6 +86,9 @@ struct MinigameState: Codable, Equatable {
     var lyrics: [String]?
     /// Punchliner only: the first real punchline the player found, the track's title.
     var hook: String?
+    /// Punchliner only: rich rhymes written this game, and the best rhyme written (see `noteRhyme`).
+    var richRhymes: Int?
+    var bestRhyme: RhymePair?
     let roundCount: Int
 
     init(minigame: Minigame) {
