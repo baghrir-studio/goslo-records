@@ -69,6 +69,8 @@ struct EventConditions: Codable, Equatable {
     var maxChapter: Int?
     /// Only in this starting city (city challenges).
     var city: City?
+    /// Minimum artist level (`ArtistLevel`): "come back when you're somebody".
+    var minArtistLevel: Int?
 
     enum CodingKeys: String, CodingKey {
         case minYear = "min_year"
@@ -84,12 +86,14 @@ struct EventConditions: Codable, Equatable {
         case minChapter = "min_chapter"
         case maxChapter = "max_chapter"
         case city
+        case minArtistLevel = "min_artist_level"
     }
 
     init(minYear: Int? = nil, maxYear: Int? = nil, requiredFlags: [String] = [], excludedFlags: [String] = [],
          minStats: [StatKind: Int] = [:], maxStats: [StatKind: Int] = [:], minCounters: [CounterKind: Int] = [:],
          minSkills: [Skill: Int] = [:], minRelations: [String: Int] = [:], maxRelations: [String: Int] = [:],
-         minChapter: Int? = nil, maxChapter: Int? = nil, city: City? = nil) {
+         minChapter: Int? = nil, maxChapter: Int? = nil, city: City? = nil, minArtistLevel: Int? = nil) {
+        self.minArtistLevel = minArtistLevel
         self.minYear = minYear
         self.maxYear = maxYear
         self.requiredFlags = requiredFlags
@@ -120,6 +124,7 @@ struct EventConditions: Codable, Equatable {
         minChapter = try c.decodeIfPresent(Int.self, forKey: .minChapter)
         maxChapter = try c.decodeIfPresent(Int.self, forKey: .maxChapter)
         city = try c.decodeIfPresent(City.self, forKey: .city)
+        minArtistLevel = try c.decodeIfPresent(Int.self, forKey: .minArtistLevel)
     }
 
     /// All bounds are inclusive.
@@ -129,6 +134,7 @@ struct EventConditions: Codable, Equatable {
         if let minChapter, state.chapter < minChapter { return false }
         if let maxChapter, state.chapter > maxChapter { return false }
         if let city, state.rapper.city != city { return false }
+        if let minArtistLevel, ArtistLevel.level(xp: state.artistXP) < minArtistLevel { return false }
         if !requiredFlags.allSatisfy(state.flags.contains) { return false }
         if excludedFlags.contains(where: state.flags.contains) { return false }
         if minStats.contains(where: { state.stats[$0.key] < $0.value }) { return false }

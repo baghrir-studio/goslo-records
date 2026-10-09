@@ -4664,6 +4664,1022 @@
           "consequence": "« L'ordre ? » Il rit, fatigué. « J'ai même plus l'heure. » Il repart avec sa valise qui couine. Tu as eu le dernier mot. Il n'avait pas l'air d'y tenir."
         }
       ]
+    },
+    {
+      "id": "mounir_paquet",
+      "title": "Le kiosque de Mounir",
+      "location": "quartier",
+      "npc": "mounir_kiosque",
+      "weight": 10,
+      "unique": true,
+      "text": "Mounir range ses magazines, une ficelle entre les dents. Il te tend un paquet de journaux emballé dans du papier kraft. « Tu passes au bord de l'eau ? C'est pour Mamie Yvette. Elle a pas raté un numéro depuis 1971. Moi j'ai le dos en compote. »",
+      "choices": [
+        {
+          "label": "Prendre le paquet pour Mamie Yvette",
+          "relations": {
+            "mounir_kiosque": 8
+          },
+          "set_flags": [
+            "colis_mounir"
+          ],
+          "consequence": "Le paquet pèse une tonne : elle prend aussi les mots fléchés, l'horoscope et le programme télé. Mounir te glisse un chewing-gum. « Pour la route. »"
+        },
+        {
+          "label": "Prendre le paquet, et feuilleter la page culture au passage",
+          "xp": {
+            "plume": 15
+          },
+          "set_flags": [
+            "colis_mounir"
+          ],
+          "consequence": "Pas un mot sur toi. Un article sur un chien qui fait du skate. Tu notes une rime sur le chien. Mounir te regarde faire : « Les vrais lisent avant de livrer. »"
+        },
+        {
+          "label": "T'as pas le temps, t'as un morceau à finir",
+          "relations": {
+            "mounir_kiosque": -3
+          },
+          "consequence": "Mounir hausse les épaules. « Les artistes. » Il appelle son neveu. Le neveu met quarante minutes. Mamie Yvette le saura."
+        }
+      ]
+    },
+    {
+      "id": "yvette_journal",
+      "title": "Le journal de Mamie Yvette",
+      "location": "quartier",
+      "npc": "mamie_yvette",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 2,
+        "required_flags": [
+          "colis_mounir"
+        ]
+      },
+      "text": "Mamie Yvette t'attend sur le banc, au bord de l'eau, comme si elle savait que tu viendrais. Elle savait. « Mounir t'envoie ? Il a encore mal au dos, ce grand fainéant. Donne. Et assieds-toi, que je te raconte le quartier. »",
+      "choices": [
+        {
+          "label": "T'asseoir et écouter",
+          "effects": {
+            "mental": 3
+          },
+          "xp": {
+            "plume": 15
+          },
+          "relations": {
+            "mamie_yvette": 10
+          },
+          "set_flags": [
+            "journal_livre"
+          ],
+          "consequence": "Tu apprends qui sort avec qui, qui doit de l'argent à qui, et que le gardien chante du Dalida quand il passe la serpillière. Tu repars avec trois idées de couplets et un bonbon à la violette."
+        },
+        {
+          "label": "Lui lire l'horoscope à voix haute, avec l'intonation",
+          "effects": {
+            "mental": 2
+          },
+          "xp": {
+            "scene": 15
+          },
+          "relations": {
+            "mamie_yvette": 8
+          },
+          "set_flags": [
+            "journal_livre"
+          ],
+          "consequence": "« Bélier : une rencontre inattendue. » Elle rit : « À mon âge, c'est le docteur. » Les pigeons se rapprochent pour écouter. Tu as un public."
+        },
+        {
+          "label": "Poser le paquet et filer",
+          "set_flags": [
+            "journal_livre"
+          ],
+          "consequence": "Elle te regarde partir. « Les jeunes, toujours pressés. » Elle ouvre le journal. Elle a quand même son journal."
+        }
+      ]
+    },
+    {
+      "id": "yvette_bal",
+      "title": "Le bal de 1974",
+      "location": "quartier",
+      "npc": "mamie_yvette",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 2
+      },
+      "text": "Mamie Yvette regarde l'eau. « En 1974, il y avait un bal ici. Un accordéon, des lampions, et mon René qui dansait comme une armoire. » Elle se tourne vers toi. « Le jour où tu feras un vrai concert, tu viendras chanter pour les vieux du quartier ? Une fois. Pour René. »",
+      "choices": [
+        {
+          "label": "Promettre : une fête au bord de l'eau, après ton premier vrai concert",
+          "relations": {
+            "mamie_yvette": 10
+          },
+          "set_flags": [
+            "yvette_bal_promis"
+          ],
+          "consequence": "Elle te serre la main, fort, longtemps. « Je vais commencer à faire des crêpes. Ça me laisse le temps de rater les premières. »"
+        },
+        {
+          "label": "Promettre, et lui demander comment dansait René",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "mamie_yvette": 12
+          },
+          "set_flags": [
+            "yvette_bal_promis"
+          ],
+          "consequence": "Elle se lève et te montre. Elle a raison : c'était une armoire. Une armoire très heureuse. Tu promets, en riant."
+        },
+        {
+          "label": "Lui dire que les vieux n'aiment pas le rap",
+          "relations": {
+            "mamie_yvette": -4
+          },
+          "consequence": "« Les vieux n'aiment pas qu'on décide pour eux », répond-elle. Elle a raison. Tu le sais. Elle le sait que tu le sais."
+        }
+      ]
+    },
+    {
+      "id": "yvette_fete",
+      "title": "La fête au bord de l'eau",
+      "location": "quartier",
+      "npc": "mamie_yvette",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 3,
+        "required_flags": [
+          "yvette_bal_promis",
+          "concert_reussi"
+        ]
+      },
+      "text": "Des lampions accrochés aux réverbères, une table pliante, des crêpes ratées et des crêpes réussies. Mamie Yvette a ramené tout l'immeuble, et Mounir a ramené une enceinte. Ils attendent tous que tu prennes le micro.",
+      "choices": [
+        {
+          "label": "Rapper un morceau calme, pour René",
+          "effects": {
+            "mental": 3,
+            "credibilite": 2
+          },
+          "relations": {
+            "mamie_yvette": 10
+          },
+          "set_flags": [
+            "fete_yvette"
+          ],
+          "consequence": "Tu baisses le tempo. Les vieux hochent la tête, les petits aussi. Mamie Yvette danse comme une armoire. C'est le plus beau public de ta vie, et le plus petit."
+        },
+        {
+          "label": "Lancer un freestyle sur les gens présents",
+          "effects": {
+            "mental": 2,
+            "streams": 2
+          },
+          "xp": {
+            "flow": 20
+          },
+          "set_flags": [
+            "fete_yvette"
+          ],
+          "consequence": "Une rime sur le gardien, une sur Monique, une sur les crêpes. Monique ne se souviendra de rien. Tout le monde d'autre, si."
+        },
+        {
+          "label": "Passer l'enceinte de Mounir en mode bal musette",
+          "effects": {
+            "mental": 3
+          },
+          "xp": {
+            "scene": 15
+          },
+          "set_flags": [
+            "fete_yvette"
+          ],
+          "consequence": "Tu fais DJ. Un accordéon sur un 808. Les vieux crient « ENCORE ». Tu inventes un genre musical. Personne ne le saura jamais."
+        }
+      ]
+    },
+    {
+      "id": "sami_prod",
+      "title": "La prod du toit",
+      "location": "quartier",
+      "npc": "petit_sami",
+      "weight": 10,
+      "unique": true,
+      "text": "Sur le toit du bâtiment C, un gamin en casque fait hocher la tête à un ordinateur qui chauffe. « Écoute ça. » C'est lent, bancal, plein de bruits d'ascenseur. Et au milieu, une mélodie qui te reste. « C'est pour toi. Enfin, si tu veux. Quand t'auras un vrai projet. »",
+      "choices": [
+        {
+          "label": "Promettre de poser dessus quand ton projet sera sorti",
+          "relations": {
+            "petit_sami": 12
+          },
+          "set_flags": [
+            "sami_promesse"
+          ],
+          "consequence": "Il se lève d'un coup. Son casque tombe. « T'es sérieux ? » Tu es sérieux. Il range l'ordinateur comme on range un trophée."
+        },
+        {
+          "label": "Lui montrer comment caler sa caisse claire",
+          "xp": {
+            "flow": 15
+          },
+          "relations": {
+            "petit_sami": 8
+          },
+          "set_flags": [
+            "sami_promesse"
+          ],
+          "consequence": "Dix minutes plus tard, ça groove. Il te regarde comme si tu avais réparé la lune. « Tu poseras dessus, alors ? » Tu dis oui."
+        },
+        {
+          "label": "Lui dire de rentrer faire ses devoirs",
+          "relations": {
+            "petit_sami": -4
+          },
+          "consequence": "Il rentre. Il fera ses devoirs en tapant le rythme sur la table. Sa mère croira à un tic."
+        }
+      ]
+    },
+    {
+      "id": "sami_session",
+      "title": "Session de goûter",
+      "location": "studio",
+      "npc": "petit_sami",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "required_flags": [
+          "sami_promesse"
+        ],
+        "min_counters": {
+          "projets": 1
+        }
+      },
+      "text": "Petit Sami débarque au studio avec sa clé USB, un paquet de gâteaux et une autorisation parentale signée. « T'as sorti ton projet. Tu m'avais promis. » Il pose la clé sur la console. Personne ne touche le fader 7.",
+      "choices": [
+        {
+          "label": "Poser sur sa prod, sérieusement",
+          "effects": {
+            "streams": 3
+          },
+          "relations": {
+            "petit_sami": 15
+          },
+          "set_flags": [
+            "sami_pose"
+          ],
+          "consequence": "Deux prises. La deuxième est la bonne. Sami ne dit rien pendant tout le morceau, puis il dit « wesh » quatre fois. C'est la meilleure critique de ta carrière."
+        },
+        {
+          "label": "Le laisser faire l'ingé son",
+          "xp": {
+            "flow": 20
+          },
+          "relations": {
+            "petit_sami": 12
+          },
+          "set_flags": [
+            "sami_pose"
+          ],
+          "consequence": "Il monte le kick, baisse ta voix, ajoute un klonk d'ascenseur. C'est bizarre. C'est bien. Fred l'observe en silence et finit par lui serrer la main."
+        },
+        {
+          "label": "Poser, et le créditer en gros sur la pochette",
+          "effects": {
+            "credibilite": 2
+          },
+          "relations": {
+            "petit_sami": 15
+          },
+          "set_flags": [
+            "sami_pose"
+          ],
+          "consequence": "« Prod. Petit Sami ». En majuscules. Il prend la pochette en photo quarante fois. Sa mère l'encadre. Le gâteau, lui, est mangé."
+        }
+      ]
+    },
+    {
+      "id": "ptit_sauge_defi",
+      "title": "Le petit frère",
+      "location": "quartier",
+      "npc": "ptit_sauge",
+      "weight": 8,
+      "conditions": {
+        "min_chapter": 2,
+        "excluded_flags": [
+          "clash_gagne_ptit_sauge"
+        ]
+      },
+      "text": "Au city stade, un gamin en casquette te barre la route. Même cheveux décolorés que Lil Sauge, même chaîne en plastique. « Je suis son frère. Il dit que t'es nul. Je vais vérifier. » Derrière lui, quatre copains de CM2 filment déjà.",
+      "choices": [
+        {
+          "label": "Accepter le clash",
+          "clash": {
+            "opponent": "ptit_sauge",
+            "rounds": 3,
+            "win": {
+              "effects": {
+                "credibilite": 2
+              },
+              "consequence": "P'tit Sauge encaisse, la lèvre tremblante. Puis il tend la main : « OK. T'es pas nul. Le dis pas à mon frère. »"
+            },
+            "lose": {
+              "effects": {
+                "mental": -2
+              },
+              "consequence": "Battu par un CM2. Les copains font tourner la vidéo. Elle s'appelle « LE GRAND A PERDU ». Elle a déjà 400 vues."
+            }
+          },
+          "consequence": "Le terrain se tait. Les copains comptent les points sur leurs doigts."
+        },
+        {
+          "label": "Lui donner un conseil plutôt qu'une raclée",
+          "relations": {
+            "ptit_sauge": 5
+          },
+          "consequence": "« Raconte des histoires, pas des insultes. » Il réfléchit très fort. « Une histoire… sur mon frère qui se fait clasher ? » C'est un début."
+        },
+        {
+          "label": "Refuser : tu clashes pas les CM2",
+          "consequence": "« T'as peur ! » crient les copains. Tu repars. Derrière toi, P'tit Sauge rappe tout seul ta défaite imaginaire. Elle est pas mal, d'ailleurs."
+        }
+      ]
+    },
+    {
+      "id": "ptit_sauge_freres",
+      "title": "Les frères Sauge",
+      "location": "quartier",
+      "npc": "ptit_sauge",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 2,
+        "required_flags": [
+          "clash_gagne_ptit_sauge"
+        ]
+      },
+      "text": "Lil Sauge traverse le city stade, téléphone en l'air, et tombe sur son petit frère, en train de te raconter comment il a « presque gagné ». Les deux frères se regardent. L'aîné baisse son téléphone. C'est rare.",
+      "choices": [
+        {
+          "label": "Dire à Lil Sauge que son frère a du talent",
+          "xp": {
+            "plume": 15
+          },
+          "relations": {
+            "ptit_sauge": 10,
+            "lil_sauge": 5
+          },
+          "set_flags": [
+            "sauge_freres"
+          ],
+          "consequence": "Lil Sauge ne sait pas quoi faire de ses mains. Il les met dans ses poches. « Il a du talent ? » Il regarde son frère. « Évidemment. C'est mon frère. »"
+        },
+        {
+          "label": "Proposer un clash à deux contre un, eux contre toi",
+          "effects": {
+            "credibilite": 2
+          },
+          "xp": {
+            "flow": 15
+          },
+          "set_flags": [
+            "sauge_freres"
+          ],
+          "consequence": "Ils perdent. Ensemble. Ils rient ensemble aussi, ce qui ne leur était pas arrivé depuis longtemps."
+        },
+        {
+          "label": "Les laisser régler ça entre frères",
+          "effects": {
+            "mental": 2
+          },
+          "set_flags": [
+            "sauge_freres"
+          ],
+          "consequence": "Tu t'éloignes. Derrière toi, tu entends : « Tu m'apprends le flow ? » et « Seulement si tu me prêtes pas mes baskets. »"
+        }
+      ]
+    },
+    {
+      "id": "papy_caisse",
+      "title": "La caisse de Papy Groove",
+      "location": "quartier",
+      "npc": "papy_groove",
+      "weight": 14,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 3
+      },
+      "text": "Sur le quai, un vieux monsieur en casque doré est assis sur une caisse de vinyles et regarde la péniche. « Il m'en manque un. La face B. Mon seul pressage unique, 1989. Je l'avais prêtée à un régisseur, au Transfo. Il y a… vingt-cinq ans. » Il soupire. « Il doit plus s'en souvenir. Moi si. »",
+      "choices": [
+        {
+          "label": "Promettre de demander au Transfo",
+          "relations": {
+            "papy_groove": 10
+          },
+          "set_flags": [
+            "papy_caisse"
+          ],
+          "consequence": "Il te regarde par-dessus ses lunettes. « T'as des bonnes oreilles, toi. Ça se voit à ta façon d'écouter les vieux. »"
+        },
+        {
+          "label": "Lui demander de te montrer un scratch d'abord",
+          "xp": {
+            "scene": 15
+          },
+          "relations": {
+            "papy_groove": 6
+          },
+          "set_flags": [
+            "papy_caisse"
+          ],
+          "consequence": "Il scratche sur sa propre manche. C'est parfait. Tu promets de chercher la face B, la tête pleine de rythme."
+        },
+        {
+          "label": "Lui dire que tout est en streaming maintenant",
+          "relations": {
+            "papy_groove": -4
+          },
+          "consequence": "« Pas ce disque-là. » Il ne dit plus rien. La péniche passe. Tu te sens vieux, d'un coup, et pas dans le bon sens."
+        }
+      ]
+    },
+    {
+      "id": "gege_face_b",
+      "title": "La face B",
+      "location": "scene",
+      "npc": "gege",
+      "weight": 20,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 3,
+        "required_flags": [
+          "papy_caisse"
+        ]
+      },
+      "text": "Gégé, le régisseur du Transfo, fouille sous la régie en grommelant. « Papy Groove ? Le DJ ? Attends… » Il ressort un vinyle poussiéreux, étiqueté au feutre : « FACE B — NE PAS PERDRE ». « Je l'ai pas perdu. Je l'ai gardé. C'est pas pareil. »",
+      "choices": [
+        {
+          "label": "Le prendre avec précaution, comme un trophée",
+          "relations": {
+            "gege": 5
+          },
+          "set_flags": [
+            "face_b_trouvee"
+          ],
+          "consequence": "Tu portes le disque à deux mains jusqu'à la sortie. Gégé te suit du regard. « Dis-lui que j'ai pas perdu. Dis-lui bien. »"
+        },
+        {
+          "label": "L'écouter d'abord sur la sono du Transfo",
+          "xp": {
+            "scene": 15
+          },
+          "set_flags": [
+            "face_b_trouvee"
+          ],
+          "consequence": "La salle vide se remplit d'un groove de 1989. Gégé ferme les yeux. Toi aussi. Puis tu ranges le disque dans sa pochette, très doucement."
+        },
+        {
+          "label": "Demander à Gégé ce qu'il a d'autre sous la régie",
+          "set_flags": [
+            "face_b_trouvee"
+          ],
+          "consequence": "Un parapluie, trois câbles XLR, une chaussure. Et la face B. Tu prends la face B. Il garde la chaussure."
+        }
+      ]
+    },
+    {
+      "id": "papy_face_b",
+      "title": "Retour au quai",
+      "location": "quartier",
+      "npc": "papy_groove",
+      "weight": 20,
+      "unique": true,
+      "conditions": {
+        "required_flags": [
+          "face_b_trouvee"
+        ]
+      },
+      "text": "Papy Groove reconnaît la pochette à vingt mètres. Il se lève sans son genou. Il prend le disque, le retourne, regarde le sillon dans la lumière du réverbère. « Vingt-cinq ans. Il l'a gardée. » Il pose la main sur ton épaule.",
+      "choices": [
+        {
+          "label": "Accepter son cadeau : sa vieille paire de casques",
+          "effects": {
+            "credibilite": 3
+          },
+          "relations": {
+            "papy_groove": 15
+          },
+          "set_flags": [
+            "face_b_rendue"
+          ],
+          "consequence": "Le casque est lourd, chaud, il sent le cuir et la fumée de boîte de nuit. « Il a entendu tout ce qui comptait. Maintenant il t'entendra, toi. »"
+        },
+        {
+          "label": "Lui demander de mixer la face B pour toi, là, sur le quai",
+          "effects": {
+            "mental": 3
+          },
+          "xp": {
+            "scene": 20
+          },
+          "set_flags": [
+            "face_b_rendue"
+          ],
+          "consequence": "Une platine portative, une enceinte à piles. Les passants s'arrêtent. Quelqu'un danse. Papy Groove sourit avec tout le visage."
+        },
+        {
+          "label": "Lui rendre le disque et repartir sans un mot",
+          "effects": {
+            "mental": 2
+          },
+          "set_flags": [
+            "face_b_rendue"
+          ],
+          "consequence": "Tu entends derrière toi le crépitement du diamant sur le sillon. Puis le groove, tout bas. Tu ne te retournes pas. C'est mieux comme ça."
+        }
+      ]
+    },
+    {
+      "id": "rachid_slogan",
+      "title": "La criée",
+      "location": "quartier",
+      "npc": "rachid_halles",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 3
+      },
+      "text": "Aux Halles, Rachid crie ses prix en rimes au-dessus des oranges. Il t'aperçoit et pointe sa balance vers toi. « Toi ! L'artiste ! Mon stand a besoin d'un jingle. Le fromager d'en face a pris un chanteur d'opéra. Je peux pas perdre contre un baryton. »",
+      "choices": [
+        {
+          "label": "Accepter : tu vas lui écrire un jingle",
+          "relations": {
+            "rachid_halles": 8
+          },
+          "set_flags": [
+            "rachid_slogan"
+          ],
+          "consequence": "Il te serre la main par-dessus les cagettes et te donne une clémentine d'avance. « Paiement en fruits. C'est le tarif artiste. »"
+        },
+        {
+          "label": "Accepter, et négocier le paiement",
+          "xp": {
+            "business": 15
+          },
+          "set_flags": [
+            "rachid_slogan"
+          ],
+          "consequence": "Après dix minutes de négociation féroce, tu obtiens une cagette par semaine et un panier pour ta mère. Rachid est impressionné. « T'aurais fait un bon primeur. »"
+        },
+        {
+          "label": "Refuser : tu rappes pas pour des courgettes",
+          "relations": {
+            "rachid_halles": -3
+          },
+          "consequence": "« Les courgettes t'ont rien fait », dit Rachid, vexé pour elles. Le baryton d'en face entame un air sur le camembert."
+        }
+      ]
+    },
+    {
+      "id": "rachid_jingle",
+      "title": "Le jingle des Halles",
+      "location": "quartier",
+      "npc": "rachid_halles",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "required_flags": [
+          "rachid_slogan"
+        ]
+      },
+      "text": "Rachid a installé un micro entre les poireaux et les fraises. Le baryton d'en face s'échauffe. Les clients attendent. C'est un clash. Un clash de légumes.",
+      "choices": [
+        {
+          "label": "Un jingle trap : « Fraîcheur, fraîcheur, ça sort du cageot »",
+          "effects": {
+            "argent": 3
+          },
+          "relations": {
+            "rachid_halles": 10
+          },
+          "set_flags": [
+            "rachid_jingle_fait"
+          ],
+          "consequence": "Les ados s'arrêtent. Les mamies aussi. Rachid vend toutes ses fraises en vingt minutes. Le baryton chante plus fort. Personne ne l'écoute."
+        },
+        {
+          "label": "Un refrain chanté, à la variété",
+          "effects": {
+            "mental": 3
+          },
+          "xp": {
+            "scene": 15
+          },
+          "set_flags": [
+            "rachid_jingle_fait"
+          ],
+          "consequence": "Les clients chantent en choisissant leurs tomates. Le baryton finit par faire les chœurs. C'est la paix des Halles."
+        },
+        {
+          "label": "Un egotrip de primeur : Rachid est le roi de la patate",
+          "xp": {
+            "plume": 20
+          },
+          "relations": {
+            "rachid_halles": 12
+          },
+          "set_flags": [
+            "rachid_jingle_fait"
+          ],
+          "consequence": "Rachid rappe le refrain lui-même, torse bombé. Il a du coffre. Les Halles l'acclament. Tu as créé un monstre, un monstre très aimable."
+        }
+      ]
+    },
+    {
+      "id": "zoe_mur",
+      "title": "La graffeuse",
+      "location": "quartier",
+      "npc": "zoe_bombe",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 3
+      },
+      "text": "Devant les fresques du centre-ville, une fille en bandana repasse un contour au violet, sans se presser. Elle te regarde, puis regarde le mur, puis te regarde encore. « T'as une tête à fresque. Pas encore assez {connu|connue} pour un mur entier. Mais bientôt. Je fais un croquis ? »",
+      "choices": [
+        {
+          "label": "Accepter de poser pour le croquis",
+          "relations": {
+            "zoe_bombe": 10
+          },
+          "set_flags": [
+            "zoe_projet"
+          ],
+          "consequence": "Tu restes immobile dix minutes. Elle dessine vite, sans gomme. « Le mur du Bloc. Dix mètres. Quand ton nom pèsera assez lourd pour le tenir. »"
+        },
+        {
+          "label": "Lui proposer d'écrire un texte pour accompagner la fresque",
+          "xp": {
+            "plume": 15
+          },
+          "set_flags": [
+            "zoe_projet"
+          ],
+          "consequence": "Elle hoche la tête. « Une phrase. Pas plus. Les murs, ça lit lentement. » Tu cherches la phrase. Elle attendra."
+        },
+        {
+          "label": "Lui dire que les tags, c'est pas ton truc",
+          "relations": {
+            "zoe_bombe": -3
+          },
+          "consequence": "« Les murs t'aiment bien quand même », dit-elle, et elle retourne à son violet."
+        }
+      ]
+    },
+    {
+      "id": "zoe_croquis",
+      "title": "Le mur du Bloc",
+      "location": "quartier",
+      "npc": "zoe_bombe",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4,
+        "required_flags": [
+          "zoe_projet"
+        ]
+      },
+      "text": "Zoé a tracé les grandes lignes de ta tête sur le mur du Bloc, à la craie, sur dix mètres. Les gamins du quartier jugent la ressemblance. Mamie Yvette trouve que t'as l'air triste. Zoé te tend une bombe. « Le premier trait, c'est toi. »",
+      "choices": [
+        {
+          "label": "Tracer le premier trait, d'une main sûre",
+          "effects": {
+            "credibilite": 2
+          },
+          "relations": {
+            "zoe_bombe": 10
+          },
+          "set_flags": [
+            "zoe_croquis"
+          ],
+          "consequence": "Le trait est droit. Pas parfait, mais droit. Zoé le garde. « Un trait qui hésite pas. C'est ta signature. »"
+        },
+        {
+          "label": "Ajouter un micro dans ta main, sur la fresque",
+          "xp": {
+            "scene": 15
+          },
+          "set_flags": [
+            "zoe_croquis"
+          ],
+          "consequence": "Un micro de deux mètres. Les gamins applaudissent. Zoé fait semblant de râler, puis ajoute un reflet doré dessus."
+        },
+        {
+          "label": "Lui laisser la bombe : c'est son œuvre",
+          "effects": {
+            "mental": 2
+          },
+          "relations": {
+            "zoe_bombe": 12
+          },
+          "set_flags": [
+            "zoe_croquis"
+          ],
+          "consequence": "Elle sourit pour la première fois. « Bonne réponse. » Elle peint toute la nuit. Toi, tu lui apportes des cafés."
+        }
+      ]
+    },
+    {
+      "id": "ines_exclu",
+      "title": "La Gazette des quartiers",
+      "location": "quartier",
+      "npc": "ines_gazette",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "text": "Une journaliste en trench te tend un enregistreur qui date d'avant ta naissance. « Inès Lacroix, la Gazette des quartiers. Personne nous lit, sauf les gens qui comptent. Je veux ton portrait, avant que les grandes radios te découvrent. Une exclu. Ça te dit ? »",
+      "choices": [
+        {
+          "label": "Lui donner l'exclu, sans langue de bois",
+          "effects": {
+            "credibilite": 2
+          },
+          "relations": {
+            "ines_gazette": 10
+          },
+          "set_flags": [
+            "ines_exclu"
+          ],
+          "consequence": "Tu parles du Bloc, de tes doutes, du snack de Tatie Nadia. Elle écrit tout, sans lever les yeux. « Ça, c'est un papier. »"
+        },
+        {
+          "label": "Répondre en punchlines à chaque question",
+          "xp": {
+            "plume": 15
+          },
+          "set_flags": [
+            "ines_exclu"
+          ],
+          "consequence": "Elle rit, note tout, et barre la moitié. « Les punchlines, c'est pour le titre. Le reste, c'est pour moi. »"
+        },
+        {
+          "label": "Lui dire que tu parles qu'aux grandes radios",
+          "relations": {
+            "ines_gazette": -5
+          },
+          "consequence": "Elle range son enregistreur. « Les grandes radios lisent la Gazette, tu sais. Pour savoir qui inviter. » Elle s'éloigne. Tu as peut-être fait une erreur."
+        }
+      ]
+    },
+    {
+      "id": "ines_article",
+      "title": "L'article est en ligne",
+      "location": "reseaux",
+      "npc": "ines_gazette",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 5,
+        "required_flags": [
+          "ines_exclu"
+        ]
+      },
+      "text": "Ton téléphone vibre : « La Gazette des quartiers — PORTRAIT : celui ou celle qui rappe le Bloc ». Une photo de toi prise de loin, floue, très belle. Inès a écrit trois pages. Les commentaires se remplissent.",
+      "choices": [
+        {
+          "label": "Partager l'article avec un mot pour Inès",
+          "effects": {
+            "streams": 3
+          },
+          "relations": {
+            "ines_gazette": 10
+          },
+          "set_flags": [
+            "article_gazette"
+          ],
+          "consequence": "« Merci à la seule journaliste qui est venue avant tout le monde. » Inès répond par un emoji. Un seul. Le stylo. C'est beaucoup, venant d'elle."
+        },
+        {
+          "label": "Le lire trois fois, en silence",
+          "effects": {
+            "mental": 3
+          },
+          "set_flags": [
+            "article_gazette"
+          ],
+          "consequence": "Elle a vu des choses que tu n'avais pas dites. Ça fait un peu peur. Ça fait surtout du bien."
+        },
+        {
+          "label": "Envoyer l'article à Mounir pour son kiosque",
+          "xp": {
+            "business": 15
+          },
+          "relations": {
+            "mounir_kiosque": 5
+          },
+          "set_flags": [
+            "article_gazette"
+          ],
+          "consequence": "Mounir l'imprime et le scotche sur son comptoir. Les clients le lisent en attendant leur monnaie."
+        }
+      ]
+    },
+    {
+      "id": "jojo_course",
+      "title": "Le taxi de nuit",
+      "location": "quartier",
+      "npc": "jojo_taxi",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 4
+      },
+      "text": "Il est tard. Un taxi s'arrête à ta hauteur, le lumineux allumé. « Monte, je vais par là de toute façon. » Jojo baisse la radio. « Mon fils écoute ce que tu fais. On se parle plus beaucoup, lui et moi. Si un jour tu passes sur goslo radio… tu lui dirais bonjour ? Il s'appelle Kevin. »",
+      "choices": [
+        {
+          "label": "Promettre une dédicace à Kevin, quand tu seras assez gros pour la radio",
+          "relations": {
+            "jojo_taxi": 12
+          },
+          "set_flags": [
+            "jojo_dedicace_promise"
+          ],
+          "consequence": "Jojo hoche la tête, les yeux sur la route. Il ne dit rien pendant trois feux rouges. Au quatrième : « Merci. » Il arrête le compteur."
+        },
+        {
+          "label": "Lui demander ce que Kevin aime comme son",
+          "xp": {
+            "plume": 15
+          },
+          "relations": {
+            "jojo_taxi": 8
+          },
+          "set_flags": [
+            "jojo_dedicace_promise"
+          ],
+          "consequence": "« Les trucs tristes. Comme son père. » Vous parlez de musique jusqu'au bout de la nuit. Tu promets la dédicace."
+        },
+        {
+          "label": "Lui dire d'appeler son fils lui-même",
+          "effects": {
+            "mental": 1
+          },
+          "consequence": "Il serre le volant. « T'as raison. » Il ne l'appellera pas ce soir. Peut-être demain."
+        }
+      ]
+    },
+    {
+      "id": "jojo_nuit",
+      "title": "La ville de nuit",
+      "location": "quartier",
+      "npc": "jojo_taxi",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 5,
+        "required_flags": [
+          "jojo_dedicace_promise"
+        ]
+      },
+      "text": "Jojo t'attend en bas, moteur allumé. « Monte. Je vais te montrer la ville comme personne la voit. » Le pont désert, les Halles qui se réveillent, la lumière du Dôme au loin. Il connaît chaque feu par son prénom.",
+      "choices": [
+        {
+          "label": "Écrire pendant tout le trajet",
+          "xp": {
+            "plume": 20
+          },
+          "set_flags": [
+            "jojo_nuit_vue"
+          ],
+          "consequence": "Un carnet entier de nuit : les néons, le pont, les livreurs. Jojo conduit doucement pour pas te faire raturer."
+        },
+        {
+          "label": "Ne rien dire et regarder",
+          "effects": {
+            "mental": 4
+          },
+          "set_flags": [
+            "jojo_nuit_vue"
+          ],
+          "consequence": "La ville défile. Tu ne penses à rien. Ça faisait longtemps. Jojo arrête le compteur sans que tu demandes."
+        },
+        {
+          "label": "Lui faire écouter ta maquette",
+          "effects": {
+            "streams": 2
+          },
+          "relations": {
+            "jojo_taxi": 6
+          },
+          "set_flags": [
+            "jojo_nuit_vue"
+          ],
+          "consequence": "Il monte le son. Puis encore. Au feu rouge, un livreur hoche la tête. « Ça, c'est un son de taxi », dit Jojo. C'est un compliment."
+        }
+      ]
+    },
+    {
+      "id": "sylvie_gamin",
+      "title": "Un gamin dans les coulisses",
+      "location": "quartier",
+      "npc": "sylvie_vigile",
+      "weight": 12,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 6
+      },
+      "text": "Devant le Dôme, Sylvie tient par la capuche un gamin qui se débat, casque sur les oreilles. Petit Sami. « Il est passé sous la barrière avec une clé USB. Il dit qu'il te connaît. » Sami te fait des yeux immenses. « Je voulais juste entendre le son de la salle. Pour mes prods. »",
+      "choices": [
+        {
+          "label": "Te porter garant de lui",
+          "relations": {
+            "sylvie_vigile": 8,
+            "petit_sami": 10
+          },
+          "set_flags": [
+            "sami_backstage"
+          ],
+          "consequence": "Sylvie te regarde longtemps. Puis elle lâche la capuche et sort un bracelet de sa poche. « Toi, tu le surveilles. Moi, je te surveille. » Sami ne touche plus terre."
+        },
+        {
+          "label": "Proposer à Sylvie de faire écouter sa prod à l'ingé son du Dôme",
+          "xp": {
+            "business": 15
+          },
+          "set_flags": [
+            "sami_backstage"
+          ],
+          "consequence": "« L'ingé son écoute personne. » Elle appelle quand même dans son oreillette. L'ingé son dit : « Envoie. » Sylvie lève un sourcil. Un seul."
+        },
+        {
+          "label": "Laisser Sylvie faire son travail",
+          "relations": {
+            "petit_sami": -6,
+            "sylvie_vigile": 3
+          },
+          "consequence": "Sami est raccompagné jusqu'au métro. Il ne pleure pas. Il est trop fier. Toi, tu te sens moins fier."
+        }
+      ]
+    },
+    {
+      "id": "sylvie_balance",
+      "title": "Les balances",
+      "location": "scene",
+      "npc": "sylvie_vigile",
+      "weight": 16,
+      "unique": true,
+      "conditions": {
+        "min_chapter": 6,
+        "required_flags": [
+          "sami_backstage"
+        ]
+      },
+      "text": "Pendant les balances, l'ingé son du Dôme lance une prod dans les enceintes. Un klonk d'ascenseur résonne dans vingt mille places vides. Petit Sami, assis au premier rang avec son bracelet, ne respire plus. Sylvie, au fond de la salle, croise les bras.",
+      "choices": [
+        {
+          "label": "Rapper dessus, là, devant la salle vide",
+          "effects": {
+            "streams": 3
+          },
+          "relations": {
+            "sylvie_vigile": 10
+          },
+          "set_flags": [
+            "sami_dome",
+            "sylvie_respect"
+          ],
+          "consequence": "Ta voix remplit le Dôme. Sami filme en tremblant. Au fond, Sylvie décroise les bras. C'est sa façon d'applaudir."
+        },
+        {
+          "label": "Demander qu'on passe la prod en ouverture du concert",
+          "xp": {
+            "scene": 20
+          },
+          "set_flags": [
+            "sami_dome",
+            "sylvie_respect"
+          ],
+          "consequence": "L'ingé son dit oui. Sami tombe assis. Sylvie lui apporte un verre d'eau. « Respire, petit. Dans ce métier, on respire. »"
+        },
+        {
+          "label": "Laisser Sami monter sur scène saluer la salle vide",
+          "effects": {
+            "mental": 3
+          },
+          "relations": {
+            "petit_sami": 10
+          },
+          "set_flags": [
+            "sami_dome"
+          ],
+          "consequence": "Il salue vingt mille sièges. Ils ne disent rien. Pour lui, ils hurlent. Sylvie regarde ailleurs pour lui laisser le moment."
+        }
+      ]
     }
   ]
 }

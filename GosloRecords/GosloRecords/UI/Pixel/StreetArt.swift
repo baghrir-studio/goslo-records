@@ -14,7 +14,7 @@ extension TileArt {
                 var noise = PixelNoise(x, y, salt: 23)
                 switch map.tile(at: p) {
                 case .asphalt, .crosswalk:
-                    if district == .centre {
+                    if district == .centre || (t.tram && district == .bloc && isMainRoad(y, on: map)) {
                         // The tramway's rails, sunk in the road.
                         for ry in [py + 4, py + 11] {
                             c.fill(px, ry, px + 15, ry, NightPalette.metal.shaded(1.25))
@@ -54,6 +54,12 @@ extension TileArt {
         case .bloc: playground(c, map: map, theme: t)
         case .hauts, .dome: break
         }
+    }
+
+    /// A road that runs across the whole map (Casablanca's tramway takes it).
+    private static func isMainRoad(_ y: Int, on map: WorldMap) -> Bool {
+        let road = (0..<map.width).filter { [.asphalt, .crosswalk].contains(map.tile(at: TilePoint(x: $0, y: y))) }.count
+        return road >= map.width - 2
     }
 
     private static func manhole(_ c: PixelCanvas, _ cx: Int, _ cy: Int) {

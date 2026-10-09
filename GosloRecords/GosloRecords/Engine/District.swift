@@ -70,7 +70,8 @@ extension GameEngine {
 
     /// The current district's map, as it is in this chapter.
     func currentMap(in state: GameState) -> WorldMap? {
-        world.map(for: state.district)?.forChapter(state.chapter, flags: state.flags)
+        world.map(for: state.district)?.forChapter(state.chapter, flags: state.flags,
+                                                   level: ArtistLevel.level(xp: state.artistXP))
     }
 
     /// Takes the metro: you come out of the destination's station.
