@@ -77,10 +77,15 @@ struct GameView: View {
                                             .id(headline)
                                             .transition(.move(edge: .top).combined(with: .opacity))
                                     }
+                                    if let briefing = model.briefing, model.transition == nil {
+                                        BriefingCard(briefing: briefing) { model.dismissBriefing() }
+                                            .transition(.move(edge: .top).combined(with: .opacity))
+                                    }
                                 }
                                 .padding(.horizontal, 12)
                                 .padding(.top, 4)
                                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: model.radioHeadline)
+                                .animation(.spring(response: 0.4, dampingFraction: 0.8), value: model.briefing)
                                 .animation(.spring(response: 0.4, dampingFraction: 0.8), value: model.objective?.id)
                             }
                             Spacer(minLength: 0)
@@ -168,7 +173,7 @@ struct GameView: View {
     private func hud(_ state: GameState) -> some View {
         VStack(spacing: 0) {
             StatsBar(stats: state.stats, deltas: model.lastDeltas, token: model.deltaToken, compact: true)
-            HStack(spacing: 10) {
+            HStack(spacing: 8) {
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(alignment: .lastTextBaseline, spacing: 6) {
                         Text(state.periodLabel).font(.display(20)).lineLimit(1).minimumScaleFactor(0.6)
@@ -190,6 +195,19 @@ struct GameView: View {
 
                 Spacer()
 
+                if model.canTakeMetro {
+                    let transit = Transit.of(state.rapper.city)
+                    hudButton(systemImage: transit == .tramway ? "tram.fill" : "tram.fill.tunnel", label: transit.name) {
+                        model.takeMetro()
+                    }
+                    .disabled(!model.canMove || model.placingDecor != nil)
+                    .overlay(alignment: .topTrailing) {
+                        // The objective is in another district.
+                        if model.objectiveDistrict != nil {
+                            Circle().fill(Color(red: 1, green: 0.85, blue: 0.3)).frame(width: 9, height: 9).offset(x: 2, y: -2)
+                        }
+                    }
+                }
                 hudButton(systemImage: "iphone", label: "Téléphone") { model.openPhone() }
                     .disabled(!model.canMove)
                     .overlay(alignment: .topTrailing) {

@@ -123,6 +123,10 @@ final class AppModel {
     private var heldDirection: Direction?
     private var walkTask: Task<Void, Never>?
     private var pendingSemesterCard = false
+    /// The period briefing card (what the last turn paid, the goals for this one), shown over the map for a moment.
+    private(set) var briefing: PeriodBriefing?
+    /// Set when a turn closes (with what it paid, if known), shown once back on the map.
+    private var pendingBriefing: PeriodSummary??
     private var stepsSinceSave = 0
     /// Achievements unlocked on this device (they unlock the legacy bonuses).
     private(set) var profile: TrophyCase
@@ -573,6 +577,36 @@ final class AppModel {
     func closeMetro() {
         guard phase == .metro else { return }
         phase = .overworld
+    }
+
+    /// The HUD's metro button: the metro map from anywhere on the map (the engine only asks for an open district).
+    var canTakeMetro: Bool { state.map { engine.openDistricts(in: $0).count > 1 } ?? false }
+
+    func takeMetro() {
+        guard canMove, canTakeMetro, placingDecor == nil else { return }
+        heldDirection = nil
+        briefing = nil
+        sound.play(.door)
+        phase = .metro
+    }
+
+    // MARK: - Period briefing
+
+    /// A new period starts: a short card over the map, gone after a few seconds or on a tap.
+    private func presentBriefing() {
+        guard let summary = pendingBriefing, let current = state, !current.isOver else { return }
+        pendingBriefing = nil
+        let card = engine.periodBriefing(in: current, summary: summary)
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) { briefing = card }
+        Task {
+            try? await Task.sleep(for: .seconds(6))
+            if briefing == card { dismissBriefing() }
+        }
+    }
+
+    func dismissBriefing() {
+        guard briefing != nil else { return }
+        withAnimation(.easeIn(duration: 0.25)) { briefing = nil }
     }
 
     /// Rides to another district: the train crosses the screen, the district's card, then its station.
@@ -1224,6 +1258,7 @@ final class AppModel {
         busy = false
         persist()
         await playPendingCinematic()
+        presentBriefing()
     }
 
     // MARK: - Cinematics
@@ -1443,6 +1478,7 @@ final class AppModel {
         celebrate(outcome)
         // The year card: once a year, not every turn.
         if outcome.semesterEnded, state?.isNewYear == true { pendingSemesterCard = true }
+        if outcome.semesterEnded, outcome.ending == nil { pendingBriefing = .some(outcome.period) }
         playOutcomeSound(outcome)
         if outcome.ending != nil {
             // Archive immediately so nothing is lost if the app is killed.
