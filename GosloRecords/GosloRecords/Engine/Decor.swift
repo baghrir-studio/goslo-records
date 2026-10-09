@@ -456,7 +456,9 @@ extension GameEngine {
         let incomes = state.placed.map { income(of: $0, in: state) }
         for index in state.placed.indices {
             let item = state.placed[index], earned = incomes[index]
-            for (kind, value) in earned.total {
+            let crew = Crew.buildingBonus(item.decor, in: state)
+            for (kind, base) in earned.total {
+                let value = Crew.boosted(base, by: crew)
                 if kind == .argent {
                     // A busy period can push it past the usual cap; it never eats what's already waiting.
                     let cap = max(earned.storageCap, value * 3)

@@ -3,7 +3,7 @@ import Foundation
 /// The artist level: XP from the Top, the season's challenges and clashes. Each level unlocks something.
 enum ArtistLevel {
     enum Unlock: String, CaseIterable {
-        case clip, radio, feat, tournee
+        case clip, radio, feat, crew, tournee
 
         /// Level that unlocks it.
         var level: Int {
@@ -11,6 +11,7 @@ enum ArtistLevel {
             case .clip: 2
             case .radio: 3
             case .feat: 4
+            case .crew: 5
             case .tournee: 6
             }
         }
@@ -20,6 +21,7 @@ enum ArtistLevel {
             case .clip: "Clips vidéo pour tes singles (+buzz dans le Top)"
             case .radio: "Passage sur goslo radio : +1 défi par saison, mieux payé"
             case .feat: "Featurings : invite un rival sur ton single"
+            case .crew: "Crew : une 4e place pour tes cartes"
             case .tournee: "Tournée : chaque single dans le Top 3 rapporte double"
             }
         }

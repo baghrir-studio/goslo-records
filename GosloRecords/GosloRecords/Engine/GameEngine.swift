@@ -14,6 +14,8 @@ struct TurnOutcome: Equatable {
     var gainedItems: [String] = []
     /// Secret techniques unlocked by this action (names).
     var unlockedTechniques: [String] = []
+    /// Crew cards and fragments earned by this action (`Crew`).
+    var crewCards: [CrewGain] = []
     /// Finished clash, if the action was one.
     var clash: ClashState?
     /// Finished interview, if the action was one.
@@ -1018,7 +1020,8 @@ struct GameEngine {
     /// The player tapped `taps` times against the boss's technique: it lands, softened.
     func counterSecret(taps: Int, in state: inout GameState) throws -> ClashState {
         guard var clash = state.clash else { throw GameEngineError.noClash }
-        ClashEngine.resolveCounter(&clash, taps: taps)
+        // A crew card with the counter perk adds taps (only if you tapped at all).
+        ClashEngine.resolveCounter(&clash, taps: taps > 0 ? taps + Crew.counterTaps(in: state) : 0)
         state.clash = clash
         return clash
     }
@@ -1156,6 +1159,7 @@ struct GameEngine {
             ArtistLevel.gain(15, in: &state, outcome: &outcome)
             state.counters.increment(.clashsGagnes)
             state.flags.insert("clash_gagne_\(clash.opponentId)")
+            grantCrewCard(id: clash.opponentId, from: .clash, in: &state, outcome: &outcome)
             if let boss = tournamentBoss(for: clash) { applyTournamentWin(boss, &outcome, in: &state) }
         }
         let penalty = won ? GameEngine.clashRelationPenalty.win : GameEngine.clashRelationPenalty.lose
@@ -1188,6 +1192,7 @@ struct GameEngine {
             if paid {
                 outcome.add(state.applyStats(clash.spec.win.effects))
                 ArtistLevel.gain(4, in: &state, outcome: &outcome)
+                grantCrewCard(id: clash.opponentId, from: .clash, in: &state, outcome: &outcome)
             }
             state.counters.increment(.victoiresTerrain)
             state.flags.formUnion(clash.spec.win.setFlags)
@@ -1278,6 +1283,7 @@ struct GameEngine {
                 outcome.add(state.applyStats(quest.reward.effects))
                 outcome.add(levelUps: state.skills.gain(quest.reward.xp))
                 outcome.completedQuests.append(quest)
+                grantQuestCards(quest, in: &state, outcome: &outcome)
             }
         }
     }

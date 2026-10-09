@@ -227,6 +227,9 @@ extension GameEngine {
 
     /// The secret technique gauge at the start of a clash (half full with the "flow" legacy).
     func startingMeter(in state: GameState) -> Int {
-        state.rapper.heritage == .flow ? ClashState.secretThreshold / 2 : 0
+        let heritage = state.rapper.heritage == .flow ? ClashState.secretThreshold / 2 : 0
+        // Crew cards with the gauge perk charge it too, never up to a ready technique.
+        let crew = Crew.meterBonus(in: state)
+        return crew == 0 ? heritage : min(heritage + crew, ClashState.secretThreshold - 1)
     }
 }
