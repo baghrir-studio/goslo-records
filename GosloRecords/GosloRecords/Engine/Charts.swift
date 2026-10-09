@@ -155,7 +155,8 @@ extension GameEngine {
             + Double(fame(in: state)) * 4 + (single.clip ? 9 : 0) + (single.feat != nil ? 6 : 0)
         // The first turn is the launch: the buzz builds up.
         let curve = age == 0 ? 0.9 : pow(ChartRules.decay, Double(age - 1))
-        return base * curve
+        let owner = state.flags.contains(RadioDeal.flag) ? RadioDeal.buzz : 1
+        return base * curve * owner
     }
 
     /// End of a turn: your singles in the Top bring streams, money and artist XP; their rank is kept.
