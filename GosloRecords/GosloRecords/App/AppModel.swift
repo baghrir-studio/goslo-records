@@ -155,6 +155,8 @@ final class AppModel {
     private(set) var arcadePlaying: ArcadeGame?
     /// The Punchliner's French dictionary, read once in the background the first time it's needed.
     @ObservationIgnored private var dictionaryTask: Task<FrenchDictionary?, Never>?
+    /// What the Punchliner game that just ended did to the personal records (for its result screen).
+    private(set) var punchlinerBreak: PunchlinerRecordBreak?
     /// The philosopher's analysis being read, to share as a card (cleared when the dialogue ends).
     private(set) var philosophyCard: PhilosophyCard?
     /// « Le Tournoi goslo radio » is open (talking to the radio host opens it).
@@ -959,7 +961,17 @@ final class AppModel {
         state = current
         if let running = current.minigame { phase = .minigame(running) }
         persist()
+        recordPunchlinerIfOver()
         return reaction
+    }
+
+    /// The Punchliner game just ended (story or arcade): its score and rhymes go into the personal records.
+    private func recordPunchlinerIfOver() {
+        guard let running = state?.minigame, running.kind == .punchliner, running.isOver else { return }
+        let score = Int((engine.minigameScore(running) * 100).rounded())
+        guard let broken = profile.recordPunchliner(running, score: score) else { return }
+        punchlinerBreak = broken
+        store.saveProfile(profile)
     }
 
     /// The French dictionary (nil if the file is missing). Read off the main thread, once.
@@ -977,6 +989,7 @@ final class AppModel {
         state = current
         if let running = current.minigame { phase = .minigame(running) }
         persist()
+        recordPunchlinerIfOver()
         return written
     }
 

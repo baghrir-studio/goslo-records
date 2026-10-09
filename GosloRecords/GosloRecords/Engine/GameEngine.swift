@@ -730,6 +730,7 @@ struct GameEngine {
         record(written.text.isEmpty ? "…" : written.text, points: written.points,
                log: "« \(written.text) » — \(written.feedback) \(written.reaction)",
                round: current.round, running: &running, rapper: rapper)
+        running.noteRhyme(written)
         state.minigame = running
         return written
     }
