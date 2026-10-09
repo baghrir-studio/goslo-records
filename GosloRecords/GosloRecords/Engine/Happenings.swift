@@ -1,7 +1,7 @@
 import Foundation
 
 /// Street happenings: something going on a few steps away on the map (a cypher forming, a fan, a beatboxer).
-/// Walk onto it to join in. They cost no action; one per turn at most.
+/// Walk onto it to join in. They cost no action; one pays per period at most (`Gate.happening`).
 enum Happening: String, Codable, CaseIterable {
     case cypher, selfie, beatbox
 
@@ -70,6 +70,8 @@ extension GameEngine {
     func takeSelfie<R: RandomNumberGenerator>(in state: inout GameState, using rng: inout R) -> (fan: String, line: String, changes: [StatKind: Int]) {
         let fan = Happenings.fans.randomElement(using: &rng)!
         let line = Happenings.selfieLines.randomElement(using: &rng)!
+        // One paying happening a period (`Gate.happening`): after that, the photo is just a photo.
+        guard useGate(.happening, in: &state) else { return (fan, line, [:]) }
         let changes = state.applyStats([.streams: 2, .mental: 2])
         var notes = TurnOutcome(consequence: "")
         ArtistLevel.gain(3, in: &state, outcome: &notes)
@@ -79,6 +81,7 @@ extension GameEngine {
     /// The beatboxer's challenge: Beatbox Simon, for real (no action spent).
     func startStreetBeatbox(in state: inout GameState) throws -> MinigameState {
         guard canVisit(state) else { throw GameEngineError.cannotVisit }
+        guard useGate(.happening, in: &state) else { throw GameEngineError.requirementNotMet }
         let running = MinigameState(minigame: Arcade.beatbox)
         state.minigame = running
         return running
