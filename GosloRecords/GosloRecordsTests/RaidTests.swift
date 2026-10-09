@@ -32,8 +32,8 @@ final class RaidTests: XCTestCase {
     }
 
     /// A state whose period end brings a raid on the snack (the first turn whose roll hits).
-    private func raided() throws -> GameState {
-        var state = try game()
+    private func raided(from start: GameState? = nil) throws -> GameState {
+        var state = try start ?? game()
         fill(&state)
         for turn in 0..<400 {
             var probe = state
@@ -107,8 +107,8 @@ final class RaidTests: XCTestCase {
         var full = state
         fill(&full)
         let cap = full.placed[0].stored
-        let first = try raided()
-        let again = try raided()
+        let first = try raided(from: state)
+        let again = try raided(from: state)
         XCTAssertEqual(first.raid, again.raid, "même partie, même tour : même raid")
         let raid = try XCTUnwrap(first.raid)
         XCTAssertEqual(raid.rival, "lil_sauge", "un rival déjà croisé")
