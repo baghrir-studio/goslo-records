@@ -285,10 +285,12 @@ struct GameView: View {
             VStack(spacing: 10) {
                 if let decor = model.placingDecor {
                     PlacementBar(decor: decor, moving: model.movingDecorId != nil, refusal: model.placementRefusal,
+                                 synergies: model.placementSynergies,
                                  confirm: { _ = model.confirmPlacing() }, cancel: { model.cancelPlacing() })
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 } else if let item = model.inspectedDecor {
-                    BuildingCard(item: item, upgradeRefusal: model.upgradeRefusal(item),
+                    BuildingCard(item: item, income: model.engine.income(of: item, in: state),
+                                 demand: Neighbourhood.demand(turn: state.turn), upgradeRefusal: model.upgradeRefusal(item),
                                  upgrade: { _ = model.upgradeInspected() }, move: { model.moveInspected() },
                                  sell: { model.sellInspected() }, close: { model.closeInspected() })
                         .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -337,6 +339,8 @@ private struct PlacementBar: View {
     let decor: Decor
     let moving: Bool
     let refusal: String?
+    /// What putting it here would start with the neighbours ("+1 argent : synergie avec …").
+    let synergies: [String]
     let confirm: () -> Void
     let cancel: () -> Void
 
@@ -351,6 +355,15 @@ private struct PlacementBar: View {
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(refusal == nil ? Color.green : Color(red: 1, green: 0.45, blue: 0.4))
                     .lineLimit(2)
+                if refusal == nil {
+                    ForEach(Array(synergies.prefix(2)), id: \.self) { line in
+                        Text(line)
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
+                }
             }
             Spacer(minLength: 4)
             Button(action: cancel) {
@@ -382,6 +395,9 @@ private struct PlacementBar: View {
 /// One of your decorations, up close: what it brings, and what you can do with it.
 private struct BuildingCard: View {
     let item: PlacedDecor
+    /// What it really gives this period: level, synergies, demand.
+    let income: BuildingIncome
+    let demand: Demand
     let upgradeRefusal: String?
     let upgrade: () -> Void
     let move: () -> Void
@@ -389,10 +405,13 @@ private struct BuildingCard: View {
     let close: () -> Void
     @State private var confirmSell = false
 
-    private var income: String {
-        item.perTurn.sorted { $0.key.rawValue < $1.key.rawValue }
-            .map { "+\($0.value) \($0.key.label.lowercased())" }
-            .joined(separator: " · ")
+    /// Why it pays more than its base: one short line per synergy, and the period's demand.
+    private var bonusLines: [String] {
+        var lines = income.synergies.map { match in
+            "\(GameEngine.bonusText(match.synergy.bonus)) · synergie avec \(match.partner.shortName)"
+        }
+        if income.boosted { lines.append("×2 cette période · \(demand.title)") }
+        return lines
     }
 
     var body: some View {
@@ -412,9 +431,16 @@ private struct BuildingCard: View {
                                 .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
                         }
                     }
-                    Text("\(income) par période")
+                    Text("\(GameEngine.bonusText(income.total)) par période")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(Color.green)
+                    ForEach(bonusLines, id: \.self) { line in
+                        Text(line)
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
                 }
                 Spacer(minLength: 4)
                 Button(action: close) {

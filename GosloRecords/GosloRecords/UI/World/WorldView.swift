@@ -82,7 +82,7 @@ struct WorldView: View {
                         .zIndex(Double(item.anchor.y) + 0.3)
                     // Money waiting: walk up and press A to pick it up.
                     if item.stored > 0 {
-                        CoinBubble(amount: item.stored, full: item.stored >= item.storageCap)
+                        CoinBubble(amount: item.stored, full: item.stored >= model.engine.income(of: item, in: state).storageCap)
                             .position(x: spot.x, y: spot.y - height / 2 - 10)
                             .zIndex(Double(item.anchor.y) + 0.32)
                     }

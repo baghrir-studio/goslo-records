@@ -140,6 +140,60 @@ enum ShopIcons {
             p.fill(3, 6, 12, 6, red)
             p.fill(3, 9, 12, 9, gold)
             p.fill(3, 6, 3, 9, red)
+        case .snack:
+            p.fill(1, 1, 14, 3, dark)
+            p.fill(3, 2, 12, 2, gold)
+            p.fill(1, 4, 14, 15, c("#2f6b4f"))
+            for x in 1...14 { p.fill(x, 4, x, 5, (x / 2) % 2 == 0 ? red : c("#f0eee8")) }
+            p.fill(2, 7, 9, 12, c("#f2c14e"))
+            p.fill(4, 8, 7, 11, c("#9a5a2a"))
+            p.fill(5, 7, 6, 7, c("#b8bcc8"))
+            p.fill(11, 8, 13, 15, dark)
+        case .barbier:
+            p.fill(0, 2, 11, 3, dark)
+            p.fill(1, 4, 11, 15, c("#2a4a6a"))
+            p.fill(2, 6, 7, 10, c("#9fd4e8"))
+            p.fill(4, 11, 7, 12, red)
+            p.fill(8, 11, 10, 15, dark)
+            for y in 3...14 { for x in 13...14 { p.dot(x, y, (x + y) % 4 < 2 ? red : c("#f0eee8")) } }
+            p.fill(12, 2, 15, 2, c("#b8bcc8")); p.fill(12, 15, 15, 15, c("#b8bcc8"))
+        case .salleBoxe:
+            p.circle(cx: 9, cy: 6, radius: 5, red)
+            p.circle(cx: 4, cy: 7, radius: 2, c("#c43a22"))
+            p.fill(5, 10, 13, 14, red)
+            p.fill(5, 12, 13, 12, c("#f0eee8"))
+            p.dot(7, 3, c("#ff9a8a")); p.dot(8, 2, c("#ff9a8a"))
+        case .disquaire:
+            p.circle(cx: 8, cy: 8, radius: 7, c("#14141a"))
+            p.circle(cx: 8, cy: 8, radius: 5, c("#24242c"))
+            p.circle(cx: 8, cy: 8, radius: 4, c("#14141a"))
+            p.circle(cx: 8, cy: 8, radius: 2, c("#4fd6e0"))
+            p.dot(8, 8, dark)
+            p.dot(4, 5, c("#b8bcc8")); p.dot(5, 4, c("#b8bcc8"))
+        case .radioPirate:
+            p.fill(7, 2, 8, 10, c("#b8bcc8"))
+            p.fill(6, 5, 9, 5, c("#b8bcc8")); p.fill(5, 8, 10, 8, c("#b8bcc8"))
+            p.dot(7, 1, red); p.dot(8, 1, red)
+            for (x, y) in [(4, 1), (3, 2), (3, 3), (4, 4), (11, 1), (12, 2), (12, 3), (11, 4)] { p.dot(x, y, c("#ff5ab4")) }
+            p.fill(1, 10, 14, 15, c("#5a5a4a"))
+            p.fill(3, 12, 6, 13, gold)
+            p.fill(10, 12, 12, 15, dark)
+        case .labelInde:
+            p.fill(1, 1, 14, 15, c("#26263a"))
+            p.fill(3, 2, 5, 3, gold); p.fill(10, 2, 12, 3, gold)
+            p.circle(cx: 8, cy: 7, radius: 3, gold)
+            p.dot(8, 7, dark)
+            p.fill(2, 11, 13, 15, c("#3a6a8a"))
+            p.fill(7, 11, 8, 15, dark)
+        case .fresqueGeante:
+            p.fill(0, 1, 15, 4, c("#3b2a6a"))
+            p.fill(0, 5, 15, 8, c("#7a3a8a"))
+            p.fill(0, 9, 15, 11, c("#e04fb0"))
+            p.fill(0, 12, 15, 14, c("#ff8a3a"))
+            p.circle(cx: 7, cy: 8, radius: 3, c("#1a1030"))
+            p.fill(3, 11, 11, 14, c("#1a1030"))
+            p.fill(4, 3, 10, 4, gold)
+            p.circle(cx: 12, cy: 10, radius: 1, gold)
         }
         return p
     }

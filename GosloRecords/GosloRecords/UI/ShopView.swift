@@ -74,9 +74,10 @@ struct ShopView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
                         if tab == .deco {
-                            Text("Pose-la où tu veux sur la carte. L’argent de tes bâtiments s’accumule sur place : passe le ramasser (bouton A), améliore-les, déplace-les ou revends-les.")
+                            Text("Pose-la où tu veux sur la carte. L’argent de tes bâtiments s’accumule sur place : passe le ramasser (bouton A), améliore-les, déplace-les ou revends-les. Certains bâtiments se boostent entre voisins (une case d’écart au plus).")
                                 .font(.system(size: 12))
                                 .foregroundStyle(Theme.muted)
+                            demandBanner(Neighbourhood.demand(turn: state.turn))
                         }
                         LazyVGrid(columns: columns, spacing: 10) {
                             switch tab {
@@ -134,12 +135,38 @@ struct ShopView: View {
         let placed = state.decor.values.filter { $0 == decor }.count + state.placed.filter { $0.decor == decor }.count
         let levelLock = ArtistLevel.level(xp: state.artistXP) < decor.minLevel ? "Niveau \(decor.minLevel) requis" : nil
         let moneyLock = state.stats.argent <= decor.price ? "Pas assez d'argent" : nil
+        let boosted = Neighbourhood.demand(turn: state.turn).boosted.contains(decor)
+        var detail = "\(GameEngine.bonusText(decor.perTurn)) / période"
+        if boosted { detail += " · ×2 en ce moment" }
+        let partners = Neighbourhood.partners(of: decor)
+        if !partners.isEmpty { detail += "\nVoisins : " + partners.map(\.shortName).joined(separator: ", ") }
         return card(image: ShopIcons.decor(decor), imageWidth: decor.isBuilding ? 64 : 56, title: decor.name,
                     pitch: placed > 0 ? "\(decor.pitch) · \(placed) posé\(placed > 1 ? "s" : "")" : decor.pitch,
-                    price: "\(decor.price)", locked: levelLock ?? moneyLock, highlighted: placed > 0) {
+                    price: "\(decor.price)", locked: levelLock ?? moneyLock, highlighted: placed > 0 || boosted,
+                    detail: detail) {
             model.beginPlacing(decor)
             dismiss()
         }
+    }
+
+    /// What the neighbourhood wants this period: those businesses pay double at the end of it.
+    private func demandBanner(_ demand: Demand) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 6) {
+            Text("★")
+                .foregroundStyle(shopGold)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("CETTE PÉRIODE · \(demand.title.uppercased())")
+                    .font(.mono(11, weight: .bold))
+                    .foregroundStyle(shopGold)
+                Text("\(demand.effect.prefix(1).uppercased())\(demand.effect.dropFirst()), payé en fin de période.")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Theme.text)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .padding(10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .overlay(Rectangle().stroke(shopGold.opacity(0.6), lineWidth: 1))
     }
 
     /// The big one: buy goslo radio itself. Your sounds get more airplay and it pays every period.
@@ -155,7 +182,8 @@ struct ShopView: View {
     }
 
     private func card(image: UIImage, imageWidth: CGFloat, title: String, pitch: String, price: String,
-                      locked: String?, highlighted: Bool, action: @escaping () -> Void) -> some View {
+                      locked: String?, highlighted: Bool, detail: String? = nil,
+                      action: @escaping () -> Void) -> some View {
         Button(action: action) {
             VStack(spacing: 6) {
                 ZStack {
@@ -176,6 +204,15 @@ struct ShopView: View {
                     .multilineTextAlignment(.center)
                     .lineLimit(3)
                     .fixedSize(horizontal: false, vertical: true)
+                if let detail {
+                    Text(detail)
+                        .font(.mono(9, weight: .bold))
+                        .foregroundStyle(Color.green.opacity(0.85))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                        .minimumScaleFactor(0.8)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 Spacer(minLength: 0)
                 Text(locked.map { "🔒 \($0)" } ?? price)
                     .font(locked == nil ? .display(22) : .mono(10, weight: .bold))
