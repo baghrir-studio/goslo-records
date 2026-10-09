@@ -38,9 +38,22 @@ struct Result {
     var retries = 0
     var fillerActions = 0
     var stuck = false
+    // Economy.
+    var level = 1
+    /// Money at the start of S5, S10, S15 (absent: the career ended before).
+    var money: [Int: Int] = [:]
+    var buildings = 0
+    var firstBuildTurn: Int?
+    var upgrades = 0
+    var collected = 0
+    /// Synergies at work on the map at the end.
+    var synergies = 0
+    var spent = 0
 }
 
 let trace = ProcessInfo.processInfo.environment["TRACE"] != nil
+/// NOBUILD=1 plays without buying buildings (the economy baseline).
+let builds = ProcessInfo.processInfo.environment["NOBUILD"] == nil
 
 final class Player {
     let engine: GameEngine
@@ -65,9 +78,15 @@ final class Player {
 
     func play() -> Result {
         var guardCounter = 0
+        var lastTurn = state.turn
         while !state.isOver {
             guardCounter += 1
             if guardCounter > 2_000 { result.stuck = true; break }
+            if state.turn != lastTurn {
+                lastTurn = state.turn
+                if [5, 10, 15].contains(state.turn + 1) { result.money[state.turn + 1] = state.stats.argent }
+                if builds { manageBuildings() }
+            }
             if let cinematic = state.pendingCinematic {
                 engine.cinematicFinished(cinematic, in: &state)
                 continue
@@ -82,7 +101,55 @@ final class Player {
         result.finished = state.flags.contains("chapitre_\(engine.story.chapters.map(\.number).max() ?? 0)")
         result.chapterReached = state.chapter
         result.turn = state.turn
+        result.level = ArtistLevel.level(xp: state.artistXP)
+        result.synergies = state.placed.reduce(0) { $0 + engine.income(of: $1, in: state).synergies.count }
         return result
+    }
+
+    // MARK: Buildings
+
+    /// A player who builds: at each new period, picks up what the buildings made, then buys the best building
+    /// they can afford while keeping a cushion (placed where it starts the most synergies), or else upgrades one.
+    func manageBuildings() {
+        for item in state.placed { result.collected += engine.collect(item.id, in: &state) }
+        let cushion = 25
+        let level = ArtistLevel.level(xp: state.artistXP)
+        func value(_ income: [StatKind: Int]) -> Double {
+            income.reduce(0) { $0 + Double($1.value) * ($1.key == .argent ? 1 : 0.6) }
+        }
+        let affordable = Decor.allCases.filter { $0.isBuilding && level >= $0.minLevel && state.stats.argent - $0.price >= cushion }
+        if !affordable.isEmpty, let map = engine.currentMap(in: state) {
+            let player = map.spawn
+            let anchors = (0..<map.height).flatMap { y in (0..<map.width).map { TilePoint(x: $0, y: y) } }
+            // Worth: what it pays, plus the synergies it could start, minus a little for each copy already owned.
+            func score(_ decor: Decor) -> Double {
+                let synergies = anchors.lazy.map { self.engine.placementSynergies(decor, at: $0, in: self.state).count }.max() ?? 0
+                let copies = state.placed.filter { $0.decor == decor }.count
+                return value(decor.perTurn) + Double(synergies) - Double(copies)
+            }
+            let scored = affordable.map { ($0, score($0)) }
+            let best = scored.max { ($0.1, $0.0.price) < ($1.1, $1.0.price) }!.0
+            let ranked = anchors.map { ($0, engine.placementSynergies(best, at: $0, in: state).count) }
+                .sorted { $0.1 > $1.1 }
+            if let pick = ranked.first(where: { engine.placementRefusal(best, at: $0.0, in: state, player: player) == nil }),
+               (try? engine.place(best, at: pick.0, in: &state, player: player)) != nil {
+                result.buildings += 1
+                result.spent += best.price
+                if result.firstBuildTurn == nil { result.firstBuildTurn = state.turn }
+                if trace { print("S\(state.turn + 1) construit \(best.name) (\(pick.1) synergies)") }
+                return
+            }
+        }
+        // Nothing new to build: upgrade the building that pays most.
+        let upgradable = state.placed.filter { item in
+            engine.upgradeRefusal(item.id, in: state) == nil
+                && state.stats.argent - (item.decor.upgradeCost(from: item.level) ?? 999) >= cushion
+        }
+        if let item = upgradable.max(by: { value($0.perTurn) < value($1.perTurn) }),
+           let cost = item.decor.upgradeCost(from: item.level), (try? engine.upgrade(item.id, in: &state)) != nil {
+            result.upgrades += 1
+            result.spent += cost
+        }
     }
 
     var requiredFlags: Set<String> {
@@ -207,8 +274,20 @@ final class Player {
         let preferred: [StatKind: Location] = [.mental: .chezToi, .argent: .label, .credibilite: .quartier, .streams: .reseaux]
         var location = preferred[low] ?? .chezToi
         if !engine.isUnlocked(location, in: state) { location = .chezToi }
-        guard let event = try? engine.visit(location, in: &state, using: &rng) else { return }
-        resolve(event)
+        // The street and the phone go through their gates (`Gate.bench`, `Gate.phone`), like in the app.
+        let gated: GatedVisit?
+        switch location {
+        case .quartier: gated = try? engine.sitOnBench(in: &state, using: &rng)
+        case .reseaux: gated = try? engine.checkPhone(in: &state, using: &rng)
+        default: gated = (try? engine.visit(location, in: &state, using: &rng)).map(GatedVisit.event)
+        }
+        switch gated {
+        case .event(let event)?: resolve(event)
+        case .closed?:
+            guard let event = try? engine.visit(.chezToi, in: &state, using: &rng) else { return }
+            resolve(event)
+        case nil: return
+        }
     }
 
     // MARK: Mini-games
@@ -395,6 +474,18 @@ for profile in Profile.all {
         let turns = finished.map(\.turn).sorted()
         let p90 = turns[min(turns.count - 1, turns.count * 9 / 10)]
         print("  semestre de la finale (histoire finie) : médiane \(turns[turns.count / 2] + 1), 90e centile \(p90 + 1), max \(turns.last! + 1)")
+    }
+    let median = { (xs: [Int]) in xs.isEmpty ? 0 : xs.sorted()[xs.count / 2] }
+    var levels: [Int: Int] = [:]
+    for r in results { levels[r.level, default: 0] += 1 }
+    print("  niveau d'artiste en fin de carrière : \(levels.sorted { $0.key < $1.key }.map { "niv\($0.key): \($0.value)" }.joined(separator: ", "))")
+    print("  argent (médiane) : début S5 \(median(results.compactMap { $0.money[5] })), S10 \(median(results.compactMap { $0.money[10] })), S15 \(median(results.compactMap { $0.money[15] }))")
+    if builds {
+        let firsts = results.compactMap(\.firstBuildTurn)
+        print(String(format: "  bâtiments : %.1f construits, %.1f améliorations, %.0f dépensés, %.0f ramassés, %.1f synergies actives (moyennes)",
+                     mean(results.map(\.buildings)), mean(results.map(\.upgrades)), mean(results.map(\.spent)),
+                     mean(results.map(\.collected)), mean(results.map(\.synergies))))
+        print("  premier bâtiment : \(pct(firsts.count, careers)) des carrières, au semestre \(median(firsts) + 1) (médiane)")
     }
     print("")
 }

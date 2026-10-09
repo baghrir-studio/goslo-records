@@ -214,6 +214,8 @@ final class AppModel {
     func startCareer(_ rapper: Rapper) {
         var fresh = engine.newGame(rapper: rapper)
         HQ.apply(profile.hq, to: &fresh)
+        // The Punchliner verses already played in other careers and the arcade come last.
+        fresh.seenVerses = profile.punchliner.recentVerses
         fresh.freeCareer = true
         fresh.position = engine.world.map?.spawn
         state = fresh
@@ -399,7 +401,7 @@ final class AppModel {
     /// Now and then (once a turn at most), something starts a few steps away.
     private func spawnHappening(near point: TilePoint, on map: WorldMap) {
         guard let current = state, dailyClash == nil, arcadePlaying == nil, phase == .overworld,
-              engine.canVisit(current), current.chapter >= 2 else { return }
+              engine.canVisit(current), engine.gateStatus(.happening, in: current).isOpen else { return }
         if let spot = happening, happeningTurn != current.turn || spot.point == point { happening = nil }
         guard happening == nil, happeningTurn != current.turn,
               Int.random(in: 0..<100, using: &rng) < Happenings.chancePercent,
@@ -423,13 +425,20 @@ final class AppModel {
             let selfie = engine.takeSelfie(in: &current, using: &rng)
             state = current
             publishDeltas(from: before, to: current.stats)
-            sound.play(.statUp)
-            Haptics.shared.play(.good)
+            let paid = !selfie.changes.isEmpty
+            if paid {
+                sound.play(.statUp)
+                Haptics.shared.play(.good)
+            }
             phase = .dialogue(speaker: selfie.fan, lines: [spot.kind.intro, selfie.line,
-                                                           "Elle poste la photo : « vu en vrai !! » Ça tourne dans le quartier."])
+                                                           paid ? "Elle poste la photo : « vu en vrai !! » Ça tourne dans le quartier."
+                                                                : "Elle range son téléphone. Le quartier t'a déjà assez vu pour cette période."])
             persist()
         case .beatbox:
-            guard let running = try? engine.startStreetBeatbox(in: &current) else { return }
+            guard let running = try? engine.startStreetBeatbox(in: &current) else {
+                phase = .dialogue(speaker: nil, lines: [Gate.happening.spentLine(yearly: false)])
+                return
+            }
             state = current
             source = nil
             phase = .minigame(running)
@@ -522,10 +531,16 @@ final class AppModel {
             }
         case .bench:
             sound.play(.select)
-            guard let event = try? engine.visit(.quartier, in: &current, using: &rng) else { return }
+            // Once a period (`Gate.bench`): otherwise a short line, nothing paid, no action spent.
+            guard let visit = try? engine.sitOnBench(in: &current, using: &rng) else { return }
             state = current
-            source = .bench
-            phase = .encounter(event)
+            switch visit {
+            case .event(let event):
+                source = .bench
+                phase = .encounter(event)
+            case .closed(let lines):
+                phase = .dialogue(speaker: nil, lines: lines)
+            }
             persist()
         case .nothing:
             break
@@ -534,11 +549,16 @@ final class AppModel {
 
     /// Phone button: social media and DMs (1 action).
     func openPhone() {
-        guard canMove, var current = state, let event = try? engine.visit(.reseaux, in: &current, using: &rng) else { return }
+        guard canMove, var current = state, let visit = try? engine.checkPhone(in: &current, using: &rng) else { return }
         sound.play(.select)
         state = current
-        source = .phone
-        phase = .encounter(event)
+        switch visit {
+        case .event(let event):
+            source = .phone
+            phase = .encounter(event)
+        case .closed(let lines):
+            phase = .dialogue(speaker: nil, lines: lines)
+        }
         persist()
     }
 
@@ -1052,6 +1072,12 @@ final class AppModel {
     var placementRefusal: String? {
         guard let decor = placingDecor, let anchor = placementAnchor, let state else { return "—" }
         return engine.placementRefusal(decor, at: anchor, in: state, player: position, moving: movingDecorId)
+    }
+
+    /// What putting it there would start with the neighbours (shown under the ghost's verdict).
+    var placementSynergies: [String] {
+        guard let decor = placingDecor, let anchor = placementAnchor, let state else { return [] }
+        return engine.placementSynergies(decor, at: anchor, in: state, moving: movingDecorId)
     }
 
     /// From the shop: walk around with the decoration in front of you, then put it down.
@@ -1714,7 +1740,7 @@ final class AppModel {
     func startArcade(_ game: ArcadeGame) {
         guard dailyClash == nil, arcadePlaying == nil, isUnlocked(game), game.mode != .freestyle else { return }
         let rapper = state?.rapper ?? history.last?.rapper ?? Rapper(name: "MC Personne", city: .paris, style: .boomBap)
-        guard let sandbox = engine.arcadeGame(game, rapper: rapper) else { return }
+        guard let sandbox = engine.arcadeGame(game, rapper: rapper, seenVerses: profile.punchliner.recentVerses) else { return }
         careerAside = state
         state = sandbox
         arcadePlaying = game

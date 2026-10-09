@@ -382,6 +382,7 @@ struct GameEngine {
         }
         state.pendingFollowUp = nil
         state.currentLocation = nil
+        state.currentGate = nil
         state.currentEventId = event.id
         if let npc = event.npc { state.metCast.insert(npc) }
         return event
@@ -415,7 +416,11 @@ struct GameEngine {
 
         var outcome = TurnOutcome(consequence: choice.consequence)
         let tired = fatigue(at: state.currentLocation, in: state)
-        let effects = tired < 1 ? choice.effects.mapValues { $0 > 0 ? max(1, Int((Double($0) * tired).rounded())) : $0 } : choice.effects
+        // The bench pays with progress, not repetition (`Gate.bench`): the scale grows with the artist level.
+        let scale = state.currentGate == .bench ? Gates.benchScale(level: ArtistLevel.level(xp: state.artistXP)) : 1
+        state.currentGate = nil
+        var effects = tired < 1 ? choice.effects.mapValues { $0 > 0 ? max(1, Int((Double($0) * tired).rounded())) : $0 } : choice.effects
+        effects = Gates.scaled(effects, by: scale)
         outcome.add(state.applyStats(effects))
         if tired < 1, choice.effects.values.contains(where: { $0 > 0 }) {
             outcome.notes.append("Ici, tout le monde t'a déjà vu cette année : ça rapporte moins. Va voir ailleurs.")
@@ -435,8 +440,9 @@ struct GameEngine {
             // A new item with a technique gets equipped right away.
             if story.item(id)?.secret != nil { state.equippedTechnique = id }
         }
+        // Skill XP tires like the stats: farming one place doesn't level you up either.
         let visitXP = state.currentLocation?.visitXP ?? [:]
-        outcome.add(levelUps: state.skills.gain(visitXP.merging(choice.xp, uniquingKeysWith: +)))
+        outcome.add(levelUps: state.skills.gain(Gates.scaled(visitXP.merging(choice.xp, uniquingKeysWith: +), by: tired * scale)))
 
         if event.unique { state.seenUniqueEvents.insert(event.id) }
         state.seenEvents.insert(event.id)
@@ -484,9 +490,7 @@ struct GameEngine {
         }
         if let id = choice.minigame, let minigame = story.minigame(id),
            EndingResolver.prematureEnding(for: state.stats) == nil {
-            let running = MinigameState(minigame: minigame)
-            state.minigame = running
-            return .minigame(running)
+            return .minigame(startMinigame(minigame, in: &state))
         }
         return .outcome(finishAction(outcome, in: &state))
     }
@@ -698,10 +702,11 @@ struct GameEngine {
 
     /// Punchliner: the round being played, and the order its endings are shown in (stable).
     func punchlinerRound(in state: GameState) -> (round: PunchlinerRound, order: [Int])? {
-        guard let running = state.minigame, running.kind == .punchliner, let minigame = minigame(running.id),
-              minigame.rounds.indices.contains(running.round) else { return nil }
-        let round = minigame.rounds[running.round]
-        return (round, PunchlinerEngine.order(for: round, seed: PunchlinerEngine.seed(running.id, round: running.round)))
+        guard let running = state.minigame, running.kind == .punchliner, running.round < running.roundCount else { return nil }
+        let rounds = punchlinerRounds(of: running)
+        guard rounds.indices.contains(running.round) else { return nil }
+        let round = rounds[running.round]
+        return (round, PunchlinerEngine.order(for: round, seed: punchlinerSeed(of: running, round: running.round)))
     }
 
     /// Punchliner: the player picks an ending (nil = the timer ran out). Returns the reaction.
@@ -795,7 +800,7 @@ struct GameEngine {
     func minigameScore(_ running: MinigameState) -> Double {
         switch running.kind {
         case .punchliner:
-            let best = minigame(running.id).map(PunchlinerEngine.maxPoints) ?? 0
+            let best = PunchlinerEngine.maxPoints(punchlinerRounds(of: running))
             return best > 0 ? Double(running.points) / Double(best) : 0
         case .platine:
             return Double(running.points) / Double(PlatineEngine.runs * PlatineEngine.maxPoints)
@@ -1165,15 +1170,26 @@ struct GameEngine {
         let won = clash.playerWon
         var outcome = TurnOutcome(consequence: won ? clash.spec.win.consequence : clash.spec.lose.consequence)
         outcome.clash = clash
-        outcome.add(state.applyStats(won ? clash.spec.win.effects : clash.spec.lose.effects))
+        // Only the period's first wins pay (`Gate.terrain`); after that a win still counts for the story
+        // and the challenges. A defeat costs morale, so it doesn't need a cap: its small XP is how you learn.
+        let paid = won ? useGate(.terrain, in: &state) : true
         if won {
-            ArtistLevel.gain(4, in: &state, outcome: &outcome)
+            if paid {
+                outcome.add(state.applyStats(clash.spec.win.effects))
+                ArtistLevel.gain(4, in: &state, outcome: &outcome)
+            }
             state.counters.increment(.victoiresTerrain)
             state.flags.formUnion(clash.spec.win.setFlags)
+        } else {
+            outcome.add(state.applyStats(clash.spec.lose.effects))
         }
-        let amount = won ? GameEngine.wildXP.win : GameEngine.wildXP.lose
-        let gains = Dictionary(uniqueKeysWithValues: clash.movesUsed.map { ($0.skill, amount) })
-        outcome.add(levelUps: state.skills.gain(gains))
+        if paid {
+            let amount = won ? GameEngine.wildXP.win : GameEngine.wildXP.lose
+            let gains = Dictionary(uniqueKeysWithValues: clash.movesUsed.map { ($0.skill, amount) })
+            outcome.add(levelUps: state.skills.gain(gains))
+        } else {
+            outcome.notes.append(Gate.terrain.spentLine(yearly: false))
+        }
         state.clash = nil
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
@@ -1223,6 +1239,7 @@ struct GameEngine {
             // Burn-out: one action only.
             state.actionsLeft = state.stats.mental < Economy.burnout ? 1 : GameState.actionsPerTurn
             if state.isNewYear { state.visitsThisYear = [:] }
+            resetGates(in: &state)
             refreshChallenges(in: &state)
             state.challengedThisSemester = []
             outcome.semesterEnded = true

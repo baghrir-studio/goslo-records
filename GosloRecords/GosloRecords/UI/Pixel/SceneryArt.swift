@@ -22,6 +22,9 @@ extension TileArt {
             case .panorama: panoramaArt(scenery, on: c, map: map, theme: t)
             case .backstage: backstageArt(scenery, on: c, map: map, theme: t)
             case .bridge: bridgeArt(scenery, on: c, map: map, theme: t)
+            case .rooftops, .shopfronts, .kiosk, .busStop, .planters, .graffiti, .scooters, .stalls, .cafe, .shore:
+                // The neighbourhood's small things (NeighbourhoodArt.swift).
+                dressNeighbourhood(scenery, on: c, map: map, theme: t, district: district)
             }
         }
     }

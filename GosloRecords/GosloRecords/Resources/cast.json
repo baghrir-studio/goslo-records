@@ -2796,6 +2796,520 @@
         "J'ai analysé ta carrière. Recommandation : continuer. Statistiquement, tu vas perdre.",
         "Mon point faible, c'est le vécu. J'ai demandé à ma base de données ce qu'est une mère. Elle cherche encore."
       ]
+    },
+    {
+      "id": "mounir_kiosque",
+      "name": "Mounir",
+      "role": "Le kiosquier du Bloc",
+      "bio": "Trente ans derrière le même comptoir de journaux. Sait tout ce qui se passe au Bloc avant que ce soit imprimé.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#9a9aa6",
+        "top": "#2f5a3a",
+        "bottom": "#3a3a44",
+        "shoes": "#3a2a1e",
+        "accent": "#f2c14e",
+        "hair_style": "short",
+        "glasses": true,
+        "beard": true,
+        "outfit": "jacket",
+        "build": "heavy"
+      },
+      "idle": [
+        "Le journal, un café, un ticket à gratter. Depuis trente ans, c'est le même petit-déjeuner pour tout le quartier.",
+        "Je sais tout ce qui se passe ici avant que ce soit imprimé. Le journal, c'est juste pour confirmer.",
+        "Il y a un article sur un chien qui fait du skate, aujourd'hui. Toi t'y es pas. Pas encore.",
+        "Le kiosque, c'est le premier réseau social. Tu viens, tu parles, tu repars avec des nouvelles. Et zéro pub.",
+        "Quand tu feras la une, je te garderai un exemplaire. Deux, même. Un pour ta mère.",
+        "Les mots croisés de mardi : « rappeur en sept lettres ». J'ai mis ton blaze. Ça rentrait pas, j'ai forcé.",
+        "Un touriste m'a demandé où était le centre-ville. Je lui ai vendu un plan, un journal et une carte postale. Il est reparti à pied, ravi."
+      ],
+      "moments": [
+        {
+          "text": "Mamie Yvette a eu son journal. Elle m'a dit que t'étais « bien {élevé|élevée} ». Venant d'elle, c'est une médaille.",
+          "conditions": {
+            "required_flags": [
+              "journal_livre"
+            ]
+          }
+        },
+        {
+          "text": "Les gamins m'achètent des magazines de rap pour voir si t'es dedans. Je leur dis : « Patience. » Je dis ça à moi aussi.",
+          "conditions": {
+            "min_chapter": 3
+          }
+        },
+        {
+          "text": "T'es en page culture ! Pas la une, mais la page culture. J'ai mis le journal ouvert sur le comptoir. À la bonne page.",
+          "conditions": {
+            "required_flags": [
+              "article_gazette"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "petit_sami",
+      "name": "Petit Sami",
+      "role": "Beatmaker, 12 ans",
+      "bio": "Fait des prods sur un ordinateur qui chauffe comme un grille-pain, sur le toit du bâtiment C. Doit rentrer à 19 h.",
+      "start_relation": 55,
+      "look": {
+        "skin": "#c68642",
+        "hair": "#1b1b1f",
+        "top": "#e04f4f",
+        "bottom": "#2f4a7a",
+        "shoes": "#f2f2f2",
+        "accent": "#4fd6e0",
+        "hair_style": "fade",
+        "hat": "cap",
+        "headphones": true,
+        "outfit": "hoodie",
+        "build": "slim"
+      },
+      "idle": [
+        "J'ai fait une prod avec le micro-ondes de ma mère. Le bip, c'est la caisse claire. Elle sait pas encore.",
+        "Mon ordi rame tellement que mes beats sont lents de base. J'appelle ça de la drill-escargot. C'est un genre.",
+        "Les grands font des sessions de nuit. Moi je fais des sessions de goûter. Je dois rentrer à 19 h.",
+        "J'ai samplé l'ascenseur du bâtiment C. Il fait « klonk ». C'est mon meilleur kick.",
+        "Le jour où un vrai rappeur pose sur une de mes prods, je l'encadre. Le rappeur, pas la prod.",
+        "Ma prof de musique dit que j'ai pas le sens du rythme. Elle a mis 18 à la flûte de Kevin. Je la crois plus.",
+        "Dis pas à ma mère que je suis sur le toit. Elle croit que je suis à l'aide aux devoirs."
+      ],
+      "moments": [
+        {
+          "text": "J'ai une nouvelle prod. Elle s'appelle « Promesse ». C'est pour te rappeler. Subtil, hein ?",
+          "conditions": {
+            "required_flags": [
+              "sami_promesse"
+            ],
+            "excluded_flags": [
+              "sami_pose"
+            ]
+          }
+        },
+        {
+          "text": "T'as posé sur ma prod. MA prod. J'ai fait écouter à toute la classe. La prof a dit « pas mal ». PAS MAL. Je vais l'encadrer, elle aussi.",
+          "conditions": {
+            "required_flags": [
+              "sami_pose"
+            ]
+          }
+        },
+        {
+          "text": "Le Dôme a passé mon beat avant le concert. Vingt mille personnes ont hoché la tête sur un klonk d'ascenseur. Je vais pas dormir pendant un mois.",
+          "conditions": {
+            "required_flags": [
+              "sami_dome"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "mamie_yvette",
+      "name": "Mamie Yvette",
+      "role": "La mémoire du quartier",
+      "bio": "Au Bloc depuis 1971. Connaît le prénom de tout le monde, le chien de tout le monde, et les secrets de presque tout le monde.",
+      "start_relation": 60,
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#d8d8d8",
+        "top": "#7a4a8a",
+        "bottom": "#3a3346",
+        "shoes": "#3a3a44",
+        "accent": "#e06a9a",
+        "hair_style": "bun",
+        "glasses": true,
+        "earrings": true,
+        "feminine": true,
+        "outfit": "jacket"
+      },
+      "idle": [
+        "J'ai connu ta mère quand elle avait ton âge. Elle chantait faux, mais avec conviction. Tu tiens ça d'elle.",
+        "Le petit du troisième a un scooter neuf, le gardien a une nouvelle amoureuse. Et toi, t'as un nouveau morceau ? Je le saurai avant toi, va.",
+        "Assieds-toi deux minutes. Moi je reste assise, et c'est le quartier qui vient à moi.",
+        "Je comprends pas tes paroles, mais je comprends quand tu les penses. Ça, ça s'entend.",
+        "En 1974, il y avait un bal au bord de l'eau. J'y ai rencontré mon René. Il dansait comme une armoire. Je l'ai épousé quand même.",
+        "On me raconte tout. Je répète rien. Sauf à Monique. Mais Monique compte pas, elle oublie tout.",
+        "Mange un peu, t'es {tout maigre|toute maigre}. Les artistes, ça mange pas. C'est pour ça qu'ils sont tristes."
+      ],
+      "moments": [
+        {
+          "text": "Le petit Sami t'attend sur le toit tous les soirs. Il fait semblant de pas t'attendre. Je le vois, moi, de ma fenêtre.",
+          "conditions": {
+            "required_flags": [
+              "sami_promesse"
+            ],
+            "excluded_flags": [
+              "sami_pose"
+            ]
+          }
+        },
+        {
+          "text": "La fête au bord de l'eau… René aurait adoré. Il aurait dansé comme une armoire. J'ai dansé pour deux.",
+          "conditions": {
+            "required_flags": [
+              "fete_yvette"
+            ]
+          }
+        },
+        {
+          "text": "Toute la ville parle de toi. Moi je parle de toi depuis le début. Je tiens à ce que ça se sache.",
+          "conditions": {
+            "min_chapter": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "ptit_sauge",
+      "name": "P'tit Sauge",
+      "role": "Le petit frère de Lil Sauge",
+      "bio": "Dix ans, les baskets trop grandes de son frère, et la ferme intention de te battre avant lui.",
+      "start_relation": 45,
+      "clash": {
+        "stats": {
+          "punchline": 3,
+          "flow": 3,
+          "presence": 2,
+          "story": 2
+        },
+        "weakness": "story",
+        "resistance": "flow",
+        "counter": "mash",
+        "taunts": [
+          "Même mon frère rappe mieux que toi. Et mon frère rappe mal !",
+          "T'as quel âge ? Ah ouais. Ça explique.",
+          "Je vais te clasher tellement fort que ta mère va me demander pardon."
+        ]
+      },
+      "secret": {
+        "name": "La Story du Grand Frère",
+        "line": "P'tit Sauge sort le téléphone de son frère et lance un direct. Trois cents personnes te regardent chercher ta rime.",
+        "fx": "emojis",
+        "prop": "iphone"
+      },
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#c8b23a",
+        "top": "#7a3fb0",
+        "bottom": "#1a1a1f",
+        "shoes": "#f2f2f2",
+        "accent": "#7fe0a0",
+        "hair_style": "puff",
+        "hat": "cap",
+        "outfit": "jersey",
+        "build": "slim"
+      },
+      "idle": [
+        "Mon frère dit que t'es nul. Moi je dis rien, j'observe. Et je note. J'ai un carnet, moi aussi.",
+        "Un jour je serai plus connu que mon frère. C'est pas dur, il a juste un chat et un téléphone.",
+        "Ma mère dit d'arrêter de clasher les gens dans la cour. Alors je les clashe au city. C'est pas la cour.",
+        "J'ai travaillé mon flow devant mon poisson rouge. Il a pas tenu. Le poisson. Le flow, si.",
+        "Les baskets de mon frère sont trop grandes. Je rappe avec trois paires de chaussettes. C'est mon secret.",
+        "Si tu dis à mon frère que je traîne ici, je dis à tout le monde que t'as perdu contre un CM2.",
+        "Je sais même pas pourquoi vous vous battez, toi et mon frère. Moi je me bats parce que c'est marrant."
+      ],
+      "moments": [
+        {
+          "text": "Tu m'as battu. OK. Mais j'ai dix ans, toi t'as… plein. Rendez-vous dans dix ans.",
+          "conditions": {
+            "required_flags": [
+              "clash_gagne_ptit_sauge"
+            ]
+          }
+        },
+        {
+          "text": "Mon frère et moi, on a fait un son ensemble. Il fait le refrain, moi les couplets. Pour une fois, c'est moi le grand.",
+          "conditions": {
+            "required_flags": [
+              "sauge_freres"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "papy_groove",
+      "name": "Papy Groove",
+      "role": "DJ à la retraite",
+      "bio": "A fait danser la ville de 1983 à 2011. Son genou a pris sa retraite avant lui. Ses mains scratchent encore la nappe à table.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#5a3825",
+        "hair": "#d8d8d8",
+        "top": "#8a6a2e",
+        "bottom": "#3a2a1e",
+        "shoes": "#e8e4dc",
+        "accent": "#f2c14e",
+        "hair_style": "bald",
+        "beard": true,
+        "glasses": true,
+        "headphones": true,
+        "chain": true,
+        "outfit": "jacket"
+      },
+      "idle": [
+        "Le vinyle, ça craque. Comme les vieux. Et comme les vieux, ça a des histoires, si tu prends le temps.",
+        "Aujourd'hui ils mixent sur un téléphone. De mon temps, il fallait deux platines, un camion et un cousin costaud.",
+        "Je viens regarder l'eau. Le fleuve a un tempo, tu savais ? 72 BPM. Parfait pour une ballade. Ou pour une sieste.",
+        "Ma femme m'a demandé de vendre mes disques. J'ai vendu le canapé. On s'assoit sur les caisses, maintenant. C'est très groove.",
+        "La première fois que j'ai passé du rap en boîte, le patron m'a viré. La deuxième fois, il m'a augmenté. C'est ça, le métier.",
+        "Garde toujours une face B. Dans la vie aussi. Surtout dans la vie.",
+        "Un jeune m'a demandé c'était quoi, un « scratch ». Je lui ai montré. Il a filmé. Je suis viral, paraît-il. Je sais pas où c'est."
+      ],
+      "moments": [
+        {
+          "text": "Ma face B est revenue à la maison. Je l'ai passée trois fois de suite. Ma femme a dansé. Elle avait pas dansé depuis 2011.",
+          "conditions": {
+            "required_flags": [
+              "face_b_rendue"
+            ]
+          }
+        },
+        {
+          "text": "J'ai entendu ton concert depuis le quai. Le son traversait l'eau. C'était propre. Un peu trop de basses. Mais propre.",
+          "conditions": {
+            "required_flags": [
+              "concert_reussi"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "rachid_halles",
+      "name": "Rachid",
+      "role": "Primeur aux Halles",
+      "bio": "Troisième génération de primeurs aux Halles. Crie ses prix en rimes depuis 5 h du matin. A du coffre, et des fraises motivées.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#c68642",
+        "hair": "#1b1b1f",
+        "top": "#3f8a3a",
+        "bottom": "#2a2a30",
+        "shoes": "#3a3a44",
+        "accent": "#f2a03a",
+        "hair_style": "short",
+        "hat": "cap",
+        "beard": true,
+        "outfit": "jacket",
+        "build": "strong"
+      },
+      "idle": [
+        "Mes tomates, je les choisis comme toi tes rimes : rondes, rouges, et qui éclatent quand il faut.",
+        "Goûte ! C'est gratuit pour les artistes. Enfin, la première. La deuxième, c'est deux euros.",
+        "Je crie les prix depuis 5 h du matin. Ma voix porte jusqu'au fleuve. Si un jour il te faut un chœur, j'ai du coffre.",
+        "Mon père vendait ici, mon grand-père aussi. Moi je vends et je rappe les prix. C'est l'évolution.",
+        "« Melon, melon, sucré comme ton flow ! » Celle-là, je te la laisse. Cadeau de la maison.",
+        "Un client m'a demandé si mes fraises étaient bio. Je lui ai dit : elles sont surtout motivées.",
+        "Le marché, c'est un concert tous les matins. Le public râle, négocie, et revient le lendemain."
+      ],
+      "moments": [
+        {
+          "text": "Ton jingle passe en boucle aux Halles. Les clients chantent en choisissant leurs courgettes. Le fromager est jaloux. Il veut le sien.",
+          "conditions": {
+            "required_flags": [
+              "rachid_jingle_fait"
+            ]
+          }
+        },
+        {
+          "text": "On parle de toi à la criée. « Deux kilos d'oranges et c'est qui ce rappeur ? » Je réponds : « C'est mon client. »",
+          "conditions": {
+            "min_chapter": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "zoe_bombe",
+      "name": "Zoé Bombe",
+      "role": "Graffeuse",
+      "bio": "A un tag dans chaque quartier de la ville, sauf aux Hauts : là-haut, les murs sont en verre. Peint la nuit, dort le jour, signe jamais.",
+      "start_relation": 45,
+      "look": {
+        "skin": "#8d5524",
+        "hair": "#e04fb0",
+        "top": "#2a2a30",
+        "bottom": "#3f5a34",
+        "shoes": "#e8e8e8",
+        "accent": "#f2c14e",
+        "hair_style": "braids",
+        "hat": "bandana",
+        "earrings": true,
+        "feminine": true,
+        "outfit": "hoodie"
+      },
+      "idle": [
+        "La bombe, c'est comme le micro : si tu hésites, ça coule.",
+        "Ce mur, je l'ai repeint quatre fois. La mairie efface, je recommence. On est devenus potes, avec le gars de la mairie.",
+        "Je signe jamais mes vraies œuvres. Les fausses, si. Comme ça, on cherche quelqu'un qui existe pas.",
+        "Le jaune, c'est pour la joie. Le violet, pour la colère. Le gris, c'est la ville qui le met toute seule.",
+        "Je peins la nuit parce que le jour, les murs sont occupés à être des murs.",
+        "Un jour je ferai ta tête en dix mètres de haut. Faut juste que tu sois assez {connu|connue} pour qu'on la reconnaisse.",
+        "Un mur sans tag, c'est une page blanche. Et toi, tu sais ce que ça fait, une page blanche."
+      ],
+      "moments": [
+        {
+          "text": "Le croquis est prêt. Il manque plus que toi : que ton nom soit assez gros pour la taille du mur.",
+          "conditions": {
+            "required_flags": [
+              "zoe_croquis"
+            ],
+            "excluded_flags": [
+              "quete_fresque_zoe"
+            ]
+          }
+        },
+        {
+          "text": "Ta tête fait dix mètres de haut sur le mur du Bloc. Les pigeons se posent sur ton oreille. C'est un honneur, chez les pigeons.",
+          "conditions": {
+            "required_flags": [
+              "quete_fresque_zoe"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "ines_gazette",
+      "name": "Inès Lacroix",
+      "role": "Journaliste · La Gazette des quartiers",
+      "bio": "Couvre la culture, les faits divers et les chiens écrasés, parfois dans le même article. A toujours raison avant tout le monde.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#e0ac7e",
+        "hair": "#5a3a22",
+        "top": "#c8a165",
+        "bottom": "#24304f",
+        "shoes": "#3a2a1e",
+        "accent": "#e8e4dc",
+        "hair_style": "long",
+        "glasses": true,
+        "feminine": true,
+        "outfit": "jacket"
+      },
+      "idle": [
+        "Je couvre la culture, les faits divers et les chiens écrasés. Parfois les trois dans le même article.",
+        "Mon rédac' chef veut des clics. Moi je veux des histoires. On a trouvé un compromis : les histoires avec des chats.",
+        "Off the record ? Il n'y a pas de off avec moi. Mais il y a des cafés. Et dans les cafés, j'oublie mon carnet.",
+        "Les grandes radios parlent des stars. Moi je parle de celles et ceux qui vont le devenir. C'est moins bien payé, mais on a raison en premier.",
+        "J'ai interviewé le Baron une fois. Il a répondu à toutes mes questions par d'autres questions. J'ai titré : « ? ».",
+        "Mon premier article, c'était la kermesse du Bloc. Trois cents mots sur un lancer de chaussure. J'en suis encore fière.",
+        "Une exclu, c'est une demi-page. Un café, un quart de page. Les prix ont augmenté."
+      ],
+      "moments": [
+        {
+          "text": "L'article est sorti. Mon rédac' chef dit qu'il a fait plus de clics que le chat. Je crois que c'est la plus belle chose qu'il m'ait dite.",
+          "conditions": {
+            "required_flags": [
+              "article_gazette"
+            ]
+          }
+        },
+        {
+          "text": "Tout le monde veut t'interviewer, maintenant. Je dis à mes collègues : « J'y étais avant. » Ils me détestent. C'est délicieux.",
+          "conditions": {
+            "min_chapter": 6
+          }
+        }
+      ]
+    },
+    {
+      "id": "jojo_taxi",
+      "name": "Jojo",
+      "role": "Chauffeur de taxi de nuit",
+      "bio": "Trente ans de nuits au volant. A eu des stars sur la banquette arrière : elles parlaient toutes de leur ex.",
+      "start_relation": 50,
+      "look": {
+        "skin": "#f1c9a5",
+        "hair": "#5a3a22",
+        "top": "#2a2a30",
+        "bottom": "#3a3a44",
+        "shoes": "#1a1a1e",
+        "accent": "#f2d04e",
+        "hair_style": "bald",
+        "hat": "cap",
+        "beard": true,
+        "outfit": "jacket",
+        "build": "heavy"
+      },
+      "idle": [
+        "Trente ans de taxi. J'ai eu des stars à l'arrière. Elles parlaient toutes de leur ex. Les stars, c'est des gens.",
+        "Je mets ta musique dans le taxi, si tu veux. Les clients savent pas sortir pendant que je roule.",
+        "Mon GPS a une voix de dame très polie. On se dispute tous les soirs. Elle a toujours tort.",
+        "La nuit, la ville est à moi. Le jour, elle est aux livreurs. On se partage. Mal, mais on se partage.",
+        "Le compteur tourne, {petit|petite}. Même quand tu parles. Surtout quand tu parles. C'est une blague. À moitié.",
+        "Un soir, j'ai ramené un rappeur qui pleurait à l'arrière : il avait perdu un clash. Je lui ai dit « demain tu le gagnes ». Il l'a gagné. Je prends pas de commission.",
+        "Mon fils veut que je passe VTC. Moi je reste taxi. Il y a un lumineux sur le toit. C'est ma couronne."
+      ],
+      "moments": [
+        {
+          "text": "Mon fils a entendu ta dédicace à la radio. Il m'a appelé. On s'était pas appelés depuis Noël. Merci, {petit|petite}. Vraiment.",
+          "conditions": {
+            "required_flags": [
+              "quete_dedicace_jojo"
+            ]
+          }
+        },
+        {
+          "text": "Je t'ai vu sur l'affiche du Dôme. J'ai fait le tour du rond-point trois fois pour la regarder. Le client a payé la différence.",
+          "conditions": {
+            "min_chapter": 6
+          }
+        }
+      ]
+    },
+    {
+      "id": "sylvie_vigile",
+      "name": "Sylvie",
+      "role": "Cheffe de la sécurité du Dôme",
+      "bio": "Vingt mille personnes par soir, et elle les regarde toutes. A sorti des stars par l'issue de secours ; pas toujours pour les protéger.",
+      "start_relation": 45,
+      "look": {
+        "skin": "#5a3825",
+        "hair": "#1b1b1f",
+        "top": "#16161a",
+        "bottom": "#16161a",
+        "shoes": "#1a1a1e",
+        "accent": "#e8c040",
+        "hair_style": "fade",
+        "earrings": true,
+        "feminine": true,
+        "outfit": "jacket",
+        "build": "strong"
+      },
+      "idle": [
+        "Pas de bracelet, pas d'entrée. Même pour toi. Surtout pour toi : les artistes, c'est ceux qui perdent leur bracelet.",
+        "J'ai vu un gars demander sa copine en mariage pendant un solo de batterie. Elle a dit non. Le batteur a continué.",
+        "Mon oreillette crépite toute la soirée : « Sylvie, le carré VIP ! Sylvie, quelqu'un est coincé dans les confettis ! » Je dors très bien, après.",
+        "En sécurité, on dit que les problèmes arrivent par la porte qu'on surveille pas. Alors je surveille toutes les portes.",
+        "Le Baron me dit bonjour depuis dix ans. Je lui réponds depuis neuf.",
+        "Avant, je tenais la porte d'une salle de 200 places en centre-ville. Elle me manque. On entendait les gens respirer.",
+        "Je souris jamais pendant le service. Après le service non plus, mais là c'est par choix."
+      ],
+      "moments": [
+        {
+          "text": "Le petit Sami a demandé s'il pouvait revenir. J'ai dit non. Puis je lui ai donné un bracelet. Dis-le à personne.",
+          "conditions": {
+            "required_flags": [
+              "sami_dome"
+            ]
+          }
+        },
+        {
+          "text": "Ce soir, c'est toi sur la scène. Je surveille toutes les portes. Et une fois, une seule, je regarderai la scène.",
+          "conditions": {
+            "required_flags": [
+              "sylvie_respect"
+            ]
+          }
+        }
+      ]
     }
   ]
 }

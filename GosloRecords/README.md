@@ -26,10 +26,13 @@ To run on a real iPhone: Signing & Capabilities → choose your Team.
 - **Concert music**: each song has its own instrumental (`ConcertGroove`, in four styles: boom bap, trap, afro, drill),
   rendered whole by `ConcertMix` and played as one buffer. The notes to tap come from the same groove: kicks on the
   left lane, snares and claps in the middle, the hook on the right, so every note sits on a sound you hear.
-- **Ton son tourne**: after a Punchliner, « Écouter ton son » plays the player's own track (`PlayerTrack`,
-  `TrackView`): an instrumental in their style, their verse as karaoke, rapped by the phone's voice
-  (AVSpeechSynthesizer, offline), and a Share button. The first real punchline is the title, and goes into
-  `GameState.hooks`.
+- **Ton son / la cabine**: after a Punchliner, « 🎙 Enregistrer ta voix » opens the voice booth (`PlayerTrack`,
+  `VoiceBoothView`, `Audio/VoiceBooth.swift`): an instrumental in their style, their verse as karaoke, rapped by the
+  player into the microphone (no synthetic voice). « Partager mon freestyle » mixes the beat and the take offline
+  (`Audio/FreestyleExport.swift`, same latency offset as the playback) into a vertical .mp4 with the Punchliner card
+  as the picture (or a .m4a if the video fails) and opens the share sheet. The first real punchline is the title,
+  and goes into `GameState.hooks`.
+- **Arcade**: Punchliner, the flagship, comes first, free, on a bigger card (« JEU PHARE »).
 - **Memory** (`Engine/Fame.swift`): rivals quote your hooks and your story in clashes (not wild opponents), friends
   bring up your latest track in small talk, posters of you go up as the streams grow, a fresco appears on the
   laundromat once the Baron falls, and the people you met stand in the front row of your concerts (all of them at

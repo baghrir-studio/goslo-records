@@ -1,0 +1,3801 @@
+{
+  "verses": [
+    {
+      "id": "ego_planches",
+      "theme": "ego",
+      "tier": 1,
+      "setup": "Ils copient mon flow, mais pas mes nuits blanches,",
+      "lead": "ils veulent le podium",
+      "endings": [
+        {
+          "text": "sans monter les planches",
+          "score": 10,
+          "reaction": "« Sans monter les planches. » La salle comprend en deux temps : la scène, puis le travail. Les deux font mal."
+        },
+        {
+          "text": "sans retrousser leurs manches",
+          "score": 6,
+          "reaction": "Juste, et ça rime. Il manque juste le double sens qui fait lever la salle."
+        },
+        {
+          "text": "et prendre leur revanche",
+          "score": 3,
+          "reaction": "La revanche, le grand classique. Le public hoche la tête par politesse."
+        },
+        {
+          "text": "sans faire d'efforts",
+          "score": 0,
+          "reaction": "C'est exactement l'idée. Mais ça ne rime pas, et le beat s'en va sans toi."
+        }
+      ]
+    },
+    {
+      "id": "ego_bagues",
+      "theme": "ego",
+      "tier": 1,
+      "setup": "T'as trois chaînes en or, deux montres et dix bagues,",
+      "lead": "tu brilles de partout,",
+      "endings": [
+        {
+          "text": "sauf au micro : là, c'est une blague",
+          "score": 10,
+          "reaction": "« Sauf au micro. » Tout le monde se tourne vers le mec aux dix bagues. Il met ses mains dans ses poches."
+        },
+        {
+          "text": "mais ton flow part en zigzags",
+          "score": 6,
+          "reaction": "Ça pique un peu. Le public attendait le coup de grâce, il n'est pas venu."
+        },
+        {
+          "text": "comme une grosse vague",
+          "score": 3,
+          "reaction": "Une vague ? De quoi ? Personne ne sait. Mais ça rime."
+        },
+        {
+          "text": "mais t'as pas de talent",
+          "score": 0,
+          "reaction": "Vrai, mais sec comme un constat d'huissier. Et ça ne rime pas."
+        }
+      ]
+    },
+    {
+      "id": "ego_pointure",
+      "theme": "ego",
+      "tier": 1,
+      "setup": "Tu veux ma place, mon public et même ma signature,",
+      "lead": "tu veux marcher dans mes pas,",
+      "endings": [
+        {
+          "text": "mais t'as pas la pointure",
+          "score": 10,
+          "reaction": "« Pas la pointure. » Le premier rang regarde ses baskets en rigolant."
+        },
+        {
+          "text": "mais t'as pas l'envergure",
+          "score": 6,
+          "reaction": "Propre, ça rime, ça tient. Mais personne ne se tape sur la cuisse."
+        },
+        {
+          "text": "c'est contre nature",
+          "score": 3,
+          "reaction": "Contre nature ? Le public cherche le rapport. Il ne le trouve pas."
+        },
+        {
+          "text": "mais t'as pas le niveau",
+          "score": 0,
+          "reaction": "C'est dit. Mais sans rime, on dirait un bulletin scolaire."
+        }
+      ]
+    },
+    {
+      "id": "ego_frein",
+      "theme": "ego",
+      "tier": 1,
+      "setup": "Mon voisin tape au plafond, il veut que je mette un frein,",
+      "lead": "mais ce matin dans l'escalier,",
+      "endings": [
+        {
+          "text": "je l'ai entendu siffler mon refrain",
+          "score": 10,
+          "reaction": "Le voisin, s'il est dans la salle, fait semblant de tousser. Tout le monde rit."
+        },
+        {
+          "text": "il m'a {salué|saluée}, plutôt serein",
+          "score": 6,
+          "reaction": "Une petite paix de palier. Gentil, mais il manque la chute."
+        },
+        {
+          "text": "il m'a donné un coup de main",
+          "score": 3,
+          "reaction": "Sympa, le voisin. Mais la rime est aussi plate que le palier."
+        },
+        {
+          "text": "il m'a fait la gueule",
+          "score": 0,
+          "reaction": "Il fait la gueule, toi aussi, et la rime aussi. Personne n'y gagne."
+        }
+      ]
+    },
+    {
+      "id": "ego_copie",
+      "theme": "ego",
+      "tier": 2,
+      "setup": "Ils copient mon flow, mes sapes, même mon adresse,",
+      "lead": "mais t'es qu'un faux billet :",
+      "endings": [
+        {
+          "text": "tu passeras jamais à la caisse",
+          "score": 10,
+          "reaction": "« Jamais à la caisse. » Un « ohhh » descend des gradins. Le faux billet est grillé."
+        },
+        {
+          "text": "tu manques de finesse",
+          "score": 6,
+          "reaction": "Bien envoyé. Mais le faux billet attendait une suite, et elle n'arrive pas."
+        },
+        {
+          "text": "t'as pas de politesse",
+          "score": 3,
+          "reaction": "La politesse ? On parlait de faux billets. Le public décroche."
+        },
+        {
+          "text": "t'es qu'une photocopie",
+          "score": 0,
+          "reaction": "L'image est bonne, mais elle ne rime pas. Le billet reste dans ta poche."
+        }
+      ]
+    },
+    {
+      "id": "ego_trone",
+      "theme": "ego",
+      "tier": 2,
+      "setup": "Ils se battent pour le trône, ils s'insultent, ils se jalousent,",
+      "lead": "moi pendant ce temps-là,",
+      "endings": [
+        {
+          "text": "j'ai racheté le château et la pelouse",
+          "score": 10,
+          "reaction": "Pendant qu'ils se battent pour une chaise, toi tu as pris le terrain entier. La salle explose."
+        },
+        {
+          "text": "j'ai sorti douze titres sur douze",
+          "score": 6,
+          "reaction": "Solide, du travail propre. Mais ça manque de folie."
+        },
+        {
+          "text": "je pense à ma future épouse",
+          "score": 3,
+          "reaction": "Ton épouse ? Le public cherche le rapport avec le trône. Il ne le trouve pas."
+        },
+        {
+          "text": "je dors tranquillement",
+          "score": 0,
+          "reaction": "Tu dors, et le public avec toi. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ego_tweet",
+      "theme": "ego",
+      "tier": 2,
+      "setup": "Mes rimes sont lourdes, faut deux mains pour les porter, c'est confirmé,",
+      "lead": "tes punchlines, elles,",
+      "endings": [
+        {
+          "text": "tiennent dans un tweet supprimé",
+          "score": 10,
+          "reaction": "« Un tweet supprimé. » Quelqu'un au fond sort son téléphone pour vérifier. Plus rien. Exactement."
+        },
+        {
+          "text": "sont légères comme de la fumée",
+          "score": 6,
+          "reaction": "L'image est juste et ça rime. Mais un tweet supprimé, ça aurait fait plus mal."
+        },
+        {
+          "text": "sont pas très aimées",
+          "score": 3,
+          "reaction": "Pas très aimées… Le clash se termine en câlin. Dommage."
+        },
+        {
+          "text": "s'envolent au vent",
+          "score": 0,
+          "reaction": "Joli, mais ça ne rime pas. Ta punchline s'envole avec."
+        }
+      ]
+    },
+    {
+      "id": "ego_perche",
+      "theme": "ego",
+      "tier": 2,
+      "setup": "Ils me disent « baisse la barre », ils sont toujours à la recherche,",
+      "lead": "moi je la mets si haut",
+      "endings": [
+        {
+          "text": "qu'il leur faut un saut à la perche",
+          "score": 10,
+          "reaction": "« Un saut à la perche. » Un gamin mime le saut au premier rang. Il tombe. Tout le monde rit."
+        },
+        {
+          "text": "qu'ils abandonnent la recherche",
+          "score": 6,
+          "reaction": "Ça rime et ça se tient. Mais l'image du saut aurait fait lever la salle."
+        },
+        {
+          "text": "que personne la cherche",
+          "score": 3,
+          "reaction": "La barre, personne ne la cherche. Le public non plus, du coup."
+        },
+        {
+          "text": "qu'il leur faut une échelle",
+          "score": 0,
+          "reaction": "L'image est bonne, la rime absente. L'échelle reste au sol."
+        }
+      ]
+    },
+    {
+      "id": "ego_zeros",
+      "theme": "ego",
+      "tier": 3,
+      "setup": "Je suis le numéro un, les autres c'est des zéros,",
+      "lead": "je les mets derrière moi :",
+      "endings": [
+        {
+          "text": "ça me fait des millions d'euros",
+          "score": 10,
+          "reaction": "Les matheux de la salle comprennent en premier. Puis tout le monde. Le « ohhh » arrive en retard, mais il arrive."
+        },
+        {
+          "text": "j'ai pris tous les numéros",
+          "score": 6,
+          "reaction": "Bel ego, rime riche. Mais les zéros derrière le un, c'était là qu'était l'or."
+        },
+        {
+          "text": "j'ai le moral au plus haut",
+          "score": 3,
+          "reaction": "Content pour toi. Le public, lui, attendait mieux."
+        },
+        {
+          "text": "ils me suivent partout",
+          "score": 0,
+          "reaction": "C'est l'idée, mais sans le calcul ni la rime. Les zéros restent des zéros."
+        }
+      ]
+    },
+    {
+      "id": "ego_seconde",
+      "theme": "ego",
+      "tier": 3,
+      "setup": "Le prof m'a dit « tu finiras derrière tout le monde »,",
+      "lead": "aujourd'hui je les double tous,",
+      "endings": [
+        {
+          "text": "et sans redoubler ma seconde",
+          "score": 10,
+          "reaction": "Doubler, redoubler, la seconde : trois sens dans une ligne. Le prof, s'il écoute, pose son stylo."
+        },
+        {
+          "text": "à chaque nouvelle ronde",
+          "score": 6,
+          "reaction": "Ça avance, ça rime. Mais le prof attendait sa leçon, et il ne l'a pas eue."
+        },
+        {
+          "text": "à la vitesse d'une onde",
+          "score": 3,
+          "reaction": "Une onde ? Le public cherche l'antenne. Ça rime, au moins."
+        },
+        {
+          "text": "et j'ai eu mon bac",
+          "score": 0,
+          "reaction": "Bravo pour le bac. Pas pour la rime."
+        }
+      ]
+    },
+    {
+      "id": "quartier_parking",
+      "theme": "quartier",
+      "tier": 1,
+      "setup": "Notre terrain de foot, c'était le parking, entre deux voitures,",
+      "lead": "on a appris à dribbler",
+      "endings": [
+        {
+          "text": "sans jamais rayer la peinture",
+          "score": 10,
+          "reaction": "Tous ceux qui ont joué entre deux voitures rient. Ils savent. Le propriétaire de la Clio aussi."
+        },
+        {
+          "text": "comme des pros, je te jure",
+          "score": 6,
+          "reaction": "Ça rime, c'est sincère. Mais la peinture des voitures, c'était là, le détail qui tue."
+        },
+        {
+          "text": "avec de grosses blessures",
+          "score": 3,
+          "reaction": "Des blessures, en effet. Le public grimace sans rire."
+        },
+        {
+          "text": "et à courir très vite",
+          "score": 0,
+          "reaction": "Vrai, surtout quand l'alarme se déclenchait. Mais ça ne rime pas."
+        }
+      ]
+    },
+    {
+      "id": "quartier_purgatoire",
+      "theme": "quartier",
+      "tier": 1,
+      "setup": "Ma cité, l'enfer ou le paradis ? Franchement, bonne question,",
+      "lead": "c'est le purgatoire,",
+      "endings": [
+        {
+          "text": "mais avec la connexion",
+          "score": 10,
+          "reaction": "« Avec la connexion. » La salle rit, puis elle réfléchit, puis elle rit encore."
+        },
+        {
+          "text": "on attend la permission",
+          "score": 6,
+          "reaction": "Honnête, ça rime. Mais le purgatoire attendait sa blague."
+        },
+        {
+          "text": "et c'est une belle maison",
+          "score": 3,
+          "reaction": "Belle maison ? Le public regarde par la fenêtre. Pas sûr."
+        },
+        {
+          "text": "on y est bien, en vrai",
+          "score": 0,
+          "reaction": "Touchant, mais ça ne rime pas. Le purgatoire continue."
+        }
+      ]
+    },
+    {
+      "id": "quartier_canape",
+      "theme": "quartier",
+      "tier": 1,
+      "setup": "On était huit dans un F2, chaque coin était occupé,",
+      "lead": "aujourd'hui j'ai une villa,",
+      "endings": [
+        {
+          "text": "et je dors toujours sur le canapé",
+          "score": 10,
+          "reaction": "Tous ceux qui ont grandi à huit dans un F2 se reconnaissent. La villa est grande, le réflexe aussi."
+        },
+        {
+          "text": "huit chambres, toutes bien équipées",
+          "score": 6,
+          "reaction": "Belle revanche. Mais le canapé, c'était là qu'était le rire."
+        },
+        {
+          "text": "et je suis bien {installé|installée}",
+          "score": 3,
+          "reaction": "Content pour toi. La salle, elle, reste debout."
+        },
+        {
+          "text": "avec un grand jardin",
+          "score": 0,
+          "reaction": "Le jardin, c'est beau. La rime, elle, n'a pas poussé."
+        }
+      ]
+    },
+    {
+      "id": "quartier_hall",
+      "theme": "quartier",
+      "tier": 1,
+      "setup": "Le gardien nous chasse du hall, on va squatter à côté,",
+      "lead": "c'est pas de la délinquance,",
+      "endings": [
+        {
+          "text": "c'est juste de la mobilité",
+          "score": 10,
+          "reaction": "« De la mobilité. » Même le gardien, s'il entendait, sourirait. Peut-être."
+        },
+        {
+          "text": "c'est juste qu'on sait pas où rester",
+          "score": 6,
+          "reaction": "Vrai, et un peu triste. Ça rime, mais ça ne fait pas rire."
+        },
+        {
+          "text": "on cherche la liberté",
+          "score": 3,
+          "reaction": "La liberté, le joker des rimes faciles. Le hall bâille."
+        },
+        {
+          "text": "on revient demain",
+          "score": 0,
+          "reaction": "Ils reviennent demain, oui. La rime, elle, ne revient pas."
+        }
+      ]
+    },
+    {
+      "id": "quartier_murs",
+      "theme": "quartier",
+      "tier": 2,
+      "setup": "Dans ma cité les murs ont des oreilles, les voisins sont curieux,",
+      "lead": "mais quand la police pose une question,",
+      "endings": [
+        {
+          "text": "l'immeuble est sourd et silencieux",
+          "score": 10,
+          "reaction": "Des oreilles partout… et d'un coup plus rien. Le public adore le retournement."
+        },
+        {
+          "text": "on dit « je sais pas », c'est mieux",
+          "score": 6,
+          "reaction": "Réaliste, ça rime. Mais l'immeuble qui devient sourd, ça aurait claqué."
+        },
+        {
+          "text": "on regarde vers les cieux",
+          "score": 3,
+          "reaction": "Les cieux. Le cliché descend du ciel, lui aussi."
+        },
+        {
+          "text": "on dit qu'on était au bled",
+          "score": 0,
+          "reaction": "Excuse classique, mais ça ne rime pas. La police note quand même."
+        }
+      ]
+    },
+    {
+      "id": "quartier_compter",
+      "theme": "quartier",
+      "tier": 2,
+      "setup": "Chez nous les petits savent compter avant de savoir écrire,",
+      "lead": "pas grâce au prof de maths :",
+      "endings": [
+        {
+          "text": "grâce aux liasses qu'ils voient sortir",
+          "score": 10,
+          "reaction": "Ça fait rire une seconde, puis plus du tout. La phrase reste dans la salle."
+        },
+        {
+          "text": "grâce à la vie, qui fait souffrir",
+          "score": 6,
+          "reaction": "Sincère, ça rime. Mais trop vague pour frapper."
+        },
+        {
+          "text": "ils veulent juste grandir",
+          "score": 3,
+          "reaction": "Grandir, oui. La rime, elle, reste petite."
+        },
+        {
+          "text": "grâce à la calculatrice",
+          "score": 0,
+          "reaction": "La calculatrice ? Ça ne rime pas, et ça ne raconte rien du quartier."
+        }
+      ]
+    },
+    {
+      "id": "quartier_echelle",
+      "theme": "quartier",
+      "tier": 2,
+      "setup": "J'habite au quinzième étage, j'ai la tête dans le ciel,",
+      "lead": "on vit tout en haut des tours,",
+      "endings": [
+        {
+          "text": "mais tout en bas de l'échelle",
+          "score": 10,
+          "reaction": "En haut des tours, en bas de l'échelle. La salle met deux secondes, puis elle applaudit."
+        },
+        {
+          "text": "loin de la vie réelle",
+          "score": 6,
+          "reaction": "Joli, ça rime. Mais on attendait que ça tombe, et ça ne tombe pas."
+        },
+        {
+          "text": "comme des hirondelles",
+          "score": 3,
+          "reaction": "Des hirondelles au quinzième. Poétique. Trop."
+        },
+        {
+          "text": "avec les pigeons et le vent",
+          "score": 0,
+          "reaction": "Vrai, il y a des pigeons. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "quartier_futur",
+      "theme": "quartier",
+      "tier": 2,
+      "setup": "Ils rénovent les façades tous les dix ans, avec la même peinture,",
+      "lead": "ils repeignent les murs,",
+      "endings": [
+        {
+          "text": "mais jamais le futur",
+          "score": 10,
+          "reaction": "« Jamais le futur. » Cinq mots, et toute la salle pense à sa propre façade."
+        },
+        {
+          "text": "mais l'humidité, elle, perdure",
+          "score": 6,
+          "reaction": "Bien vu, ça rime. Mais le futur, c'était plus fort."
+        },
+        {
+          "text": "avec beaucoup de dorure",
+          "score": 3,
+          "reaction": "De la dorure en cité ? Le public n'y croit pas."
+        },
+        {
+          "text": "en rose et en bleu",
+          "score": 0,
+          "reaction": "Les couleurs sont jolies. La rime, inexistante."
+        }
+      ]
+    },
+    {
+      "id": "quartier_cauchemars",
+      "theme": "quartier",
+      "tier": 2,
+      "setup": "Dans mon quartier, les rêves ont des loyers en retard,",
+      "lead": "on paie en espoir",
+      "endings": [
+        {
+          "text": "et on rembourse en cauchemars",
+          "score": 10,
+          "reaction": "« En cauchemars. » Un silence, puis des têtes qui hochent. Tout le monde a déjà payé ce loyer-là."
+        },
+        {
+          "text": "et on rembourse toujours trop tard",
+          "score": 6,
+          "reaction": "Juste et ça rime. Mais les cauchemars auraient fermé la boucle."
+        },
+        {
+          "text": "chaque soir, au hasard",
+          "score": 3,
+          "reaction": "Au hasard… La phrase aussi semble tirée au hasard."
+        },
+        {
+          "text": "et on rembourse jamais",
+          "score": 0,
+          "reaction": "La dette reste, la rime aussi. Enfin, elle ne vient pas."
+        }
+      ]
+    },
+    {
+      "id": "quartier_fibre",
+      "theme": "quartier",
+      "tier": 3,
+      "setup": "Ils ont mis la fibre dans la cité, le wifi le plus fort,",
+      "lead": "on a le très haut débit,",
+      "endings": [
+        {
+          "text": "mais nos rêves chargent encore",
+          "score": 10,
+          "reaction": "« Nos rêves chargent encore. » Quelqu'un fait tourner son doigt en l'air, comme une roue de chargement."
+        },
+        {
+          "text": "mais pas de boulot dehors",
+          "score": 6,
+          "reaction": "Vrai et ça rime. Mais l'image du chargement était à portée de main."
+        },
+        {
+          "text": "et la connexion est en or",
+          "score": 3,
+          "reaction": "En or ? Le box internet du quartier n'est pas d'accord."
+        },
+        {
+          "text": "pour regarder des vidéos",
+          "score": 0,
+          "reaction": "C'est à ça que ça sert, oui. Mais ça ne rime pas."
+        }
+      ]
+    },
+    {
+      "id": "argent_potes",
+      "theme": "argent",
+      "tier": 1,
+      "setup": "Mon voisin compte ses billets toute la nuit, sans limite,",
+      "lead": "moi je compte mes vrais potes :",
+      "endings": [
+        {
+          "text": "c'est moins lourd, et ça va plus vite",
+          "score": 10,
+          "reaction": "Rire amer dans la salle. Tout le monde a fait ce calcul-là une fois."
+        },
+        {
+          "text": "ils sont peu, mais d'élite",
+          "score": 6,
+          "reaction": "Classe, et ça rime. Mais l'autodérision aurait mieux marché."
+        },
+        {
+          "text": "c'est une bonne réussite",
+          "score": 3,
+          "reaction": "Une réussite… Le public attend toujours la chute."
+        },
+        {
+          "text": "ils sont trois ou quatre",
+          "score": 0,
+          "reaction": "Le compte est bon. La rime, non."
+        }
+      ]
+    },
+    {
+      "id": "argent_frigo",
+      "theme": "argent",
+      "tier": 1,
+      "setup": "Chez moi, l'argent du mois disparaît avant la fin de la semaine,",
+      "lead": "après, quand t'ouvres le frigo,",
+      "endings": [
+        {
+          "text": "y a que la lumière qui se promène",
+          "score": 10,
+          "reaction": "Tout le monde voit le frigo vide et la petite lumière. On rit, parce qu'on connaît."
+        },
+        {
+          "text": "y a juste un yaourt et sa peine",
+          "score": 6,
+          "reaction": "Drôle, ça rime. Mais la lumière seule, c'était plus fort."
+        },
+        {
+          "text": "c'est pas la joie, c'est la gêne",
+          "score": 3,
+          "reaction": "Ça rime, mais c'est plat comme un frigo vide."
+        },
+        {
+          "text": "y a rien à manger",
+          "score": 0,
+          "reaction": "Exact, mais ça ne rime pas. Le frigo et la rime sont vides."
+        }
+      ]
+    },
+    {
+      "id": "argent_photo",
+      "theme": "argent",
+      "tier": 1,
+      "setup": "Il parle de crypto, de bourse, de villa, de bateau,",
+      "lead": "mais sa voiture est en leasing",
+      "endings": [
+        {
+          "text": "et sa villa, c'est une photo",
+          "score": 10,
+          "reaction": "« Une photo. » Le public sort ses téléphones pour chercher la villa. Introuvable."
+        },
+        {
+          "text": "et sa montre, c'est un cadeau",
+          "score": 6,
+          "reaction": "Ça pique un peu. Mais la photo aurait tout démoli."
+        },
+        {
+          "text": "il est vraiment beau",
+          "score": 3,
+          "reaction": "Il est beau, peut-être. La rime, elle, est moche."
+        },
+        {
+          "text": "et il rembourse jamais",
+          "score": 0,
+          "reaction": "Vrai, sans doute. Mais pas de rime, pas de clash."
+        }
+      ]
+    },
+    {
+      "id": "argent_sec",
+      "theme": "argent",
+      "tier": 2,
+      "setup": "Mon patron me paie au noir, en liquide, jamais de chèque,",
+      "lead": "et pourtant chaque fin de mois,",
+      "endings": [
+        {
+          "text": "je me retrouve à sec",
+          "score": 10,
+          "reaction": "Payé en liquide, et à sec. La salle comprend, et rit jaune."
+        },
+        {
+          "text": "je finis sur la paille, en échec",
+          "score": 6,
+          "reaction": "Ça rime et c'est vrai. Mais le liquide appelait le « à sec »."
+        },
+        {
+          "text": "j'ai plus rien dans le bec",
+          "score": 3,
+          "reaction": "Plus rien dans le bec. Le public a de la peine, mais pas d'émotion."
+        },
+        {
+          "text": "je compte les pièces",
+          "score": 0,
+          "reaction": "On t'imagine compter. Pas rimer."
+        }
+      ]
+    },
+    {
+      "id": "argent_suisse",
+      "theme": "argent",
+      "tier": 2,
+      "setup": "Eux ils ont des comptes en Suisse, des yachts, tout est réglé,",
+      "lead": "moi aussi j'ai des comptes :",
+      "endings": [
+        {
+          "text": "mais des comptes à régler",
+          "score": 10,
+          "reaction": "« Des comptes à régler. » Le banquier en Suisse ne l'a pas entendue. Tout le reste de la salle, si."
+        },
+        {
+          "text": "dans une petite banque de quartier",
+          "score": 6,
+          "reaction": "Ça rime, c'est honnête. Mais où est le double sens ?"
+        },
+        {
+          "text": "de quoi me payer des souliers",
+          "score": 3,
+          "reaction": "Des souliers. Le public regarde tes pieds. Ils sont très bien."
+        },
+        {
+          "text": "mais ils sont vides",
+          "score": 0,
+          "reaction": "Triste, vrai, sans rime. Le compte est à zéro, le couplet aussi."
+        }
+      ]
+    },
+    {
+      "id": "argent_rond",
+      "theme": "argent",
+      "tier": 2,
+      "setup": "Il dit que le temps c'est de l'argent, il le répète comme un patron,",
+      "lead": "normal qu'il arrive toujours en retard :",
+      "endings": [
+        {
+          "text": "il a jamais un rond",
+          "score": 10,
+          "reaction": "La logique est imparable. La salle met une seconde, puis elle explose."
+        },
+        {
+          "text": "il compte tout, même les jetons",
+          "score": 6,
+          "reaction": "Presque. Ça rime, mais le lien avec le retard s'est perdu."
+        },
+        {
+          "text": "c'est un vrai champion",
+          "score": 3,
+          "reaction": "Champion de quoi ? Du retard, peut-être."
+        },
+        {
+          "text": "il a perdu sa montre",
+          "score": 0,
+          "reaction": "Logique, mais ça ne rime pas. Le temps passe, la rime aussi."
+        }
+      ]
+    },
+    {
+      "id": "argent_pret",
+      "theme": "argent",
+      "tier": 2,
+      "setup": "Le banquier m'a refusé son prêt, il m'a dit « revenez après »,",
+      "lead": "aujourd'hui je reviens :",
+      "endings": [
+        {
+          "text": "racheter son agence, cash, sans prêt",
+          "score": 10,
+          "reaction": "Le banquier, au premier rang, cherche la sortie. Il refusait un prêt, tu n'en as plus besoin."
+        },
+        {
+          "text": "avec un disque d'or, tout frais",
+          "score": 6,
+          "reaction": "Belle revanche, ça rime. Mais le jeu sur « prêt » était là, tout seul."
+        },
+        {
+          "text": "et je suis toujours aussi près",
+          "score": 3,
+          "reaction": "Près de quoi ? Le public ne sait pas. Toi non plus."
+        },
+        {
+          "text": "en voiture de sport",
+          "score": 0,
+          "reaction": "Tape-à-l'œil, mais sans rime. Le banquier n'est pas impressionné."
+        }
+      ]
+    },
+    {
+      "id": "argent_loto",
+      "theme": "argent",
+      "tier": 2,
+      "setup": "Mon oncle joue au loto chaque semaine, il y met tout son argent,",
+      "lead": "il a jamais gagné,",
+      "endings": [
+        {
+          "text": "mais il a rendu riche plein de gens",
+          "score": 10,
+          "reaction": "Jamais gagné, mais il a enrichi les autres. Rire, puis silence. Ça tape juste."
+        },
+        {
+          "text": "mais il y croit, c'est touchant",
+          "score": 6,
+          "reaction": "Touchant, oui. Mais il manquait le retournement."
+        },
+        {
+          "text": "il reste toujours confiant",
+          "score": 3,
+          "reaction": "Confiant. La rime aussi, elle y croit. Pas le public."
+        },
+        {
+          "text": "il achète un autre ticket",
+          "score": 0,
+          "reaction": "Il recommence, oui. La rime, elle, ne revient pas."
+        }
+      ]
+    },
+    {
+      "id": "argent_decouvert",
+      "theme": "argent",
+      "tier": 3,
+      "setup": "Ça fait trois mois que la banque me dit que je suis à découvert,",
+      "lead": "normal, chez moi",
+      "endings": [
+        {
+          "text": "même mon compte a froid l'hiver",
+          "score": 10,
+          "reaction": "À découvert, donc il a froid. La moitié de la salle rit tout de suite, l'autre moitié une seconde après."
+        },
+        {
+          "text": "chaque fin de mois c'est l'enfer",
+          "score": 6,
+          "reaction": "Vrai, ça rime. Mais le double sens de « découvert » attendait d'être pris."
+        },
+        {
+          "text": "je fais tout de travers",
+          "score": 3,
+          "reaction": "Un peu de travers, la rime aussi."
+        },
+        {
+          "text": "faut que je rembourse",
+          "score": 0,
+          "reaction": "Le banquier approuve. Le public, non : pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "argent_agriculteur",
+      "theme": "argent",
+      "tier": 3,
+      "setup": "Je parle que de blé, d'oseille et de radis, comme tout bon rappeur,",
+      "lead": "à force, ma mère croit",
+      "endings": [
+        {
+          "text": "que je fais le métier d'agriculteur",
+          "score": 10,
+          "reaction": "Blé, oseille, radis… Ta mère, au premier rang, cherche le tracteur. La salle pleure de rire."
+        },
+        {
+          "text": "que je veux devenir acteur",
+          "score": 6,
+          "reaction": "Ça rime, mais l'argot de l'argent appelait le potager."
+        },
+        {
+          "text": "que j'ai la tête en hauteur",
+          "score": 3,
+          "reaction": "En hauteur ? Le public lève les yeux. Rien."
+        },
+        {
+          "text": "que j'ai un potager",
+          "score": 0,
+          "reaction": "Presque la blague, mais pas la rime. Le potager reste en friche."
+        }
+      ]
+    },
+    {
+      "id": "famille_menage",
+      "theme": "famille",
+      "tier": 1,
+      "setup": "Ma mère faisait des ménages dans des bureaux, en silence,",
+      "lead": "aujourd'hui moi aussi je fais le ménage :",
+      "endings": [
+        {
+          "text": "dans le rap, sans laisser une chance",
+          "score": 10,
+          "reaction": "Le ménage, deux sens, une seule mère. Le public applaudit pour elle."
+        },
+        {
+          "text": "pour qu'elle ait enfin des vacances",
+          "score": 6,
+          "reaction": "Sincère, ça rime. Mais on attendait le double sens du ménage."
+        },
+        {
+          "text": "et dans l'abondance",
+          "score": 3,
+          "reaction": "L'abondance. Le mot sonne bien, et ne dit rien."
+        },
+        {
+          "text": "je passe l'aspirateur",
+          "score": 0,
+          "reaction": "Ta mère serait fière. La rime, elle, n'est pas venue."
+        }
+      ]
+    },
+    {
+      "id": "famille_bouche",
+      "theme": "famille",
+      "tier": 1,
+      "setup": "Ma mère m'appelle dix fois par jour pour savoir si j'ai mangé,",
+      "lead": "je décroche jamais :",
+      "endings": [
+        {
+          "text": "j'ai la bouche pleine, faut pas déranger",
+          "score": 10,
+          "reaction": "Elle appelle pour savoir si tu manges, et tu ne réponds pas parce que tu manges. La salle valide."
+        },
+        {
+          "text": "je la rappelle quand j'ai tout rangé",
+          "score": 6,
+          "reaction": "Gentil, ça rime. Mais la bouche pleine, c'était la blague."
+        },
+        {
+          "text": "je l'aime, ça a pas changé",
+          "score": 3,
+          "reaction": "Ça rime. Ta mère serait touchée. Le public, moins."
+        },
+        {
+          "text": "je lui envoie un cœur",
+          "score": 0,
+          "reaction": "Mignon, mais ça ne rime pas. Ta mère rappelle."
+        }
+      ]
+    },
+    {
+      "id": "famille_frere",
+      "theme": "famille",
+      "tier": 1,
+      "setup": "Mon petit frère veut rapper, il m'écoute, il est appliqué,",
+      "lead": "je lui dis « fais mieux que moi »,",
+      "endings": [
+        {
+          "text": "il répond « c'est pas compliqué »",
+          "score": 10,
+          "reaction": "Ton petit frère vient de te clasher, et il a gagné. La salle est pliée."
+        },
+        {
+          "text": "il a dit « tu m'as tout expliqué »",
+          "score": 6,
+          "reaction": "Ça rime, c'est mignon. Mais la petite pique aurait tout fait."
+        },
+        {
+          "text": "il est vraiment piqué",
+          "score": 3,
+          "reaction": "Piqué ? Par quoi ? Le public ne sait pas."
+        },
+        {
+          "text": "il hoche la tête",
+          "score": 0,
+          "reaction": "Il hoche la tête, la salle aussi. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "famille_biscuits",
+      "theme": "famille",
+      "tier": 1,
+      "setup": "Ma mère cache ses économies dans une boîte à biscuits,",
+      "lead": "la seule banque du monde",
+      "endings": [
+        {
+          "text": "où je fais des retraits à minuit",
+          "score": 10,
+          "reaction": "Des retraits à minuit… Tout le monde a déjà ouvert cette boîte en douce."
+        },
+        {
+          "text": "qui ferme jamais, même la nuit",
+          "score": 6,
+          "reaction": "Ça rime, ça tient. Mais les retraits à minuit, c'était plus drôle."
+        },
+        {
+          "text": "qui est pleine de fruits",
+          "score": 3,
+          "reaction": "Des fruits dans une boîte à biscuits ? Le public doute."
+        },
+        {
+          "text": "qu'on a toujours eue",
+          "score": 0,
+          "reaction": "Ça ne rime pas. La boîte reste fermée."
+        }
+      ]
+    },
+    {
+      "id": "famille_valise",
+      "theme": "famille",
+      "tier": 2,
+      "setup": "Ma grand-mère a traversé la mer avec une seule valise,",
+      "lead": "et moi je me plains",
+      "endings": [
+        {
+          "text": "pour une tache sur ma chemise",
+          "score": 10,
+          "reaction": "La mer contre une tache. La salle rit, un peu gênée, parce qu'elle se reconnaît."
+        },
+        {
+          "text": "quand la vie me met en crise",
+          "score": 6,
+          "reaction": "Ça rime, c'est sincère. Mais la tache aurait mieux tout dit."
+        },
+        {
+          "text": "dans ma petite maison grise",
+          "score": 3,
+          "reaction": "Une maison grise. C'est triste, mais ça ne raconte rien."
+        },
+        {
+          "text": "quand il pleut un peu",
+          "score": 0,
+          "reaction": "Une petite pluie, une petite plainte, pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "famille_omelette",
+      "theme": "famille",
+      "tier": 2,
+      "setup": "Ma mère sautait des repas pour qu'on ait plus dans nos assiettes,",
+      "lead": "aujourd'hui je l'invite au resto :",
+      "endings": [
+        {
+          "text": "elle prend la moins chère, une omelette",
+          "score": 10,
+          "reaction": "Ça fait sourire, puis ça serre la gorge. Ta mère, au premier rang, fait semblant de lire le menu."
+        },
+        {
+          "text": "elle dit merci même pour la serviette",
+          "score": 6,
+          "reaction": "Touchant, ça rime. Mais l'omelette, c'était le détail qui tue."
+        },
+        {
+          "text": "on mange bien, c'est chouette",
+          "score": 3,
+          "reaction": "C'est chouette. Le mot le plus plat de la langue française."
+        },
+        {
+          "text": "elle commande juste un thé",
+          "score": 0,
+          "reaction": "Presque la bonne idée. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "famille_nom",
+      "theme": "famille",
+      "tier": 2,
+      "setup": "Mon père m'a rien laissé, à part son nom de famille,",
+      "lead": "aujourd'hui ce nom-là,",
+      "endings": [
+        {
+          "text": "je l'ai mis sur un disque, et il brille",
+          "score": 10,
+          "reaction": "Rien laissé… sauf ce qui brille maintenant. Ton père, s'il écoute, se racle la gorge."
+        },
+        {
+          "text": "je le porte sans qu'il vacille",
+          "score": 6,
+          "reaction": "Joli, ça rime. Mais le disque aurait mieux bouclé l'histoire."
+        },
+        {
+          "text": "il sent bon la vanille",
+          "score": 3,
+          "reaction": "La vanille ? Le public cherche. Il ne trouve pas."
+        },
+        {
+          "text": "je le dis au micro",
+          "score": 0,
+          "reaction": "Fier, mais sans rime. Le nom reste en l'air."
+        }
+      ]
+    },
+    {
+      "id": "famille_troishuit",
+      "theme": "famille",
+      "tier": 3,
+      "setup": "Mon père a fait trente ans de trois-huit à l'usine,",
+      "lead": "moi aussi je fais les trois-huit :",
+      "endings": [
+        {
+          "text": "trois couplets, huit heures en cabine",
+          "score": 10,
+          "reaction": "Trois-huit, deux vies. Ceux dont le père a fait l'usine applaudissent plus fort."
+        },
+        {
+          "text": "jour et nuit, j'écris dans la cuisine",
+          "score": 6,
+          "reaction": "Bien vu, ça rime. Mais les trois-huit attendaient leur jeu de mots."
+        },
+        {
+          "text": "et je prends de la vitamine",
+          "score": 3,
+          "reaction": "De la vitamine. Ton couplet en aurait besoin."
+        },
+        {
+          "text": "mais sans les patrons",
+          "score": 0,
+          "reaction": "Bonne pique, mais pas de rime. L'usine ferme."
+        }
+      ]
+    },
+    {
+      "id": "famille_sortie",
+      "theme": "famille",
+      "tier": 3,
+      "setup": "Mon frère est en prison, moi au studio, depuis qu'il est parti,",
+      "lead": "on attend tous les deux",
+      "endings": [
+        {
+          "text": "notre sortie",
+          "score": 10,
+          "reaction": "La sortie de prison, la sortie de l'album. Un mot, deux attentes. La salle se tait, puis applaudit."
+        },
+        {
+          "text": "la fin de la nuit",
+          "score": 6,
+          "reaction": "Joli, et ça rime un peu. Mais le double sens était juste là."
+        },
+        {
+          "text": "un peu de répit",
+          "score": 3,
+          "reaction": "Du répit. Le mot est sage, trop sage."
+        },
+        {
+          "text": "un coup de téléphone",
+          "score": 0,
+          "reaction": "Vrai, et triste. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amitie_cousins",
+      "theme": "amitie",
+      "tier": 1,
+      "setup": "Depuis que je passe à la radio, mon téléphone sonne sans arrêt,",
+      "lead": "j'ai découvert que j'avais",
+      "endings": [
+        {
+          "text": "des cousins que j'ai jamais vus de près",
+          "score": 10,
+          "reaction": "Tout le monde a ces cousins-là. La salle rit, et quelques-uns regardent leurs pieds."
+        },
+        {
+          "text": "des amis que je connaissais à peu près",
+          "score": 6,
+          "reaction": "Ça rime, c'est vrai. Mais les cousins, c'était plus drôle."
+        },
+        {
+          "text": "un succès, c'est vrai",
+          "score": 3,
+          "reaction": "Un succès, oui. Le couplet, moins."
+        },
+        {
+          "text": "beaucoup trop de messages",
+          "score": 0,
+          "reaction": "Exact, mais pas de rime. Le téléphone sonne encore."
+        }
+      ]
+    },
+    {
+      "id": "amitie_autour",
+      "theme": "amitie",
+      "tier": 1,
+      "setup": "Hier ils m'ont tous tourné le dos, sans même un détour,",
+      "lead": "aujourd'hui que je brille,",
+      "endings": [
+        {
+          "text": "ils me tournent autour",
+          "score": 10,
+          "reaction": "Tourner le dos, tourner autour. Le retournement est net, la salle le salue."
+        },
+        {
+          "text": "ils m'appellent à leur tour",
+          "score": 6,
+          "reaction": "Ça rime, c'est juste. Mais le jeu sur « tourner » était là."
+        },
+        {
+          "text": "ils me parlent d'amour",
+          "score": 3,
+          "reaction": "D'amour ? Le public se demande ce qu'il a raté."
+        },
+        {
+          "text": "ils me demandent des places",
+          "score": 0,
+          "reaction": "Vrai, ils en demandent. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amitie_gps",
+      "theme": "amitie",
+      "tier": 1,
+      "setup": "Ce pote m'appelle jamais, sauf pour un service, c'est entendu,",
+      "lead": "il me prend pour un GPS :",
+      "endings": [
+        {
+          "text": "il me parle que quand il est perdu",
+          "score": 10,
+          "reaction": "Le GPS, le pote perdu. Simple, net, tout le monde a ce pote-là."
+        },
+        {
+          "text": "il m'appelle et il a disparu",
+          "score": 6,
+          "reaction": "Ça rime. Mais le GPS attendait le mot « perdu »."
+        },
+        {
+          "text": "c'est un pote un peu tordu",
+          "score": 3,
+          "reaction": "Tordu, oui. La rime aussi, mais pas assez."
+        },
+        {
+          "text": "il m'appelle à trois heures",
+          "score": 0,
+          "reaction": "Vrai, à trois heures du matin. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amitie_kebab",
+      "theme": "amitie",
+      "tier": 1,
+      "setup": "On partageait tout, même un kebab à deux sur le banc de la cité,",
+      "lead": "aujourd'hui il me trahit",
+      "endings": [
+        {
+          "text": "pour une moitié de célébrité",
+          "score": 10,
+          "reaction": "Un demi-kebab, une demi-célébrité. Le partage a changé de menu. La salle grince des dents."
+        },
+        {
+          "text": "pour un peu de visibilité",
+          "score": 6,
+          "reaction": "Ça rime et c'est vrai. Mais la « moitié » faisait écho au kebab."
+        },
+        {
+          "text": "c'est triste, c'est la vérité",
+          "score": 3,
+          "reaction": "La vérité, ça rime avec tout. C'est bien le problème."
+        },
+        {
+          "text": "pour aller en boîte",
+          "score": 0,
+          "reaction": "Triste, mais sans rime. Le kebab refroidit."
+        }
+      ]
+    },
+    {
+      "id": "amitie_milieu",
+      "theme": "amitie",
+      "tier": 2,
+      "setup": "Les vrais se comptent sur les doigts d'une main, j'ai fait le tri, adieu,",
+      "lead": "il m'en reste un seul :",
+      "endings": [
+        {
+          "text": "celui du milieu",
+          "score": 10,
+          "reaction": "La salle comprend, rit, et lève le même doigt. Le service d'ordre fait semblant de ne pas voir."
+        },
+        {
+          "text": "et il est sérieux",
+          "score": 6,
+          "reaction": "Bien, ça rime. Mais le doigt du milieu était juste à côté."
+        },
+        {
+          "text": "il habite vers les cieux",
+          "score": 3,
+          "reaction": "Les cieux. On était partis sur une main, on finit au paradis."
+        },
+        {
+          "text": "il s'appelle Karim",
+          "score": 0,
+          "reaction": "Salut Karim. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amitie_vente",
+      "theme": "amitie",
+      "tier": 2,
+      "setup": "Mon ancien pote m'a vendu pour un billet de cinquante,",
+      "lead": "pas grave, maintenant",
+      "endings": [
+        {
+          "text": "je sais ce qu'il vaut : il est en vente",
+          "score": 10,
+          "reaction": "Cinquante euros, prix affiché. Le public fait « ohhh », et quelqu'un crie « soldé ! »."
+        },
+        {
+          "text": "il vit dans une longue attente",
+          "score": 6,
+          "reaction": "Ça rime, c'est sombre. Mais le prix était plus cruel."
+        },
+        {
+          "text": "sa vie est décevante",
+          "score": 3,
+          "reaction": "Décevant, oui. Le couplet aussi."
+        },
+        {
+          "text": "il dort mal la nuit",
+          "score": 0,
+          "reaction": "Peut-être. Mais ça ne rime pas."
+        }
+      ]
+    },
+    {
+      "id": "amitie_pates",
+      "theme": "amitie",
+      "tier": 2,
+      "setup": "Quand je mangeais des pâtes tous les soirs, personne venait à ma table,",
+      "lead": "maintenant ils veulent leur part du gâteau :",
+      "endings": [
+        {
+          "text": "je leur garde les pâtes, c'est équitable",
+          "score": 10,
+          "reaction": "Le gâteau pour toi, les pâtes pour eux. La salle trouve ça très juste."
+        },
+        {
+          "text": "ils deviennent tous adorables",
+          "score": 6,
+          "reaction": "Ça rime, c'est bien vu. Mais les pâtes revenaient si bien."
+        },
+        {
+          "text": "c'est pas très aimable",
+          "score": 3,
+          "reaction": "Pas très aimable, non. Pas très drôle non plus."
+        },
+        {
+          "text": "je leur dis non merci",
+          "score": 0,
+          "reaction": "Poli, mais sans rime. Le gâteau reste sur la table."
+        }
+      ]
+    },
+    {
+      "id": "amitie_marche",
+      "theme": "amitie",
+      "tier": 2,
+      "setup": "Mon ex-pote m'a tout pris : mon flow, mes potes, même ma démarche,",
+      "lead": "il a tout copié,",
+      "endings": [
+        {
+          "text": "sauf ce qui marche",
+          "score": 10,
+          "reaction": "« Sauf ce qui marche. » Démarche, marche : le public fait le lien, et le copieur aussi."
+        },
+        {
+          "text": "il suit chacune de mes démarches",
+          "score": 6,
+          "reaction": "Ça rime. Mais le jeu sur « marcher » attendait juste derrière."
+        },
+        {
+          "text": "il vit dans une arche",
+          "score": 3,
+          "reaction": "Une arche ? Noé est content. Personne d'autre."
+        },
+        {
+          "text": "même mes baskets",
+          "score": 0,
+          "reaction": "Même les baskets, oui. Pas la rime."
+        }
+      ]
+    },
+    {
+      "id": "amitie_dents",
+      "theme": "amitie",
+      "tier": 3,
+      "setup": "Avant on se serrait les coudes, il me serrait la main, mon confident,",
+      "lead": "depuis que j'ai percé,",
+      "endings": [
+        {
+          "text": "il serre plus que les dents",
+          "score": 10,
+          "reaction": "Les coudes, la main, les dents : trois fois « serrer », et la jalousie au bout. La salle valide."
+        },
+        {
+          "text": "il est devenu distant",
+          "score": 6,
+          "reaction": "Vrai, ça rime. Mais les trois « serrer » attendaient le dernier."
+        },
+        {
+          "text": "il est pas content",
+          "score": 3,
+          "reaction": "Pas content. Le public non plus, un peu."
+        },
+        {
+          "text": "il me salue plus",
+          "score": 0,
+          "reaction": "C'est triste. Et ça ne rime pas."
+        }
+      ]
+    },
+    {
+      "id": "ambition_arrive",
+      "theme": "ambition",
+      "tier": 1,
+      "setup": "J'ai grandi sans ascenseur, les quinze étages à pied, je les ai bravés,",
+      "lead": "toi t'as pris l'escalator",
+      "endings": [
+        {
+          "text": "et tu te crois arrivé",
+          "score": 10,
+          "reaction": "« Tu te crois arrivé. » Ceux qui montent à pied depuis toujours se lèvent."
+        },
+        {
+          "text": "et tu montes sans transpirer",
+          "score": 6,
+          "reaction": "Ça rime, c'est vrai. Mais le coup de grâce manque."
+        },
+        {
+          "text": "c'est toi le plus pressé",
+          "score": 3,
+          "reaction": "Pressé, oui. La rime aussi, visiblement."
+        },
+        {
+          "text": "et t'es fatigué quand même",
+          "score": 0,
+          "reaction": "Drôle, mais ça ne rime pas."
+        }
+      ]
+    },
+    {
+      "id": "ambition_soussol",
+      "theme": "ambition",
+      "tier": 1,
+      "setup": "On me dit « redescends sur terre », « arrête ton envol »,",
+      "lead": "comment je redescends ?",
+      "endings": [
+        {
+          "text": "j'ai grandi au sous-sol",
+          "score": 10,
+          "reaction": "Redescendre de quoi ? La salle rit, puis elle comprend que c'est vrai."
+        },
+        {
+          "text": "je suis déjà au ras du sol",
+          "score": 6,
+          "reaction": "Ça rime, c'est juste. Mais le sous-sol aurait été plus drôle."
+        },
+        {
+          "text": "je fais un joli vol",
+          "score": 3,
+          "reaction": "Un joli vol. Plat comme une piste d'atterrissage."
+        },
+        {
+          "text": "j'ai jamais quitté la cité",
+          "score": 0,
+          "reaction": "Vrai, mais sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ambition_virgule",
+      "theme": "ambition",
+      "tier": 1,
+      "setup": "On m'a dit « tu pars de zéro », j'ai trouvé ça ridicule,",
+      "lead": "aujourd'hui j'ai six zéros sur mon compte,",
+      "endings": [
+        {
+          "text": "mais tous derrière la virgule",
+          "score": 10,
+          "reaction": "Six zéros… derrière la virgule. La salle met une seconde, puis elle hurle de rire."
+        },
+        {
+          "text": "et des rêves en majuscule",
+          "score": 6,
+          "reaction": "Joli, ça rime. Mais la virgule était le piège parfait."
+        },
+        {
+          "text": "et j'ai pris du recul",
+          "score": 3,
+          "reaction": "Du recul. Le public recule aussi un peu."
+        },
+        {
+          "text": "et je suis millionnaire",
+          "score": 0,
+          "reaction": "Si seulement. Pas de rime, et sans doute pas de million."
+        }
+      ]
+    },
+    {
+      "id": "ambition_chaussee",
+      "theme": "ambition",
+      "tier": 1,
+      "setup": "Les labels m'ont fermé la porte, alors vers la fenêtre j'ai foncé,",
+      "lead": "la chute aurait pu faire mal,",
+      "endings": [
+        {
+          "text": "mais j'habitais au rez-de-chaussée",
+          "score": 10,
+          "reaction": "Toute la tension de la phrase, et la chute tombe de cinquante centimètres. La salle adore."
+        },
+        {
+          "text": "mais j'avais le cœur cuirassé",
+          "score": 6,
+          "reaction": "Ça rime. Mais le rez-de-chaussée était trop beau pour le rater."
+        },
+        {
+          "text": "j'ai tout recommencé",
+          "score": 3,
+          "reaction": "Courageux, mais la rime est fatiguée."
+        },
+        {
+          "text": "j'avais un matelas",
+          "score": 0,
+          "reaction": "Prévoyant. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ambition_realise",
+      "theme": "ambition",
+      "tier": 1,
+      "setup": "Pendant qu'ils dorment, moi je bosse, j'écris, je raye, j'analyse,",
+      "lead": "eux ils rêvent,",
+      "endings": [
+        {
+          "text": "moi je réalise",
+          "score": 10,
+          "reaction": "Rêver, réaliser. Le mot a deux sens, et tu les as pris tous les deux."
+        },
+        {
+          "text": "moi je m'organise",
+          "score": 6,
+          "reaction": "Sérieux, ça rime. Mais « réaliser » fermait la boucle."
+        },
+        {
+          "text": "moi je fais des bêtises",
+          "score": 3,
+          "reaction": "Des bêtises ? Ça casse tout le couplet."
+        },
+        {
+          "text": "moi je travaille dur",
+          "score": 0,
+          "reaction": "Vrai, mais ça ne rime pas."
+        }
+      ]
+    },
+    {
+      "id": "ambition_erreur",
+      "theme": "ambition",
+      "tier": 2,
+      "setup": "Ils m'ont dit « reste à ta place », j'ai pris la leur,",
+      "lead": "chez nous on appelle ça une montée,",
+      "endings": [
+        {
+          "text": "chez eux une erreur",
+          "score": 10,
+          "reaction": "« Chez eux une erreur. » Deux mondes, un seul mot de différence. La salle applaudit fort."
+        },
+        {
+          "text": "chez eux un voleur",
+          "score": 6,
+          "reaction": "Ça pique, ça rime. Mais « erreur » était plus fin."
+        },
+        {
+          "text": "et ça fait peur",
+          "score": 3,
+          "reaction": "Peur, oui. La rime a peur aussi."
+        },
+        {
+          "text": "chez eux un problème",
+          "score": 0,
+          "reaction": "L'idée est là, la rime non."
+        }
+      ]
+    },
+    {
+      "id": "ambition_commentaires",
+      "theme": "ambition",
+      "tier": 2,
+      "setup": "Ma tante me demande ce que je veux faire plus tard, très terre à terre,",
+      "lead": "je dis : « moi dans ton écran,",
+      "endings": [
+        {
+          "text": "et toi dans les commentaires »",
+          "score": 10,
+          "reaction": "Ta tante ouvre son téléphone. Elle est déjà dans les commentaires."
+        },
+        {
+          "text": "et peut-être chez le notaire »",
+          "score": 6,
+          "reaction": "Ambitieux, ça rime. Mais les commentaires auraient piqué."
+        },
+        {
+          "text": "pour devenir millionnaire »",
+          "score": 3,
+          "reaction": "Millionnaire. Tout le monde l'a déjà dit."
+        },
+        {
+          "text": "si tout se passe bien »",
+          "score": 0,
+          "reaction": "Prudent. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ambition_disque",
+      "theme": "ambition",
+      "tier": 2,
+      "setup": "À seize ans je voulais un disque d'or, c'était mon futur,",
+      "lead": "aujourd'hui j'ai bien un disque :",
+      "endings": [
+        {
+          "text": "il est pas en or, il est dur",
+          "score": 10,
+          "reaction": "Le disque dur plein de maquettes. Tous les rappeurs de la salle rient : ils ont le même."
+        },
+        {
+          "text": "accroché au mur",
+          "score": 6,
+          "reaction": "Belle réussite, ça rime. Mais l'autodérision aurait mieux sonné."
+        },
+        {
+          "text": "c'est sûr",
+          "score": 3,
+          "reaction": "C'est sûr. Le mot qui rime avec tout et ne dit rien."
+        },
+        {
+          "text": "il est rayé",
+          "score": 0,
+          "reaction": "Pauvre disque. Pauvre rime."
+        }
+      ]
+    },
+    {
+      "id": "ambition_serie",
+      "theme": "ambition",
+      "tier": 3,
+      "setup": "Toi t'es une story : tu disparais au bout d'une journée,",
+      "lead": "moi je suis une série,",
+      "endings": [
+        {
+          "text": "renouvelée chaque année",
+          "score": 10,
+          "reaction": "Story contre série : vingt-quatre heures contre des saisons. Le public valide."
+        },
+        {
+          "text": "on me regarde toute la soirée",
+          "score": 6,
+          "reaction": "Ça rime. Mais le renouvellement était la vraie pique."
+        },
+        {
+          "text": "je passe à la télé, c'est mon année",
+          "score": 3,
+          "reaction": "Ton année, d'accord. La rime, elle, est déjà vue."
+        },
+        {
+          "text": "avec un générique",
+          "score": 0,
+          "reaction": "Il y a un générique, oui. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ambition_toile",
+      "theme": "ambition",
+      "tier": 3,
+      "setup": "On m'a dit « vise la lune, au pire t'atterris dans les étoiles »,",
+      "lead": "j'ai visé la lune,",
+      "endings": [
+        {
+          "text": "j'ai atterri sur la Toile",
+          "score": 10,
+          "reaction": "Les étoiles, la Toile. Tu as raté la lune, mais tu as eu internet. La salle trouve que c'est pas mal."
+        },
+        {
+          "text": "j'ai pris la mer, mais sans voile",
+          "score": 6,
+          "reaction": "L'image tient, ça rime. Mais la Toile, c'était le vrai jeu de mots."
+        },
+        {
+          "text": "et c'était pas génial",
+          "score": 3,
+          "reaction": "Pas génial, non. Le couplet non plus."
+        },
+        {
+          "text": "je dors encore",
+          "score": 0,
+          "reaction": "Honnête. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "haters_benevole",
+      "theme": "haters",
+      "tier": 1,
+      "setup": "Tu parles de moi dans chaque live, chaque story, chaque parole,",
+      "lead": "merci beaucoup :",
+      "endings": [
+        {
+          "text": "t'es mon attaché de presse bénévole",
+          "score": 10,
+          "reaction": "Le hater devient ton employé, et il n'est même pas payé. La salle explose."
+        },
+        {
+          "text": "grâce à toi mon compteur s'envole",
+          "score": 6,
+          "reaction": "Bien vu, ça rime. Mais « bénévole » humiliait mieux."
+        },
+        {
+          "text": "t'es un peu drôle",
+          "score": 3,
+          "reaction": "Drôle, oui. Toi, beaucoup moins."
+        },
+        {
+          "text": "je te dois une bise",
+          "score": 0,
+          "reaction": "Gentil. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "haters_classe",
+      "theme": "haters",
+      "tier": 1,
+      "setup": "Sur Insta il joue les durs, il montre ses muscles, il menace,",
+      "lead": "mais dans la vraie vie,",
+      "endings": [
+        {
+          "text": "il lève la main pour parler en classe",
+          "score": 10,
+          "reaction": "Le dur d'Insta, le doigt levé au fond de la classe. Le public hurle de rire."
+        },
+        {
+          "text": "il fait que des grimaces",
+          "score": 6,
+          "reaction": "Ça rime, ça pique un peu. Mais l'image de la classe était plus drôle."
+        },
+        {
+          "text": "il prend toute la place",
+          "score": 3,
+          "reaction": "La place, oui. La rime, elle, n'en prend aucune."
+        },
+        {
+          "text": "il est très gentil",
+          "score": 0,
+          "reaction": "Gentil. Le pire des clashs, et sans rime."
+        }
+      ]
+    },
+    {
+      "id": "haters_mere",
+      "theme": "haters",
+      "tier": 1,
+      "setup": "Tu cries partout que t'es le roi de la rue, que t'as fait la guerre,",
+      "lead": "j'ai demandé à la rue :",
+      "endings": [
+        {
+          "text": "personne te connaît, à part ta mère",
+          "score": 10,
+          "reaction": "« À part ta mère. » La salle rit si fort que le DJ coupe le son."
+        },
+        {
+          "text": "elle t'a jamais vu, mon frère",
+          "score": 6,
+          "reaction": "Bien, ça rime. Mais ta mère aurait été le coup final."
+        },
+        {
+          "text": "elle était en galère",
+          "score": 3,
+          "reaction": "La rue en galère. Une rime, pas un clash."
+        },
+        {
+          "text": "elle était fermée",
+          "score": 0,
+          "reaction": "La rue était fermée. Ta rime aussi."
+        }
+      ]
+    },
+    {
+      "id": "haters_rendu",
+      "theme": "haters",
+      "tier": 2,
+      "setup": "Ton album a fait un bide, les bacs sont pleins, rien de vendu,",
+      "lead": "c'est tellement nul que",
+      "endings": [
+        {
+          "text": "même les pirates l'ont rendu",
+          "score": 10,
+          "reaction": "Les pirates, qui prennent tout gratuitement, l'ont rendu. Coup fatal. La salle se lève."
+        },
+        {
+          "text": "même ta mère l'a pas entendu",
+          "score": 6,
+          "reaction": "Ça pique, ça rime. Mais les pirates, c'était l'humiliation parfaite."
+        },
+        {
+          "text": "t'as vraiment tout perdu",
+          "score": 3,
+          "reaction": "Perdu, oui. La rime aussi."
+        },
+        {
+          "text": "c'est un peu dommage",
+          "score": 0,
+          "reaction": "Trop gentil, et pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "haters_minute",
+      "theme": "haters",
+      "tier": 2,
+      "setup": "Ton flow est tellement plat, tellement mou, tellement sans but,",
+      "lead": "on dirait un GPS :",
+      "endings": [
+        {
+          "text": "« recalcul en cours » chaque minute",
+          "score": 10,
+          "reaction": "La voix du GPS dans un couplet. La salle imite « recalcul en cours » pendant une minute."
+        },
+        {
+          "text": "il fait que des chutes",
+          "score": 6,
+          "reaction": "Ça rime, c'est méchant. Mais le GPS attendait sa phrase."
+        },
+        {
+          "text": "c'est plat comme une flûte",
+          "score": 3,
+          "reaction": "Une flûte plate ? Ce n'est pas une image, c'est une erreur."
+        },
+        {
+          "text": "il parle tout seul",
+          "score": 0,
+          "reaction": "C'est vrai. Ta rime aussi parle toute seule."
+        }
+      ]
+    },
+    {
+      "id": "haters_preneur",
+      "theme": "haters",
+      "tier": 3,
+      "setup": "Ils disent que je me suis {vendu|vendue}, que j'ai bradé mon honneur,",
+      "lead": "c'est vrai, je me suis {vendu|vendue},",
+      "endings": [
+        {
+          "text": "toi t'as même pas trouvé preneur",
+          "score": 10,
+          "reaction": "« Même pas trouvé preneur. » Le hater du premier rang se rassoit lentement."
+        },
+        {
+          "text": "et j'ai fait tout ça avec bonheur",
+          "score": 6,
+          "reaction": "Assumé, ça rime. Mais le preneur était plus cruel."
+        },
+        {
+          "text": "j'ai suivi mon cœur",
+          "score": 3,
+          "reaction": "Ton cœur. Le cliché suit aussi."
+        },
+        {
+          "text": "mais pour un bon prix",
+          "score": 0,
+          "reaction": "Bonne idée, mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "haters_couplet",
+      "theme": "haters",
+      "tier": 2,
+      "setup": "T'as ramené trois rappeurs pour me clasher, l'équipe au complet,",
+      "lead": "il vous a fallu être quatre",
+      "endings": [
+        {
+          "text": "pour remplir un seul couplet",
+          "score": 10,
+          "reaction": "Quatre pour un couplet. Le public compte sur ses doigts et rit."
+        },
+        {
+          "text": "pour sortir un son incomplet",
+          "score": 6,
+          "reaction": "Ça rime, ça pique. Mais « un seul couplet » était plus humiliant."
+        },
+        {
+          "text": "et c'était bien laid",
+          "score": 3,
+          "reaction": "Laid, oui. La rime aussi."
+        },
+        {
+          "text": "et c'était nul",
+          "score": 0,
+          "reaction": "Vrai, mais sans rime."
+        }
+      ]
+    },
+    {
+      "id": "haters_date",
+      "theme": "haters",
+      "tier": 2,
+      "setup": "Tu dis que mon style est vieux, que mon flow est daté,",
+      "lead": "c'est normal :",
+      "endings": [
+        {
+          "text": "c'est avec mes sons que t'as débuté",
+          "score": 10,
+          "reaction": "Il trouve ton flow daté, mais c'est avec lui qu'il a appris. La salle le regarde."
+        },
+        {
+          "text": "mais t'as jamais rien inventé",
+          "score": 6,
+          "reaction": "Bien vu, ça rime. Mais la vraie pique était dans le passé."
+        },
+        {
+          "text": "c'est la réalité",
+          "score": 3,
+          "reaction": "La réalité. Ça rime avec tout et ça ne dit rien."
+        },
+        {
+          "text": "mais il tourne toujours",
+          "score": 0,
+          "reaction": "Vrai. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "haters_filante",
+      "theme": "haters",
+      "tier": 3,
+      "setup": "Tu te prends pour une étoile, ton équipe a tout préparé,",
+      "lead": "mais t'es une étoile filante :",
+      "endings": [
+        {
+          "text": "on fait un vœu, et tu disparais",
+          "score": 10,
+          "reaction": "L'étoile filante : on fait un vœu, et pouf. Tout le monde a fait le même vœu."
+        },
+        {
+          "text": "tu passes vite, et t'es égaré",
+          "score": 6,
+          "reaction": "Ça rime, c'est juste. Mais le vœu était la vraie chute."
+        },
+        {
+          "text": "t'es un peu mal barré",
+          "score": 3,
+          "reaction": "Mal barré. Ta rime aussi."
+        },
+        {
+          "text": "on te voit plus du tout",
+          "score": 0,
+          "reaction": "C'est l'idée, sans la rime."
+        }
+      ]
+    },
+    {
+      "id": "haters_accessoire",
+      "theme": "haters",
+      "tier": 3,
+      "setup": "Dans ton clip y a un flingue en plastique, une Lambo, toute une histoire,",
+      "lead": "comme le flingue, sur ton propre album,",
+      "endings": [
+        {
+          "text": "toi aussi t'es qu'un accessoire",
+          "score": 10,
+          "reaction": "Le flingue en plastique, le rappeur en plastique. La salle comprend, et rit fort."
+        },
+        {
+          "text": "t'as que des feats et pas de gloire",
+          "score": 6,
+          "reaction": "Ça rime, c'est méchant. Mais « accessoire » fermait la boucle."
+        },
+        {
+          "text": "tout est noir",
+          "score": 3,
+          "reaction": "Noir. Tout est dit, et rien n'est dit."
+        },
+        {
+          "text": "y a que des invités",
+          "score": 0,
+          "reaction": "Vrai, mais sans rime."
+        }
+      ]
+    },
+    {
+      "id": "amour_pris",
+      "theme": "amour",
+      "tier": 2,
+      "setup": "Elle me regarde et me dit « je te quitte », avec mépris,",
+      "lead": "j'ai répondu :",
+      "endings": [
+        {
+          "text": "« on quitte que ce qu'on a pris »",
+          "score": 10,
+          "reaction": "« On quitte que ce qu'on a pris. » Le public fait « ohhh », long, comme une sirène."
+        },
+        {
+          "text": "« j'avais déjà tout compris »",
+          "score": 6,
+          "reaction": "Fier, ça rime. Mais il manquait la réplique qui tue."
+        },
+        {
+          "text": "« tant pis, chérie »",
+          "score": 3,
+          "reaction": "Tant pis. Le public aussi."
+        },
+        {
+          "text": "« bon courage »",
+          "score": 0,
+          "reaction": "Poli. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amour_sentiments",
+      "theme": "amour",
+      "tier": 1,
+      "setup": "Elle veut une voiture, une maison, un salaire, un appartement,",
+      "lead": "moi j'ai un ticket de bus",
+      "endings": [
+        {
+          "text": "et beaucoup de sentiments",
+          "score": 10,
+          "reaction": "Le ticket de bus et le cœur. La salle rit, avec un peu de tendresse."
+        },
+        {
+          "text": "et un cœur bien vivant",
+          "score": 6,
+          "reaction": "Joli, ça rime à peine. Mais il manque la chute."
+        },
+        {
+          "text": "et je l'aime tendrement",
+          "score": 3,
+          "reaction": "Tendrement. Le mot le plus tiède de la langue."
+        },
+        {
+          "text": "et une trottinette",
+          "score": 0,
+          "reaction": "Avec la trottinette, peut-être. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amour_story",
+      "theme": "amour",
+      "tier": 1,
+      "setup": "On postait nos photos tous les jours, en filtre, en mode « t'es le mien »,",
+      "lead": "notre amour a duré",
+      "endings": [
+        {
+          "text": "le temps d'une story, et puis plus rien",
+          "score": 10,
+          "reaction": "Vingt-quatre heures, puis plus rien. Tout le monde connaît ces amours-là."
+        },
+        {
+          "text": "le temps d'un film, c'était bien",
+          "score": 6,
+          "reaction": "Ça rime. Mais la story, c'était l'image du siècle."
+        },
+        {
+          "text": "un mois, un mois de chagrin",
+          "score": 3,
+          "reaction": "Chagrin. Le couplet, lui, est malade."
+        },
+        {
+          "text": "trois semaines et deux jours",
+          "score": 0,
+          "reaction": "Précis. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amour_mesure",
+      "theme": "amour",
+      "tier": 3,
+      "setup": "Elle me dit que j'ai pas de cœur, que c'est un caillou, un mur,",
+      "lead": "pourtant il bat, mon cœur :",
+      "endings": [
+        {
+          "text": "il bat la mesure",
+          "score": 10,
+          "reaction": "Battre la mesure : le cœur du rappeur. Simple et parfait."
+        },
+        {
+          "text": "il bat fort, c'est sûr",
+          "score": 6,
+          "reaction": "Ça rime. Mais la mesure était le vrai jeu."
+        },
+        {
+          "text": "il bat contre un mur",
+          "score": 3,
+          "reaction": "Contre un mur. La rime s'y cogne aussi."
+        },
+        {
+          "text": "il bat pour toi",
+          "score": 0,
+          "reaction": "Touchant. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amour_frein",
+      "theme": "amour",
+      "tier": 2,
+      "setup": "En amour j'ai le cœur sur la main, toujours {prêt|prête} à prendre le train,",
+      "lead": "mais la main",
+      "endings": [
+        {
+          "text": "sur le frein",
+          "score": 10,
+          "reaction": "Le cœur sur la main, la main sur le frein. Cinq mots, et toute ta vie amoureuse."
+        },
+        {
+          "text": "et l'autre sur le refrain",
+          "score": 6,
+          "reaction": "Ça rime, c'est mignon. Mais le frein disait tout."
+        },
+        {
+          "text": "je suis là, c'est certain",
+          "score": 3,
+          "reaction": "Certain. Le mot de ceux qui ne savent pas."
+        },
+        {
+          "text": "je fais attention",
+          "score": 0,
+          "reaction": "Prudent. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "amour_rappelle",
+      "theme": "amour",
+      "tier": 2,
+      "setup": "Elle m'a dit « c'est moi ou le rap », j'ai choisi sans appel,",
+      "lead": "j'ai pris le rap :",
+      "endings": [
+        {
+          "text": "lui, au moins, il me rappelle",
+          "score": 10,
+          "reaction": "Le rap qui « rappelle ». La salle met une seconde, puis tout le monde rit."
+        },
+        {
+          "text": "lui au moins il est fidèle",
+          "score": 6,
+          "reaction": "Ça rime, c'est vrai. Mais le jeu de mots attendait."
+        },
+        {
+          "text": "elle était si belle",
+          "score": 3,
+          "reaction": "Si belle, oui. Le couplet, moins."
+        },
+        {
+          "text": "et j'ai perdu ma copine",
+          "score": 0,
+          "reaction": "Logique. Mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "amour_souslocation",
+      "theme": "amour",
+      "tier": 3,
+      "setup": "Elle me dit « t'es dans mon cœur », j'y ai cru, quelle émotion,",
+      "lead": "c'est vrai, j'y suis,",
+      "endings": [
+        {
+          "text": "mais en sous-location",
+          "score": 10,
+          "reaction": "« En sous-location. » Rire général, et quelques regards gênés dans la salle."
+        },
+        {
+          "text": "mais sans aucune protection",
+          "score": 6,
+          "reaction": "Ça rime. Mais la sous-location faisait plus mal."
+        },
+        {
+          "text": "c'est une belle chanson",
+          "score": 3,
+          "reaction": "Belle chanson. Rime plate."
+        },
+        {
+          "text": "pour toujours et à jamais",
+          "score": 0,
+          "reaction": "Romantique. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "amour_prime",
+      "theme": "amour",
+      "tier": 3,
+      "setup": "Elle m'a quitté comme on vire un intérimaire, sans un mot, sans une rime,",
+      "lead": "pas d'entretien, pas de préavis,",
+      "endings": [
+        {
+          "text": "et même pas de prime",
+          "score": 10,
+          "reaction": "L'amour en intérim, licencié sans prime. La salle rit jaune et applaudit."
+        },
+        {
+          "text": "c'était presque un crime",
+          "score": 6,
+          "reaction": "Fort, ça rime. Mais la prime fermait la métaphore du boulot."
+        },
+        {
+          "text": "c'est la déprime",
+          "score": 3,
+          "reaction": "Déprime. Le cliché pleure aussi."
+        },
+        {
+          "text": "et elle a pris la voiture",
+          "score": 0,
+          "reaction": "Dur. Mais sans rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_chiffon",
+      "theme": "industrie",
+      "tier": 1,
+      "setup": "Le label m'a promis qu'avec eux je toucherais le plafond,",
+      "lead": "j'ai signé, et ils m'ont fait briller :",
+      "endings": [
+        {
+          "text": "leurs pompes, avec un chiffon",
+          "score": 10,
+          "reaction": "Briller, oui… leurs chaussures. La salle explose. Les gens des maisons de disques rient moins."
+        },
+        {
+          "text": "et j'ai fini au fond",
+          "score": 6,
+          "reaction": "Triste, ça rime. Mais le chiffon était la chute parfaite."
+        },
+        {
+          "text": "on est partis en avion",
+          "score": 3,
+          "reaction": "En avion ? Le label a payé ça ?"
+        },
+        {
+          "text": "ils m'ont oublié",
+          "score": 0,
+          "reaction": "Vrai sans doute. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_otage",
+      "theme": "industrie",
+      "tier": 1,
+      "setup": "Le directeur m'a dit « signe ici, en bas de la page »,",
+      "lead": "j'ai signé en bas,",
+      "endings": [
+        {
+          "text": "et j'y suis {resté|restée}, comme un otage",
+          "score": 10,
+          "reaction": "Signer en bas, rester en bas. Tous les artistes de la salle ont un contrat en tête."
+        },
+        {
+          "text": "en tremblant, comme un gosse en stage",
+          "score": 6,
+          "reaction": "Ça rime, c'est honnête. Mais rester en bas, c'était la vraie chute."
+        },
+        {
+          "text": "sans lire, c'est dommage",
+          "score": 3,
+          "reaction": "Dommage, oui. Et plat."
+        },
+        {
+          "text": "avec un stylo bleu",
+          "score": 0,
+          "reaction": "Le stylo était bleu. Pas la rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_peine",
+      "theme": "industrie",
+      "tier": 1,
+      "setup": "Mon son tourne partout, un million de streams en une semaine,",
+      "lead": "mais mon banquier, lui,",
+      "endings": [
+        {
+          "text": "regarde mon compte et il a de la peine",
+          "score": 10,
+          "reaction": "Un million d'écoutes, et un banquier qui a pitié. Tout le monde rit, les artistes un peu jaune."
+        },
+        {
+          "text": "voit toujours le même compte qui traîne",
+          "score": 6,
+          "reaction": "Ça rime. Mais la pitié du banquier faisait plus rire."
+        },
+        {
+          "text": "sait que ma vie est pleine",
+          "score": 3,
+          "reaction": "Pleine de quoi ? On ne saura pas."
+        },
+        {
+          "text": "dit que c'est pas assez",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_lune",
+      "theme": "industrie",
+      "tier": 3,
+      "setup": "Mon manager m'a promis la lune, les étoiles, les tournées, la fortune,",
+      "lead": "il a pris vingt pour cent de tout,",
+      "endings": [
+        {
+          "text": "même de la lune",
+          "score": 10,
+          "reaction": "Vingt pour cent de la lune. La salle imagine le contrat, et rit fort."
+        },
+        {
+          "text": "de mes rêves et de ma thune",
+          "score": 6,
+          "reaction": "Ça rime, c'est vrai. Mais la lune, c'était le trait de génie."
+        },
+        {
+          "text": "y a pas de rancune",
+          "score": 3,
+          "reaction": "Pas de rancune. Le public, si, un peu."
+        },
+        {
+          "text": "et il est parti",
+          "score": 0,
+          "reaction": "Classique. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_maison",
+      "theme": "industrie",
+      "tier": 2,
+      "setup": "À chaque interview on me parle de violence, de quartier, de prison,",
+      "lead": "jamais on me demande",
+      "endings": [
+        {
+          "text": "si j'ai un livre à la maison",
+          "score": 10,
+          "reaction": "Une question jamais posée, et tout le préjugé d'un coup. Applaudissements."
+        },
+        {
+          "text": "si j'ai des rêves, une passion",
+          "score": 6,
+          "reaction": "Sincère, ça rime. Mais le livre visait plus juste."
+        },
+        {
+          "text": "quel temps il fait à l'horizon",
+          "score": 3,
+          "reaction": "La météo ? Le journaliste note. Le public, non."
+        },
+        {
+          "text": "ce que j'écoute le matin",
+          "score": 0,
+          "reaction": "Bonne question. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_maladie",
+      "theme": "industrie",
+      "tier": 2,
+      "setup": "Le label a voulu retravailler mon son, du lundi au samedi,",
+      "lead": "ils l'ont tellement travaillé",
+      "endings": [
+        {
+          "text": "qu'il est parti en arrêt maladie",
+          "score": 10,
+          "reaction": "Le son en arrêt maladie. Tous les gens qui ont un chef rient."
+        },
+        {
+          "text": "qu'il est sorti tout raidi",
+          "score": 6,
+          "reaction": "Ça rime, c'est drôle. Mais l'arrêt maladie était parfait."
+        },
+        {
+          "text": "qu'il a beaucoup grandi",
+          "score": 3,
+          "reaction": "Grandi. Mignon. Plat."
+        },
+        {
+          "text": "qu'il ressemble plus à rien",
+          "score": 0,
+          "reaction": "Vrai. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_visage",
+      "theme": "industrie",
+      "tier": 2,
+      "setup": "Le label me dit « reste toi-même, mais plus lisse, plus calme, plus sage »,",
+      "lead": "en gros, reste toi-même,",
+      "endings": [
+        {
+          "text": "mais avec un autre visage",
+          "score": 10,
+          "reaction": "Reste toi-même, mais pas toi. La logique s'effondre, la salle applaudit."
+        },
+        {
+          "text": "mais fais attention à l'image",
+          "score": 6,
+          "reaction": "Ça rime. Mais il manquait le retournement."
+        },
+        {
+          "text": "c'est un beau message",
+          "score": 3,
+          "reaction": "Beau message. Rime de carte postale."
+        },
+        {
+          "text": "mais sans les gros mots",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_boutique",
+      "theme": "industrie",
+      "tier": 3,
+      "setup": "Le label m'a dit « fais plus commercial, sois moins critique »,",
+      "lead": "j'ai écouté leur conseil :",
+      "endings": [
+        {
+          "text": "j'ai ouvert une boutique",
+          "score": 10,
+          "reaction": "« Commercial » pris au pied de la lettre. La salle rigole, le label beaucoup moins."
+        },
+        {
+          "text": "j'ai fait un son plus pratique",
+          "score": 6,
+          "reaction": "Ça rime. Mais la boutique était le vrai jeu de mots."
+        },
+        {
+          "text": "c'était vraiment magique",
+          "score": 3,
+          "reaction": "Magique ? Pas ce couplet."
+        },
+        {
+          "text": "j'ai changé de label",
+          "score": 0,
+          "reaction": "Bonne idée. Mauvaise rime."
+        }
+      ]
+    },
+    {
+      "id": "industrie_caractere",
+      "theme": "industrie",
+      "tier": 3,
+      "setup": "Le contrat faisait douze pages, écrites en tout petit, très austère,",
+      "lead": "ils m'ont dit « lis les petits caractères »,",
+      "endings": [
+        {
+          "text": "j'ai répondu avec mon sale caractère",
+          "score": 10,
+          "reaction": "Les caractères du contrat, et le tien. La salle se marre, l'avocat aussi."
+        },
+        {
+          "text": "j'ai pris un avocat sévère",
+          "score": 6,
+          "reaction": "Prudent, ça rime. Mais le double sens était offert."
+        },
+        {
+          "text": "j'ai dit oui, sans mystère",
+          "score": 3,
+          "reaction": "Sans mystère, et sans saveur."
+        },
+        {
+          "text": "j'ai signé sans lire",
+          "score": 0,
+          "reaction": "La pire idée, et pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_scandale",
+      "theme": "conscience",
+      "tier": 1,
+      "setup": "Les journalistes viennent filmer chez nous en gilet pare-balles,",
+      "lead": "et qu'est-ce qu'ils trouvent ?",
+      "endings": [
+        {
+          "text": "un goûter d'anniversaire : scandale",
+          "score": 10,
+          "reaction": "Le gilet pare-balles contre les bougies. Tout le monde rit, et chacun pense au JT."
+        },
+        {
+          "text": "des gamins qui jouent sur la dalle",
+          "score": 6,
+          "reaction": "Vrai, ça rime. Mais l'ironie du goûter était plus forte."
+        },
+        {
+          "text": "une vie plutôt normale",
+          "score": 3,
+          "reaction": "Normale. C'est l'idée, mais sans le piquant."
+        },
+        {
+          "text": "des gens très gentils",
+          "score": 0,
+          "reaction": "C'est vrai. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_orientation",
+      "theme": "conscience",
+      "tier": 1,
+      "setup": "Le conseiller d'orientation m'a donné deux minutes, chrono, c'est garanti,",
+      "lead": "et il m'a orienté",
+      "endings": [
+        {
+          "text": "direct vers la sortie",
+          "score": 10,
+          "reaction": "Orienté vers la sortie. Ceux qui sont passés par ce bureau rient fort."
+        },
+        {
+          "text": "vers un métier, vite fait, sans répit",
+          "score": 6,
+          "reaction": "Ça rime un peu. Mais la sortie, c'était le coup."
+        },
+        {
+          "text": "vers la vie, c'est joli",
+          "score": 3,
+          "reaction": "Joli. Vide."
+        },
+        {
+          "text": "vers la mécanique",
+          "score": 0,
+          "reaction": "Le grand classique. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_integration",
+      "theme": "conscience",
+      "tier": 2,
+      "setup": "Ils me parlent d'intégration, d'effort, de comportement,",
+      "lead": "mais je suis {né|née} ici :",
+      "endings": [
+        {
+          "text": "{intégré|intégrée} depuis l'accouchement",
+          "score": 10,
+          "reaction": "« Depuis l'accouchement. » Un silence, puis des applaudissements qui ne s'arrêtent pas."
+        },
+        {
+          "text": "j'ai grandi là, tout simplement",
+          "score": 6,
+          "reaction": "Juste, ça rime. Mais l'accouchement était plus percutant."
+        },
+        {
+          "text": "c'est vraiment étonnant",
+          "score": 3,
+          "reaction": "Étonnant. Le mot qui ne dit rien."
+        },
+        {
+          "text": "je parle français mieux qu'eux",
+          "score": 0,
+          "reaction": "Ça pique, mais ça ne rime pas."
+        }
+      ]
+    },
+    {
+      "id": "conscience_glaces",
+      "theme": "conscience",
+      "tier": 2,
+      "setup": "Dans mon quartier, le camion de glaces passe jamais l'été,",
+      "lead": "la seule camionnette qui fait du bruit,",
+      "endings": [
+        {
+          "text": "c'est la BAC, et elle vient nous arrêter",
+          "score": 10,
+          "reaction": "Le rire s'arrête net à la fin. Puis la salle applaudit, sérieuse."
+        },
+        {
+          "text": "c'est les éboueurs, pour tout jeter",
+          "score": 6,
+          "reaction": "Ça rime, c'est vrai. Mais ça ne mord pas."
+        },
+        {
+          "text": "c'est les vacances, la liberté",
+          "score": 3,
+          "reaction": "La liberté. Le cliché de l'été."
+        },
+        {
+          "text": "c'est le facteur",
+          "score": 0,
+          "reaction": "Le facteur. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_projets",
+      "theme": "conscience",
+      "tier": 2,
+      "setup": "Trois contrôles d'identité dans la même journée, sur le même trajet,",
+      "lead": "à force, les policiers",
+      "endings": [
+        {
+          "text": "me demandent des news de mes projets",
+          "score": 10,
+          "reaction": "Contrôlé tellement souvent qu'on devient potes. La salle rit, amère."
+        },
+        {
+          "text": "me traitent comme un sujet",
+          "score": 6,
+          "reaction": "Ça rime. Mais l'ironie manquait."
+        },
+        {
+          "text": "m'ont pris pour un objet",
+          "score": 3,
+          "reaction": "Objet. Triste, mais plat."
+        },
+        {
+          "text": "me disent bonjour",
+          "score": 0,
+          "reaction": "Presque drôle. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_voix",
+      "theme": "conscience",
+      "tier": 2,
+      "setup": "Le maire nous dit « les jeunes, faut faire entendre votre voix »,",
+      "lead": "j'ai pris le micro au parc,",
+      "endings": [
+        {
+          "text": "ils ont appelé la police, trois fois",
+          "score": 10,
+          "reaction": "Faire entendre ta voix, oui, mais pas trop fort. La salle rit, et elle comprend."
+        },
+        {
+          "text": "tout le quartier était là",
+          "score": 6,
+          "reaction": "Ça rime à peine. Belle image, sans chute."
+        },
+        {
+          "text": "et j'ai chanté avec joie",
+          "score": 3,
+          "reaction": "Avec joie. Le public bâille."
+        },
+        {
+          "text": "personne a écouté",
+          "score": 0,
+          "reaction": "Triste. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_carton",
+      "theme": "conscience",
+      "tier": 2,
+      "setup": "Mon grand-père a construit leurs routes, leurs ponts, leur béton,",
+      "lead": "et à la retraite,",
+      "endings": [
+        {
+          "text": "sa vie tient dans un carton",
+          "score": 10,
+          "reaction": "Tout le béton du pays, et un carton à la fin. La salle se tait, puis applaudit longtemps."
+        },
+        {
+          "text": "on l'appelle même pas par son nom",
+          "score": 6,
+          "reaction": "Ça rime, c'est dur. Mais le carton, après le béton, frappait plus."
+        },
+        {
+          "text": "c'était un vrai champion",
+          "score": 3,
+          "reaction": "Champion. Le mot facile."
+        },
+        {
+          "text": "il est très fatigué",
+          "score": 0,
+          "reaction": "Vrai. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_programme",
+      "theme": "conscience",
+      "tier": 3,
+      "setup": "Ils disent à la télé que les jeunes savent plus lire un texte,",
+      "lead": "moi j'ai lu leur programme :",
+      "endings": [
+        {
+          "text": "y avait que des prétextes",
+          "score": 10,
+          "reaction": "Ils disent qu'on ne lit plus, et toi tu as lu leur programme. La salle valide."
+        },
+        {
+          "text": "plein de mots, aucun contexte",
+          "score": 6,
+          "reaction": "Ça rime. Mais les prétextes visaient plus juste."
+        },
+        {
+          "text": "c'était un peu complexe",
+          "score": 3,
+          "reaction": "Complexe. Le public décroche."
+        },
+        {
+          "text": "il était très long",
+          "score": 0,
+          "reaction": "Peut-être. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_eleves",
+      "theme": "conscience",
+      "tier": 3,
+      "setup": "Dans ma cité, les caméras marchent mieux que l'ascenseur, c'est prouvé,",
+      "lead": "on est toujours surveillés,",
+      "endings": [
+        {
+          "text": "mais jamais élevés",
+          "score": 10,
+          "reaction": "Élevés : par l'ascenseur, par la société. Un mot, deux sens, et le silence dans la salle."
+        },
+        {
+          "text": "mais jamais aidés, jamais sauvés",
+          "score": 6,
+          "reaction": "Juste, ça rime. Mais « élevés » faisait écho à l'ascenseur."
+        },
+        {
+          "text": "c'est comme ça, c'est arrivé",
+          "score": 3,
+          "reaction": "C'est arrivé. Rien de plus."
+        },
+        {
+          "text": "même sur le parking",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "conscience_touche",
+      "theme": "conscience",
+      "tier": 3,
+      "setup": "La mairie nous offre un terrain de foot pour qu'on ferme notre bouche,",
+      "lead": "on a compris le message :",
+      "endings": [
+        {
+          "text": "ils veulent qu'on reste sur la touche",
+          "score": 10,
+          "reaction": "Un terrain de foot, et la touche. Le double sens claque, personne ne rit vraiment."
+        },
+        {
+          "text": "ils trouvent qu'on est trop farouches",
+          "score": 6,
+          "reaction": "Ça rime. Mais la touche était le coup parfait."
+        },
+        {
+          "text": "c'est un peu louche",
+          "score": 3,
+          "reaction": "Louche, oui. La rime aussi."
+        },
+        {
+          "text": "on joue quand même",
+          "score": 0,
+          "reaction": "Courageux. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "humour_casier",
+      "theme": "humour",
+      "tier": 2,
+      "setup": "Le juge me demande si j'ai un casier, il veut tout savoir,",
+      "lead": "j'ai dit « oui, au collège,",
+      "endings": [
+        {
+          "text": "le deuxième au fond du couloir »",
+          "score": 10,
+          "reaction": "Le juge sourit malgré lui. Le greffier, lui, éclate de rire."
+        },
+        {
+          "text": "mais je l'ai vidé hier soir »",
+          "score": 6,
+          "reaction": "Ça rime. Mais la précision du couloir, c'était l'or."
+        },
+        {
+          "text": "et je l'ai perdu dans le noir »",
+          "score": 3,
+          "reaction": "Perdu dans le noir. Le juge aussi."
+        },
+        {
+          "text": "mais j'ai oublié le code »",
+          "score": 0,
+          "reaction": "Drôle, mais pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "humour_plombier",
+      "theme": "humour",
+      "tier": 1,
+      "setup": "Mon flow coule tellement qu'il a noyé le premier palier,",
+      "lead": "les voisins du dessous",
+      "endings": [
+        {
+          "text": "ont appelé le plombier",
+          "score": 10,
+          "reaction": "Le flow qui fuit, le plombier qui arrive. La salle adore l'absurde."
+        },
+        {
+          "text": "ont monté tout l'escalier",
+          "score": 6,
+          "reaction": "Ça rime, mais personne ne rit."
+        },
+        {
+          "text": "sont venus me féliciter",
+          "score": 3,
+          "reaction": "Gentils, les voisins. La rime, moins."
+        },
+        {
+          "text": "sont venus avec des seaux",
+          "score": 0,
+          "reaction": "Pratique. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "humour_echo",
+      "theme": "humour",
+      "tier": 1,
+      "setup": "Je rêve de cocktails sur la plage, servis dans une noix de coco,",
+      "lead": "quand je crie dans mes poches,",
+      "endings": [
+        {
+          "text": "y a que l'écho",
+          "score": 10,
+          "reaction": "Crier dans ses poches et n'entendre que l'écho. Tout le monde a déjà fait ça, au moins dans sa tête."
+        },
+        {
+          "text": "y a même pas un mégot",
+          "score": 6,
+          "reaction": "Ça rime. Mais l'écho était l'image parfaite."
+        },
+        {
+          "text": "ça sonne faux",
+          "score": 3,
+          "reaction": "Faux, oui. La rime aussi."
+        },
+        {
+          "text": "y a rien du tout",
+          "score": 0,
+          "reaction": "Exact. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "humour_toilettes",
+      "theme": "humour",
+      "tier": 1,
+      "setup": "Mon premier concert, trois personnes dans la salle, pas de quoi faire la fête,",
+      "lead": "ma mère, le DJ,",
+      "endings": [
+        {
+          "text": "et un mec qui cherchait les toilettes",
+          "score": 10,
+          "reaction": "La salle pleure de rire. Tout rappeur a eu ce public-là."
+        },
+        {
+          "text": "et la serveuse, un peu inquiète",
+          "score": 6,
+          "reaction": "Ça rime. Mais le mec des toilettes était le héros."
+        },
+        {
+          "text": "c'était déjà ma conquête",
+          "score": 3,
+          "reaction": "Conquête. Le mot rime, pas plus."
+        },
+        {
+          "text": "et c'était génial",
+          "score": 0,
+          "reaction": "Mignon. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "humour_flash",
+      "theme": "humour",
+      "tier": 1,
+      "setup": "Je rappe tellement vite que l'ingé son est fâché,",
+      "lead": "en sortant de la cabine,",
+      "endings": [
+        {
+          "text": "un radar m'a flashé",
+          "score": 10,
+          "reaction": "Le radar dans le studio. Absurde, et la salle adore."
+        },
+        {
+          "text": "tout le monde m'a lâché",
+          "score": 6,
+          "reaction": "Ça rime, mais c'est triste."
+        },
+        {
+          "text": "j'ai la gorge arrachée",
+          "score": 3,
+          "reaction": "Douloureux. Plat."
+        },
+        {
+          "text": "j'ai cassé le micro",
+          "score": 0,
+          "reaction": "Bruyant. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "humour_rappeurs",
+      "theme": "humour",
+      "tier": 2,
+      "setup": "Le docteur m'a mis au régime, il dit que mon cœur fait peur,",
+      "lead": "il m'a dit « mange moins gras »,",
+      "endings": [
+        {
+          "text": "alors j'arrête les petits rappeurs",
+          "score": 10,
+          "reaction": "Manger les petits rappeurs au régime. La salle rit, les petits rappeurs moins."
+        },
+        {
+          "text": "alors je fais tout à la vapeur",
+          "score": 6,
+          "reaction": "Ça rime, c'est sain. Mais pas drôle."
+        },
+        {
+          "text": "j'ai suivi ça de bon cœur",
+          "score": 3,
+          "reaction": "Bon cœur. Cliché."
+        },
+        {
+          "text": "et j'ai pris une salade",
+          "score": 0,
+          "reaction": "Raisonnable. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "humour_horoscope",
+      "theme": "humour",
+      "tier": 2,
+      "setup": "Mon horoscope m'a promis une rencontre, un coup de foudre, un truc spécial,",
+      "lead": "dans le bus, j'ai croisé",
+      "endings": [
+        {
+          "text": "le contrôleur et son procès-verbal",
+          "score": 10,
+          "reaction": "Le coup de foudre en uniforme, carnet à la main. La salle hurle."
+        },
+        {
+          "text": "une mamie avec son journal",
+          "score": 6,
+          "reaction": "Ça rime, c'est mignon. Mais le contrôleur était la chute."
+        },
+        {
+          "text": "quelqu'un de vraiment génial",
+          "score": 3,
+          "reaction": "Génial. Le mot vide."
+        },
+        {
+          "text": "personne, comme d'habitude",
+          "score": 0,
+          "reaction": "Triste. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "humour_relance",
+      "theme": "humour",
+      "tier": 3,
+      "setup": "Au Scrabble j'ai toujours trop de lettres, j'en ai même d'avance,",
+      "lead": "dans ma boîte aussi :",
+      "endings": [
+        {
+          "text": "que des lettres de relance",
+          "score": 10,
+          "reaction": "Les lettres du Scrabble, les lettres de la banque. La salle rit, un peu jaune."
+        },
+        {
+          "text": "des factures et des quittances",
+          "score": 6,
+          "reaction": "Ça rime. Mais la relance était le vrai jeu."
+        },
+        {
+          "text": "j'ai beaucoup de chance",
+          "score": 3,
+          "reaction": "Chance. Rime facile."
+        },
+        {
+          "text": "des pubs pour des pizzas",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_paris_rentrer",
+      "theme": "ville",
+      "tier": 1,
+      "city": "Paris",
+      "setup": "Paris dans les films, c'est les toits, les cafés, ce qu'on nous a montré,",
+      "lead": "nous on connaît le périph :",
+      "endings": [
+        {
+          "text": "on tourne autour, sans jamais rentrer",
+          "score": 10,
+          "reaction": "Tourner autour de Paris sans y entrer. Toute la banlieue se reconnaît."
+        },
+        {
+          "text": "c'est des bouchons, c'est serré",
+          "score": 6,
+          "reaction": "Ça rime. Mais la vérité était ailleurs."
+        },
+        {
+          "text": "on roule, on est entrés",
+          "score": 3,
+          "reaction": "Entrés ? Le public n'y croit pas."
+        },
+        {
+          "text": "c'est long et c'est gris",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_paris_expres",
+      "theme": "ville",
+      "tier": 1,
+      "city": "Paris",
+      "setup": "Ligne 13 à huit heures, on est tellement serrés, tellement près,",
+      "lead": "ce matin j'ai fait trois feats,",
+      "endings": [
+        {
+          "text": "sans le faire exprès",
+          "score": 10,
+          "reaction": "La ligne 13 à huit heures : tout le monde a « collaboré » avec un inconnu."
+        },
+        {
+          "text": "et un câlin, en vrai",
+          "score": 6,
+          "reaction": "Ça rime. Drôle, mais moins."
+        },
+        {
+          "text": "c'était pas très frais",
+          "score": 3,
+          "reaction": "Frais. Comme la ligne 13."
+        },
+        {
+          "text": "j'ai raté ma station",
+          "score": 0,
+          "reaction": "Classique. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_paris_maquette",
+      "theme": "ville",
+      "tier": 1,
+      "city": "Paris",
+      "setup": "Le RER B a encore du retard, quarante minutes à quai, tout le monde s'embête,",
+      "lead": "pas moi :",
+      "endings": [
+        {
+          "text": "j'ai eu le temps d'écrire une maquette",
+          "score": 10,
+          "reaction": "Le RER en retard, enfin utile. La salle parisienne applaudit."
+        },
+        {
+          "text": "j'écris, je rature, je m'entête",
+          "score": 6,
+          "reaction": "Ça rime. Studieux, mais pas de chute."
+        },
+        {
+          "text": "c'est la fête",
+          "score": 3,
+          "reaction": "La fête, sur le quai du RER B ? Personne n'y croit."
+        },
+        {
+          "text": "j'ai appelé un taxi",
+          "score": 0,
+          "reaction": "Riche. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_paris_adresse",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Paris",
+      "setup": "À Paris, neuf mètres carrés, neuf cents euros, et pas de place pour la paresse,",
+      "lead": "c'est pas un studio,",
+      "endings": [
+        {
+          "text": "c'est un placard avec une adresse",
+          "score": 10,
+          "reaction": "Neuf mètres carrés. Tout Paris rit, puis paie son loyer."
+        },
+        {
+          "text": "c'est une cage, avec une promesse",
+          "score": 6,
+          "reaction": "Ça rime. Mais le placard était plus drôle."
+        },
+        {
+          "text": "c'est une vie de princesse",
+          "score": 3,
+          "reaction": "Princesse ? Pas à neuf mètres carrés."
+        },
+        {
+          "text": "c'est la vie à Paris",
+          "score": 0,
+          "reaction": "Vrai. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_paris_depart",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Paris",
+      "setup": "À Châtelet, ils courent tous pour le métro, ils ont peur d'être en retard,",
+      "lead": "nous, en banlieue,",
+      "endings": [
+        {
+          "text": "on court après Paris depuis le départ",
+          "score": 10,
+          "reaction": "Courir après un train, courir après une ville. La banlieue applaudit."
+        },
+        {
+          "text": "on court pour le dernier car",
+          "score": 6,
+          "reaction": "Ça rime. Vrai, mais sans profondeur."
+        },
+        {
+          "text": "on court comme des guépards",
+          "score": 3,
+          "reaction": "Des guépards ? Le RER, plutôt."
+        },
+        {
+          "text": "on prend le RER",
+          "score": 0,
+          "reaction": "Exact. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_paris_place",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Paris",
+      "setup": "Le Parisien râle pour la pluie, le métro, le café trop cher, toujours pressé,",
+      "lead": "même au paradis,",
+      "endings": [
+        {
+          "text": "il dirait que son nuage est mal placé",
+          "score": 10,
+          "reaction": "Le Parisien au paradis, qui râle. Même les Parisiens rient."
+        },
+        {
+          "text": "il dirait qu'il est trop stressé",
+          "score": 6,
+          "reaction": "Ça rime. Mais le nuage était la blague."
+        },
+        {
+          "text": "il serait un peu agacé",
+          "score": 3,
+          "reaction": "Agacé. Plat."
+        },
+        {
+          "text": "il ferait la tête",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_paris_petits",
+      "theme": "ville",
+      "tier": 3,
+      "city": "Paris",
+      "setup": "Ils ont lancé le Grand Paris, des milliards, tout est investi,",
+      "lead": "mais sur la carte, chez nous,",
+      "endings": [
+        {
+          "text": "on est toujours aussi petits",
+          "score": 10,
+          "reaction": "Le Grand Paris, et nous toujours petits. Un mot contre l'autre. Applaudissements."
+        },
+        {
+          "text": "rien n'a encore abouti",
+          "score": 6,
+          "reaction": "Ça rime. Mais la grandeur contre la petitesse était plus forte."
+        },
+        {
+          "text": "c'est joli, c'est garanti",
+          "score": 3,
+          "reaction": "Garanti ? Le public en doute."
+        },
+        {
+          "text": "le bus passe pas",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_paris_amende",
+      "theme": "ville",
+      "tier": 3,
+      "city": "Paris",
+      "setup": "Au Louvre ils paient vingt euros pour voir de l'art, c'est la légende,",
+      "lead": "nous on peint les murs de la ligne B :",
+      "endings": [
+        {
+          "text": "pour nous, l'art, ça se paye en amende",
+          "score": 10,
+          "reaction": "Payer pour l'art, payer à cause de l'art. Les graffeurs de la salle applaudissent."
+        },
+        {
+          "text": "c'est gratuit, mais personne demande",
+          "score": 6,
+          "reaction": "Ça rime. Mais l'amende était la chute."
+        },
+        {
+          "text": "c'est notre offrande",
+          "score": 3,
+          "reaction": "Offrande. Joli, et vide."
+        },
+        {
+          "text": "et personne regarde",
+          "score": 0,
+          "reaction": "Triste. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_marseille_vent",
+      "theme": "ville",
+      "tier": 1,
+      "city": "Marseille",
+      "setup": "À Marseille, le mistral souffle à cent à l'heure sur tout le Vieux-Port,",
+      "lead": "alors quand elle m'a mis un vent,",
+      "endings": [
+        {
+          "text": "j'ai cru à la météo, d'abord",
+          "score": 10,
+          "reaction": "Un vent de plus sur le Vieux-Port. Tout Marseille rit."
+        },
+        {
+          "text": "j'ai tenu bon, j'ai fait l'effort",
+          "score": 6,
+          "reaction": "Ça rime. Pas de blague."
+        },
+        {
+          "text": "j'ai eu le cœur mort",
+          "score": 3,
+          "reaction": "Mort ? Pour un vent ? Drame."
+        },
+        {
+          "text": "j'ai mis une veste",
+          "score": 0,
+          "reaction": "Prudent. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_marseille_pouce",
+      "theme": "ville",
+      "tier": 1,
+      "city": "Marseille",
+      "setup": "Le mistral souffle si fort qu'il a vidé ma trousse,",
+      "lead": "mais mes rimes sont lourdes :",
+      "endings": [
+        {
+          "text": "elles ont pas bougé d'un pouce",
+          "score": 10,
+          "reaction": "Le mistral contre tes rimes, et tes rimes gagnent. Marseille approuve."
+        },
+        {
+          "text": "elles tiennent, même sous la secousse",
+          "score": 6,
+          "reaction": "Ça rime. Mais le pouce était l'expression parfaite."
+        },
+        {
+          "text": "elles sont douces",
+          "score": 3,
+          "reaction": "Douces ? On disait lourdes."
+        },
+        {
+          "text": "elles sont restées là",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_marseille_silence",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Marseille",
+      "setup": "Au Vélodrome, le stade chante si fort qu'on n'entend plus la défense,",
+      "lead": "même les buts adverses",
+      "endings": [
+        {
+          "text": "rentrent en silence",
+          "score": 10,
+          "reaction": "Les buts adverses qui rentrent en s'excusant. Le Vélodrome se lève."
+        },
+        {
+          "text": "nous demandent l'indulgence",
+          "score": 6,
+          "reaction": "Ça rime. Mais le silence était plus fort."
+        },
+        {
+          "text": "c'est une belle ambiance",
+          "score": 3,
+          "reaction": "Belle ambiance. Plat."
+        },
+        {
+          "text": "font moins mal",
+          "score": 0,
+          "reaction": "Vrai. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_marseille_sardine",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Marseille",
+      "setup": "À Marseille on exagère un peu, une sardine a bouché tout le port,",
+      "lead": "alors mon premier son, cent vues :",
+      "endings": [
+        {
+          "text": "ici on dit disque d'or",
+          "score": 10,
+          "reaction": "Cent vues, disque d'or. Toute la ville rit, parce que c'est vrai."
+        },
+        {
+          "text": "il a fait trembler le décor",
+          "score": 6,
+          "reaction": "Ça rime. Mais l'exagération était la blague."
+        },
+        {
+          "text": "il était vraiment fort",
+          "score": 3,
+          "reaction": "Fort. Plat."
+        },
+        {
+          "text": "c'est déjà pas mal",
+          "score": 0,
+          "reaction": "Modeste. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_marseille_bronzees",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Marseille",
+      "setup": "À Marseille y a tellement de soleil que tout le monde est posé,",
+      "lead": "même mes galères",
+      "endings": [
+        {
+          "text": "reviennent de vacances, bronzées",
+          "score": 10,
+          "reaction": "Les galères bronzées. Absurde, et très marseillais."
+        },
+        {
+          "text": "ont l'air reposées",
+          "score": 6,
+          "reaction": "Ça rime. Mais les vacances étaient plus drôles."
+        },
+        {
+          "text": "sont bien arrosées",
+          "score": 3,
+          "reaction": "Arrosées. Rime plate."
+        },
+        {
+          "text": "mettent de la crème",
+          "score": 0,
+          "reaction": "Drôle. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_marseille_bonnemere",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Marseille",
+      "setup": "Tout Marseille a sa Bonne Mère qui veille d'en haut, sur la colline,",
+      "lead": "moi j'en ai deux :",
+      "endings": [
+        {
+          "text": "l'autre me surveille depuis la cuisine",
+          "score": 10,
+          "reaction": "La Bonne Mère sur la colline, et la tienne en cuisine. La salle rit avec tendresse."
+        },
+        {
+          "text": "et toutes les deux ont bonne mine",
+          "score": 6,
+          "reaction": "Ça rime. Mais la cuisine était le vrai clin d'œil."
+        },
+        {
+          "text": "elles sont divines",
+          "score": 3,
+          "reaction": "Divines. Cliché."
+        },
+        {
+          "text": "et elles me protègent",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_marseille_petanque",
+      "theme": "ville",
+      "tier": 3,
+      "city": "Marseille",
+      "setup": "À la pétanque comme au micro, c'est la même technique, le même calcul,",
+      "lead": "d'abord je pointe,",
+      "endings": [
+        {
+          "text": "et après je tire, sans recul",
+          "score": 10,
+          "reaction": "Pointer, tirer, sans recul. La pétanque et le reste. Les anciens applaudissent."
+        },
+        {
+          "text": "puis je vise, je calcule",
+          "score": 6,
+          "reaction": "Ça rime. Mais il manque la chute."
+        },
+        {
+          "text": "c'est pas ridicule",
+          "score": 3,
+          "reaction": "Ridicule ? Le public doute."
+        },
+        {
+          "text": "et je gagne la partie",
+          "score": 0,
+          "reaction": "Bravo. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_marseille_crime",
+      "theme": "ville",
+      "tier": 3,
+      "city": "Marseille",
+      "setup": "Les Parisiens disent qu'ici on exagère, qu'on parle trop fort, qu'on frime,",
+      "lead": "nous au moins, quand on ment,",
+      "endings": [
+        {
+          "text": "on y croit, c'est pas un crime",
+          "score": 10,
+          "reaction": "Mentir, mais y croire. Tout Marseille hoche la tête."
+        },
+        {
+          "text": "on le fait avec la rime",
+          "score": 6,
+          "reaction": "Ça rime. Moins drôle."
+        },
+        {
+          "text": "c'est notre petite déprime",
+          "score": 3,
+          "reaction": "Déprime ? À Marseille ?"
+        },
+        {
+          "text": "c'est pour rigoler",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_casa_repas",
+      "theme": "ville",
+      "tier": 1,
+      "city": "Casablanca",
+      "setup": "À Casa dans le petit taxi on est cinq, serrés, on se connaît même pas,",
+      "lead": "mais avant d'arriver à Maârif,",
+      "endings": [
+        {
+          "text": "on s'invite déjà au repas",
+          "score": 10,
+          "reaction": "Le petit taxi rouge, et l'hospitalité de Casa. Toute la salle rit."
+        },
+        {
+          "text": "on parle de tout, c'est sympa",
+          "score": 6,
+          "reaction": "Ça rime. Mais le repas était la chute."
+        },
+        {
+          "text": "on chante tous « lalala »",
+          "score": 3,
+          "reaction": "Lalala. Le couplet aussi."
+        },
+        {
+          "text": "on est arrivés",
+          "score": 0,
+          "reaction": "Enfin. Pas de rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_casa_babouches",
+      "theme": "ville",
+      "tier": 1,
+      "city": "Casablanca",
+      "setup": "Le tram de Casa brille tellement, pas une tache, pas une mouche,",
+      "lead": "ma grand-mère monte dedans",
+      "endings": [
+        {
+          "text": "et elle enlève ses babouches",
+          "score": 10,
+          "reaction": "La grand-mère et ses babouches. Casa rit, tendrement."
+        },
+        {
+          "text": "et fait gaffe à ce qu'elle touche",
+          "score": 6,
+          "reaction": "Ça rime. Mais les babouches étaient la blague."
+        },
+        {
+          "text": "c'est vraiment pas louche",
+          "score": 3,
+          "reaction": "Louche ? Le tram ? Non."
+        },
+        {
+          "text": "elle prend une photo",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_casa_pente",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Casablanca",
+      "setup": "Chez ma tante à Casa, y a le tajine, le couscous, puis le thé à la menthe,",
+      "lead": "elle répète « zid », « zid » :",
+      "endings": [
+        {
+          "text": "je repars en roulant dans la pente",
+          "score": 10,
+          "reaction": "« Zid » jusqu'à rouler. Toute la salle a une tante comme ça."
+        },
+        {
+          "text": "et elle reste là, souriante",
+          "score": 6,
+          "reaction": "Ça rime. Mais il manque la chute."
+        },
+        {
+          "text": "elle est vraiment marrante",
+          "score": 3,
+          "reaction": "Marrante. Plat."
+        },
+        {
+          "text": "j'ai trop mangé",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_casa_amitie",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Casablanca",
+      "setup": "À la médina, le vendeur m'a fait un « prix d'ami », un sourire, un verre de thé,",
+      "lead": "quand j'ai vu le prix,",
+      "endings": [
+        {
+          "text": "notre amitié a pas résisté",
+          "score": 10,
+          "reaction": "Le prix d'ami qui tue l'amitié. La médina rit."
+        },
+        {
+          "text": "j'ai compris, j'ai juste hésité",
+          "score": 6,
+          "reaction": "Ça rime. Mais l'amitié était la chute."
+        },
+        {
+          "text": "c'était un bon été",
+          "score": 3,
+          "reaction": "Bon été. Plat."
+        },
+        {
+          "text": "j'ai dit non merci",
+          "score": 0,
+          "reaction": "Poli. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_casa_safi",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Casablanca",
+      "setup": "À Casa, « safi » ça veut dire « c'est bon, c'est fini, mon ami »,",
+      "lead": "mais quand ma mère dit « safi »,",
+      "endings": [
+        {
+          "text": "y en a encore pour deux heures et demie",
+          "score": 10,
+          "reaction": "« Safi » de mère : deux heures et demie. Tout le monde a vécu ça."
+        },
+        {
+          "text": "faut fuir, ou faire l'endormi",
+          "score": 6,
+          "reaction": "Ça rime. Drôle, mais moins."
+        },
+        {
+          "text": "c'est que j'ai pas compris",
+          "score": 3,
+          "reaction": "Pas compris. Le public non plus."
+        },
+        {
+          "text": "c'est l'heure du thé",
+          "score": 0,
+          "reaction": "Toujours. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_casa_galette",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Casablanca",
+      "setup": "À Casa le derby Raja-Wydad, c'est plus sacré qu'un jour de fête,",
+      "lead": "même ma grand-mère",
+      "endings": [
+        {
+          "text": "siffle hors-jeu si tu prends sa galette",
+          "score": 10,
+          "reaction": "La grand-mère arbitre. Toute la salle rit, vert et rouge confondus."
+        },
+        {
+          "text": "regarde le match sur sa tablette",
+          "score": 6,
+          "reaction": "Ça rime. Mais l'arbitrage était plus drôle."
+        },
+        {
+          "text": "devient complètement bête",
+          "score": 3,
+          "reaction": "Bête. Plat."
+        },
+        {
+          "text": "regarde le match",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_casa_hiver",
+      "theme": "ville",
+      "tier": 3,
+      "city": "Casablanca",
+      "setup": "À Anfa, les villas ont des piscines immenses, bleues, au bord de la mer,",
+      "lead": "à Sidi Moumen aussi on a de l'eau :",
+      "endings": [
+        {
+          "text": "dans le salon, quand c'est l'hiver",
+          "score": 10,
+          "reaction": "La piscine et la fuite. Même eau, pas la même vie. La salle se tait."
+        },
+        {
+          "text": "on la porte dans des seaux en fer",
+          "score": 6,
+          "reaction": "Vrai, ça rime. Mais l'hiver était plus dur."
+        },
+        {
+          "text": "on boit un grand verre",
+          "score": 3,
+          "reaction": "Un verre. Plat."
+        },
+        {
+          "text": "on se lave au hammam",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_casa_classe",
+      "theme": "ville",
+      "tier": 3,
+      "city": "Casablanca",
+      "setup": "En France mon accent fait trop bled, ici il sonne trop français,",
+      "lead": "alors j'ai choisi le rap :",
+      "endings": [
+        {
+          "text": "le seul pays où personne est classé",
+          "score": 10,
+          "reaction": "Le rap comme seul pays. Ceux qui vivent entre deux rives applaudissent."
+        },
+        {
+          "text": "le seul endroit où rien est imposé",
+          "score": 6,
+          "reaction": "Ça rime. Mais le classement était plus fort."
+        },
+        {
+          "text": "et je suis bien {lancé|lancée}",
+          "score": 3,
+          "reaction": "Lancé. Plat."
+        },
+        {
+          "text": "et ça me va bien",
+          "score": 0,
+          "reaction": "Gentil. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_lyon_klaxon",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Lyon",
+      "setup": "À Lyon, les bouchons, c'est des restos : quenelles, gratin, saucisson,",
+      "lead": "à Paris aussi y a des bouchons,",
+      "endings": [
+        {
+          "text": "mais là-bas on mange du klaxon",
+          "score": 10,
+          "reaction": "Le bouchon lyonnais contre le bouchon parisien. Lyon rit, fier."
+        },
+        {
+          "text": "mais c'est sur le périph, à reculons",
+          "score": 6,
+          "reaction": "Ça rime. Mais le klaxon était la blague."
+        },
+        {
+          "text": "et c'est pas très bon",
+          "score": 3,
+          "reaction": "Pas très bon. Plat."
+        },
+        {
+          "text": "et c'est beaucoup moins bien",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_lille_longtemps",
+      "theme": "ville",
+      "tier": 1,
+      "city": "Lille",
+      "setup": "À Lille, « il fait beau » ça veut dire qu'il pleut que la moitié du temps,",
+      "lead": "alors quand on dit « canicule »,",
+      "endings": [
+        {
+          "text": "on enlève un pull, mais pas longtemps",
+          "score": 10,
+          "reaction": "La canicule lilloise : un pull de moins, cinq minutes. Le Nord rit."
+        },
+        {
+          "text": "on sort en terrasse, en attendant",
+          "score": 6,
+          "reaction": "Ça rime. Mais le pull était la chute."
+        },
+        {
+          "text": "on est vraiment contents",
+          "score": 3,
+          "reaction": "Contents. Plat."
+        },
+        {
+          "text": "on mange une frite",
+          "score": 0,
+          "reaction": "Toujours. Sans rime."
+        }
+      ]
+    },
+    {
+      "id": "ville_bruxelles_semaine",
+      "theme": "ville",
+      "tier": 2,
+      "city": "Bruxelles",
+      "setup": "Le Manneken-Pis fait pipi devant les touristes depuis des siècles, sans gêne,",
+      "lead": "s'il habitait dans ma cité,",
+      "endings": [
+        {
+          "text": "il serait au poste depuis une semaine",
+          "score": 10,
+          "reaction": "Le Manneken-Pis en garde à vue. Bruxelles rit, et pense à ses quartiers."
+        },
+        {
+          "text": "on lui aurait mis une chaîne",
+          "score": 6,
+          "reaction": "Ça rime. Mais le poste était plus drôle."
+        },
+        {
+          "text": "il ferait de la peine",
+          "score": 3,
+          "reaction": "Peine. Plat."
+        },
+        {
+          "text": "il aurait des problèmes",
+          "score": 0,
+          "reaction": "Vrai. Sans rime."
+        }
+      ]
+    }
+  ]
+}

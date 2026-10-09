@@ -97,7 +97,7 @@ final class MapPlotsTests: XCTestCase {
                               && scenery.y + scenery.h <= map.height, "\(district) : \(scenery.kind) déborde de la carte")
                 let inside = tiles(of: map).filter(scenery.contains)
                 switch scenery.kind {
-                case .barge, .panorama, .murals:
+                case _ where scenery.kind.isProp:
                     XCTAssertFalse(inside.contains { map.tile(at: $0).isWalkable }, "\(district) : \(scenery.kind) sur une case praticable")
                 case .stairs:
                     XCTAssertTrue(inside.allSatisfy { map.tile(at: $0).isWalkable }, "\(district) : escalier bloqué")

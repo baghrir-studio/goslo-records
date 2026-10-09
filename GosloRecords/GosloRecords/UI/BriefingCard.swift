@@ -46,6 +46,13 @@ struct BriefingCard: View {
                         .lineLimit(1)
                         .truncationMode(.tail)
                 }
+                if let demand = briefing.demand {
+                    Text("★ \(demand)")
+                        .font(.mono(10, weight: .semibold))
+                        .foregroundStyle(Self.gold)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+                }
                 ForEach(briefing.objectives, id: \.self) { objective in
                     HStack(alignment: .firstTextBaseline, spacing: 5) {
                         Text("→").foregroundStyle(Self.gold)

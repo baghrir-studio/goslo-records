@@ -18,7 +18,11 @@ enum DecorArt {
         case .sono: PixelColor(hex: "#e04fb0")
         case .studioPerso: PixelColor(hex: "#ff4d2e")
         case .scenePleinAir: PixelColor(hex: "#e04fb0")
-        case .boutiqueMerch, .panneauGeant: PixelColor(hex: "#f2c14e")
+        case .boutiqueMerch, .panneauGeant, .labelInde, .snack: PixelColor(hex: "#f2c14e")
+        case .barbier, .salleBoxe: PixelColor(hex: "#ff4d2e")
+        case .disquaire: PixelColor(hex: "#4fd6e0")
+        case .radioPirate: PixelColor(hex: "#e04fb0")
+        case .fresqueGeante: nil
         case .fresque, .bancDore, .palmier, .foodTruck: nil
         }
     }
@@ -37,6 +41,13 @@ enum DecorArt {
         case .studioPerso: studio().outlined()
         case .scenePleinAir: stage().outlined()
         case .boutiqueMerch: merch().outlined()
+        case .snack: snack().outlined()
+        case .barbier: barber().outlined()
+        case .salleBoxe: boxingGym().outlined()
+        case .disquaire: recordShop().outlined()
+        case .radioPirate: pirateRadio().outlined()
+        case .labelInde: labelHouse().outlined()
+        case .fresqueGeante: mural().outlined()
         }
     }
 
@@ -291,6 +302,243 @@ enum DecorArt {
         c.fill(16, 30, 18, 31, PixelColor(hex: "#4fd6e0")); c.fill(15, 32, 19, 32, PixelColor(hex: "#4fd6e0"))
         // Door.
         c.fill(22, 27, 28, 45, PixelColor(hex: "#141418")); c.fill(23, 28, 27, 35, NightPalette.windowLit.shaded(0.6))
+        return c
+    }
+
+    // MARK: Neighbourhood businesses
+
+    /// Momo's kebab shop (two tiles wide, one deep): green tiles, striped awning, the spit turning in the lit window.
+    private static func snack() -> PixelCanvas {
+        let c = PixelCanvas(width: 32, height: 30)
+        let wall = PixelColor(hex: "#2f6b4f"), cream = PixelColor(hex: "#f0eee8"), awning = PixelColor(hex: "#e04f4f")
+        let meat = PixelColor(hex: "#9a5a2a")
+        c.fill(1, 6, 30, 29, wall)
+        for y in stride(from: 13, through: 28, by: 3) { c.fill(1, y, 2, y, wall.shaded(0.8)); c.fill(20, y, 21, y, wall.shaded(0.8)) }
+        c.fill(0, 5, 31, 6, PixelColor(hex: "#1c1c24"))
+        // The sign on the roof.
+        let text = "KEBAB", w = PixelFont.width(text)
+        c.fill((32 - w) / 2 - 2, 0, (32 + w) / 2 + 1, 5, PixelColor(hex: "#14141a"))
+        PixelFont.draw(text, on: c, x: (32 - w) / 2, y: 0, gold)
+        // Awning.
+        for x in 1...30 { c.fill(x, 7, x, 9, (x / 3) % 2 == 0 ? awning : cream) }
+        c.fill(1, 10, 30, 10, awning.shaded(0.7))
+        // The window: the spit, the menu, the counter.
+        c.fill(3, 12, 19, 24, NightPalette.windowLit.shaded(0.9))
+        c.fill(8, 12, 9, 13, NightPalette.metal); c.fill(8, 22, 9, 23, NightPalette.metal)
+        c.fill(7, 14, 10, 21, meat); c.fill(6, 15, 11, 19, meat)
+        for y in stride(from: 15, through: 20, by: 2) { c.fill(7, y, 10, y, meat.shaded(0.75)) }
+        c.dot(6, 15, meat.shaded(1.3)); c.dot(7, 14, meat.shaded(1.3))
+        c.fill(13, 13, 18, 18, PixelColor(hex: "#1c1c24"))
+        for y in [14, 16] { c.fill(14, y, 17, y, gold) }
+        c.fill(2, 23, 20, 24, NightPalette.metal.shaded(1.3))
+        c.fill(4, 22, 5, 22, PixelColor(hex: "#f0d060")); c.fill(15, 22, 17, 22, awning)
+        // Door.
+        c.fill(23, 13, 29, 29, NightPalette.door)
+        c.fill(24, 14, 28, 20, NightPalette.windowLit.shaded(0.6))
+        c.dot(24, 23, gold)
+        return c
+    }
+
+    /// The barber's: a blue shopfront, the spinning striped pole, a chair facing the mirror in the window.
+    private static func barber() -> PixelCanvas {
+        let c = PixelCanvas(width: 32, height: 46)
+        let wall = PixelColor(hex: "#2a4a6a"), red = PixelColor(hex: "#e04f4f"), cream = PixelColor(hex: "#f0eee8")
+        c.fill(1, 10, 30, 45, wall)
+        for y in stride(from: 21, through: 44, by: 4) { c.fill(1, y, 30, y, wall.shaded(0.85)) }
+        c.fill(0, 8, 31, 10, PixelColor(hex: "#1c1c24"))
+        // Sign.
+        let text = "BARBER", w = PixelFont.width(text)
+        c.fill(2, 12, 29, 18, PixelColor(hex: "#14141a"))
+        PixelFont.draw(text, on: c, x: (32 - w) / 2, y: 13, cream)
+        // Window: the mirror, the red chair.
+        c.fill(3, 22, 16, 35, NightPalette.windowLit.shaded(0.85))
+        c.fill(4, 23, 10, 28, PixelColor(hex: "#9fd4e8")); c.fill(4, 23, 10, 23, PixelColor(hex: "#d8f0f8"))
+        c.fill(9, 30, 14, 32, red); c.fill(13, 26, 14, 32, red); c.fill(13, 26, 14, 26, red.shaded(1.3))
+        c.fill(11, 33, 12, 35, NightPalette.metal)
+        c.fill(2, 36, 17, 36, NightPalette.metal.shaded(1.2))
+        // Door.
+        c.fill(18, 30, 24, 45, NightPalette.door)
+        c.fill(19, 31, 23, 37, NightPalette.windowLit.shaded(0.6))
+        c.dot(23, 40, gold)
+        // The pole: red, white and blue stripes, a glass ball on top.
+        c.fill(25, 20, 29, 21, NightPalette.metal); c.fill(25, 37, 29, 38, NightPalette.metal)
+        for y in 22...36 {
+            for x in 26...28 {
+                let k = (x + y) % 6
+                c.dot(x, y, k < 2 ? red : (k < 4 ? cream : PixelColor(hex: "#3b5bdb")))
+            }
+        }
+        c.circle(cx: 27, cy: 18, radius: 1, PixelColor(hex: "#ffe8a0"))
+        return c
+    }
+
+    /// The boxing gym (three tiles wide): a brick hall, BOXE in red, a glove painted on the wall,
+    /// punching bags hanging behind the big window.
+    private static func boxingGym() -> PixelCanvas {
+        let c = PixelCanvas(width: 48, height: 46)
+        let brick = PixelColor(hex: "#5b3a32"), red = PixelColor(hex: "#ff4d2e")
+        c.fill(1, 12, 46, 45, brick)
+        for y in stride(from: 14, through: 44, by: 3) {
+            c.fill(1, y, 46, y, brick.shaded(0.8))
+            for x in stride(from: (y / 3) % 2 == 0 ? 4 : 1, through: 46, by: 6) { c.dot(x, y + 1, brick.shaded(0.8)) }
+        }
+        c.fill(0, 10, 47, 12, PixelColor(hex: "#2a2a30"))
+        c.fill(6, 6, 13, 9, NightPalette.metal); c.fill(7, 7, 12, 8, NightPalette.metal.shaded(0.7))
+        // Sign.
+        let text = "BOXE", w = PixelFont.width(text)
+        c.fill(4, 14, 28, 20, PixelColor(hex: "#14141a"))
+        PixelFont.draw(text, on: c, x: 4 + (25 - w) / 2, y: 15, red)
+        // The glove on the wall.
+        c.circle(cx: 38, cy: 19, radius: 5, red)
+        c.circle(cx: 33, cy: 20, radius: 2, red.shaded(0.8))
+        c.fill(34, 24, 42, 28, red); c.fill(34, 26, 42, 26, PixelColor(hex: "#f0eee8"))
+        c.dot(36, 16, PixelColor(hex: "#ff9a8a")); c.dot(37, 15, PixelColor(hex: "#ff9a8a"))
+        // Big window: three bags on chains, the blue ring mat.
+        c.fill(3, 24, 30, 37, NightPalette.windowLit.shaded(0.7))
+        for x in [8, 16, 24] {
+            c.fill(x, 24, x, 26, NightPalette.metal)
+            c.fill(x - 1, 27, x + 1, 33, PixelColor(hex: "#8a2a2a"))
+            c.fill(x - 1, 27, x - 1, 33, PixelColor(hex: "#b84a3a"))
+            c.fill(x - 1, 27, x + 1, 27, PixelColor(hex: "#14141a"))
+        }
+        c.fill(3, 35, 30, 37, PixelColor(hex: "#2a4a8a"))
+        c.fill(3, 35, 30, 35, PixelColor(hex: "#f0eee8"))
+        // Door.
+        c.fill(35, 31, 42, 45, NightPalette.door)
+        c.fill(36, 32, 41, 36, NightPalette.windowLit.shaded(0.55))
+        c.dot(41, 39, gold)
+        return c
+    }
+
+    /// The record shop: a purple front, DISQUES in cyan, a huge vinyl in the window above the crates.
+    private static func recordShop() -> PixelCanvas {
+        let c = PixelCanvas(width: 32, height: 46)
+        let wall = PixelColor(hex: "#3a2a4a"), cyan = PixelColor(hex: "#4fd6e0"), vinyl = PixelColor(hex: "#14141a")
+        c.fill(1, 10, 30, 45, wall)
+        c.fill(0, 8, 31, 10, PixelColor(hex: "#1c1c24"))
+        // Sign.
+        let text = "DISQUES", w = PixelFont.width(text)
+        c.fill(1, 12, 30, 18, PixelColor(hex: "#14141a"))
+        PixelFont.draw(text, on: c, x: (32 - w) / 2, y: 13, cyan)
+        // Window: the vinyl and its grooves, the crates and their sleeves.
+        c.fill(3, 21, 19, 37, NightPalette.windowLit.shaded(0.8))
+        c.circle(cx: 11, cy: 27, radius: 5, vinyl)
+        c.circle(cx: 11, cy: 27, radius: 3, PixelColor(hex: "#24242c"))
+        c.circle(cx: 11, cy: 27, radius: 2, vinyl)
+        c.circle(cx: 11, cy: 27, radius: 1, PixelColor(hex: "#e04f4f"))
+        c.dot(8, 24, NightPalette.metal)
+        let sleeves = ["#e04fb0", "#f2c14e", "#4fd6e0", "#7fe0a0", "#ff6a3a", "#f0eee8", "#3b5bdb", "#e04f4f"]
+        for (i, x) in stride(from: 4, through: 18, by: 2).enumerated() { c.fill(x, 33, x, 35, PixelColor(hex: sleeves[i % sleeves.count])) }
+        c.fill(3, 35, 19, 37, PixelColor(hex: "#8a5a34"))
+        // Door, a little vinyl sticker on it.
+        c.fill(22, 27, 28, 45, NightPalette.door)
+        c.fill(23, 28, 27, 35, NightPalette.windowLit.shaded(0.6))
+        c.circle(cx: 25, cy: 39, radius: 1, cyan)
+        return c
+    }
+
+    /// The pirate radio (two tiles wide, one deep): a tin shack, a lattice mast with a red light,
+    /// the waves going out, FM on the wall.
+    private static func pirateRadio() -> PixelCanvas {
+        let c = PixelCanvas(width: 32, height: 42)
+        let tin = PixelColor(hex: "#5a5a4a"), pink = PixelColor(hex: "#ff5ab4")
+        // The mast: wider at the bottom, crossbars, the red light on top.
+        for y in 3...25 {
+            let half = (y - 3) / 9
+            c.dot(22 - half, y, NightPalette.metal); c.dot(22 + half, y, NightPalette.metal)
+            if y % 4 == 0 { c.fill(22 - half, y, 22 + half, y, NightPalette.metal) }
+        }
+        c.fill(22, 1, 22, 2, NightPalette.metal)
+        c.dot(22, 0, PixelColor(hex: "#ff4d2e"))
+        // Waves.
+        for (x, y) in [(18, 1), (17, 2), (17, 3), (18, 4), (26, 1), (27, 2), (27, 3), (26, 4),
+                       (14, 0), (13, 1), (13, 2), (13, 3), (13, 4), (14, 5), (30, 0), (31, 1), (31, 2), (31, 3), (31, 4), (30, 5)] {
+            c.dot(x, y, pink)
+        }
+        // The shack, corrugated.
+        c.fill(1, 26, 30, 41, tin)
+        for x in stride(from: 2, through: 30, by: 3) { c.fill(x, 27, x, 41, tin.shaded(0.8)) }
+        c.fill(0, 24, 31, 26, NightPalette.metal.shaded(0.8))
+        // Window with the console.
+        c.fill(3, 29, 10, 35, NightPalette.windowLit.shaded(0.8))
+        for (x, color) in [(4, "#ff4d2e"), (6, "#7fe0a0"), (8, "#4fd6e0")] { c.fill(x, 33, x, 34, PixelColor(hex: color)) }
+        // The FM sign.
+        let text = "FM", w = PixelFont.width(text)
+        c.fill(12, 28, 13 + w, 34, PixelColor(hex: "#14141a"))
+        PixelFont.draw(text, on: c, x: 13, y: 29, pink)
+        // Door.
+        c.fill(24, 30, 29, 41, NightPalette.door)
+        c.dot(25, 36, gold)
+        return c
+    }
+
+    /// Your own label (three tiles wide): a glass-and-steel block, lit offices upstairs, LABEL in gold
+    /// with a golden record, a water tank and a dish on the roof.
+    private static func labelHouse() -> PixelCanvas {
+        let c = PixelCanvas(width: 48, height: 50)
+        let body = PixelColor(hex: "#26263a"), glass = PixelColor(hex: "#3a6a8a")
+        // Roof: water tank and satellite dish.
+        c.fill(6, 1, 13, 5, NightPalette.metal); c.fill(6, 1, 13, 1, NightPalette.metal.shaded(1.3))
+        c.fill(7, 6, 7, 7, NightPalette.metal); c.fill(12, 6, 12, 7, NightPalette.metal)
+        c.circle(cx: 38, cy: 4, radius: 2, NightPalette.metal.shaded(1.2)); c.fill(38, 6, 38, 7, NightPalette.metal)
+        c.fill(0, 8, 47, 10, PixelColor(hex: "#1c1c24"))
+        c.fill(1, 10, 46, 49, body)
+        // Offices upstairs.
+        for (i, x) in stride(from: 4, through: 40, by: 7).enumerated() {
+            c.fill(x, 12, x + 4, 19, i % 2 == 0 ? NightPalette.windowLit.shaded(0.85) : NightPalette.windowDark)
+            c.fill(x, 16, x + 4, 16, NightPalette.windowFrame)
+        }
+        c.fill(1, 22, 46, 23, NightPalette.metal.shaded(0.8))
+        // Sign and the gold record.
+        let text = "LABEL", w = PixelFont.width(text)
+        c.fill(4, 25, 32, 31, PixelColor(hex: "#14141a"))
+        PixelFont.draw(text, on: c, x: 4 + (29 - w) / 2, y: 26, gold)
+        c.circle(cx: 40, cy: 28, radius: 4, gold)
+        c.circle(cx: 40, cy: 28, radius: 2, goldDark)
+        c.dot(40, 28, PixelColor(hex: "#14141a")); c.dot(38, 26, goldLight)
+        // Glass front with a reflection.
+        c.fill(3, 34, 30, 48, glass)
+        for x in stride(from: 9, through: 27, by: 7) { c.fill(x, 34, x, 48, NightPalette.metal) }
+        for i in 0..<6 { c.dot(5 + i, 36 + i, glass.shaded(1.5)); c.dot(19 + i, 36 + i, glass.shaded(1.4)) }
+        // Double door and its red carpet.
+        c.fill(34, 35, 44, 49, NightPalette.door)
+        c.fill(35, 36, 38, 47, NightPalette.windowLit.shaded(0.6)); c.fill(40, 36, 43, 47, NightPalette.windowLit.shaded(0.6))
+        c.fill(33, 49, 45, 49, PixelColor(hex: "#c43a3a"))
+        return c
+    }
+
+    /// The monumental fresco (three tiles wide): a whole wall painted at sunset, your silhouette with a cap,
+    /// a crown and the golden mic, the city's towers behind, spray cans at the foot.
+    private static func mural() -> PixelCanvas {
+        let c = PixelCanvas(width: 48, height: 40)
+        let shadow = PixelColor(hex: "#1a1030"), brick = PixelColor(hex: "#6b4a3a")
+        c.fill(0, 0, 47, 2, PixelColor(hex: "#5e5e68"))
+        c.fill(0, 2, 47, 39, brick)
+        // The sky, in bands.
+        for y in 4...33 {
+            let hex = y < 11 ? "#3b2a6a" : (y < 18 ? "#7a3a8a" : (y < 25 ? "#e04fb0" : "#ff8a3a"))
+            c.fill(2, y, 45, y, PixelColor(hex: hex))
+        }
+        c.circle(cx: 35, cy: 24, radius: 6, gold)
+        for (x, y) in [(6, 6), (12, 9), (40, 5), (44, 10), (30, 7)] { c.dot(x, y, goldLight) }
+        // Towers behind.
+        c.fill(3, 22, 8, 33, shadow); c.fill(9, 26, 12, 33, shadow); c.fill(38, 20, 43, 33, shadow); c.fill(33, 27, 37, 33, shadow)
+        for (x, y) in [(5, 24), (5, 28), (40, 23), (40, 27), (42, 30)] { c.dot(x, y, NightPalette.windowLit) }
+        // The silhouette: cap, head, shoulders, the mic.
+        c.circle(cx: 22, cy: 17, radius: 5, shadow)
+        c.fill(16, 11, 27, 13, shadow); c.fill(27, 13, 30, 13, shadow)
+        c.fill(14, 23, 30, 33, shadow); c.fill(16, 22, 28, 22, shadow)
+        c.circle(cx: 31, cy: 20, radius: 2, gold); c.fill(30, 22, 31, 27, goldDark)
+        // The crown above.
+        c.fill(17, 7, 26, 9, gold)
+        for x in [17, 21, 22, 26] { c.dot(x, 6, gold) }
+        c.dot(21, 5, gold); c.dot(22, 5, gold); c.dot(19, 8, PixelColor(hex: "#e04f4f")); c.dot(24, 8, PixelColor(hex: "#4fd6e0"))
+        // Brick base, the tag along it, and the spray cans.
+        for y in stride(from: 35, through: 38, by: 2) { c.fill(0, y, 47, y, brick.shaded(0.8)) }
+        PixelFont.draw("GOSLO", on: c, x: 14, y: 35, PixelColor(hex: "#f0eee8"))
+        for (x, hex) in [(4, "#e04f4f"), (7, "#4fd6e0"), (41, "#f2c14e")] {
+            c.fill(x, 35, x + 1, 39, PixelColor(hex: hex)); c.fill(x, 34, x + 1, 34, NightPalette.metal)
+        }
         return c
     }
 }

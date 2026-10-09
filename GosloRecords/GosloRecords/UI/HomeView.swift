@@ -76,8 +76,20 @@ struct HomeView: View {
                 HStack(spacing: 12) {
                     Button("Le QG · 💿 \(model.profile.hq.discs)") { model.go(.hq) }
                         .buttonStyle(SecondaryButtonStyle())
-                    Button("Arcade") { model.go(.arcade) }
-                        .buttonStyle(SecondaryButtonStyle())
+                    // The arcade's flagship shows on the button itself.
+                    Button {
+                        model.go(.arcade)
+                    } label: {
+                        VStack(spacing: 2) {
+                            Text("Arcade")
+                            Text("★ Punchliner")
+                                .font(.mono(11, weight: .heavy))
+                                .textCase(nil)
+                                .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                        }
+                    }
+                    .buttonStyle(SecondaryButtonStyle())
+                    .accessibilityLabel("Arcade, avec Punchliner, le jeu phare")
                 }
                 .disabled(model.loadError != nil)
 

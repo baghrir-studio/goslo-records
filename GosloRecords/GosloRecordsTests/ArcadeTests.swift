@@ -13,6 +13,8 @@ final class ArcadeTests: XCTestCase {
         XCTAssertEqual(Set(Arcade.games.map(\.id)).count, Arcade.games.count)
         XCTAssertGreaterThanOrEqual(Arcade.games.filter { $0.unlockedBy == nil }.count, 3, "quelques jeux gratuits")
         XCTAssertTrue(Arcade.games.contains { $0.unlockedBy != nil }, "les autres se débloquent en jouant")
+        XCTAssertEqual(Arcade.games.first?.id, Arcade.flagshipID, "Punchliner, le jeu phare, en premier")
+        XCTAssertNil(Arcade.games.first?.unlockedBy, "le jeu phare est gratuit")
         let rapper = Rapper(name: "A", city: .paris, style: .trap)
         for game in Arcade.games {
             switch game.mode {

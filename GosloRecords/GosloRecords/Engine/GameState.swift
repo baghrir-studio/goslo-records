@@ -39,6 +39,8 @@ struct GameState: Codable, Equatable {
     var smallTalk: [String: Int] = [:]
     /// The player's best punchlines, oldest first: the titles of their tracks, quoted back by the cast.
     var hooks: [String] = []
+    /// Punchliner verses already played, oldest first: the ones never seen are drawn first (`PunchlinerDeck`).
+    var seenVerses: [String] = []
     /// Albums released, in order (sales keep coming in for a few semesters).
     var albums: [Album] = []
     /// Free career: no time limit. It ends on a defeat or when the player hangs up the mic (`GameEngine.retire`).
@@ -64,6 +66,11 @@ struct GameState: Codable, Equatable {
     var wardrobe: Set<String> = []
     /// Visits per place this year (they pay less after a few: `GameEngine.fatigue`).
     var visitsThisYear: [String: Int] = [:]
+    /// Rewarded uses of each gated source (`Gate`) this period, and this year (reset in `finishAction`).
+    var gatePeriodUses: [String: Int] = [:]
+    var gateYearUses: [String: Int] = [:]
+    /// The gated source the current event came from (the bench scales its rewards with progress).
+    var currentGate: Gate?
     /// The finale is played: the player picks between retiring as a legend and carrying on.
     var finaleChoicePending = false
     var pendingFollowUp: String?
@@ -119,8 +126,9 @@ struct GameState: Codable, Equatable {
         case minigame
         case questProgress, completedQuests, ending, position, facing, district, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
-        case seenEvents, talkedAt, smallTalk, hooks, albums, freeCareer, finaleChoicePending
+        case seenEvents, talkedAt, smallTalk, hooks, seenVerses, albums, freeCareer, finaleChoicePending
         case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank, decor, visitsThisYear, wardrobe, placed
+        case gatePeriodUses, gateYearUses, currentGate
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -169,6 +177,7 @@ struct GameState: Codable, Equatable {
         talkedAt = try c.decodeIfPresent([String: String].self, forKey: .talkedAt) ?? [:]
         smallTalk = try c.decodeIfPresent([String: Int].self, forKey: .smallTalk) ?? [:]
         hooks = try c.decodeIfPresent([String].self, forKey: .hooks) ?? []
+        seenVerses = try c.decodeIfPresent([String].self, forKey: .seenVerses) ?? []
         albums = try c.decodeIfPresent([Album].self, forKey: .albums) ?? []
         freeCareer = try c.decodeIfPresent(Bool.self, forKey: .freeCareer) ?? false
         finaleChoicePending = try c.decodeIfPresent(Bool.self, forKey: .finaleChoicePending) ?? false
@@ -183,6 +192,9 @@ struct GameState: Codable, Equatable {
         visitsThisYear = try c.decodeIfPresent([String: Int].self, forKey: .visitsThisYear) ?? [:]
         wardrobe = try c.decodeIfPresent(Set<String>.self, forKey: .wardrobe) ?? []
         placed = try c.decodeIfPresent([PlacedDecor].self, forKey: .placed) ?? []
+        gatePeriodUses = try c.decodeIfPresent([String: Int].self, forKey: .gatePeriodUses) ?? [:]
+        gateYearUses = try c.decodeIfPresent([String: Int].self, forKey: .gateYearUses) ?? [:]
+        currentGate = try c.decodeIfPresent(Gate.self, forKey: .currentGate)
     }
 
     /// Year 1 to 10 (no cap in a free career).

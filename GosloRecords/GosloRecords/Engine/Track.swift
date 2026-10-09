@@ -1,7 +1,7 @@
 import Foundation
 
 /// The player's own song, made from the lines they picked in a Punchliner: an instrumental in their style,
-/// then their verse, one line per bar. Played by `TrackView`, the lines rapped by the phone's voice.
+/// then their verse, one line per bar. Rapped by the player in the voice booth (`VoiceBoothView`).
 struct PlayerTrack: Equatable {
     static let introBars = 2
     static let outroBars = 2

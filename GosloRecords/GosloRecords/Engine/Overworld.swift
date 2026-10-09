@@ -89,6 +89,8 @@ struct MapNPC: Codable, Equatable, Identifiable {
     let fromChapter: Int
     /// The character leaves the map once this flag is set (e.g. exiled to Miami).
     let hiddenIf: String?
+    /// Artist level needed before the character shows up (1 = from the start): the cast grows with the career.
+    let minLevel: Int
 
     var point: TilePoint { TilePoint(x: x, y: y) }
 
@@ -96,10 +98,12 @@ struct MapNPC: Codable, Equatable, Identifiable {
         case id, x, y, facing, sight
         case fromChapter = "from_chapter"
         case hiddenIf = "hidden_if"
+        case minLevel = "min_level"
     }
 
     init(id: String, x: Int, y: Int, facing: Direction = .down, sight: Int = 0, fromChapter: Int = 1,
-         hiddenIf: String? = nil) {
+         hiddenIf: String? = nil, minLevel: Int = 1) {
+        self.minLevel = minLevel
         self.id = id
         self.x = x
         self.y = y
@@ -118,6 +122,7 @@ struct MapNPC: Codable, Equatable, Identifiable {
         sight = try c.decodeIfPresent(Int.self, forKey: .sight) ?? 0
         fromChapter = try c.decodeIfPresent(Int.self, forKey: .fromChapter) ?? 1
         hiddenIf = try c.decodeIfPresent(String.self, forKey: .hiddenIf)
+        minLevel = try c.decodeIfPresent(Int.self, forKey: .minLevel) ?? 1
     }
 }
 
@@ -157,6 +162,35 @@ struct MapScenery: Codable, Equatable {
         case backstage
         /// A footbridge over the water (walkable planks, a handrail on each side).
         case bridge
+        /// Life on the rooftops: washing lines, satellite dishes, aerials, chimney pots, water tanks.
+        case rooftops
+        /// A row of ground-floor shops on a front wall: kebab neons, a laundromat, a hairdresser, a phone shop.
+        case shopfronts
+        /// A newspaper kiosk (a ticket booth at Le Dôme) on a blocked tile.
+        case kiosk
+        /// A bus shelter over a run of blocked tiles.
+        case busStop = "bus_stop"
+        /// Big planters on blocked tiles: box hedges, olive trees, potted palms.
+        case planters
+        /// A tagged hoarding over a fence, or throw-ups over a wall.
+        case graffiti
+        /// Scooters and bikes parked on blocked tiles.
+        case scooters
+        /// Open-air stalls on blocked tiles (a food truck on a run of two).
+        case stalls
+        /// A café terrace: tables and parasols on blocked tiles.
+        case cafe
+        /// The water's edge: limestone calanques, surf on the rocks, or a stone quay, depending on the city.
+        case shore
+
+        /// Props stand only on tiles that were already blocked (they never take a walkable tile).
+        var isProp: Bool {
+            switch self {
+            case .barge, .panorama, .murals, .rooftops, .shopfronts, .kiosk, .busStop, .planters, .graffiti,
+                 .scooters, .stalls, .cafe, .shore: true
+            default: false
+            }
+        }
     }
 
     let kind: Kind
@@ -211,10 +245,11 @@ struct WorldMap: Codable, Equatable {
         npcs.first { $0.point == point }
     }
 
-    /// The map as it is in a given chapter (characters not there yet are removed).
-    func forChapter(_ chapter: Int, flags: Set<String> = []) -> WorldMap {
+    /// The map as it is in a given chapter (characters not there yet are removed). `level` is the player's
+    /// artist level: characters asking for more stay away (by default everyone who could be there is).
+    func forChapter(_ chapter: Int, flags: Set<String> = [], level: Int = Int.max) -> WorldMap {
         WorldMap(rows: rows, spawn: spawn, doors: doors, npcs: npcs.filter { npc in
-            npc.fromChapter <= chapter && !(npc.hiddenIf.map(flags.contains) ?? false)
+            npc.fromChapter <= chapter && npc.minLevel <= level && !(npc.hiddenIf.map(flags.contains) ?? false)
         }, metro: metro, plots: plots, scenery: scenery)
     }
 
