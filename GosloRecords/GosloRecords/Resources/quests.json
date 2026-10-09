@@ -584,6 +584,346 @@
         },
         "text": "Défi de la ville relevé. Ici, maintenant, tout le monde connaît ton nom."
       }
+    },
+    {
+      "id": "journal_yvette",
+      "title": "Le journal de Mamie Yvette",
+      "description": "Mounir a le dos en compote. Mamie Yvette n'a pas raté un numéro depuis 1971.",
+      "conditions": {
+        "required_flags": [
+          "colis_mounir"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Livrer le journal à Mamie Yvette, au bord de l'eau",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "journal_livre"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "argent": 3
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Mounir te fait crédit d'un journal par semaine. Mamie Yvette te fait crédit de sa confiance. C'est plus rare."
+      }
+    },
+    {
+      "id": "prod_sami",
+      "title": "La prod du toit",
+      "description": "Petit Sami t'a fait une prod sur un ordinateur qui chauffe. Tu as promis de poser dessus.",
+      "conditions": {
+        "required_flags": [
+          "sami_promesse"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Sortir un projet",
+          "location": "chez_toi",
+          "conditions": {
+            "min_counters": {
+              "projets": 1
+            }
+          }
+        },
+        {
+          "label": "Poser sur la prod de Petit Sami au studio",
+          "location": "studio",
+          "conditions": {
+            "required_flags": [
+              "sami_pose"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "streams": 3
+        },
+        "xp": {
+          "flow": 25
+        },
+        "text": "« Prod. Petit Sami ». Quelque part au Bloc, une pochette est encadrée au-dessus d'un lit."
+      }
+    },
+    {
+      "id": "bal_yvette",
+      "title": "Le bal de René",
+      "description": "Une fête au bord de l'eau, pour les vieux du quartier, comme en 1974.",
+      "conditions": {
+        "required_flags": [
+          "yvette_bal_promis"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Réussir un vrai concert",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "concert_reussi"
+            ]
+          }
+        },
+        {
+          "label": "Chanter à la fête de Mamie Yvette",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "fete_yvette"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 3
+        },
+        "xp": {
+          "scene": 20
+        },
+        "text": "Tu as rappé pour l'immeuble entier. René aurait dansé comme une armoire."
+      }
+    },
+    {
+      "id": "freres_sauge",
+      "title": "Le petit frère",
+      "description": "P'tit Sauge veut prouver qu'il est meilleur que son grand frère. En commençant par toi.",
+      "conditions": {
+        "min_chapter": 2
+      },
+      "steps": [
+        {
+          "label": "Battre P'tit Sauge au city stade",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "clash_gagne_ptit_sauge"
+            ]
+          }
+        },
+        {
+          "label": "Réconcilier les frères Sauge",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "sauge_freres"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 2
+        },
+        "xp": {
+          "plume": 20
+        },
+        "text": "Les frères Sauge font un son ensemble. Le petit fait les couplets. Le grand, pour une fois, écoute."
+      }
+    },
+    {
+      "id": "face_b_papy",
+      "title": "La face B de Papy Groove",
+      "description": "Un pressage unique de 1989, prêté au Transfo il y a vingt-cinq ans.",
+      "conditions": {
+        "required_flags": [
+          "papy_caisse"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Retrouver la face B au Transfo",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "face_b_trouvee"
+            ]
+          }
+        },
+        {
+          "label": "Rapporter la face B à Papy Groove, sur le quai",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "face_b_rendue"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 2,
+          "mental": 2
+        },
+        "xp": {
+          "scene": 25
+        },
+        "text": "Le vieux DJ a retrouvé son disque. Toi, tu as gagné un casque qui a tout entendu."
+      }
+    },
+    {
+      "id": "jingle_rachid",
+      "title": "Le jingle des Halles",
+      "description": "Le fromager d'en face a engagé un baryton. Rachid compte sur toi.",
+      "conditions": {
+        "required_flags": [
+          "rachid_slogan"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Enregistrer le jingle de Rachid aux Halles",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "rachid_jingle_fait"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "argent": 4
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Une cagette par semaine, et ton refrain chanté entre les poireaux. Le baryton fait les chœurs."
+      }
+    },
+    {
+      "id": "fresque_zoe",
+      "title": "Ta tête sur le mur",
+      "description": "Zoé Bombe veut peindre ton portrait sur dix mètres. Encore faut-il que ton nom pèse assez lourd.",
+      "conditions": {
+        "required_flags": [
+          "zoe_projet"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Poser pour le croquis au Bloc",
+          "location": "quartier",
+          "conditions": {
+            "required_flags": [
+              "zoe_croquis"
+            ]
+          }
+        },
+        {
+          "label": "Atteindre le niveau 4 d'artiste pour que la fresque soit dévoilée",
+          "location": "reseaux",
+          "conditions": {
+            "min_artist_level": 4
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "credibilite": 3
+        },
+        "xp": {
+          "scene": 20
+        },
+        "text": "Ta tête fait dix mètres de haut sur le mur du Bloc. Les gamins font des photos devant. Les pigeons aussi, à leur façon."
+      }
+    },
+    {
+      "id": "exclu_gazette",
+      "title": "L'exclu de la Gazette",
+      "description": "Inès Lacroix veut ton portrait avant les grandes radios.",
+      "conditions": {
+        "required_flags": [
+          "ines_exclu"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Lire l'article d'Inès sur ton téléphone",
+          "location": "reseaux",
+          "conditions": {
+            "required_flags": [
+              "article_gazette"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "streams": 3
+        },
+        "xp": {
+          "business": 20
+        },
+        "text": "Trois pages dans la Gazette des quartiers. Les grandes radios l'ont lue. Elles savent qui inviter, maintenant."
+      }
+    },
+    {
+      "id": "dedicace_jojo",
+      "title": "Une dédicace pour Kevin",
+      "description": "Jojo le taxi ne parle plus beaucoup à son fils. Une dédicace à la radio, ça pourrait aider.",
+      "conditions": {
+        "required_flags": [
+          "jojo_dedicace_promise"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Atteindre le niveau 5 d'artiste pour passer en direct sur goslo radio",
+          "location": "media",
+          "conditions": {
+            "min_artist_level": 5
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "mental": 3
+        },
+        "xp": {
+          "scene": 20
+        },
+        "text": "« Bonjour à Kevin, de la part de ton père. Il est fier. Il te le dira pas. Je le dis pour lui. »"
+      }
+    },
+    {
+      "id": "gamin_dome",
+      "title": "Un gamin au Dôme",
+      "description": "Petit Sami a passé la barrière du Dôme. Sylvie t'a à l'œil.",
+      "conditions": {
+        "required_flags": [
+          "sami_backstage"
+        ]
+      },
+      "steps": [
+        {
+          "label": "Faire résonner une prod de Sami pendant les balances du Dôme",
+          "location": "scene",
+          "conditions": {
+            "required_flags": [
+              "sami_dome"
+            ]
+          }
+        }
+      ],
+      "reward": {
+        "effects": {
+          "streams": 3
+        },
+        "xp": {
+          "scene": 25
+        },
+        "text": "Un klonk d'ascenseur dans vingt mille places. Petit Sami ne s'en remettra jamais, et c'est tant mieux."
+      }
     }
   ]
 }

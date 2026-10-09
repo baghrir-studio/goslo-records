@@ -53,9 +53,12 @@ struct CityTheme {
     var awnings = [PixelColor(hex: "#9a2a26"), PixelColor(hex: "#2f5a3a")]
     /// The local shop downtown, by its sign (8 letters at most).
     var signature = "TABAC"
+    /// The city itself, for the props that change from one city to the next (kiosks, shop signs, rooftops, the shore).
+    var city: City = .paris
 
     static func forCity(_ city: City) -> CityTheme {
         var t = CityTheme()
+        t.city = city
         switch city {
         case .paris:
             // Pale stone, zinc roofs.

@@ -132,6 +132,19 @@ enum TileArt {
             c.fill(7, 0, 8, 4, NightPalette.metal)
             c.circle(cx: 8, cy: 2, radius: 2, red)
             c.fill(7, 1, 9, 1, PixelColor(hex: "#f0eee8")); c.fill(8, 1, 8, 3, PixelColor(hex: "#f0eee8"))
+        case .metro where t.city == .paris:
+            // Paris: the old green cast-iron entrance, two amber globes on its posts, an amber "M" on green.
+            facade(c, p, t)
+            let green = PixelColor(hex: "#2f5a3a"), amber = PixelColor(hex: "#f2a83a")
+            c.fill(3, 5, 12, 15, NightPalette.door)
+            for (row, inset) in [(9, 0), (11, 1), (13, 2), (15, 3)] {
+                c.fill(4 + inset, row, 11 - inset, row, NightPalette.metal.shaded(1.2))
+            }
+            c.fill(1, 3, 2, 15, green); c.fill(13, 3, 14, 15, green)
+            c.fill(1, 4, 14, 5, green)
+            c.circle(cx: 2, cy: 1, radius: 1, amber); c.circle(cx: 13, cy: 1, radius: 1, amber)
+            c.fill(5, 0, 10, 3, green)
+            for (x, y0, y1) in [(6, 1, 3), (7, 1, 1), (8, 1, 1), (9, 1, 3)] { c.fill(x, y0, x, y1, amber) }
         case .metro:
             // Metro entrance: steps going down under a blue frame, the big white M above.
             facade(c, p, t)
