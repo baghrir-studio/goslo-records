@@ -49,11 +49,34 @@ struct Result {
     /// Synergies at work on the map at the end.
     var synergies = 0
     var spent = 0
+    // Chests and leagues.
+    var chestsGranted = 0
+    var chestsOpened = 0
+    var chestMoney = 0
+    var chestXP = 0
+    var trophies = 0
+    var clashWins = 0
+    var clashLosses = 0
+    var league: League = .bronze
+    // Raids.
+    var raids = 0
+    var raidWins = 0
+    var raidLosses = 0
+    var raidTimeouts = 0
+    var stolen = 0
+    var recovered = 0
+    var firstRaidTurn: Int?
 }
 
 let trace = ProcessInfo.processInfo.environment["TRACE"] != nil
 /// NOBUILD=1 plays without buying buildings (the economy baseline).
 let builds = ProcessInfo.processInfo.environment["NOBUILD"] == nil
+/// WILD=1.5 adds terrain vague duels per action (a player who grinds the ladder).
+let grind = ProcessInfo.processInfo.environment["WILD"].flatMap(Double.init)
+/// COLLECT=0.6: chance to pick up each building's money at a period (a player who doesn't always walk past).
+let collectRate = Double(ProcessInfo.processInfo.environment["COLLECT"] ?? "") ?? 0.6
+/// FIGHT=0.9: chance to go and challenge a raider each period (otherwise the raid runs on).
+let fightRate = Double(ProcessInfo.processInfo.environment["FIGHT"] ?? "") ?? 0.9
 
 final class Player {
     let engine: GameEngine
@@ -63,6 +86,8 @@ final class Player {
     var result = Result(ending: nil, finished: false, chapterReached: 1, turn: 0)
     /// Objectives already attempted once (a second attempt is a retry).
     var attempted: Set<String> = []
+    /// The raid being followed (to count the ones that time out).
+    var trackedRaid: Raid?
 
     init(engine: GameEngine, profile: Profile, seed: UInt64) {
         self.engine = engine
@@ -86,6 +111,7 @@ final class Player {
                 lastTurn = state.turn
                 if [5, 10, 15].contains(state.turn + 1) { result.money[state.turn + 1] = state.stats.argent }
                 if builds { manageBuildings() }
+                manageChests()
             }
             if let cinematic = state.pendingCinematic {
                 engine.cinematicFinished(cinematic, in: &state)
@@ -102,6 +128,9 @@ final class Player {
         result.chapterReached = state.chapter
         result.turn = state.turn
         result.level = ArtistLevel.level(xp: state.artistXP)
+        result.chestsGranted = state.chestSerial
+        result.trophies = state.trophies
+        result.league = state.bestLeague
         result.synergies = state.placed.reduce(0) { $0 + engine.income(of: $1, in: state).synergies.count }
         return result
     }
@@ -111,7 +140,9 @@ final class Player {
     /// A player who builds: at each new period, picks up what the buildings made, then buys the best building
     /// they can afford while keeping a cushion (placed where it starts the most synergies), or else upgrades one.
     func manageBuildings() {
-        for item in state.placed { result.collected += engine.collect(item.id, in: &state) }
+        handleRaid()
+        // Collects regularly, but not always: a building left full can get raided.
+        for item in state.placed where chance(collectRate) { result.collected += engine.collect(item.id, in: &state) }
         let cushion = 25
         let level = ArtistLevel.level(xp: state.artistXP)
         func value(_ income: [StatKind: Int]) -> Double {
@@ -152,13 +183,63 @@ final class Player {
         }
     }
 
+    /// At each new period: opens what is ready, then starts the unlock of the best waiting chest (never pays to rush).
+    func manageChests() {
+        for chest in state.chests where engine.chestStatus(chest, in: state) == .ready {
+            guard let loot = try? engine.openChest(chest.id, in: &state) else { continue }
+            result.chestsOpened += 1
+            result.chestMoney += loot.money
+            result.chestXP += loot.xp
+        }
+        if engine.unlockingChest(in: state) == nil,
+           let pick = state.chests.filter({ engine.chestStatus($0, in: state) == .locked })
+               .min(by: { $0.rarity.unlockPeriods < $1.rarity.unlockPeriods }) {
+            try? engine.startUnlocking(pick.id, in: &state)
+        }
+    }
+
+    /// A raid: counted when it starts, fought most of the time (no action spent), timed out otherwise.
+    func handleRaid() {
+        func same(_ a: Raid, _ b: Raid) -> Bool { a.buildingId == b.buildingId && a.rival == b.rival && a.stolen == b.stolen }
+        if let tracked = trackedRaid, !(state.raid.map { same($0, tracked) } ?? false) {
+            // Gone without a fight: the rival left with the money.
+            result.raidTimeouts += 1
+            trackedRaid = nil
+        }
+        guard let raid = state.raid else { return }
+        if trackedRaid == nil {
+            trackedRaid = raid
+            result.raids += 1
+            result.stolen += raid.stolen
+            if result.firstRaidTurn == nil { result.firstRaidTurn = state.turn }
+        }
+        guard chance(fightRate) else { return }
+        if state.district != raid.district { try? engine.travel(to: raid.district, in: &state) }
+        guard engine.raidClashRefusal(in: state) == nil, (try? engine.startRaidClash(in: &state)) != nil else { return }
+        let before = state.stats.argent
+        playClash()
+        let won = state.clash?.playerWon ?? false
+        _ = try? engine.finishClash(in: &state)
+        if won {
+            result.raidWins += 1
+            result.recovered += state.stats.argent - before
+        } else {
+            result.raidLosses += 1
+        }
+        trackedRaid = nil
+        if trace { print("S\(state.turn + 1) raid \(raid.rival) : \(won ? "gagné" : "perdu")") }
+    }
+
     var requiredFlags: Set<String> {
         Set(engine.currentObjective(in: state)?.conditions.requiredFlags ?? [])
     }
 
     func takeAction() {
         // Walking between doors crosses the grass now and then (free).
+        // WILD=n: the player also looks for n terrain vague duels per action on average (a grinder).
         if chance(profile.wildPerAction) { wildClash() }
+        if let extra = grind, chance(extra.truncatingRemainder(dividingBy: 1)) { wildClash() }
+        if let extra = grind { for _ in 0..<Int(extra) { wildClash() } }
         if state.isOver { return }
 
         guard let objective = engine.currentObjective(in: state) else {
@@ -257,7 +338,7 @@ final class Player {
     func play(_ resolution: Resolution) {
         switch resolution {
         case .outcome: break
-        case .clash: playClash(); _ = try? engine.finishClash(in: &state)
+        case .clash: playClash(); finishClash()
         case .interview: playInterview(); _ = try? engine.finishInterview(in: &state)
         case .concert: playConcert(); _ = try? engine.finishConcert(in: &state)
         case .negotiation: playNegotiation(); _ = try? engine.finishNegotiation(in: &state)
@@ -295,7 +376,12 @@ final class Player {
     func wildClash() {
         guard engine.startWildClash(in: &state, using: &rng) != nil else { return }
         playClash()
-        _ = try? engine.finishClash(in: &state)
+        finishClash()
+    }
+
+    func finishClash() {
+        guard let outcome = try? engine.finishClash(in: &state), let clash = outcome.clash else { return }
+        if clash.playerWon { result.clashWins += 1 } else { result.clashLosses += 1 }
     }
 
     func playClash() {
@@ -480,12 +566,29 @@ for profile in Profile.all {
     for r in results { levels[r.level, default: 0] += 1 }
     print("  niveau d'artiste en fin de carrière : \(levels.sorted { $0.key < $1.key }.map { "niv\($0.key): \($0.value)" }.joined(separator: ", "))")
     print("  argent (médiane) : début S5 \(median(results.compactMap { $0.money[5] })), S10 \(median(results.compactMap { $0.money[10] })), S15 \(median(results.compactMap { $0.money[15] }))")
+    print(String(format: "  coffres : %.1f gagnés, %.1f ouverts, %.1f argent et %.0f XP tirés des coffres (moyennes)",
+                 mean(results.map(\.chestsGranted)), mean(results.map(\.chestsOpened)),
+                 mean(results.map(\.chestMoney)), mean(results.map(\.chestXP))))
+    var leagues: [League: Int] = [:]
+    for r in results { leagues[r.league, default: 0] += 1 }
+    print(String(format: "  clashs : %.1f gagnés, %.1f perdus (moyennes)", mean(results.map(\.clashWins)), mean(results.map(\.clashLosses))))
+    print("  trophées (médiane) : \(median(results.map(\.trophies))), ligue atteinte : \(League.allCases.filter { leagues[$0] != nil }.map { "\($0.name) \(pct(leagues[$0]!, careers))" }.joined(separator: ", "))")
     if builds {
         let firsts = results.compactMap(\.firstBuildTurn)
         print(String(format: "  bâtiments : %.1f construits, %.1f améliorations, %.0f dépensés, %.0f ramassés, %.1f synergies actives (moyennes)",
                      mean(results.map(\.buildings)), mean(results.map(\.upgrades)), mean(results.map(\.spent)),
                      mean(results.map(\.collected)), mean(results.map(\.synergies))))
         print("  premier bâtiment : \(pct(firsts.count, careers)) des carrières, au semestre \(median(firsts) + 1) (médiane)")
+        let raided = results.filter { $0.raids > 0 }
+        let total = results.reduce(0) { $0 + $1.raids }
+        print(String(format: "  raids (ramassage %.0f %%, riposte %.0f %%) : %@ des carrières, %.2f par carrière, premier au semestre %d (médiane)",
+                     collectRate * 100, fightRate * 100, pct(raided.count, careers), mean(results.map(\.raids)),
+                     median(raided.compactMap(\.firstRaidTurn)) + 1))
+        let wins = results.reduce(0) { $0 + $1.raidWins }, losses = results.reduce(0) { $0 + $1.raidLosses }
+        let timeouts = results.reduce(0) { $0 + $1.raidTimeouts }
+        print("    gagnés \(pct(wins, total)), perdus \(pct(losses, total)), ignorés (partis avec l'argent) \(pct(timeouts, total))"
+              + String(format: " ; volé %.1f, récupéré (bonus compris) %.1f par carrière",
+                       mean(results.map(\.stolen)), mean(results.map(\.recovered))))
     }
     print("")
 }

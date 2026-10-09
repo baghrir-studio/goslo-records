@@ -71,6 +71,11 @@ struct GameState: Codable, Equatable {
     var gateYearUses: [String: Int] = [:]
     /// The gated source the current event came from (the bench scales its rewards with progress).
     var currentGate: Gate?
+    /// Crew cards earned and the active crew (`Crew`).
+    var crew = CrewState()
+    /// A rival holding one of your buildings (`Raid`, at most one), and the turn the last raid ended.
+    var raid: Raid?
+    var raidEndedTurn: Int?
     /// The finale is played: the player picks between retiring as a legend and carrying on.
     var finaleChoicePending = false
     var pendingFollowUp: String?
@@ -113,6 +118,12 @@ struct GameState: Codable, Equatable {
     var equippedTechnique: String?
     /// Unlocked techniques already announced to the player.
     var knownTechniques: Set<String> = []
+    /// Victory chests waiting in their slots (`Chests.slots` at most), and how many were ever granted.
+    var chests: [VictoryChest] = []
+    var chestSerial = 0
+    /// Trophies (`League`), and the best league reached: its floor is never lost.
+    var trophies = 0
+    var bestLeague: League = .bronze
 
     init(rapper: Rapper, stats: Stats? = nil) {
         self.rapper = rapper
@@ -128,7 +139,9 @@ struct GameState: Codable, Equatable {
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
         case seenEvents, talkedAt, smallTalk, hooks, seenVerses, albums, freeCareer, finaleChoicePending
         case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank, decor, visitsThisYear, wardrobe, placed
-        case gatePeriodUses, gateYearUses, currentGate
+        case chests, chestSerial, trophies, bestLeague
+        case gatePeriodUses, gateYearUses, currentGate, raid, raidEndedTurn
+        case crew
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -195,6 +208,15 @@ struct GameState: Codable, Equatable {
         gatePeriodUses = try c.decodeIfPresent([String: Int].self, forKey: .gatePeriodUses) ?? [:]
         gateYearUses = try c.decodeIfPresent([String: Int].self, forKey: .gateYearUses) ?? [:]
         currentGate = try c.decodeIfPresent(Gate.self, forKey: .currentGate)
+        chests = try c.decodeIfPresent([VictoryChest].self, forKey: .chests) ?? []
+        chestSerial = try c.decodeIfPresent(Int.self, forKey: .chestSerial) ?? 0
+        trophies = try c.decodeIfPresent(Int.self, forKey: .trophies) ?? 0
+        bestLeague = try c.decodeIfPresent(League.self, forKey: .bestLeague) ?? .bronze
+        // Saves from before the crew get the cards they already earned.
+        crew = try c.decodeIfPresent(CrewState.self, forKey: .crew)
+            ?? CrewState.retroactive(flags: flags, completedQuests: completedQuests, feats: singles.compactMap(\.feat))
+        raid = try c.decodeIfPresent(Raid.self, forKey: .raid)
+        raidEndedTurn = try c.decodeIfPresent(Int.self, forKey: .raidEndedTurn)
     }
 
     /// Year 1 to 10 (no cap in a free career).
@@ -207,7 +229,7 @@ struct GameState: Codable, Equatable {
     var careerYear: Int { turn / GameState.turnsPerYear + 1 }
     /// How far into the current year (0…1), actions included.
     var yearProgress: Double {
-        let done = (turn % GameState.turnsPerYear) * GameState.actionsPerTurn + (GameState.actionsPerTurn - actionsLeft)
+        let done = (turn % GameState.turnsPerYear) * GameState.actionsPerTurn + (GameState.actionsPerTurn - min(actionsLeft, GameState.actionsPerTurn))
         return min(1, max(0, Double(done) / Double(GameState.turnsPerYear * GameState.actionsPerTurn)))
     }
     /// This turn starts a new year (the year card shows).

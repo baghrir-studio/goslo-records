@@ -74,6 +74,16 @@ struct RootView: View {
                     .zIndex(20)
             }
 
+            if let gain = model.cardReveal {
+                CrewCardReveal(gain: gain)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.black.opacity(0.55).ignoresSafeArea())
+                    .contentShape(Rectangle())
+                    .onTapGesture { model.dismissCardReveal() }
+                    .transition(.opacity)
+                    .zIndex(21)
+            }
+
             if let toast = model.achievementToast {
                 AchievementToast(achievement: toast)
                     .frame(maxHeight: .infinity, alignment: .top)

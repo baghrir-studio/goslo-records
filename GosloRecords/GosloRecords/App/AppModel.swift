@@ -148,6 +148,8 @@ final class AppModel {
     private(set) var inspectedDecorId: Int?
     /// A big moment to celebrate at the top of the screen (level up, n°1, challenge).
     private(set) var celebration: String?
+    /// A crew card just earned (or levelled up), revealed with a flip over the screen.
+    private(set) var cardReveal: CrewGain?
     /// The daily clash being played (the career waits in `careerAside`, untouched).
     private(set) var dailyClash: DailyChallenge?
     private var careerAside: GameState?
@@ -163,6 +165,8 @@ final class AppModel {
     var showingTournament = false
     /// The radio host's dialogue ends on the Tournoi's ladder.
     private var tournamentAfterDialogue = false
+    /// The raider's taunt ends on the clash (`Raid`).
+    private var raidAfterDialogue = false
     static let tournamentInvite = "Le Tournoi goslo radio t'attend. DJ Noize est aux platines, le tableau est affiché. On regarde qui tu peux défier ?"
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
@@ -448,10 +452,15 @@ final class AppModel {
 
     /// Shows the biggest moment of an outcome as a banner, with a fanfare.
     private func celebrate(_ outcome: TurnOutcome) {
+        if let gain = outcome.crewCards.first(where: \.isNew) ?? outcome.crewCards.first(where: \.leveledUp) {
+            revealCard(gain)
+        }
         let notes = outcome.notes
-        let moment = notes.first { $0.hasPrefix("NIVEAU") }
+        let moment = outcome.league.map { "LIGUE \($0.name.uppercased()) !" }
+            ?? notes.first { $0.hasPrefix("NIVEAU") }
             ?? notes.first { $0.contains("n°1") }.map { _ in "N°1 DU TOP GOSLO RADIO !" }
             ?? notes.first { $0.hasPrefix("Défi réussi") }.map { _ in "DÉFI RÉUSSI !" }
+            ?? notes.first { $0.hasPrefix("Tu récupères") }.map { _ in "RAID REPOUSSÉ !" }
         guard let moment else { return }
         sound.play(.levelUp)
         Haptics.shared.play(.victory)
@@ -460,6 +469,29 @@ final class AppModel {
             try? await Task.sleep(for: .seconds(2.6))
             withAnimation(.easeIn(duration: 0.3)) { if celebration == moment { celebration = nil } }
         }
+    }
+
+    /// « Nouvelle carte ! »: the card flips over the screen for a few seconds (a tap closes it).
+    private func revealCard(_ gain: CrewGain) {
+        sound.play(.quest)
+        Haptics.shared.play(.good)
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) { cardReveal = gain }
+        Task {
+            try? await Task.sleep(for: .seconds(4.5))
+            withAnimation(.easeIn(duration: 0.3)) { if cardReveal == gain { cardReveal = nil } }
+        }
+    }
+
+    func dismissCardReveal() {
+        withAnimation(.easeIn(duration: 0.2)) { cardReveal = nil }
+    }
+
+    /// « Mon crew »: puts a card in the active crew, or takes it out.
+    func setCrewMember(_ id: String, active: Bool) {
+        guard var current = state, engine.setCrewMember(id, active: active, in: &current) else { return }
+        state = current
+        sound.play(.select)
+        persist()
     }
 
     // MARK: - Interactions
@@ -487,6 +519,11 @@ final class AppModel {
             } else if bunkerKnocks == Secrets.bunkerKnocks / 2 {
                 phase = .dialogue(speaker: nil, lines: ["Toc. Toc. Ce mur sonne creux…"])
             }
+            return
+        }
+        // A rival raiding one of your buildings stands next to it: walk up and challenge them.
+        if placingDecor == nil, engine.raidRival(at: front, in: current) != nil {
+            challengeRaider()
             return
         }
         if placingDecor == nil, let item = placedDecor(at: front) {
@@ -735,6 +772,45 @@ final class AppModel {
         withAnimation(.easeOut(duration: 0.4)) { transition = nil }
         busy = false
         persist()
+    }
+
+    // MARK: - Raids
+
+    /// Why the raider can't be challenged right now (nil: they can).
+    var raidClashRefusal: String? { state.flatMap { engine.raidClashRefusal(in: $0) } ?? "—" }
+
+    /// Walks up to the rival raiding one of your buildings (or taps "Défier" on its card): their taunt, then the clash.
+    func challengeRaider() {
+        guard canMove, dailyClash == nil, arcadePlaying == nil, let current = state, let raid = current.raid,
+              engine.raidClashRefusal(in: current) == nil else { return }
+        sound.play(.exclaim)
+        withAnimation(.easeOut(duration: 0.2)) { inspectedDecorId = nil }
+        if let spot = raid.spot, raid.district == current.district {
+            // The rival turns to face the player.
+            let dx = position.x - spot.x, dy = position.y - spot.y
+            npcFacing[raid.rival] = abs(dx) > abs(dy) ? (dx > 0 ? .right : .left) : (dy > 0 ? .down : .up)
+        }
+        raidAfterDialogue = true
+        phase = .dialogue(speaker: engine.castMember(raid.rival)?.name, lines: [raid.kind.taunt])
+    }
+
+    /// The raid clash: no action spent, `finishClash` settles the raid.
+    private func startRaidClash() {
+        guard dailyClash == nil, arcadePlaying == nil, var current = state,
+              let clash = try? engine.startRaidClash(in: &current) else { return }
+        state = current
+        source = nil
+        philosophyCard = nil
+        persist()
+        busy = true
+        Task {
+            sound.play(.wipe)
+            withAnimation(.easeIn(duration: 0.5)) { transition = .battle }
+            try? await Task.sleep(for: .milliseconds(650))
+            phase = .clash(clash)
+            withAnimation(.easeOut(duration: 0.4)) { transition = nil }
+            busy = false
+        }
     }
 
     // MARK: - Tournoi goslo radio
@@ -1339,6 +1415,10 @@ final class AppModel {
                 tournamentAfterDialogue = false
                 phase = .overworld
                 openTournament()
+            } else if raidAfterDialogue {
+                raidAfterDialogue = false
+                phase = .overworld
+                startRaidClash()
             } else if taxiRideOffered {
                 // Driss drives you: same destinations as the tram.
                 taxiRideOffered = false
@@ -1672,6 +1752,36 @@ final class AppModel {
         current.flags.insert(tip.flag)
         state = current
         persist()
+    }
+
+    // MARK: - Victory chests
+
+    /// A chest is ready to open (the HUD's badge).
+    var hasReadyChest: Bool { state.map { engine.hasReadyChest(in: $0) } ?? false }
+
+    /// Starts the countdown of a waiting chest (one at a time).
+    func startChestUnlock(_ id: Int) {
+        guard var current = state, (try? engine.startUnlocking(id, in: &current)) != nil else { return }
+        state = current
+        sound.play(.select)
+        persist()
+    }
+
+    /// Opens a chest (ready, or right now for money): its contents are applied and saved before the animation plays.
+    func openChest(_ id: Int, rush: Bool) -> ChestLoot? {
+        guard var current = state else { return nil }
+        let before = current.stats
+        let opened: ChestLoot?
+        if rush {
+            opened = try? engine.rushChest(id, in: &current)
+        } else {
+            opened = try? engine.openChest(id, in: &current)
+        }
+        guard let loot = opened else { return nil }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        persist()
+        return loot
     }
 
     // MARK: - Daily clash

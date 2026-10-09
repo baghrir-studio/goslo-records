@@ -16,6 +16,7 @@ struct CarnetView: View {
 
     @State private var tab: Tab = .quetes
     @State private var showTournament = false
+    @State private var showCrew = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -30,12 +31,36 @@ struct CarnetView: View {
                         .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
                 }
                 .padding(.trailing, 14)
+                Button {
+                    showCrew = true
+                } label: {
+                    Label("Crew", systemImage: "person.3.fill")
+                        .font(.mono(12, weight: .bold))
+                        .foregroundStyle(Theme.accent)
+                }
+                .padding(.trailing, 14)
                 Button("Fermer") { dismiss() }
                     .font(.mono(13, weight: .semibold))
                     .foregroundStyle(Theme.muted)
             }
             .padding(.horizontal, Theme.gutter)
             .padding(.top, 24)
+
+            // The rapper, the league title won, and the trophies.
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(state.rapper.name.uppercased()).font(.display(22)).lineLimit(1)
+                    if let title = state.leagueTitle {
+                        Text("« \(title) »")
+                            .font(.mono(11, weight: .bold))
+                            .foregroundStyle(state.bestLeague.tint)
+                    }
+                }
+                Spacer()
+                LeagueBadge(league: state.league, trophies: state.trophies, size: 18)
+            }
+            .padding(.horizontal, Theme.gutter)
+            .padding(.top, 6)
 
             HStack(spacing: 0) {
                 ForEach(Tab.allCases, id: \.self) { item in
@@ -75,6 +100,12 @@ struct CarnetView: View {
             .scrollIndicators(.hidden)
         }
         .foregroundStyle(Theme.text)
+        .sheet(isPresented: $showCrew) {
+            CrewView()
+                .environment(model)
+                .presentationBackground(Theme.background)
+                .presentationDragIndicator(.visible)
+        }
         .sheet(isPresented: $showTournament) {
             // Challenging a boss closes the notebook too: the clash starts on the map.
             TournamentView { id in

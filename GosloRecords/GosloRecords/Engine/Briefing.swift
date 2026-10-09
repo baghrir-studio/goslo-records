@@ -64,8 +64,10 @@ extension GameEngine {
         // Money waiting in your buildings: go and pick it up before it stops piling up.
         let waiting = state.placed.reduce(0) { $0 + $1.stored }
         let pickup = waiting > 0 ? ["Ramasse \(waiting) d'argent dans tes bâtiments"] : []
+        // A rival holding one of your buildings comes right after the story.
+        let raid = raidObjective(in: state).map { [$0] } ?? []
         // One of each first, then more challenges if there's room.
-        var picked = story + pickup + challenges.prefix(1) + money
+        var picked = story + raid + pickup + challenges.prefix(1) + money
         picked += challenges.dropFirst()
         return Array(picked.prefix(PeriodBriefing.maxObjectives))
     }

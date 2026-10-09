@@ -11,6 +11,8 @@ struct Wearable: Identifiable, Equatable {
     let price: Int
     let minLevel: Int
     let slot: Slot
+    /// The city where it's a local pride: sold everywhere, but put forward there.
+    var city: City? = nil
     let apply: (inout CharacterLook) -> Void
 
     static func == (a: Wearable, b: Wearable) -> Bool { a.id == b.id }
@@ -34,7 +36,20 @@ enum Wardrobe {
                  slot: .shoes) { $0.shoes = "#5ef2ff" },
         Wearable(id: "doudoune_or", name: "Doudoune dorée", pitch: "Le froid n'a aucune chance. Le public non plus.", price: 28, minLevel: 5,
                  slot: .top) { $0.outfit = .puffer; $0.top = "#e8c547"; $0.bottom = "#16161a" },
+        // The colours of the Moroccan flag: a red robe down to the ankles, the green star on the chest,
+        // the pointed hood (qob) on the back. The sprites draw the star in `djellabaGreen`.
+        Wearable(id: "djellaba_maghrib", name: "Djellaba Maghrib",
+                 pitch: "Rouge et étoile verte : tout le quartier se lève quand tu passes.", price: 32, minLevel: 5,
+                 slot: .top, city: .casablanca) { $0.outfit = .djellaba; $0.top = Wardrobe.djellabaRed; $0.bottom = Wardrobe.djellabaRed },
     ]
+
+    static let djellabaRed = "#c1272d"
+    static let djellabaGreen = "#006233"
+
+    /// The pieces in shop order: the local pride of the player's city comes first.
+    static func items(for city: City) -> [Wearable] {
+        items.filter { $0.city == city } + items.filter { $0.city != city }
+    }
 
     static func item(_ id: String) -> Wearable? { items.first { $0.id == id } }
 

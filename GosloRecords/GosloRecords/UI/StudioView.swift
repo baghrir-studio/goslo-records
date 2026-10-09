@@ -174,7 +174,9 @@ private struct RecordingPanel: View {
             TakesGame { takes = $0 }
         } else if let picked, let takes {
             let material = model.engine.singleCandidates(in: state).first { $0.id == picked }
-            let quality = ChartRules.quality(material: material?.quality ?? 5, perfectTakes: takes, feat: feat != nil)
+            let director = model.engine.hasPerk(.clipReal, in: state)
+            let quality = min(10, ChartRules.quality(material: material?.quality ?? 5, perfectTakes: takes, feat: feat != nil)
+                              + (director ? 1 : 0))
             Text("\(takes) prise\(takes > 1 ? "s" : "") parfaite\(takes > 1 ? "s" : "") sur \(ChartRules.takes)")
                 .font(.display(28))
                 .foregroundStyle(takes >= 3 ? studioGold : Theme.text)
@@ -182,7 +184,10 @@ private struct RecordingPanel: View {
                 .font(.mono(13, weight: .bold))
                 .foregroundStyle(Theme.muted)
 
-            if ArtistLevel.unlocks(.clip, in: state) {
+            if director {
+                Text("🎬 Ton réal est booké : clip offert, +1 qualité.").font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(studioGold)
+            } else if ArtistLevel.unlocks(.clip, in: state) {
                 Toggle(isOn: $clip) {
                     Text("Tourner un clip (+\(ChartRules.clipPrice) d'argent, gros buzz)").font(.system(size: 14, weight: .semibold))
                 }
@@ -214,7 +219,7 @@ private struct RecordingPanel: View {
                 Text("🔒 Featurings : niveau \(ArtistLevel.Unlock.feat.level)").font(.mono(11, weight: .bold)).foregroundStyle(Theme.faint)
             }
 
-            let price = ChartRules.studioPrice + (clip ? ChartRules.clipPrice : 0)
+            let price = ChartRules.studioPrice + (clip && !director ? ChartRules.clipPrice : 0)
             Button("Sortir le single · \(price) d'argent") {
                 if model.releaseSingle(sourceId: picked, perfectTakes: takes, clip: clip, feat: feat) { close() }
             }

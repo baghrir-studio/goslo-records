@@ -14,6 +14,8 @@ struct TurnOutcome: Equatable {
     var gainedItems: [String] = []
     /// Secret techniques unlocked by this action (names).
     var unlockedTechniques: [String] = []
+    /// Crew cards and fragments earned by this action (`Crew`).
+    var crewCards: [CrewGain] = []
     /// Finished clash, if the action was one.
     var clash: ClashState?
     /// Finished interview, if the action was one.
@@ -33,6 +35,11 @@ struct TurnOutcome: Equatable {
     /// What the end of the turn brought (bookings, burn-out…), shown under the consequence.
     var notes: [String] = []
     var ending: Ending?
+    /// Trophies won or lost by a clash (nil: not a ranked clash).
+    var trophies: Int?
+    /// Victory chest granted, and league reached for the first time.
+    var chest: ChestRarity?
+    var league: League?
 
     mutating func add(_ applied: [StatKind: Int]) {
         deltas.merge(applied, uniquingKeysWith: +)
@@ -421,6 +428,11 @@ struct GameEngine {
         state.currentGate = nil
         var effects = tired < 1 ? choice.effects.mapValues { $0 > 0 ? max(1, Int((Double($0) * tired).rounded())) : $0 } : choice.effects
         effects = Gates.scaled(effects, by: scale)
+        // The lawyer from the shop (`ShopPerk.avocat`) takes the losses of the next choice that has some.
+        if effects.values.contains(where: { $0 < 0 }), usePerk(.avocat, in: &state) {
+            effects = effects.filter { $0.value > 0 }
+            outcome.notes.append("Ton avocat a passé deux coups de fil : cette fois, ça ne te coûte rien.")
+        }
         outcome.add(state.applyStats(effects))
         if tired < 1, choice.effects.values.contains(where: { $0 > 0 }) {
             outcome.notes.append("Ici, tout le monde t'a déjà vu cette année : ça rapporte moins. Va voir ailleurs.")
@@ -1013,7 +1025,8 @@ struct GameEngine {
     /// The player tapped `taps` times against the boss's technique: it lands, softened.
     func counterSecret(taps: Int, in state: inout GameState) throws -> ClashState {
         guard var clash = state.clash else { throw GameEngineError.noClash }
-        ClashEngine.resolveCounter(&clash, taps: taps)
+        // A crew card with the counter perk adds taps (only if you tapped at all).
+        ClashEngine.resolveCounter(&clash, taps: taps > 0 ? taps + Crew.counterTaps(in: state) : 0)
         state.clash = clash
         return clash
     }
@@ -1111,6 +1124,9 @@ struct GameEngine {
         return true
     }
 
+    /// The vocal coach's session (`ShopPerk.coachVocal`) lasts one clash.
+    static let coachSpentLine = "Les conseils du coach vocal ont tenu tout le clash. Pour le prochain, c'est sans filet."
+
     static let wildRewards = (win: [StatKind.streams: 2, .credibilite: 1], lose: [StatKind.mental: -5])
     static let wildXP = (win: 25, lose: 8)
 
@@ -1126,7 +1142,8 @@ struct GameEngine {
     /// Clash levels for the running clash, boss experience included.
     func clashLevels(for clash: ClashState, in state: GameState) -> (Skill) -> Int {
         let base = clashLevels(in: state)
-        let bonus = clash.isBoss ? bossExperience(against: clash.opponentId, in: state) : 0
+        let bonus = (clash.isBoss ? bossExperience(against: clash.opponentId, in: state) : 0)
+            + (hasPerk(.coachVocal, in: state) ? 1 : 0)
         return { skill in min(Skills.maxLevel, base(skill) + bonus) }
     }
 
@@ -1134,10 +1151,17 @@ struct GameEngine {
         guard let clash = state.clash else { throw GameEngineError.noClash }
         guard clash.isOver else { throw GameEngineError.clashNotOver }
         if clash.isWild { return finishWildClash(clash, in: &state) }
+        if isRaidClash(clash) {
+            // A raid is one at a time: its win is ranked and can drop a chest.
+            var outcome = finishRaidClash(clash, in: &state)
+            applyLadder(clash, ranked: true, in: &state, outcome: &outcome)
+            return outcome
+        }
 
         let won = clash.playerWon
         let result = won ? clash.spec.win : clash.spec.lose
         var outcome = TurnOutcome(consequence: result.consequence)
+        if usePerk(.coachVocal, in: &state) { outcome.notes.append(GameEngine.coachSpentLine) }
         outcome.clash = clash
         outcome.add(state.applyStats(result.effects))
         state.flags.formUnion(result.setFlags)
@@ -1146,8 +1170,10 @@ struct GameEngine {
             ArtistLevel.gain(15, in: &state, outcome: &outcome)
             state.counters.increment(.clashsGagnes)
             state.flags.insert("clash_gagne_\(clash.opponentId)")
+            grantCrewCard(id: clash.opponentId, from: .clash, in: &state, outcome: &outcome)
             if let boss = tournamentBoss(for: clash) { applyTournamentWin(boss, &outcome, in: &state) }
         }
+        applyLadder(clash, ranked: true, in: &state, outcome: &outcome)
         let penalty = won ? GameEngine.clashRelationPenalty.win : GameEngine.clashRelationPenalty.lose
         let applied = state.changeRelation(clash.opponentId, by: penalty)
         if applied != 0 { outcome.relationChanges[clash.opponentId] = applied }
@@ -1170,13 +1196,17 @@ struct GameEngine {
         let won = clash.playerWon
         var outcome = TurnOutcome(consequence: won ? clash.spec.win.consequence : clash.spec.lose.consequence)
         outcome.clash = clash
+        if usePerk(.coachVocal, in: &state) { outcome.notes.append(GameEngine.coachSpentLine) }
         // Only the period's first wins pay (`Gate.terrain`); after that a win still counts for the story
         // and the challenges. A defeat costs morale, so it doesn't need a cap: its small XP is how you learn.
+        // Past the paid share, the duel is a friendly: no trophies either way, no chest.
+        let ranked = gateStatus(.terrain, in: state).isOpen
         let paid = won ? useGate(.terrain, in: &state) : true
         if won {
             if paid {
                 outcome.add(state.applyStats(clash.spec.win.effects))
                 ArtistLevel.gain(4, in: &state, outcome: &outcome)
+                grantCrewCard(id: clash.opponentId, from: .clash, in: &state, outcome: &outcome)
             }
             state.counters.increment(.victoiresTerrain)
             state.flags.formUnion(clash.spec.win.setFlags)
@@ -1190,6 +1220,7 @@ struct GameEngine {
         } else {
             outcome.notes.append(Gate.terrain.spentLine(yearly: false))
         }
+        applyLadder(clash, ranked: ranked, in: &state, outcome: &outcome)
         state.clash = nil
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)
@@ -1230,8 +1261,11 @@ struct GameEngine {
             payChart(&outcome, in: &state)
             period.chart = state.stats.changes(since: beforeChart)
             period.chartNotes = outcome.notes[notesBefore...].filter { $0.hasPrefix("Top goslo radio") }
+            let wasFull = fullBuildings(in: state)
             period.income = decorIncome(in: &state)
             outcome.add(period.income)
+            // A rival may raid a building left full all period, or leave with the money (`Raid`).
+            outcome.notes += raidsAtPeriodEnd(wasFull: wasFull, in: &state)
             outcome.period = period
             checkChallenges(&outcome, in: &state)
             let limit = turnLimit(in: state)
@@ -1267,6 +1301,7 @@ struct GameEngine {
                 outcome.add(state.applyStats(quest.reward.effects))
                 outcome.add(levelUps: state.skills.gain(quest.reward.xp))
                 outcome.completedQuests.append(quest)
+                grantQuestCards(quest, in: &state, outcome: &outcome)
             }
         }
     }

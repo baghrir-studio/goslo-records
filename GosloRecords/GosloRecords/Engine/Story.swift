@@ -469,6 +469,8 @@ struct UnlockableTechnique: Codable, Equatable, Identifiable {
     }
 
     func isUnlocked(in state: GameState) -> Bool {
+        // Won early in a victory chest.
+        if state.flags.contains(Chests.techniqueFlag(id)) { return true }
         if let minArtistLevel, ArtistLevel.level(xp: state.artistXP) < minArtistLevel { return false }
         return unlock.isSatisfied(by: state)
     }

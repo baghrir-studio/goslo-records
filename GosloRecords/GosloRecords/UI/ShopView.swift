@@ -81,7 +81,7 @@ struct ShopView: View {
                         }
                         LazyVGrid(columns: columns, spacing: 10) {
                             switch tab {
-                            case .fringues: ForEach(Wardrobe.items) { wearableCard($0, in: state) }
+                            case .fringues: ForEach(Wardrobe.items(for: state.rapper.city)) { wearableCard($0, in: state) }
                             case .matos: ForEach(Shop.gear) { offerCard($0, in: state) }
                             case .services: ForEach(Shop.services) { offerCard($0, in: state) }
                             case .deco:
@@ -110,10 +110,13 @@ struct ShopView: View {
         var preview = state.rapper
         preview.wearing = ((preview.wearing ?? []).filter { Wardrobe.item($0)?.slot != item.slot }) + [item.id]
         let refusal = Wardrobe.refusal(item, in: state)
+        // A local pride is put forward in its city.
+        let local = item.city != nil && item.city == state.rapper.city
         return card(image: HeroSprite.image(preview.look, facing: .down, frame: 0), imageWidth: 60,
                     title: item.name, pitch: item.pitch,
                     price: owned ? (worn ? "PORTÉ" : "À TOI") : "\(item.price)",
-                    locked: owned ? nil : refusal, highlighted: worn) {
+                    locked: owned ? nil : refusal, highlighted: worn || local,
+                    detail: local ? "★ Fierté de \(state.rapper.city.rawValue)" : nil) {
             if owned {
                 model.wear(item)
                 say(worn ? "Tu retires « \(item.name) »." : "Tu enfiles « \(item.name) ».")
