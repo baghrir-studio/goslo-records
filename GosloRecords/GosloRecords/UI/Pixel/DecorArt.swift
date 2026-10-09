@@ -24,6 +24,7 @@ enum DecorArt {
         case .radioPirate: PixelColor(hex: "#e04fb0")
         case .fresqueGeante: nil
         case .fresque, .bancDore, .palmier, .foodTruck: nil
+        case .camera: PixelColor(hex: "#ff4d2e")
         }
     }
 
@@ -37,6 +38,7 @@ enum DecorArt {
         case .foodTruck: foodTruck().outlined()
         case .statueMicro: statue().outlined()
         case .neonGoslo: neon().outlined()
+        case .camera: camera().outlined()
         case .panneauGeant: billboard().outlined()
         case .studioPerso: studio().outlined()
         case .scenePleinAir: stage().outlined()
@@ -216,6 +218,26 @@ enum DecorArt {
         }
         let text = "GOSLO"
         PixelFont.draw(text, on: c, x: (24 - PixelFont.width(text)) / 2, y: 9, pink)
+        return c
+    }
+
+    /// A surveillance camera on a grey pole, its red light on, a little sign below.
+    private static func camera() -> PixelCanvas {
+        let c = PixelCanvas(width: 16, height: 26)
+        let body = PixelColor(hex: "#d8d8e0"), shade = PixelColor(hex: "#8a8a96"), red = PixelColor(hex: "#ff4d2e")
+        c.fill(7, 6, 8, 25, NightPalette.metal)
+        c.fill(5, 24, 10, 25, NightPalette.metal.shaded(0.8))
+        // The arm and the camera, looking down the street.
+        c.fill(8, 5, 11, 6, NightPalette.metal.shaded(1.2))
+        c.fill(2, 1, 11, 5, body)
+        c.fill(2, 5, 11, 5, shade)
+        c.fill(0, 2, 2, 4, PixelColor(hex: "#1c1c22"))
+        c.dot(1, 3, PixelColor(hex: "#4fd6e0"))
+        c.dot(10, 2, red)
+        // "Zone surveillée" sign: yellow, an eye.
+        c.fill(4, 12, 11, 17, PixelColor(hex: "#f2c14e"))
+        c.fill(6, 14, 9, 15, PixelColor(hex: "#1c1c22"))
+        c.dot(7, 14, PixelColor(hex: "#f0eee8"))
         return c
     }
 

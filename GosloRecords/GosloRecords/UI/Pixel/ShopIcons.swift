@@ -194,6 +194,14 @@ enum ShopIcons {
             p.fill(3, 6, 12, 6, red)
             p.fill(3, 9, 12, 9, gold)
             p.fill(3, 6, 3, 9, red)
+        case .camera:
+            p.fill(7, 7, 8, 15, c("#5a5a66"))
+            p.fill(2, 2, 12, 6, c("#b8bcc8"))
+            p.fill(2, 6, 12, 6, c("#8a8f9c"))
+            p.fill(0, 3, 2, 5, dark)
+            p.dot(1, 4, c("#4fd6e0"))
+            p.dot(11, 3, red)
+            p.fill(8, 6, 10, 7, c("#5a5a66"))
         case .snack:
             p.fill(1, 1, 14, 3, dark)
             p.fill(3, 2, 12, 2, gold)

@@ -73,6 +73,9 @@ struct GameState: Codable, Equatable {
     var currentGate: Gate?
     /// Crew cards earned and the active crew (`Crew`).
     var crew = CrewState()
+    /// A rival holding one of your buildings (`Raid`, at most one), and the turn the last raid ended.
+    var raid: Raid?
+    var raidEndedTurn: Int?
     /// The finale is played: the player picks between retiring as a legend and carrying on.
     var finaleChoicePending = false
     var pendingFollowUp: String?
@@ -130,7 +133,7 @@ struct GameState: Codable, Equatable {
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
         case seenEvents, talkedAt, smallTalk, hooks, seenVerses, albums, freeCareer, finaleChoicePending
         case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank, decor, visitsThisYear, wardrobe, placed
-        case gatePeriodUses, gateYearUses, currentGate
+        case gatePeriodUses, gateYearUses, currentGate, raid, raidEndedTurn
         case crew
     }
 
@@ -201,6 +204,8 @@ struct GameState: Codable, Equatable {
         // Saves from before the crew get the cards they already earned.
         crew = try c.decodeIfPresent(CrewState.self, forKey: .crew)
             ?? CrewState.retroactive(flags: flags, completedQuests: completedQuests, feats: singles.compactMap(\.feat))
+        raid = try c.decodeIfPresent(Raid.self, forKey: .raid)
+        raidEndedTurn = try c.decodeIfPresent(Int.self, forKey: .raidEndedTurn)
     }
 
     /// Year 1 to 10 (no cap in a free career).

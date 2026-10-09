@@ -68,7 +68,14 @@ struct WorldView: View {
                 ForEach(state.placed.filter { $0.district == state.district && $0.id != model.movingDecorId }) { item in
                     let spot = placedPosition(item.decor, at: item.anchor)
                     let height = DecorSpot.size(of: item.decor).height
+                    let raid = model.engine.isRaided(item.id, in: state) ? state.raid : nil
                     DecorSpot(decor: item.decor)
+                        .overlay {
+                            // Raided: a rival's tag sprayed on the front, or a broken window.
+                            if let raid {
+                                RaidMark(kind: raid.kind, tag: RaidMark.tag(model.engine.castMember(raid.rival)?.name))
+                            }
+                        }
                         .overlay(alignment: .bottom) {
                             if item.decor.isBuilding && item.level > 1 {
                                 Text(String(repeating: "★", count: item.level))
@@ -81,7 +88,11 @@ struct WorldView: View {
                         .position(spot)
                         .zIndex(Double(item.anchor.y) + 0.3)
                     // Money waiting: walk up and press A to pick it up.
-                    if item.stored > 0 {
+                    if let raid {
+                        RaidLabel(text: raid.kind.label)
+                            .position(x: spot.x, y: spot.y - height / 2 - 10)
+                            .zIndex(Double(item.anchor.y) + 0.32)
+                    } else if item.stored > 0 {
                         CoinBubble(amount: item.stored, full: item.stored >= model.engine.income(of: item, in: state).storageCap)
                             .position(x: spot.x, y: spot.y - height / 2 - 10)
                             .zIndex(Double(item.anchor.y) + 0.32)
@@ -114,6 +125,12 @@ struct WorldView: View {
                 ForEach(map.npcs.filter { !model.hiddenActors.contains($0.id) }) { npc in
                     npcSprite(npc.id, at: model.npcPositions[npc.id] ?? npc.point,
                               facing: model.npcFacing[npc.id] ?? npc.facing, isObjective: objectiveNPC == npc.id)
+                }
+
+                // The rival raiding one of your buildings waits next to it: walk up and press A.
+                if let raid = state.raid, raid.district == state.district, let spot = raid.spot,
+                   !model.hiddenActors.contains(raid.rival) {
+                    npcSprite(raid.rival, at: spot, facing: model.npcFacing[raid.rival] ?? .down, isObjective: true)
                 }
 
                 // Rare scenery on the main road (rows 6–7): drawn above the people on the sidewalk behind it.
@@ -518,6 +535,91 @@ private struct HappeningMarker: View {
         .onAppear {
             withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) { bounce = true }
         }
+    }
+}
+
+/// A raided building's mark: the rival's name sprayed across the front (tag), or a smashed window (braquage).
+private struct RaidMark: View {
+    let kind: RaidKind
+    let tag: String
+
+    static let paint = Color(red: 1, green: 0.3, blue: 0.75)
+
+    /// The rival's tag: the last word of their name, in capitals ("Lil Sauge" → "SAUGE").
+    static func tag(_ name: String?) -> String {
+        let word = (name ?? "TOY").split(separator: " ").last.map(String.init) ?? "TOY"
+        return String(word.filter { $0.isLetter || $0.isNumber }.uppercased().prefix(7))
+    }
+
+    var body: some View {
+        GeometryReader { geo in
+            if kind == .tag {
+                sprayed(width: geo.size.width, height: geo.size.height)
+            } else {
+                brokenWindow(width: geo.size.width, height: geo.size.height)
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private func sprayed(width: CGFloat, height: CGFloat) -> some View {
+        ZStack {
+            ForEach(0..<3, id: \.self) { i in
+                Capsule()
+                    .fill(RaidMark.paint)
+                    .frame(width: 2, height: CGFloat(4 + i * 3))
+                    .position(x: width * (0.32 + 0.18 * CGFloat(i)), y: height * 0.6 + CGFloat(3 + i * 2))
+            }
+            Text(tag)
+                .font(.system(size: 15, weight: .black, design: .rounded))
+                .italic()
+                .foregroundStyle(RaidMark.paint)
+                .shadow(color: Color(red: 0.2, green: 0.9, blue: 0.45), radius: 0, x: 1.5, y: 1.5)
+                .lineLimit(1)
+                .minimumScaleFactor(0.4)
+                .frame(width: width * 0.9)
+                .rotationEffect(.degrees(-10))
+                .position(x: width / 2, y: height * 0.55)
+        }
+        .frame(width: width, height: height)
+    }
+
+    private func brokenWindow(width: CGFloat, height: CGFloat) -> some View {
+        let pane = min(width, height) * 0.42
+        return ZStack {
+            Rectangle()
+                .fill(Color(red: 0.55, green: 0.8, blue: 0.9).opacity(0.9))
+            Path { path in
+                let center = CGPoint(x: pane * 0.45, y: pane * 0.35)
+                for end in [CGPoint(x: 0, y: 0), CGPoint(x: pane, y: pane * 0.1), CGPoint(x: pane * 0.95, y: pane * 0.8),
+                            CGPoint(x: pane * 0.2, y: pane * 0.8), CGPoint(x: 0, y: pane * 0.45)] {
+                    path.move(to: center)
+                    path.addLine(to: end)
+                }
+                path.addEllipse(in: CGRect(x: center.x - 3, y: center.y - 3, width: 6, height: 6))
+            }
+            .stroke(Color.black.opacity(0.85), lineWidth: 1.5)
+            Rectangle()
+                .stroke(Color(white: 0.15), lineWidth: 2)
+        }
+        .frame(width: pane, height: pane * 0.8)
+        .position(x: width / 2, y: height * 0.55)
+    }
+}
+
+/// "TAGUÉ" / "BRAQUÉ" over a raided building, where the coin usually bobs.
+private struct RaidLabel: View {
+    let text: String
+
+    var body: some View {
+        Text(text)
+            .font(.system(size: 8, weight: .black, design: .monospaced))
+            .foregroundStyle(.white)
+            .padding(.horizontal, 4)
+            .padding(.vertical, 2)
+            .background(Color(red: 0.75, green: 0.1, blue: 0.35))
+            .allowsHitTesting(false)
     }
 }
 

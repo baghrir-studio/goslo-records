@@ -5,6 +5,8 @@ import Foundation
 enum Decor: String, Codable, CaseIterable, Identifiable {
     case fresque, sono, bancDore = "banc_dore", palmier, borneArcade = "borne_arcade", foodTruck = "food_truck",
          statueMicro = "statue_micro", neonGoslo = "neon_goslo"
+    /// A defence: halves the chance of a raid in its district (`Raids`).
+    case camera
     // Buildings: expensive, they take room (2 tiles wide) and pay every turn.
     case panneauGeant = "panneau_geant", studioPerso = "studio_perso", scenePleinAir = "scene_plein_air",
          boutiqueMerch = "boutique_merch"
@@ -16,7 +18,7 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
     /// The big ones: they block the way (placed only where every door and character stays reachable).
     var isBuilding: Bool {
         switch self {
-        case .fresque, .sono, .bancDore, .palmier, .borneArcade, .foodTruck, .statueMicro, .neonGoslo: false
+        case .fresque, .sono, .bancDore, .palmier, .borneArcade, .foodTruck, .statueMicro, .neonGoslo, .camera: false
         case .panneauGeant, .studioPerso, .scenePleinAir, .boutiqueMerch, .snack, .barbier, .salleBoxe, .disquaire,
              .radioPirate, .labelInde, .fresqueGeante: true
         }
@@ -29,7 +31,7 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .studioPerso, .scenePleinAir, .boutiqueMerch, .barbier, .disquaire: (2, 2)
         case .salleBoxe, .labelInde: (3, 2)
         case .fresqueGeante: (3, 1)
-        case .fresque, .sono, .bancDore, .palmier, .borneArcade, .statueMicro, .neonGoslo: (1, 1)
+        case .fresque, .sono, .bancDore, .palmier, .borneArcade, .statueMicro, .neonGoslo, .camera: (1, 1)
         }
     }
 
@@ -45,6 +47,7 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .foodTruck: "Food truck"
         case .statueMicro: "Statue du micro d'or"
         case .neonGoslo: "Néon goslo radio"
+        case .camera: "Caméra de surveillance"
         case .panneauGeant: "Panneau géant à ta gloire"
         case .studioPerso: "Ton studio perso"
         case .scenePleinAir: "Scène en plein air"
@@ -70,6 +73,7 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .foodTruck: "le food truck"
         case .statueMicro: "la statue"
         case .neonGoslo: "le néon"
+        case .camera: "la caméra"
         case .panneauGeant: "le panneau géant"
         case .studioPerso: "ton studio"
         case .scenePleinAir: "la scène"
@@ -94,6 +98,7 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .foodTruck: "Ton food truck : sandwichs, frites et un petit billet."
         case .statueMicro: "Un micro en or massif sur un socle. Personne n'ose y toucher."
         case .neonGoslo: "Le néon de goslo radio, offert par l'animateur."
+        case .camera: "Une caméra sur un poteau. Les rivaux réfléchissent à deux fois avant de taguer le coin : deux fois moins de raids dans le quartier."
         case .panneauGeant: "Quatre mètres sur trois, ta tête en grand. Tout le quartier te voit en passant."
         case .studioPerso: "Ton propre studio au pied des tours. Plus besoin de louer le Bunker."
         case .scenePleinAir: "Une vraie scène dehors : les concerts gratuits font monter ton respect."
@@ -112,6 +117,7 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .palmier: 8
         case .bancDore, .borneArcade: 12
+        case .camera: 14
         case .sono, .neonGoslo: 16
         case .fresque, .foodTruck: 20
         case .snack: 30
@@ -134,7 +140,7 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         switch self {
         case .palmier, .bancDore: 1
         case .sono, .borneArcade, .snack: 2
-        case .fresque, .foodTruck, .barbier: 3
+        case .fresque, .foodTruck, .barbier, .camera: 3
         case .neonGoslo, .panneauGeant: 4
         case .salleBoxe: 5
         case .statueMicro, .studioPerso, .disquaire: 6
@@ -156,6 +162,7 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .foodTruck: [.argent: 2]
         case .statueMicro: [.credibilite: 1, .streams: 1]
         case .neonGoslo: [.streams: 1]
+        case .camera: [.mental: 1]
         case .panneauGeant: [.streams: 2]
         case .studioPerso: [.streams: 1, .argent: 2]
         case .scenePleinAir: [.credibilite: 2, .streams: 1]
@@ -279,8 +286,11 @@ extension GameEngine {
     }
 
     /// Tiles taken on the map by the decorations of a district (all of them, or only the ones that block).
+    /// A rival standing next to a raided building (`Raid.spot`) takes their tile too.
     func decorTiles(in district: District, state: GameState, blockingOnly: Bool = false) -> Set<TilePoint> {
-        Set(state.placed.filter { $0.district == district && (!blockingOnly || $0.decor.isBuilding) }.flatMap(\.tiles))
+        var tiles = Set(state.placed.filter { $0.district == district && (!blockingOnly || $0.decor.isBuilding) }.flatMap(\.tiles))
+        if let raid = state.raid, raid.district == district, let spot = raid.spot { tiles.insert(spot) }
+        return tiles
     }
 
     /// A building standing there blocks the way.
@@ -390,16 +400,22 @@ extension GameEngine {
     }
 
     /// Sells a decoration: half of what you put in, plus what it had waiting.
+    /// A raided one goes with its raid: the rival keeps what they took.
     @discardableResult
     func sell(_ id: Int, in state: inout GameState) -> [StatKind: Int] {
         guard let item = state.placed.first(where: { $0.id == id }) else { return [:] }
         state.placed.removeAll { $0.id == id }
+        if state.raid?.buildingId == id {
+            state.raid = nil
+            state.raidEndedTurn = state.turn
+        }
         return state.stats.apply([.argent: item.resale + item.stored])
     }
 
     /// Why a decoration you already own can't move there (nil: it can). Same rules as a new one, without paying.
     func moveRefusal(_ id: Int, to anchor: TilePoint, in state: GameState, player: TilePoint) -> String? {
         guard let item = state.placed.first(where: { $0.id == id }) else { return "Introuvable" }
+        if isRaided(id, in: state) { return "Règle d'abord son compte au rival" }
         return placementRefusal(item.decor, at: anchor, in: state, player: player, moving: id)
     }
 
@@ -456,6 +472,8 @@ extension GameEngine {
         let incomes = state.placed.map { income(of: $0, in: state) }
         for index in state.placed.indices {
             let item = state.placed[index], earned = incomes[index]
+            // Raided: it earns nothing until the rival is dealt with (`Raid`).
+            if isRaided(item.id, in: state) { continue }
             let crew = Crew.buildingBonus(item.decor, in: state)
             for (kind, base) in earned.total {
                 let value = Crew.boosted(base, by: crew)

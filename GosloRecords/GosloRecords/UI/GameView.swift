@@ -292,7 +292,10 @@ struct GameView: View {
                     BuildingCard(item: item, income: model.engine.income(of: item, in: state),
                                  demand: Neighbourhood.demand(turn: state.turn), upgradeRefusal: model.upgradeRefusal(item),
                                  upgrade: { _ = model.upgradeInspected() }, move: { model.moveInspected() },
-                                 sell: { model.sellInspected() }, close: { model.closeInspected() })
+                                 sell: { model.sellInspected() }, close: { model.closeInspected() },
+                                 raid: model.engine.isRaided(item.id, in: state) ? state.raid : nil,
+                                 rivalName: state.raid.flatMap { model.engine.castMember($0.rival)?.name },
+                                 challengeRefusal: model.raidClashRefusal, challenge: { model.challengeRaider() })
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
                 HStack(alignment: .bottom) {
@@ -403,7 +406,14 @@ private struct BuildingCard: View {
     let move: () -> Void
     let sell: () -> Void
     let close: () -> Void
+    /// A rival holding it (`Raid`): it earns nothing until they're beaten.
+    var raid: Raid? = nil
+    var rivalName: String? = nil
+    var challengeRefusal: String? = nil
+    var challenge: () -> Void = {}
     @State private var confirmSell = false
+
+    private static let raidRed = Color(red: 1, green: 0.35, blue: 0.3)
 
     /// Why it pays more than its base: one short line per synergy, and the period's demand.
     private var bonusLines: [String] {
@@ -431,10 +441,23 @@ private struct BuildingCard: View {
                                 .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
                         }
                     }
-                    Text("\(GameEngine.bonusText(income.total)) par période")
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundStyle(Color.green)
-                    ForEach(bonusLines, id: \.self) { line in
+                    if let raid {
+                        Text("\(raid.kind.label) par \(rivalName ?? "un rival") · \(raid.stolen) d'argent volés")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundStyle(BuildingCard.raidRed)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                        Text("Ne rapporte plus rien · \(raid.periodsLeft) période\(raid.periodsLeft > 1 ? "s" : "") pour récupérer l'argent")
+                            .font(.system(size: 11, weight: .semibold))
+                            .foregroundStyle(.white.opacity(0.75))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    } else {
+                        Text("\(GameEngine.bonusText(income.total)) par période")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(Color.green)
+                    }
+                    ForEach(raid == nil ? bonusLines : [], id: \.self) { line in
                         Text(line)
                             .font(.system(size: 11, weight: .semibold))
                             .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
@@ -452,6 +475,10 @@ private struct BuildingCard: View {
                 .buttonStyle(PressScaleStyle())
                 .accessibilityLabel("Fermer")
             }
+            if raid != nil {
+                action(challengeRefusal ?? "DÉFIER \((rivalName ?? "LE RIVAL").uppercased())", enabled: challengeRefusal == nil,
+                       color: BuildingCard.raidRed, action: challenge)
+            }
             HStack(spacing: 6) {
                 if item.decor.isBuilding {
                     if let cost = item.decor.upgradeCost(from: item.level) {
@@ -461,7 +488,7 @@ private struct BuildingCard: View {
                         action("NIVEAU MAX", enabled: false, color: .gray, action: {})
                     }
                 }
-                action("DÉPLACER", enabled: true, color: .white, action: move)
+                action("DÉPLACER", enabled: raid == nil, color: .white, action: move)
                 action(confirmSell ? "SÛR ? +\(item.resale)" : "VENDRE", enabled: true,
                        color: Color(red: 1, green: 0.45, blue: 0.4)) {
                     if confirmSell { sell() } else { withAnimation { confirmSell = true } }
