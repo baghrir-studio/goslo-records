@@ -1134,6 +1134,7 @@ struct GameEngine {
         guard let clash = state.clash else { throw GameEngineError.noClash }
         guard clash.isOver else { throw GameEngineError.clashNotOver }
         if clash.isWild { return finishWildClash(clash, in: &state) }
+        if isRaidClash(clash) { return finishRaidClash(clash, in: &state) }
 
         let won = clash.playerWon
         let result = won ? clash.spec.win : clash.spec.lose
@@ -1230,8 +1231,11 @@ struct GameEngine {
             payChart(&outcome, in: &state)
             period.chart = state.stats.changes(since: beforeChart)
             period.chartNotes = outcome.notes[notesBefore...].filter { $0.hasPrefix("Top goslo radio") }
+            let wasFull = fullBuildings(in: state)
             period.income = decorIncome(in: &state)
             outcome.add(period.income)
+            // A rival may raid a building left full all period, or leave with the money (`Raid`).
+            outcome.notes += raidsAtPeriodEnd(wasFull: wasFull, in: &state)
             outcome.period = period
             checkChallenges(&outcome, in: &state)
             let limit = turnLimit(in: state)

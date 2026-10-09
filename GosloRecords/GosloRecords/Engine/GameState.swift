@@ -71,6 +71,9 @@ struct GameState: Codable, Equatable {
     var gateYearUses: [String: Int] = [:]
     /// The gated source the current event came from (the bench scales its rewards with progress).
     var currentGate: Gate?
+    /// A rival holding one of your buildings (`Raid`, at most one), and the turn the last raid ended.
+    var raid: Raid?
+    var raidEndedTurn: Int?
     /// The finale is played: the player picks between retiring as a legend and carrying on.
     var finaleChoicePending = false
     var pendingFollowUp: String?
@@ -128,7 +131,7 @@ struct GameState: Codable, Equatable {
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
         case seenEvents, talkedAt, smallTalk, hooks, seenVerses, albums, freeCareer, finaleChoicePending
         case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank, decor, visitsThisYear, wardrobe, placed
-        case gatePeriodUses, gateYearUses, currentGate
+        case gatePeriodUses, gateYearUses, currentGate, raid, raidEndedTurn
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -195,6 +198,8 @@ struct GameState: Codable, Equatable {
         gatePeriodUses = try c.decodeIfPresent([String: Int].self, forKey: .gatePeriodUses) ?? [:]
         gateYearUses = try c.decodeIfPresent([String: Int].self, forKey: .gateYearUses) ?? [:]
         currentGate = try c.decodeIfPresent(Gate.self, forKey: .currentGate)
+        raid = try c.decodeIfPresent(Raid.self, forKey: .raid)
+        raidEndedTurn = try c.decodeIfPresent(Int.self, forKey: .raidEndedTurn)
     }
 
     /// Year 1 to 10 (no cap in a free career).

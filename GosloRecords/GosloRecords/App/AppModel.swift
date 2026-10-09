@@ -163,6 +163,8 @@ final class AppModel {
     var showingTournament = false
     /// The radio host's dialogue ends on the Tournoi's ladder.
     private var tournamentAfterDialogue = false
+    /// The raider's taunt ends on the clash (`Raid`).
+    private var raidAfterDialogue = false
     static let tournamentInvite = "Le Tournoi goslo radio t'attend. DJ Noize est aux platines, le tableau est affiché. On regarde qui tu peux défier ?"
 
     init(engine: GameEngine, store: GameStore, loadError: String? = nil) {
@@ -452,6 +454,7 @@ final class AppModel {
         let moment = notes.first { $0.hasPrefix("NIVEAU") }
             ?? notes.first { $0.contains("n°1") }.map { _ in "N°1 DU TOP GOSLO RADIO !" }
             ?? notes.first { $0.hasPrefix("Défi réussi") }.map { _ in "DÉFI RÉUSSI !" }
+            ?? notes.first { $0.hasPrefix("Tu récupères") }.map { _ in "RAID REPOUSSÉ !" }
         guard let moment else { return }
         sound.play(.levelUp)
         Haptics.shared.play(.victory)
@@ -487,6 +490,11 @@ final class AppModel {
             } else if bunkerKnocks == Secrets.bunkerKnocks / 2 {
                 phase = .dialogue(speaker: nil, lines: ["Toc. Toc. Ce mur sonne creux…"])
             }
+            return
+        }
+        // A rival raiding one of your buildings stands next to it: walk up and challenge them.
+        if placingDecor == nil, engine.raidRival(at: front, in: current) != nil {
+            challengeRaider()
             return
         }
         if placingDecor == nil, let item = placedDecor(at: front) {
@@ -735,6 +743,45 @@ final class AppModel {
         withAnimation(.easeOut(duration: 0.4)) { transition = nil }
         busy = false
         persist()
+    }
+
+    // MARK: - Raids
+
+    /// Why the raider can't be challenged right now (nil: they can).
+    var raidClashRefusal: String? { state.flatMap { engine.raidClashRefusal(in: $0) } ?? "—" }
+
+    /// Walks up to the rival raiding one of your buildings (or taps "Défier" on its card): their taunt, then the clash.
+    func challengeRaider() {
+        guard canMove, dailyClash == nil, arcadePlaying == nil, let current = state, let raid = current.raid,
+              engine.raidClashRefusal(in: current) == nil else { return }
+        sound.play(.exclaim)
+        withAnimation(.easeOut(duration: 0.2)) { inspectedDecorId = nil }
+        if let spot = raid.spot, raid.district == current.district {
+            // The rival turns to face the player.
+            let dx = position.x - spot.x, dy = position.y - spot.y
+            npcFacing[raid.rival] = abs(dx) > abs(dy) ? (dx > 0 ? .right : .left) : (dy > 0 ? .down : .up)
+        }
+        raidAfterDialogue = true
+        phase = .dialogue(speaker: engine.castMember(raid.rival)?.name, lines: [raid.kind.taunt])
+    }
+
+    /// The raid clash: no action spent, `finishClash` settles the raid.
+    private func startRaidClash() {
+        guard dailyClash == nil, arcadePlaying == nil, var current = state,
+              let clash = try? engine.startRaidClash(in: &current) else { return }
+        state = current
+        source = nil
+        philosophyCard = nil
+        persist()
+        busy = true
+        Task {
+            sound.play(.wipe)
+            withAnimation(.easeIn(duration: 0.5)) { transition = .battle }
+            try? await Task.sleep(for: .milliseconds(650))
+            phase = .clash(clash)
+            withAnimation(.easeOut(duration: 0.4)) { transition = nil }
+            busy = false
+        }
     }
 
     // MARK: - Tournoi goslo radio
@@ -1339,6 +1386,10 @@ final class AppModel {
                 tournamentAfterDialogue = false
                 phase = .overworld
                 openTournament()
+            } else if raidAfterDialogue {
+                raidAfterDialogue = false
+                phase = .overworld
+                startRaidClash()
             } else if taxiRideOffered {
                 // Driss drives you: same destinations as the tram.
                 taxiRideOffered = false
