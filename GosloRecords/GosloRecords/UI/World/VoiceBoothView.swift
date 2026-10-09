@@ -2,21 +2,36 @@ import SwiftUI
 import UIKit
 
 /// « La cabine » : the player raps their own verse over their instrumental. The lines show up karaoke-style,
-/// one per bar, while the microphone records; then « Écouter » plays the beat and the voice together.
+/// one per bar, while the microphone records; then « Écouter » plays the beat and the voice together, and
+/// « Partager mon freestyle » mixes them into a video (the Punchliner card over the sound) for the share sheet.
 struct VoiceBoothView: View {
     let track: PlayerTrack
     let look: CharacterLook
     let artist: String
+    /// The picture of the shared video (the Punchliner card). Without it, the sound is shared alone.
+    let cover: UIImage?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var booth: VoiceBooth
 
-    init(track: PlayerTrack, look: CharacterLook, artist: String) {
+    private enum Sharing: Equatable {
+        case idle
+        case rendering
+        case failed(String)
+    }
+
+    @State private var sharing: Sharing = .idle
+    /// The last mix rendered, shared again as is until a new take replaces it.
+    @State private var sharedFile: URL?
+    @State private var renderTask: Task<Void, Never>?
+
+    init(track: PlayerTrack, look: CharacterLook, artist: String, cover: UIImage? = nil) {
         self.track = track
         self.look = look
         self.artist = artist
+        self.cover = cover
         _booth = State(initialValue: VoiceBooth(track: track))
     }
 
@@ -65,13 +80,34 @@ struct VoiceBoothView: View {
             // Not on .inactive: the microphone permission alert makes the scene inactive.
             if phase == .background { booth.stop() } else if phase == .active { booth.refreshPermission() }
         }
-        .onDisappear { booth.stop() }
+        .onChange(of: booth.phase) { _, phase in
+            // A new take: the old mix is stale.
+            if phase == .recording {
+                sharedFile = nil
+                sharing = .idle
+            }
+        }
+        .onDisappear {
+            renderTask?.cancel()
+            booth.stop()
+        }
     }
 
     private var hint: String {
+        if booth.phase == .idle {
+            switch sharing {
+            case .rendering: return "DJ Noize mixe ta voix sur le beat… Quelques secondes."
+            case .failed(let message): return message
+            case .idle: break
+            }
+        }
+        return phaseHint
+    }
+
+    private var phaseHint: String {
         switch booth.phase {
         case .denied:
-            "Pas d'accès au micro. Autorise-le dans Réglages › goslo radio › Micro. En attendant, « Écouter ton son » marche toujours avec la voix du téléphone."
+            "Pas d'accès au micro. Autorise-le dans Réglages › goslo radio › Micro, puis reviens enregistrer ton couplet."
         case .failed(let message):
             message
         case .recording:
@@ -82,7 +118,7 @@ struct VoiceBoothView: View {
             "DJ Noize branche le micro…"
         case .idle:
             booth.hasTake
-                ? "Ta prise est gardée sur ton téléphone. Écoute-la, ou refais-la."
+                ? "Ta prise est gardée sur ton téléphone. Écoute-la, refais-la, ou partage ton freestyle."
                 : "Mets des écouteurs : le beat reste dans tes oreilles, ta voix seule sur la prise. Deux mesures d'intro, puis une ligne par mesure."
         }
     }
@@ -140,19 +176,85 @@ struct VoiceBoothView: View {
             .buttonStyle(PrimaryButtonStyle())
         case .idle, .failed:
             if booth.hasTake {
-                HStack(spacing: 10) {
-                    Button("Refaire") { Task { await booth.record() } }
-                        .font(.mono(14, weight: .bold))
-                        .foregroundStyle(Theme.text)
-                        .frame(maxWidth: .infinity, minHeight: 58)
-                        .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
-                    Button("▶ Écouter") { booth.play() }
-                        .buttonStyle(PrimaryButtonStyle())
+                VStack(spacing: 10) {
+                    HStack(spacing: 10) {
+                        Button("Refaire") { Task { await booth.record() } }
+                            .font(.mono(14, weight: .bold))
+                            .foregroundStyle(Theme.text)
+                            .frame(maxWidth: .infinity, minHeight: 58)
+                            .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
+                        Button("▶ Écouter") { booth.play() }
+                            .buttonStyle(SecondaryButtonStyle())
+                    }
+                    .disabled(sharing == .rendering)
+                    shareButton
                 }
             } else {
                 Button("● Enregistrer") { Task { await booth.record() } }
                     .buttonStyle(PrimaryButtonStyle())
             }
         }
+    }
+
+    // MARK: Sharing
+
+    private var shareButton: some View {
+        Button(action: share) {
+            HStack(spacing: 10) {
+                if sharing == .rendering {
+                    ProgressView()
+                        .tint(Theme.background)
+                    Text("Mixage…")
+                } else {
+                    Image(systemName: "square.and.arrow.up")
+                    Text("Partager mon freestyle")
+                }
+            }
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
+        }
+        .buttonStyle(PrimaryButtonStyle())
+        .disabled(sharing == .rendering)
+    }
+
+    /// Mixes the take (once per take), then opens the share sheet with the file.
+    private func share() {
+        if let sharedFile, FileManager.default.fileExists(atPath: sharedFile.path) {
+            ShareSheet.present(sharedFile)
+            return
+        }
+        sharing = .rendering
+        let picture = cover?.cgImage
+        renderTask = Task { @MainActor in
+            do {
+                let file = try await booth.renderFreestyle(cover: picture)
+                guard !Task.isCancelled else { return }
+                sharedFile = file
+                sharing = .idle
+                ShareSheet.present(file)
+            } catch {
+                guard !Task.isCancelled else { return }
+                sharing = .failed("Le mixage a planté. Vérifie qu'il te reste de la place sur ton téléphone, puis réessaie.")
+            }
+        }
+    }
+}
+
+/// The system share sheet, shown over whatever is on screen (the booth is itself a full-screen cover).
+@MainActor
+private enum ShareSheet {
+    static func present(_ file: URL) {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let scene = scenes.first { $0.activationState == .foregroundActive } ?? scenes.first
+        guard let window = scene?.windows.first(where: \.isKeyWindow) ?? scene?.windows.first,
+              var top = window.rootViewController else { return }
+        while let presented = top.presentedViewController, !presented.isBeingDismissed { top = presented }
+        let sheet = UIActivityViewController(activityItems: [file], applicationActivities: nil)
+        if let popover = sheet.popoverPresentationController {
+            popover.sourceView = top.view
+            popover.sourceRect = CGRect(x: top.view.bounds.midX, y: top.view.bounds.maxY - 80, width: 1, height: 1)
+            popover.permittedArrowDirections = []
+        }
+        top.present(sheet, animated: true)
     }
 }

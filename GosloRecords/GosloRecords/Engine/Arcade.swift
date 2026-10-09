@@ -29,19 +29,23 @@ enum Arcade {
         lose: InterviewResult(consequence: "Le beatboxeur te tape l'épaule : « Reviens t'entraîner. »"))
 
     static let games: [ArcadeGame] = [
+        // The flagship comes first and is free: write your ending, then rap it in the booth and share it.
+        ArcadeGame(id: "punchliner", title: "Punchliner", pitch: "Trouve ou écris la fin de la punchline avant le chrono, puis rappe ton couplet au micro et partage ton freestyle.",
+                   mode: .minigame("punchliner_carnet"), unlockedBy: nil, unit: "%"),
         ArcadeGame(id: "beatbox", title: "Beatbox Simon", pitch: "Rejoue le motif du beatboxeur, un son de plus à chaque tour.",
                    mode: .minigame(beatbox.id), unlockedBy: nil, unit: "motifs"),
         ArcadeGame(id: "freestyle", title: "Freestyle", pitch: "Enchaîne les rimes avant la fin du beat.",
                    mode: .freestyle, unlockedBy: nil, unit: "rimes"),
         ArcadeGame(id: "platine", title: "Cale la platine", pitch: "Arrête le pitch de DJ Noize pile sur 100 %.",
                    mode: .minigame("platine_bobine"), unlockedBy: nil, unit: "%"),
-        ArcadeGame(id: "punchliner", title: "Punchliner", pitch: "Trouve la vraie fin de la punchline avant le chrono.",
-                   mode: .minigame("punchliner_carnet"), unlockedBy: .premierChapitre, unit: "%"),
         ArcadeGame(id: "fuite", title: "Fuir la foule", pitch: "Traverse la foule jusqu'à la porte sans te faire attraper.",
                    mode: .minigame("fuite_transfo"), unlockedBy: .ringDesMots, unit: "évasions"),
         ArcadeGame(id: "concert", title: "Concert", pitch: "Tape les notes en rythme et fais monter le public.",
                    mode: .concert("premier_concert"), unlockedBy: .premiereScene, unit: "% de hype"),
     ]
+
+    /// The flagship game, shown first and bigger in the arcade.
+    static let flagshipID = "punchliner"
 
     static func game(_ id: String) -> ArcadeGame? { games.first { $0.id == id } }
 

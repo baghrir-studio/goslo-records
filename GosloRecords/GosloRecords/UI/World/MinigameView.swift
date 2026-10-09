@@ -50,13 +50,10 @@ struct MinigameView: View {
 private struct MinigameResult: View {
     @Environment(AppModel.self) private var model
     let minigame: MinigameState
-    /// The track playing: with the phone's voice, or in the voice booth.
-    @State private var screen: TrackScreen?
-
-    private enum TrackScreen: String, Identifiable {
-        case listen, booth
-        var id: String { rawValue }
-    }
+    /// The voice booth is open (Punchliner: the player raps their own verse, then shares it).
+    @State private var inBooth = false
+    /// The Punchliner card, the picture of the shared freestyle video.
+    @State private var cover: UIImage?
 
     private var track: PlayerTrack? {
         model.state.flatMap { model.engine.track(for: minigame, rapper: $0.rapper) }
@@ -87,30 +84,30 @@ private struct MinigameResult: View {
             }
             Spacer(minLength: 0)
             if track != nil {
-                HStack(spacing: 10) {
-                    Button("▶ Écouter ton son") { screen = .listen }
-                        .font(.mono(14, weight: .heavy))
-                        .foregroundStyle(Theme.accent)
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                        .overlay(Rectangle().stroke(Theme.accent, lineWidth: 2))
-                    Button("🎙 Enregistrer ta voix") { screen = .booth }
-                        .font(.mono(14, weight: .heavy))
-                        .foregroundStyle(Theme.text)
-                        .frame(maxWidth: .infinity, minHeight: 48)
-                        .overlay(Rectangle().stroke(Theme.line, lineWidth: 2))
+                // Punchliner's only way to hear the verse: the player's own voice, in the booth.
+                Button {
+                    if cover == nil {
+                        cover = PunchlinerCard.image(for: minigame, model: model, newRecord: model.punchlinerBreak?.newBestScore == true)
+                    }
+                    inBooth = true
+                } label: {
+                    VStack(spacing: 2) {
+                        Text("🎙 Enregistrer ta voix")
+                        Text("Rappe ton couplet sur ton beat, puis partage ton freestyle")
+                            .font(.mono(10, weight: .semibold))
+                            .textCase(nil)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                    }
                 }
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+                .buttonStyle(PrimaryButtonStyle())
             }
             Button(model.arcadePlaying == nil ? "Continuer" : "Retour à l'arcade") { model.finishMinigame() }
-                .buttonStyle(PrimaryButtonStyle())
+                .buttonStyle(track == nil ? AnyButtonStyle(PrimaryButtonStyle()) : AnyButtonStyle(SecondaryButtonStyle()))
         }
-        .fullScreenCover(item: $screen) { screen in
+        .fullScreenCover(isPresented: $inBooth) {
             if let track, let rapper = model.state?.rapper {
-                switch screen {
-                case .listen: TrackView(track: track, look: rapper.look, artist: rapper.name)
-                case .booth: VoiceBoothView(track: track, look: rapper.look, artist: rapper.name)
-                }
+                VoiceBoothView(track: track, look: rapper.look, artist: rapper.name, cover: cover)
             }
         }
     }

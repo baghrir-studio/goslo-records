@@ -131,9 +131,7 @@ final class VoiceBooth {
             beatPlayer.volume = 0.75
             voicePlayer.volume = 1
             guard beatPlayer.prepareToPlay(), voicePlayer.prepareToPlay() else { throw BoothError.audio }
-            // Skip the round trip the sound made through the speaker and the microphone.
-            let latency = UserDefaults.standard.double(forKey: VoiceBooth.latencyKey)
-            voicePlayer.currentTime = min(max(0, latency), 0.5)
+            voicePlayer.currentTime = VoiceBooth.voiceOffset
             let when = beatPlayer.deviceCurrentTime + VoiceBooth.lead
             beatPlayer.play(atTime: when)
             voicePlayer.play(atTime: when)
@@ -145,6 +143,36 @@ final class VoiceBooth {
         } catch {
             stop()
             phase = .failed("Impossible de lire ta prise.")
+        }
+    }
+
+    /// Seconds to skip at the start of the take: the round trip the sound made through the speaker and the
+    /// microphone. Used by the playback and by the shared mix, so both sound the same.
+    static var voiceOffset: TimeInterval {
+        min(max(0, UserDefaults.standard.double(forKey: latencyKey)), 0.5)
+    }
+
+    // MARK: Sharing
+
+    /// « Partager mon freestyle » : the beat and the take mixed into one file in the temporary directory.
+    /// With a picture, a short vertical video (.mp4) of it over the mix; without one, or if the video fails,
+    /// the sound alone (.m4a).
+    func renderFreestyle(cover: CGImage?) async throws -> URL {
+        guard hasTake, !isBusy else { throw BoothError.audio }
+        let beat = try await prepareBeat()
+        let directory = FileManager.default.temporaryDirectory
+        // voix-<titre>.m4a → freestyle-<titre>: the name the file keeps once shared.
+        let name = "freestyle-" + String(track.voiceFileName.dropFirst("voix-".count).dropLast(".m4a".count))
+        let audio = directory.appendingPathComponent(name + ".m4a")
+        try await FreestyleExport.mixAudio(beat: beat, voice: VoiceBooth.takeURL(for: track),
+                                           voiceOffset: VoiceBooth.voiceOffset, to: audio)
+        guard let cover else { return audio }
+        let video = directory.appendingPathComponent(name + ".mp4")
+        do {
+            try await FreestyleExport.video(image: cover, audio: audio, to: video)
+            return video
+        } catch {
+            return audio
         }
     }
 

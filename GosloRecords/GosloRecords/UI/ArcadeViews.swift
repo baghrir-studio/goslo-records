@@ -26,11 +26,14 @@ struct ArcadeView: View {
             ScrollView {
                 VStack(spacing: 10) {
                     ForEach(Arcade.games) { game in
-                        ArcadeRow(game: game, unlocked: model.isUnlocked(game), best: model.profile.arcadeBest[game.id]) {
-                            if game.mode == .freestyle {
-                                freestyling = true
-                            } else {
-                                model.startArcade(game)
+                        if game.id == Arcade.flagshipID {
+                            ArcadeFlagshipCard(game: game, unlocked: model.isUnlocked(game), best: model.profile.arcadeBest[game.id]) {
+                                play(game)
+                            }
+                            .padding(.bottom, 6)
+                        } else {
+                            ArcadeRow(game: game, unlocked: model.isUnlocked(game), best: model.profile.arcadeBest[game.id]) {
+                                play(game)
                             }
                         }
                     }
@@ -46,6 +49,85 @@ struct ArcadeView: View {
             }
             .ignoresSafeArea()
         }
+    }
+
+    private func play(_ game: ArcadeGame) {
+        if game.mode == .freestyle {
+            freestyling = true
+        } else {
+            model.startArcade(game)
+        }
+    }
+}
+
+/// Punchliner, the flagship: a bigger card on top of the list, with its badge and its promise (the mic, the share).
+private struct ArcadeFlagshipCard: View {
+    let game: ArcadeGame
+    let unlocked: Bool
+    let best: Int?
+    let play: () -> Void
+
+    @State private var glow = false
+
+    var body: some View {
+        Button(action: play) {
+            VStack(alignment: .leading, spacing: 10) {
+                HStack(spacing: 6) {
+                    Text("★ JEU PHARE")
+                        .font(.mono(10, weight: .heavy))
+                        .padding(.horizontal, 6).padding(.vertical, 2)
+                        .background(arcadeGold)
+                        .foregroundStyle(.black)
+                    Text("NOUVEAU")
+                        .font(.mono(10, weight: .heavy))
+                        .padding(.horizontal, 6).padding(.vertical, 2)
+                        .background(Theme.accent)
+                        .foregroundStyle(Theme.background)
+                    Spacer(minLength: 0)
+                    if unlocked, let best {
+                        Text("RECORD : \(best) \(game.unit)")
+                            .font(.mono(10, weight: .bold))
+                            .foregroundStyle(arcadeGold)
+                    }
+                }
+                Text(game.title.uppercased())
+                    .font(.display(44))
+                    .foregroundStyle(Theme.text)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                Text(unlocked ? game.pitch : "🔒 Débloqué par le succès « \(game.unlockedBy?.title ?? "") »")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Theme.text.opacity(0.8))
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 14) {
+                    Label("Ta voix", systemImage: "mic.fill")
+                    Label("Ton beat", systemImage: "waveform")
+                    Label("Partage", systemImage: "square.and.arrow.up")
+                }
+                .font(.mono(11, weight: .bold))
+                .foregroundStyle(Theme.muted)
+                HStack(spacing: 8) {
+                    Image(systemName: unlocked ? "play.fill" : "lock.fill")
+                    Text(unlocked ? "Jouer" : "Verrouillé")
+                }
+                .font(.display(22))
+                .textCase(.uppercase)
+                .foregroundStyle(unlocked ? Color.black : Theme.faint)
+                .frame(maxWidth: .infinity, minHeight: 50)
+                .background(unlocked ? arcadeGold : Color.white.opacity(0.06))
+            }
+            .padding(16)
+            .background(arcadeGold.opacity(0.08))
+            .overlay(Rectangle().stroke(arcadeGold.opacity(glow ? 1 : 0.55), lineWidth: 2))
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .disabled(!unlocked)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) { glow = true }
+        }
+        .accessibilityLabel("\(game.title), jeu phare. \(game.pitch)")
     }
 }
 

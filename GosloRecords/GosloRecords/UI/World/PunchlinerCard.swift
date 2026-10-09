@@ -91,15 +91,24 @@ private struct PunchlinerShareButton: View {
     private var score: Int { Int((model.engine.minigameScore(minigame) * 100).rounded()) }
 
     private func render() {
-        guard image == nil, let rapper = model.state?.rapper else { return }
+        guard image == nil else { return }
+        image = PunchlinerCard.image(for: minigame, model: model, newRecord: newRecord)
+    }
+}
+
+extension PunchlinerCard {
+    /// The card of a finished game, as an image: the card to share, and the picture of the freestyle video.
+    @MainActor
+    static func image(for minigame: MinigameState, model: AppModel, newRecord: Bool) -> UIImage? {
+        guard let rapper = model.state?.rapper else { return nil }
         let card = PunchlinerCard(rapper: rapper, title: model.engine.minigame(minigame.id)?.title ?? "Punchliner",
-                                  score: score,
+                                  score: Int((model.engine.minigameScore(minigame) * 100).rounded()),
                                   // This game's rhyme, else its punchline, else the best rhyme ever written.
                                   pair: minigame.bestRhyme ?? (minigame.hook == nil ? model.profile.punchliner.bestRhyme : nil),
                                   pairIsThisGame: minigame.bestRhyme != nil, hook: minigame.hook,
                                   richRhymes: minigame.richRhymes ?? 0, best: model.profile.punchliner.bestScore,
                                   newRecord: newRecord)
-        image = PunchlinerCard.render(card)
+        return render(card)
     }
 }
 
