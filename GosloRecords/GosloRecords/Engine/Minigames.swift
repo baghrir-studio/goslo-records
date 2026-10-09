@@ -141,6 +141,114 @@ enum PunchlinerEngine {
     static func maxPoints(_ minigame: Minigame) -> Int {
         minigame.rounds.map { $0.endings.map(\.score).max() ?? 0 }.reduce(0, +)
     }
+
+    // MARK: Writing your own ending
+
+    /// Longest ending the player can type.
+    static let maxWrittenLength = 70
+
+    /// Points for a typed ending: a rich rhyme is worth the real punchline.
+    static func points(for quality: RhymeQuality) -> Int {
+        switch quality {
+        case .riche: bestScore
+        case .suffisante: 6
+        case .pauvre: 3
+        case .aucune: 0
+        }
+    }
+
+    /// The words a typed ending must rhyme with: the last word of the setup line, then the last word of the
+    /// real punchline (the proposed endings rhyme on it when the setup doesn't quite). `render` agrees the text.
+    static func rhymeTargets(for round: PunchlinerRound, render: (String) -> String = { $0 }) -> [String] {
+        var targets: [String] = []
+        let lines = [render(round.setup)] + (round.endings.max(by: { $0.score < $1.score }).map { [render($0.text)] } ?? [])
+        for line in lines {
+            guard let word = Rhyme.lastWord(of: line).map({ String(Rhyme.letters(of: $0)) }), !word.isEmpty,
+                  !targets.contains(where: { FrenchDictionary.normalize($0) == FrenchDictionary.normalize(word) }) else { continue }
+            targets.append(word)
+        }
+        return targets
+    }
+
+    /// Judges an ending the player typed: its last word must be in the dictionary, and rhyme with the round.
+    static func judgeWritten(_ text: String, in round: PunchlinerRound, dictionary: FrenchDictionary,
+                             render: (String) -> String = { $0 }) -> WrittenEnding {
+        let ending = String(text.trimmingCharacters(in: .whitespacesAndNewlines).prefix(maxWrittenLength))
+        let targets = rhymeTargets(for: round, render: render)
+        let shownTarget = targets.first ?? "…"
+        guard let word = Rhyme.lastWord(of: ending) else {
+            return WrittenEnding(text: ending, word: "", target: shownTarget, quality: .aucune, known: false,
+                                 feedback: "Il faut écrire une fin.", reaction: "Le micro attend. Le beat aussi.")
+        }
+        guard dictionary.contains(word) else {
+            return WrittenEnding(text: ending, word: word, target: shownTarget, quality: .aucune, known: false,
+                                 feedback: "« \(word) » n'est pas dans le dictionnaire.",
+                                 reaction: "Le public sort son téléphone pour chercher le mot. Rien. DJ Noize hausse les épaules.")
+        }
+        // Typed without accents (« ete »)? Also try the final -e as an -é: the accent doesn't make you lose.
+        var candidates = [word]
+        let letters = Rhyme.letters(of: word)
+        if letters.count > 2, letters.last == "e", FrenchDictionary.normalize(String(letters)) == String(letters) {
+            candidates.append(String(letters.dropLast()) + "é")
+        }
+        // Ending on the setup's own word is no rhyme.
+        if FrenchDictionary.normalize(shownTarget) == FrenchDictionary.normalize(String(letters)) {
+            return WrittenEnding(text: ending, word: word, target: shownTarget, quality: .aucune, known: true,
+                                 feedback: "« \(shownTarget) » avec « \(shownTarget) » : même mot, ça ne compte pas.",
+                                 reaction: "Le public a l'impression d'avoir déjà entendu ça. Il y a deux secondes.")
+        }
+        var best: (quality: RhymeQuality, endings: (String, String)?, target: String) = (.aucune, nil, shownTarget)
+        for target in targets {
+            // The real punchline's own word: copying it isn't writing (the setup word still counts).
+            if FrenchDictionary.normalize(target) == FrenchDictionary.normalize(String(letters)) { continue }
+            for candidate in candidates {
+                let match = Rhyme.match(candidate, target, lexicon: dictionary)
+                if match.quality > best.quality { best = (match.quality, match.endings, target) }
+            }
+        }
+        let quality = best.quality
+        let feedback: String
+        let reaction: String
+        switch quality {
+        case .riche:
+            feedback = "Rime riche !" + spelled(best.endings)
+            reaction = "La salle explose. DJ Noize coupe le son pour qu'on entende le public la répéter."
+        case .suffisante:
+            feedback = "Rime suffisante." + spelled(best.endings)
+            reaction = "Ça rime, ça claque. Des têtes hochent jusqu'au fond."
+        case .pauvre:
+            feedback = "Rime pauvre." + spelled(best.endings)
+            reaction = "Ça rime… de loin. DJ Noize fait semblant de régler une platine."
+        case .aucune:
+            feedback = "Pas de rime avec « \(shownTarget) »."
+            reaction = "Le silence est poli, mais c'est un silence."
+        }
+        return WrittenEnding(text: ending, word: word, target: best.target, quality: quality, known: true,
+                             feedback: feedback, reaction: reaction)
+    }
+
+    private static func spelled(_ endings: (String, String)?) -> String {
+        guard let endings else { return "" }
+        return " (-\(endings.0) / -\(endings.1))"
+    }
+}
+
+/// An ending the player typed, judged.
+struct WrittenEnding: Equatable {
+    /// The ending as typed (trimmed).
+    let text: String
+    /// Its last word.
+    let word: String
+    /// The word it was checked against.
+    let target: String
+    let quality: RhymeQuality
+    /// Was the last word in the dictionary?
+    let known: Bool
+    /// « Rime riche ! (-ver / -vers) », « « blarf » n'est pas dans le dictionnaire. »
+    let feedback: String
+    let reaction: String
+
+    var points: Int { known ? PunchlinerEngine.points(for: quality) : 0 }
 }
 
 // MARK: - Cale la platine

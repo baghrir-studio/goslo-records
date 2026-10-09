@@ -709,17 +709,40 @@ struct GameEngine {
         }
         if let choice, !current.round.endings.indices.contains(choice) { throw GameEngineError.invalidChoice(choice) }
         let (points, reaction) = PunchlinerEngine.judge(choice, in: current.round)
-        let ending = choice.map { current.round.endings[$0].text } ?? "…"
-        let verse = [current.round.setup, "\(current.round.lead) \(ending)"].map { TextTemplate.render($0, for: state.rapper) }
-        running.lyrics = (running.lyrics ?? []) + verse
-        if points >= PunchlinerEngine.bestScore, running.hook == nil, let choice {
-            running.hook = TextTemplate.render(current.round.endings[choice].text, for: state.rapper)
-        }
-        running.points += points
-        running.log.append(reaction)
-        running.round += 1
+        let ending = choice.map { TextTemplate.render(current.round.endings[$0].text, for: state.rapper) } ?? "…"
+        record(ending, points: points, log: reaction, round: current.round, running: &running, rapper: state.rapper)
         state.minigame = running
         return reaction
+    }
+
+    /// Punchliner: the player typed their own ending. It's checked against the dictionary and graded on its rhyme;
+    /// it goes into the verse (and can become the hook) like a proposed ending.
+    func dropWrittenPunchline(_ text: String, dictionary: FrenchDictionary, in state: inout GameState) throws -> WrittenEnding {
+        guard var running = state.minigame, let current = punchlinerRound(in: state) else {
+            throw GameEngineError.noMinigame
+        }
+        let rapper = state.rapper
+        let written = PunchlinerEngine.judgeWritten(text, in: current.round, dictionary: dictionary) {
+            TextTemplate.render($0, for: rapper)
+        }
+        record(written.text.isEmpty ? "…" : written.text, points: written.points,
+               log: "« \(written.text) » — \(written.feedback) \(written.reaction)",
+               round: current.round, running: &running, rapper: rapper)
+        state.minigame = running
+        return written
+    }
+
+    /// Writes a Punchliner round into the verse and the score, then moves on.
+    private func record(_ ending: String, points: Int, log: String, round: PunchlinerRound, running: inout MinigameState,
+                        rapper: Rapper) {
+        let verse = [TextTemplate.render(round.setup, for: rapper), "\(TextTemplate.render(round.lead, for: rapper)) \(ending)"]
+        running.lyrics = (running.lyrics ?? []) + verse
+        if points >= PunchlinerEngine.bestScore, running.hook == nil, ending != "…" {
+            running.hook = ending
+        }
+        running.points += points
+        running.log.append(log)
+        running.round += 1
     }
 
     /// Cale la platine: the player stopped the fader `elapsed` seconds into the current run.

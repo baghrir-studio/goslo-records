@@ -143,6 +143,8 @@ final class AppModel {
     private var careerAside: GameState?
     /// The arcade game being played (a throwaway game too).
     private(set) var arcadePlaying: ArcadeGame?
+    /// The Punchliner's French dictionary, read once in the background the first time it's needed.
+    @ObservationIgnored private var dictionaryTask: Task<FrenchDictionary?, Never>?
     /// The philosopher's analysis being read, to share as a card (cleared when the dialogue ends).
     private(set) var philosophyCard: PhilosophyCard?
     /// « Le Tournoi goslo radio » is open (talking to the radio host opens it).
@@ -908,6 +910,24 @@ final class AppModel {
         if let running = current.minigame { phase = .minigame(running) }
         persist()
         return reaction
+    }
+
+    /// The French dictionary (nil if the file is missing). Read off the main thread, once.
+    func frenchDictionary() async -> FrenchDictionary? {
+        if dictionaryTask == nil {
+            dictionaryTask = Task.detached(priority: .userInitiated) { try? EventLoader.loadDictionary(bundle: .main) }
+        }
+        return await dictionaryTask?.value
+    }
+
+    /// Punchliner: the player typed their own ending. Returns how it was judged.
+    func dropWrittenPunchline(_ text: String, dictionary: FrenchDictionary) -> WrittenEnding? {
+        guard var current = state, case .minigame = phase else { return nil }
+        guard let written = try? engine.dropWrittenPunchline(text, dictionary: dictionary, in: &current) else { return nil }
+        state = current
+        if let running = current.minigame { phase = .minigame(running) }
+        persist()
+        return written
     }
 
     /// Cale la platine: stops the fader `elapsed` seconds into the run.

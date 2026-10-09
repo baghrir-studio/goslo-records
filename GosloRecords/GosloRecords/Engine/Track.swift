@@ -60,3 +60,31 @@ extension GameEngine {
                            style: rapper.style, seed: ConcertEngine.seed(minigame.id + rapper.name, song: lyrics.count))
     }
 }
+
+extension PlayerTrack {
+    /// The instrumental as a 16-bit mono WAV file, for the voice booth (AVAudioPlayer plays files).
+    static func wav(_ samples: [Float], sampleRate: Double) -> Data {
+        let rate = UInt32(sampleRate.rounded())
+        let dataSize = UInt32(samples.count * 2)
+        var data = Data(capacity: 44 + samples.count * 2)
+        func append(_ text: String) { data.append(contentsOf: Array(text.utf8)) }
+        func append32(_ value: UInt32) { withUnsafeBytes(of: value.littleEndian) { data.append(contentsOf: $0) } }
+        func append16(_ value: UInt16) { withUnsafeBytes(of: value.littleEndian) { data.append(contentsOf: $0) } }
+        append("RIFF"); append32(36 + dataSize); append("WAVE")
+        append("fmt "); append32(16); append16(1); append16(1); append32(rate); append32(rate * 2); append16(2); append16(16)
+        append("data"); append32(dataSize)
+        for sample in samples {
+            let clipped = max(-1, min(1, sample.isFinite ? sample : 0))
+            append16(UInt16(bitPattern: Int16((clipped * 32_767).rounded())))
+        }
+        return data
+    }
+
+    /// File name of the player's recorded voice on this track: one per title, overwritten on a new take.
+    var voiceFileName: String {
+        let words = title.split(whereSeparator: { !$0.isLetter && !$0.isNumber })
+            .map { FrenchDictionary.normalize(String($0)) }.filter { !$0.isEmpty }
+        let slug = String(words.joined(separator: "-").prefix(60))
+        return "voix-\(slug.isEmpty ? "sans-titre" : slug).m4a"
+    }
+}
