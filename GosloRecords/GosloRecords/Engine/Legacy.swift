@@ -146,6 +146,8 @@ struct TrophyCase: Codable, Equatable {
     var arcadeBest: [String: Int] = [:]
     /// The HQ built between careers.
     var hq = Headquarters()
+    /// Punchliner's personal records.
+    var punchliner = PunchlinerRecord()
 
     var unlocked: Set<Achievement> { Set(achievements.keys) }
     var heritages: [Heritage] { Heritage.allCases.filter { unlocked.contains($0.unlockedBy) } }
@@ -160,6 +162,7 @@ struct TrophyCase: Codable, Equatable {
         daily = try c.decodeIfPresent(DailyRecord.self, forKey: .daily) ?? DailyRecord()
         arcadeBest = try c.decodeIfPresent([String: Int].self, forKey: .arcadeBest) ?? [:]
         hq = try c.decodeIfPresent(Headquarters.self, forKey: .hq) ?? Headquarters()
+        punchliner = try c.decodeIfPresent(PunchlinerRecord.self, forKey: .punchliner) ?? PunchlinerRecord()
     }
 }
 

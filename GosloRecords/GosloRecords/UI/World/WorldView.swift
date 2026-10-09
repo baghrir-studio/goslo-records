@@ -25,8 +25,10 @@ struct WorldView: View {
 
                 LampGlows(map: map)
                 MapLights(map: map, transit: Transit.of(state.rapper.city))
-                FameMarks(map: map, look: state.rapper.look, posters: model.engine.fame(in: state) * 2,
+                let buzz = model.engine.streetBuzz(in: state)
+                FameMarks(map: map, look: state.rapper.look, posters: buzz.posters,
                           fresco: model.engine.hasFresco(in: state))
+                StreetLife(map: map, buzz: buzz, name: state.rapper.name, people: !model.letterbox)
 
                 ForEach(map.doors, id: \.location) { door in
                     DoorSign(location: door.location, name: door.location.name(in: state.district),
@@ -362,25 +364,16 @@ struct ObjectiveMarker: View {
     }
 }
 
-/// The career on the walls: posters of the player (more as the streams grow), and a fresco on the
-/// laundromat once the Baron has fallen. Only on front walls, away from the shop fronts.
+/// The career on the walls: posters of the player (more as the streams and the artist level grow, see
+/// `StreetBuzz`), and a fresco on the laundromat once the Baron has fallen. Only on front walls, away from
+/// the shop fronts (`WorldMap.fameWalls`); the tags go on the others (`StreetLife`).
 private struct FameMarks: View {
     let map: WorldMap
     let look: CharacterLook
     let posters: Int
     let fresco: Bool
 
-    private var spots: [TilePoint] {
-        (0..<map.height).flatMap { y in
-            (0..<map.width).compactMap { x -> TilePoint? in
-                let point = TilePoint(x: x, y: y), below = map.tile(at: point.moved(.down))
-                guard map.tile(at: point) == .wall, below != .wall, below != .door, below != .metro,
-                      !map.doors.contains(where: { $0.y == y && abs($0.x - x) <= 2 }),
-                      !(map.metro.map { $0.y == y && abs($0.x - x) <= 2 } ?? false) else { return nil }
-                return point
-            }
-        }
-    }
+    private var spots: [TilePoint] { map.fameWalls }
 
     var body: some View {
         let tile = WorldView.tile
