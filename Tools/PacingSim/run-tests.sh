@@ -9,8 +9,8 @@ swift build --build-tests
 bin="$(swift build --show-bin-path)"
 if [ -d "$bin/PacingSimPackageTests.xctest/Contents" ]; then
     mkdir -p "$bin/PacingSimPackageTests.xctest/Contents/Resources"
-    cp ../../GosloRecords/GosloRecords/Resources/*.json "$bin/PacingSimPackageTests.xctest/Contents/Resources/"
+    cp ../../GosloRecords/GosloRecords/Resources/*.json ../../GosloRecords/GosloRecords/Resources/*.txt "$bin/PacingSimPackageTests.xctest/Contents/Resources/"
 else
-    cp ../../GosloRecords/GosloRecords/Resources/*.json "$bin/"
+    cp ../../GosloRecords/GosloRecords/Resources/*.json ../../GosloRecords/GosloRecords/Resources/*.txt "$bin/"
 fi
 swift test --skip-build ${1:+--filter "$1"}

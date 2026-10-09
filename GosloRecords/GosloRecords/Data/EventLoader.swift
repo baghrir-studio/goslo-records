@@ -72,6 +72,14 @@ enum EventLoader {
         )
     }
 
+    /// french-words.txt: the Punchliner's dictionary (a few hundred ms to read: load it off the main thread).
+    static func loadDictionary(bundle: Bundle = .main) throws -> FrenchDictionary {
+        guard let url = bundle.url(forResource: "french-words", withExtension: "txt") else {
+            throw LoadError.missingFile("french-words")
+        }
+        return FrenchDictionary(frontCoded: try Data(contentsOf: url))
+    }
+
     private static func bundledData(_ name: String, bundle: Bundle) throws -> Data {
         guard let url = bundle.url(forResource: name, withExtension: "json") else {
             throw LoadError.missingFile(name)
