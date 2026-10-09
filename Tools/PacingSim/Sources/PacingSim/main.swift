@@ -207,8 +207,20 @@ final class Player {
         let preferred: [StatKind: Location] = [.mental: .chezToi, .argent: .label, .credibilite: .quartier, .streams: .reseaux]
         var location = preferred[low] ?? .chezToi
         if !engine.isUnlocked(location, in: state) { location = .chezToi }
-        guard let event = try? engine.visit(location, in: &state, using: &rng) else { return }
-        resolve(event)
+        // The street and the phone go through their gates (`Gate.bench`, `Gate.phone`), like in the app.
+        let gated: GatedVisit?
+        switch location {
+        case .quartier: gated = try? engine.sitOnBench(in: &state, using: &rng)
+        case .reseaux: gated = try? engine.checkPhone(in: &state, using: &rng)
+        default: gated = (try? engine.visit(location, in: &state, using: &rng)).map(GatedVisit.event)
+        }
+        switch gated {
+        case .event(let event)?: resolve(event)
+        case .closed?:
+            guard let event = try? engine.visit(.chezToi, in: &state, using: &rng) else { return }
+            resolve(event)
+        case nil: return
+        }
     }
 
     // MARK: Mini-games
