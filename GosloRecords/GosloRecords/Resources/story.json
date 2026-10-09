@@ -7304,39 +7304,39 @@
           ]
         },
         {
-          "setup": "Lingot porte trois chaînes et deux montres en or,",
-          "lead": "il brille tellement",
+          "setup": "Lingot a trois chaînes, deux montres, de l'or partout sur le corps,",
+          "lead": "mais écoute-le rapper :",
           "endings": [
             {
-              "text": "que même le soleil dort",
+              "text": "ses rimes sont en plaqué or",
               "score": 10,
-              "reaction": "« Même le soleil dort. » Un gamin l'écrit au feutre sur le carton. C'est gravé."
+              "reaction": "« Plaqué or. » Le banc explose. Un gamin l'écrit au feutre sur le carton : c'est gravé."
             },
             {
-              "text": "qu'on le voit de dehors",
+              "text": "c'est plat, et ça sonne pas fort",
               "score": 6,
-              "reaction": "Correct. Lingot, s'il passait, prendrait ça pour un compliment."
+              "reaction": "Correct. Lingot, s'il passait, ferait semblant de ne pas avoir entendu."
             },
             {
-              "text": "qu'il s'éblouit encore",
+              "text": "il est riche, d'accord",
               "score": 3,
               "reaction": "Le banc rit poliment. Quelque part, Lingot se regarde dans une cuillère."
             },
             {
-              "text": "qu'il a mal au cou",
+              "text": "il parle surtout de ses montres",
               "score": 0,
-              "reaction": "Le plus petit hoche la tête : « C'est vrai que trois chaînes, ça doit tirer. » Personne ne rit. Ça ne rime pas."
+              "reaction": "Le plus petit hoche la tête : « C'est vrai, il parle que de ça. » Personne ne rit. Ça ne rime pas."
             }
           ]
         },
         {
           "setup": "Le Baron dit que le trône lui appartient,",
-          "lead": "j'ai vérifié le trône :",
+          "lead": "j'ai vérifié : son trône est en location,",
           "endings": [
             {
-              "text": "en carton, mais il tient",
+              "text": "et il paie même pas l'entretien",
               "score": 10,
-              "reaction": "Silence. Puis tout le banc se lève. Ça, c'est une punchline de trône."
+              "reaction": "Silence. Puis tout le banc se lève. Le Baron, locataire de son propre trône, et mauvais payeur en plus."
             },
             {
               "text": "il grince pour un rien",
@@ -7820,17 +7820,17 @@
       "rounds": [
         {
           "setup": "Septante couplets écrits dans une friterie,",
-          "lead": "une fois",
+          "lead": "et mon cachet, une fois :",
           "endings": [
             {
-              "text": "la sauce a tout dit",
+              "text": "trois cornets, c'est ça le prix",
               "score": 10,
-              "reaction": "Le patron de la friterie pose sa louche et applaudit. Il ne pose jamais sa louche."
+              "reaction": "Le patron de la friterie pose sa louche, applaudit, puis te tend tes trois cornets. Il ne pose jamais sa louche."
             },
             {
-              "text": "c'est du génie",
+              "text": "une mitraillette et un merci",
               "score": 6,
-              "reaction": "« Du génie, une fois. » Le caméraman rit tellement que le plan est flou. On le garde."
+              "reaction": "Une vraie mitraillette : baguette, viande, frites. Le caméraman rit tellement que le plan est flou. On le garde."
             },
             {
               "text": "j'ai mangé, j'ai fini",
