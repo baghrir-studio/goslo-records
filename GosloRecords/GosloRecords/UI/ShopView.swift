@@ -74,7 +74,7 @@ struct ShopView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
                         if tab == .deco {
-                            Text("Choisis, puis pose-la où tu veux sur la carte. Les bâtiments rapportent à chaque période.")
+                            Text("Pose-la où tu veux sur la carte. L’argent de tes bâtiments s’accumule sur place : passe le ramasser (bouton A), améliore-les, déplace-les ou revends-les.")
                                 .font(.system(size: 12))
                                 .foregroundStyle(Theme.muted)
                         }

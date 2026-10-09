@@ -138,6 +138,10 @@ final class AppModel {
     private var happeningTurn = -1
     /// Construction mode: the decoration being placed in front of the player (bought on "Poser").
     private(set) var placingDecor: Decor?
+    /// When the decoration being placed is one already on the map, being moved (free).
+    private(set) var movingDecorId: Int?
+    /// The placed decoration the player is looking at (collect, upgrade, move, sell).
+    private(set) var inspectedDecorId: Int?
     /// A big moment to celebrate at the top of the screen (level up, n°1, challenge).
     private(set) var celebration: String?
     /// The daily clash being played (the career waits in `careerAside`, untouched).
@@ -319,6 +323,7 @@ final class AppModel {
     /// Held direction on the D-pad (nil = released). Walks as long as it's held.
     func hold(_ direction: Direction?) {
         heldDirection = direction
+        if direction != nil, inspectedDecorId != nil { closeInspected() }
         guard direction != nil, walkTask == nil else { return }
         walkTask = Task { [weak self] in
             while let self, let direction = self.heldDirection {
@@ -469,6 +474,10 @@ final class AppModel {
             }
             return
         }
+        if placingDecor == nil, let item = placedDecor(at: front) {
+            inspect(item)
+            return
+        }
         switch OverworldRules.interaction(from: position, facing: facing, on: map) {
         case .npc(let npc) where npc.id == Philosopher.id:
             // goslo radio's philosopher reads your latest punchline.
@@ -585,6 +594,8 @@ final class AppModel {
         guard (try? engine.travel(to: district, in: &current)) != nil else { return }
         happening = nil
         placingDecor = nil
+        movingDecorId = nil
+        inspectedDecorId = nil
         let arrived = current
         busy = true
         heldDirection = nil
@@ -993,7 +1004,7 @@ final class AppModel {
     /// Why it can't go there (nil: it can).
     var placementRefusal: String? {
         guard let decor = placingDecor, let anchor = placementAnchor, let state else { return "—" }
-        return engine.placementRefusal(decor, at: anchor, in: state, player: position)
+        return engine.placementRefusal(decor, at: anchor, in: state, player: position, moving: movingDecorId)
     }
 
     /// From the shop: walk around with the decoration in front of you, then put it down.
@@ -1003,16 +1014,24 @@ final class AppModel {
     }
 
     func cancelPlacing() {
-        withAnimation(.easeOut(duration: 0.2)) { placingDecor = nil }
+        withAnimation(.easeOut(duration: 0.2)) { placingDecor = nil; movingDecorId = nil }
     }
 
     /// Buys the decoration and puts it down where it stands. Returns why not, nil when done.
     @discardableResult
     func confirmPlacing() -> String? {
         guard let decor = placingDecor, let anchor = placementAnchor, var current = state else { return "—" }
-        if let refusal = engine.placementRefusal(decor, at: anchor, in: current, player: position) {
+        if let refusal = engine.placementRefusal(decor, at: anchor, in: current, player: position, moving: movingDecorId) {
             sound.play(.miss)
             return refusal
+        }
+        if let moving = movingDecorId {
+            guard (try? engine.move(moving, to: anchor, in: &current, player: position)) != nil else { return "Impossible" }
+            state = current
+            sound.play(.select)
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { placingDecor = nil; movingDecorId = nil }
+            persist()
+            return nil
         }
         let before = current.stats
         guard (try? engine.place(decor, at: anchor, in: &current, player: position)) != nil else { return "Impossible" }
@@ -1023,6 +1042,90 @@ final class AppModel {
         withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { placingDecor = nil }
         persist()
         return nil
+    }
+
+    // MARK: - Your buildings
+
+    /// The placed decoration on the tile in front of the player, if any.
+    func placedDecor(at point: TilePoint) -> PlacedDecor? {
+        state?.placed.first { $0.district == state?.district && $0.tiles.contains(point) }
+    }
+
+    var inspectedDecor: PlacedDecor? {
+        inspectedDecorId.flatMap { id in state?.placed.first { $0.id == id } }
+    }
+
+    /// Walking up to one of your decorations: the money it made goes straight in your pocket,
+    /// and its card opens (upgrade, move, sell).
+    func inspect(_ item: PlacedDecor) {
+        guard var current = state else { return }
+        if item.stored > 0 {
+            let before = current.stats
+            let amount = engine.collect(item.id, in: &current)
+            state = current
+            publishDeltas(from: before, to: current.stats)
+            if amount > 0 {
+                sound.play(.statUp)
+                Haptics.shared.play(.good)
+            }
+            persist()
+        } else {
+            sound.play(.select)
+        }
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { inspectedDecorId = item.id }
+    }
+
+    func closeInspected() {
+        withAnimation(.easeOut(duration: 0.2)) { inspectedDecorId = nil }
+    }
+
+    func upgradeRefusal(_ item: PlacedDecor) -> String? {
+        state.flatMap { engine.upgradeRefusal(item.id, in: $0) }
+    }
+
+    /// Upgrades the building being looked at. Returns why not, nil when done.
+    @discardableResult
+    func upgradeInspected() -> String? {
+        guard let id = inspectedDecorId, var current = state else { return "—" }
+        if let refusal = engine.upgradeRefusal(id, in: current) { return refusal }
+        let before = current.stats
+        guard (try? engine.upgrade(id, in: &current)) != nil else { return "Impossible" }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.levelUp)
+        Haptics.shared.play(.victory)
+        if let item = current.placed.first(where: { $0.id == id }) {
+            celebration = "\(item.decor.name.uppercased()) · NIVEAU \(item.level)"
+            Task {
+                try? await Task.sleep(for: .seconds(2.2))
+                withAnimation { celebration = nil }
+            }
+        }
+        persist()
+        return nil
+    }
+
+    /// Sells the decoration being looked at: half of what it cost comes back.
+    func sellInspected() {
+        guard let id = inspectedDecorId, var current = state else { return }
+        let before = current.stats
+        engine.sell(id, in: &current)
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.statUp)
+        withAnimation(.easeOut(duration: 0.2)) { inspectedDecorId = nil }
+        persist()
+    }
+
+    /// Picks the decoration up to put it somewhere else (free).
+    func moveInspected() {
+        guard let item = inspectedDecor else { return }
+        sound.play(.select)
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            inspectedDecorId = nil
+            movingDecorId = item.id
+            placingDecor = item.decor
+        }
     }
 
     /// Buys goslo radio.
