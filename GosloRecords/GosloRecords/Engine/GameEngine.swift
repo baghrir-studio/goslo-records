@@ -490,9 +490,7 @@ struct GameEngine {
         }
         if let id = choice.minigame, let minigame = story.minigame(id),
            EndingResolver.prematureEnding(for: state.stats) == nil {
-            let running = MinigameState(minigame: minigame)
-            state.minigame = running
-            return .minigame(running)
+            return .minigame(startMinigame(minigame, in: &state))
         }
         return .outcome(finishAction(outcome, in: &state))
     }
@@ -704,10 +702,11 @@ struct GameEngine {
 
     /// Punchliner: the round being played, and the order its endings are shown in (stable).
     func punchlinerRound(in state: GameState) -> (round: PunchlinerRound, order: [Int])? {
-        guard let running = state.minigame, running.kind == .punchliner, let minigame = minigame(running.id),
-              minigame.rounds.indices.contains(running.round) else { return nil }
-        let round = minigame.rounds[running.round]
-        return (round, PunchlinerEngine.order(for: round, seed: PunchlinerEngine.seed(running.id, round: running.round)))
+        guard let running = state.minigame, running.kind == .punchliner, running.round < running.roundCount else { return nil }
+        let rounds = punchlinerRounds(of: running)
+        guard rounds.indices.contains(running.round) else { return nil }
+        let round = rounds[running.round]
+        return (round, PunchlinerEngine.order(for: round, seed: punchlinerSeed(of: running, round: running.round)))
     }
 
     /// Punchliner: the player picks an ending (nil = the timer ran out). Returns the reaction.
@@ -801,7 +800,7 @@ struct GameEngine {
     func minigameScore(_ running: MinigameState) -> Double {
         switch running.kind {
         case .punchliner:
-            let best = minigame(running.id).map(PunchlinerEngine.maxPoints) ?? 0
+            let best = PunchlinerEngine.maxPoints(punchlinerRounds(of: running))
             return best > 0 ? Double(running.points) / Double(best) : 0
         case .platine:
             return Double(running.points) / Double(PlatineEngine.runs * PlatineEngine.maxPoints)

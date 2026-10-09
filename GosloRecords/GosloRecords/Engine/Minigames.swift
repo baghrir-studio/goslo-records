@@ -21,26 +21,30 @@ struct Minigame: Codable, Equatable, Identifiable {
     let intro: String
     /// Score (0…1) to reach for the win result.
     let passScore: Double
-    /// Punchliner only.
+    /// Punchliner only: its own verses, played first while never seen. A game has as many verses as this.
     let rounds: [PunchlinerRound]
+    /// Punchliner only: the hardest tier of pool verses it offers (nil: all of them).
+    let tier: Int?
     /// Signing only.
     let signing: SigningSpec?
     let win: InterviewResult
     let lose: InterviewResult
 
     enum CodingKeys: String, CodingKey {
-        case id, kind, title, intro, rounds, signing, win, lose
+        case id, kind, title, intro, rounds, tier, signing, win, lose
         case passScore = "pass_score"
     }
 
     init(id: String, kind: Kind, title: String, intro: String = "", passScore: Double = 0.5,
-         rounds: [PunchlinerRound] = [], signing: SigningSpec? = nil, win: InterviewResult, lose: InterviewResult) {
+         rounds: [PunchlinerRound] = [], tier: Int? = nil, signing: SigningSpec? = nil, win: InterviewResult,
+         lose: InterviewResult) {
         self.id = id
         self.kind = kind
         self.title = title
         self.intro = intro
         self.passScore = passScore
         self.rounds = rounds
+        self.tier = tier
         self.signing = signing
         self.win = win
         self.lose = lose
@@ -54,6 +58,7 @@ struct Minigame: Codable, Equatable, Identifiable {
         intro = try c.decodeIfPresent(String.self, forKey: .intro) ?? ""
         passScore = try c.decodeIfPresent(Double.self, forKey: .passScore) ?? 0.5
         rounds = try c.decodeIfPresent([PunchlinerRound].self, forKey: .rounds) ?? []
+        tier = try c.decodeIfPresent(Int.self, forKey: .tier)
         signing = try c.decodeIfPresent(SigningSpec.self, forKey: .signing)
         win = try c.decode(InterviewResult.self, forKey: .win)
         lose = try c.decode(InterviewResult.self, forKey: .lose)
@@ -89,6 +94,9 @@ struct MinigameState: Codable, Equatable {
     /// Punchliner only: rich rhymes written this game, and the best rhyme written (see `noteRhyme`).
     var richRhymes: Int?
     var bestRhyme: RhymePair?
+    /// Punchliner only: the ids of the verses drawn for this game, in order (`PunchlinerDeck`). nil: the
+    /// mini-game's own verses (games saved before the pool).
+    var verses: [String]?
     let roundCount: Int
 
     init(minigame: Minigame) {
@@ -141,8 +149,10 @@ enum PunchlinerEngine {
     }
 
     /// Best possible total, to turn points into a 0…1 score.
-    static func maxPoints(_ minigame: Minigame) -> Int {
-        minigame.rounds.map { $0.endings.map(\.score).max() ?? 0 }.reduce(0, +)
+    static func maxPoints(_ minigame: Minigame) -> Int { maxPoints(minigame.rounds) }
+
+    static func maxPoints(_ rounds: [PunchlinerRound]) -> Int {
+        rounds.map { $0.endings.map(\.score).max() ?? 0 }.reduce(0, +)
     }
 
     // MARK: Writing your own ending

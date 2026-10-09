@@ -7054,6 +7054,7 @@
       "kind": "punchliner",
       "title": "Punchliner · le carnet",
       "intro": "Ton premier texte, trois couplets. Le début de chaque phrase est écrit : choisis la fin qui claque, et qui rime. Le chrono tourne, comme sur un vrai beat.",
+      "tier": 1,
       "pass_score": 0.3,
       "rounds": [
         {
@@ -7166,6 +7167,7 @@
       "kind": "punchliner",
       "title": "Punchliner · au Bunker",
       "intro": "Fred a collé quatre fins de phrase sur la console, au ruban adhésif. « Je te donne le début, tu choisis la fin. Trois couplets. Si ça rime pas, je te raconte 2009. »",
+      "tier": 2,
       "pass_score": 0.5,
       "rounds": [
         {
@@ -7272,6 +7274,7 @@
       "kind": "punchliner",
       "title": "Punchliner · au banc",
       "intro": "Quatre fins de phrase au feutre sur un carton, une seule qui tue. Le perdant offre les chips. Trois gamins t'attendent, très sérieux.",
+      "tier": 2,
       "pass_score": 0.5,
       "rounds": [
         {

@@ -6,6 +6,7 @@ import Foundation
 /// - quests.json  `{ "quests": [ ... ] }`
 /// - map.json     the neighbourhood (rows, doors, characters)
 /// - story.json   chapters, objectives, cinematics, interviews, goslo radio
+/// - punchlines.json  the Punchliner's verses
 enum EventLoader {
     struct EventFile: Decodable {
         let version: Int?
@@ -61,14 +62,25 @@ enum EventLoader {
         try decode(Story.self, from: data, name: "story")
     }
 
+    /// punchlines.json: the Punchliner's shared pool of verses.
+    static func loadVerses(from data: Data) throws -> [PunchlinerVerse] {
+        try decode(VerseFile.self, from: data, name: "punchlines").verses
+    }
+
+    struct VerseFile: Decodable {
+        let verses: [PunchlinerVerse]
+    }
+
     static func loadWorld(bundle: Bundle = .main) throws -> World {
-        World(
+        var story = try loadStory(from: bundledData("story", bundle: bundle))
+        story.verses = try loadVerses(from: bundledData("punchlines", bundle: bundle))
+        return World(
             events: try load(from: bundledData("events", bundle: bundle)),
             cast: try loadCast(from: bundledData("cast", bundle: bundle)),
             quests: try loadQuests(from: bundledData("quests", bundle: bundle)),
             map: try loadMap(from: bundledData("map", bundle: bundle)),
             districts: try loadDistricts(from: bundledData("districts", bundle: bundle)),
-            story: try loadStory(from: bundledData("story", bundle: bundle))
+            story: story
         )
     }
 

@@ -69,6 +69,9 @@ struct PunchlinerRecord: Codable, Equatable {
     var bestRhyme: RhymePair?
     /// Punchliner games finished.
     var games = 0
+    /// Verses played, all games together, oldest first: careers and the arcade start from them, so the
+    /// verses never seen come first there too.
+    var recentVerses: [String] = []
 
     init() {}
 
@@ -78,6 +81,7 @@ struct PunchlinerRecord: Codable, Equatable {
         richRhymes = try c.decodeIfPresent(Int.self, forKey: .richRhymes) ?? 0
         bestRhyme = try c.decodeIfPresent(RhymePair.self, forKey: .bestRhyme)
         games = try c.decodeIfPresent(Int.self, forKey: .games) ?? 0
+        recentVerses = try c.decodeIfPresent([String].self, forKey: .recentVerses) ?? []
     }
 
     /// Adds a finished game (score in %). Returns what it beat.
@@ -89,6 +93,7 @@ struct PunchlinerRecord: Codable, Equatable {
         richRhymes += rich
         bestScore = max(bestScore, score)
         if newRhyme { bestRhyme = running.bestRhyme }
+        if let verses = running.verses { recentVerses = PunchlinerDeck.remember(verses, in: recentVerses) }
         return PunchlinerRecordBreak(score: score, previousBest: previous, richThisGame: rich, newBestRhyme: newRhyme)
     }
 }
