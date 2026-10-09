@@ -71,13 +71,15 @@ final class PlacementTests: XCTestCase {
         let spot = try XCTUnwrap(freeSpots(for: .boutiqueMerch, in: state, player: map.spawn).first)
         try engine.place(.boutiqueMerch, at: spot, in: &state, player: map.spawn)
         state.stats = Stats(streams: 50, credibilite: 50, argent: 50, mental: 50)
+        // A period when the neighbourhood doesn't ask for merch (no double pay).
+        state.turn = try XCTUnwrap((0..<7).first { !Neighbourhood.demand(turn: $0).boosted.contains(.boutiqueMerch) })
         let income = engine.decorIncome(in: &state)
         XCTAssertNil(income[.argent], "l'argent attend dans la boutique")
         XCTAssertEqual(state.placed[0].stored, Decor.boutiqueMerch.perTurn[.argent], "la boutique rapporte chaque période")
         XCTAssertEqual(engine.collect(state.placed[0].id, in: &state), 4)
         XCTAssertEqual(state.stats.argent, 54)
         XCTAssertEqual(state.placed[0].stored, 0)
-        XCTAssertTrue(Decor.allCases.filter(\.isBuilding).allSatisfy { $0.price >= 40 }, "les bâtiments sont chers")
+        XCTAssertTrue(Decor.allCases.filter(\.isBuilding).allSatisfy { $0.price >= 30 }, "les bâtiments sont chers")
     }
 
     func testBuyingGosloRadio() throws {

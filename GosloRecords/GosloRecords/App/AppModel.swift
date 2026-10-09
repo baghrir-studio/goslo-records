@@ -1074,6 +1074,12 @@ final class AppModel {
         return engine.placementRefusal(decor, at: anchor, in: state, player: position, moving: movingDecorId)
     }
 
+    /// What putting it there would start with the neighbours (shown under the ghost's verdict).
+    var placementSynergies: [String] {
+        guard let decor = placingDecor, let anchor = placementAnchor, let state else { return [] }
+        return engine.placementSynergies(decor, at: anchor, in: state, moving: movingDecorId)
+    }
+
     /// From the shop: walk around with the decoration in front of you, then put it down.
     func beginPlacing(_ decor: Decor) {
         sound.play(.select)

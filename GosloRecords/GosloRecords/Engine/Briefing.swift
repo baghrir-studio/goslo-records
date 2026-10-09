@@ -36,6 +36,8 @@ struct PeriodBriefing: Equatable {
     let isNewYear: Bool
     let summary: PeriodSummary?
     let objectives: [String]
+    /// What the neighbourhood wants this period (`Neighbourhood.demand`), once the player can build.
+    var demand: String? = nil
 
     var title: String { isNewYear ? "Nouvelle année" : "Nouvelle période" }
 }
@@ -43,7 +45,9 @@ struct PeriodBriefing: Equatable {
 extension GameEngine {
     /// The briefing for the period that just started (`summary`: what the turn that closed paid).
     func periodBriefing(in state: GameState, summary: PeriodSummary?) -> PeriodBriefing {
-        PeriodBriefing(isNewYear: state.isNewYear, summary: summary, objectives: periodObjectives(in: state))
+        let builds = !state.placed.isEmpty || ArtistLevel.level(xp: state.artistXP) >= 2
+        return PeriodBriefing(isNewYear: state.isNewYear, summary: summary, objectives: periodObjectives(in: state),
+                              demand: builds ? Neighbourhood.demand(turn: state.turn).line : nil)
     }
 
     /// Up to three short goals: the story objective, the season's open challenges, and something to save for.

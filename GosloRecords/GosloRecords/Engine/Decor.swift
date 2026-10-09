@@ -8,16 +8,28 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
     // Buildings: expensive, they take room (2 tiles wide) and pay every turn.
     case panneauGeant = "panneau_geant", studioPerso = "studio_perso", scenePleinAir = "scene_plein_air",
          boutiqueMerch = "boutique_merch"
+    // Neighbourhood businesses, one to aim for at almost every artist level (see `Neighbourhood` for how they
+    // help each other and what the period asks for).
+    case snack, barbier, salleBoxe = "salle_boxe", disquaire, radioPirate = "radio_pirate",
+         labelInde = "label_inde", fresqueGeante = "fresque_geante"
 
     /// The big ones: they block the way (placed only where every door and character stays reachable).
-    var isBuilding: Bool { [.panneauGeant, .studioPerso, .scenePleinAir, .boutiqueMerch].contains(self) }
+    var isBuilding: Bool {
+        switch self {
+        case .fresque, .sono, .bancDore, .palmier, .borneArcade, .foodTruck, .statueMicro, .neonGoslo: false
+        case .panneauGeant, .studioPerso, .scenePleinAir, .boutiqueMerch, .snack, .barbier, .salleBoxe, .disquaire,
+             .radioPirate, .labelInde, .fresqueGeante: true
+        }
+    }
 
     /// Tiles taken (width, height), from the anchor tile to the right and up.
     var footprint: (width: Int, height: Int) {
         switch self {
-        case .foodTruck, .panneauGeant: (2, 1)
-        case .studioPerso, .scenePleinAir, .boutiqueMerch: (2, 2)
-        default: (1, 1)
+        case .foodTruck, .panneauGeant, .snack, .radioPirate: (2, 1)
+        case .studioPerso, .scenePleinAir, .boutiqueMerch, .barbier, .disquaire: (2, 2)
+        case .salleBoxe, .labelInde: (3, 2)
+        case .fresqueGeante: (3, 1)
+        case .fresque, .sono, .bancDore, .palmier, .borneArcade, .statueMicro, .neonGoslo: (1, 1)
         }
     }
 
@@ -37,6 +49,38 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .studioPerso: "Ton studio perso"
         case .scenePleinAir: "Scène en plein air"
         case .boutiqueMerch: "Boutique de merch"
+        case .snack: "Snack Chez Momo"
+        case .barbier: "Barbier du quartier"
+        case .salleBoxe: "Salle de boxe"
+        case .disquaire: "Disquaire"
+        case .radioPirate: "Radio pirate"
+        case .labelInde: "Ton label indépendant"
+        case .fresqueGeante: "Fresque monumentale"
+        }
+    }
+
+    /// Short name, for synergy and demand lines ("synergie avec le snack").
+    var shortName: String {
+        switch self {
+        case .fresque: "la fresque"
+        case .sono: "la sono"
+        case .bancDore: "le banc doré"
+        case .palmier: "le palmier"
+        case .borneArcade: "la borne d'arcade"
+        case .foodTruck: "le food truck"
+        case .statueMicro: "la statue"
+        case .neonGoslo: "le néon"
+        case .panneauGeant: "le panneau géant"
+        case .studioPerso: "ton studio"
+        case .scenePleinAir: "la scène"
+        case .boutiqueMerch: "la boutique de merch"
+        case .snack: "le snack"
+        case .barbier: "le barbier"
+        case .salleBoxe: "la salle de boxe"
+        case .disquaire: "le disquaire"
+        case .radioPirate: "la radio pirate"
+        case .labelInde: "ton label"
+        case .fresqueGeante: "la fresque monumentale"
         }
     }
 
@@ -54,6 +98,13 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .studioPerso: "Ton propre studio au pied des tours. Plus besoin de louer le Bunker."
         case .scenePleinAir: "Une vraie scène dehors : les concerts gratuits font monter ton respect."
         case .boutiqueMerch: "T-shirts, casquettes, posters à ton nom. Ça vend tout seul."
+        case .snack: "Kebab, frites, sauce blanche. Momo tient la broche, toi tu touches ta part."
+        case .barbier: "Le dégradé du quartier. On y parle de toi entre deux coups de tondeuse."
+        case .salleBoxe: "Un ring, des sacs, de la sueur. Les petits s'y défoulent, toi tu tiens le coup."
+        case .disquaire: "Des bacs de vinyles et tes disques en vitrine. Les puristes passent te voir."
+        case .radioPirate: "Une antenne sur le toit et un micro ouvert. Ton son tourne sans demander la permission."
+        case .labelInde: "Ta propre structure : tu signes les petits du quartier et tu touches sur tout."
+        case .fresqueGeante: "Trois étages de peinture à ta gloire. On vient de loin pour la prendre en photo."
         }
     }
 
@@ -63,11 +114,18 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .bancDore, .borneArcade: 12
         case .sono, .neonGoslo: 16
         case .fresque, .foodTruck: 20
+        case .snack: 30
         case .statueMicro: 30
         case .panneauGeant: 40
+        case .barbier: 42
+        case .salleBoxe: 50
         case .studioPerso: 55
+        case .disquaire: 58
+        case .radioPirate: 62
         case .scenePleinAir: 65
         case .boutiqueMerch: 75
+        case .labelInde: 80
+        case .fresqueGeante: 85
         }
     }
 
@@ -75,12 +133,15 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
     var minLevel: Int {
         switch self {
         case .palmier, .bancDore: 1
-        case .sono, .borneArcade: 2
-        case .fresque, .foodTruck: 3
+        case .sono, .borneArcade, .snack: 2
+        case .fresque, .foodTruck, .barbier: 3
         case .neonGoslo, .panneauGeant: 4
-        case .statueMicro, .studioPerso: 6
-        case .scenePleinAir: 7
+        case .salleBoxe: 5
+        case .statueMicro, .studioPerso, .disquaire: 6
+        case .scenePleinAir, .radioPirate: 7
         case .boutiqueMerch: 8
+        case .labelInde: 9
+        case .fresqueGeante: 10
         }
     }
 
@@ -99,6 +160,13 @@ enum Decor: String, Codable, CaseIterable, Identifiable {
         case .studioPerso: [.streams: 1, .argent: 2]
         case .scenePleinAir: [.credibilite: 2, .streams: 1]
         case .boutiqueMerch: [.argent: 4]
+        case .snack: [.argent: 3]
+        case .barbier: [.argent: 2, .credibilite: 1]
+        case .salleBoxe: [.mental: 2, .credibilite: 1]
+        case .disquaire: [.argent: 3, .streams: 1]
+        case .radioPirate: [.streams: 2, .credibilite: 1]
+        case .labelInde: [.argent: 5, .streams: 1]
+        case .fresqueGeante: [.credibilite: 2, .streams: 2]
         }
     }
 }
@@ -377,17 +445,22 @@ extension GameEngine {
         return state.stats.apply([.argent: -decor.price])
     }
 
-    /// End of a turn: what the decorations bring. Money from placed ones waits on the spot until you pick it up.
+    /// End of a turn: what the decorations bring, with their synergies and the period's demand (`Neighbourhood`).
+    /// Money from placed ones waits on the spot until you pick it up.
     func decorIncome(in state: inout GameState) -> [StatKind: Int] {
         var total: [StatKind: Int] = [:]
         for decor in state.decor.values {
             for (kind, value) in decor.perTurn { total[kind, default: 0] += value }
         }
+        // Synergies and the period's demand are worked out on the map as it stands before anything changes.
+        let incomes = state.placed.map { income(of: $0, in: state) }
         for index in state.placed.indices {
-            let item = state.placed[index]
-            for (kind, value) in item.perTurn {
+            let item = state.placed[index], earned = incomes[index]
+            for (kind, value) in earned.total {
                 if kind == .argent {
-                    state.placed[index].stored = min(item.stored + value, item.storageCap)
+                    // A busy period can push it past the usual cap; it never eats what's already waiting.
+                    let cap = max(earned.storageCap, value * 3)
+                    state.placed[index].stored = max(item.stored, min(item.stored + value, cap))
                 } else {
                     total[kind, default: 0] += value
                 }
