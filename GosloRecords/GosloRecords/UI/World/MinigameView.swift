@@ -50,7 +50,13 @@ struct MinigameView: View {
 private struct MinigameResult: View {
     @Environment(AppModel.self) private var model
     let minigame: MinigameState
-    @State private var listening = false
+    /// The track playing: with the phone's voice, or in the voice booth.
+    @State private var screen: TrackScreen?
+
+    private enum TrackScreen: String, Identifiable {
+        case listen, booth
+        var id: String { rawValue }
+    }
 
     private var track: PlayerTrack? {
         model.state.flatMap { model.engine.track(for: minigame, rapper: $0.rapper) }
@@ -78,18 +84,30 @@ private struct MinigameResult: View {
             }
             Spacer(minLength: 0)
             if track != nil {
-                Button("▶ Écouter ton son") { listening = true }
-                    .font(.mono(14, weight: .heavy))
-                    .foregroundStyle(Theme.accent)
-                    .frame(maxWidth: .infinity, minHeight: 48)
-                    .overlay(Rectangle().stroke(Theme.accent, lineWidth: 2))
+                HStack(spacing: 10) {
+                    Button("▶ Écouter ton son") { screen = .listen }
+                        .font(.mono(14, weight: .heavy))
+                        .foregroundStyle(Theme.accent)
+                        .frame(maxWidth: .infinity, minHeight: 48)
+                        .overlay(Rectangle().stroke(Theme.accent, lineWidth: 2))
+                    Button("🎙 Enregistrer ta voix") { screen = .booth }
+                        .font(.mono(14, weight: .heavy))
+                        .foregroundStyle(Theme.text)
+                        .frame(maxWidth: .infinity, minHeight: 48)
+                        .overlay(Rectangle().stroke(Theme.line, lineWidth: 2))
+                }
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             }
             Button(model.arcadePlaying == nil ? "Continuer" : "Retour à l'arcade") { model.finishMinigame() }
                 .buttonStyle(PrimaryButtonStyle())
         }
-        .fullScreenCover(isPresented: $listening) {
+        .fullScreenCover(item: $screen) { screen in
             if let track, let rapper = model.state?.rapper {
-                TrackView(track: track, look: rapper.look, artist: rapper.name)
+                switch screen {
+                case .listen: TrackView(track: track, look: rapper.look, artist: rapper.name)
+                case .booth: VoiceBoothView(track: track, look: rapper.look, artist: rapper.name)
+                }
             }
         }
     }
@@ -97,22 +115,28 @@ private struct MinigameResult: View {
 
 // MARK: - Punchliner
 
-/// The setup line, the start of the punchline, and four endings to pick from before time runs out.
-/// Once an ending is picked, the engine moves on to the next round; the board keeps showing the answered
-/// one (its line, the chosen ending and the reaction) until the player taps on.
+/// The setup line, the start of the punchline, and four endings to pick from before time runs out —
+/// or the player writes their own ending (checked against the dictionary and graded on its rhyme).
+/// Once an ending is in, the engine moves on to the next round; the board keeps showing the answered
+/// one (its line, the ending and the reaction) until the player taps on.
 private struct PunchlinerBoard: View {
     @Environment(AppModel.self) private var model
     let minigame: MinigameState
     @Binding var reading: Bool
 
     static let seconds = 20.0
+    /// Extra seconds the first time the player starts writing in a round.
+    static let writingBonus = 25.0
 
     /// The round just answered, frozen until the player moves on.
     private struct Answered {
         let number: Int
         let round: PunchlinerRound
         let ending: PunchlinerAnswer?
+        let written: WrittenEnding?
         let reaction: String
+
+        var points: Int { written?.points ?? ending?.score ?? 0 }
     }
 
     @State private var answered: Answered?
@@ -120,6 +144,14 @@ private struct PunchlinerBoard: View {
     /// Time left when the app went to the background: the clock waits for the player.
     @State private var pausedLeft: TimeInterval?
     @Environment(\.scenePhase) private var scenePhase
+
+    /// Writing your own ending.
+    @State private var writing = false
+    @State private var draft = ""
+    @State private var bonusGiven = false
+    @State private var dictionary: FrenchDictionary?
+    @State private var dictionaryMissing = false
+    @FocusState private var fieldFocused: Bool
 
     private var current: (round: PunchlinerRound, order: [Int])? {
         model.state.flatMap { model.engine.punchlinerRound(in: $0) }
@@ -130,15 +162,23 @@ private struct PunchlinerBoard: View {
         model.state.map { TextTemplate.render(text, for: $0.rapper) } ?? text
     }
 
+    private var trimmedDraft: String { draft.trimmingCharacters(in: .whitespacesAndNewlines) }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             if let answered {
                 header(number: answered.number, timer: false)
-                lines(answered.round, ending: answered.ending?.text)
-                Text(verdict(answered.ending))
+                lines(answered.round, ending: answered.written?.text ?? answered.ending.map { r($0.text) })
+                Text(verdict(answered))
                     .font(.display(30))
-                    .foregroundStyle(answered.ending.map { $0.score >= PunchlinerEngine.bestScore } == true
+                    .foregroundStyle(answered.points >= PunchlinerEngine.bestScore
                                      ? Color(red: 1, green: 0.85, blue: 0.3) : Theme.accent)
+                if let written = answered.written {
+                    Text(written.feedback)
+                        .font(.mono(13, weight: .bold))
+                        .foregroundStyle(written.points > 0 ? Color(red: 0.4, green: 0.9, blue: 0.5) : Theme.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 Text(r(answered.reaction))
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Theme.text.opacity(0.9))
@@ -148,25 +188,48 @@ private struct PunchlinerBoard: View {
                     .buttonStyle(PrimaryButtonStyle())
             } else if let current {
                 header(number: minigame.round + 1, timer: true)
-                lines(current.round, ending: nil)
-                VStack(spacing: 8) {
-                    ForEach(current.order, id: \.self) { index in
-                        Button { drop(index) } label: {
-                            Text(r(current.round.endings[index].text))
-                                .font(.system(size: 16, weight: .bold))
-                                .multilineTextAlignment(.leading)
-                                .foregroundStyle(Theme.text)
-                                .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
-                                .padding(.horizontal, 12)
-                                .background(Color.white.opacity(0.08))
-                                .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
-                                .contentShape(Rectangle())
+                lines(current.round, ending: writing && !trimmedDraft.isEmpty ? trimmedDraft : nil)
+                if writing {
+                    writingPanel(current.round)
+                } else {
+                    VStack(spacing: 8) {
+                        ForEach(current.order, id: \.self) { index in
+                            Button { drop(index) } label: {
+                                Text(r(current.round.endings[index].text))
+                                    .font(.system(size: 16, weight: .bold))
+                                    .multilineTextAlignment(.leading)
+                                    .foregroundStyle(Theme.text)
+                                    .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
+                                    .padding(.horizontal, 12)
+                                    .background(Color.white.opacity(0.08))
+                                    .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(PressScaleStyle())
                         }
-                        .buttonStyle(PressScaleStyle())
+                        if !dictionaryMissing {
+                            Button { startWriting() } label: {
+                                Text(bonusGiven ? "✍ Écrire ta propre fin" : "✍ Écrire ta propre fin  (+\(Int(PunchlinerBoard.writingBonus)) s)")
+                                    .font(.mono(14, weight: .heavy))
+                                    .foregroundStyle(Theme.accent)
+                                    .frame(maxWidth: .infinity, minHeight: 48)
+                                    .overlay(Rectangle().stroke(Theme.accent, style: StrokeStyle(lineWidth: 1.5, dash: [5, 4])))
+                                    .contentShape(Rectangle())
+                            }
+                            .buttonStyle(PressScaleStyle())
+                        }
                     }
+                    .padding(.top, 6)
                 }
-                .padding(.top, 6)
                 Spacer(minLength: 0)
+            }
+        }
+        .task {
+            if let loaded = await model.frenchDictionary() {
+                dictionary = loaded
+            } else {
+                dictionaryMissing = true
+                writing = false
             }
         }
         .onChange(of: scenePhase) { _, phase in
@@ -179,6 +242,52 @@ private struct PunchlinerBoard: View {
         }
     }
 
+    /// The text field, what it must rhyme with, and the buttons.
+    private func writingPanel(_ round: PunchlinerRound) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            if let target = PunchlinerEngine.rhymeTargets(for: round, render: r).first {
+                Text("Ta fin doit rimer avec « \(target) ». Le dernier mot compte.")
+                    .font(.mono(12, weight: .bold))
+                    .foregroundStyle(Theme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            TextField("", text: $draft, prompt: Text("ta fin de punchline…").foregroundStyle(Theme.faint))
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(Theme.text)
+                .tint(Theme.accent)
+                .textInputAutocapitalization(.never)
+                .submitLabel(.send)
+                .focused($fieldFocused)
+                .onSubmit { submitWritten() }
+                .padding(.horizontal, 12)
+                .frame(minHeight: 52)
+                .background(Color.white.opacity(0.08))
+                .overlay(Rectangle().stroke(fieldFocused ? Theme.accent : Theme.line, lineWidth: fieldFocused ? 2 : 1))
+                .onChange(of: draft) { _, text in
+                    if text.count > PunchlinerEngine.maxWrittenLength {
+                        draft = String(text.prefix(PunchlinerEngine.maxWrittenLength))
+                    }
+                }
+            HStack(spacing: 10) {
+                Button("← Les fins") {
+                    fieldFocused = false
+                    withAnimation(.easeOut(duration: 0.15)) { writing = false }
+                }
+                .font(.mono(13, weight: .bold))
+                .foregroundStyle(Theme.text)
+                .frame(maxWidth: .infinity, minHeight: 48)
+                .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
+                Button(dictionary == nil ? "Dictionnaire…" : "Lâcher la rime") { submitWritten() }
+                    .font(.mono(13, weight: .heavy))
+                    .foregroundStyle(Theme.background)
+                    .frame(maxWidth: .infinity, minHeight: 48)
+                    .background(Theme.accent.opacity(trimmedDraft.isEmpty || dictionary == nil ? 0.4 : 1))
+                    .disabled(trimmedDraft.isEmpty || dictionary == nil)
+            }
+        }
+        .padding(.top, 6)
+    }
+
     private func header(number: Int, timer: Bool) -> some View {
         HStack {
             Text("COUPLET \(number)/\(minigame.roundCount)").font(.mono(11, weight: .bold))
@@ -189,7 +298,7 @@ private struct PunchlinerBoard: View {
                     Text("\(Int(left.rounded(.up))) s")
                         .font(.mono(13, weight: .bold))
                         .foregroundStyle(left < 5 ? Theme.accent : Theme.text)
-                        .onChange(of: left == 0) { _, timedOut in if timedOut && pausedLeft == nil { drop(nil) } }
+                        .onChange(of: left == 0) { _, timedOut in if timedOut && pausedLeft == nil { timeUp() } }
                 }
             }
         }
@@ -202,14 +311,23 @@ private struct PunchlinerBoard: View {
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(Theme.text.opacity(0.75))
             (Text(r(round.lead) + " ").foregroundStyle(Theme.text)
-                + Text(r(ending ?? "…")).foregroundStyle(Theme.accent))
+                + Text(ending ?? "…").foregroundStyle(Theme.accent))
                 .font(.system(size: 20, weight: .heavy))
         }
         .fixedSize(horizontal: false, vertical: true)
     }
 
-    private func verdict(_ ending: PunchlinerAnswer?) -> String {
-        guard let ending else { return "TROP TARD" }
+    private func verdict(_ answered: Answered) -> String {
+        if let written = answered.written {
+            guard written.known else { return written.word.isEmpty ? "TROP TARD" : "MOT INCONNU" }
+            switch written.quality {
+            case .riche: return "RIME RICHE !"
+            case .suffisante: return "ÇA RIME"
+            case .pauvre: return "BOF…"
+            case .aucune: return "ÇA RIME PAS"
+            }
+        }
+        guard let ending = answered.ending else { return "TROP TARD" }
         switch ending.score {
         case PunchlinerEngine.bestScore...: return "PUNCHLINE !"
         case 5...: return "ÇA PASSE"
@@ -218,21 +336,58 @@ private struct PunchlinerBoard: View {
         }
     }
 
+    private func startWriting() {
+        if !bonusGiven {
+            bonusGiven = true
+            deadline = deadline.addingTimeInterval(PunchlinerBoard.writingBonus)
+        }
+        withAnimation(.easeOut(duration: 0.15)) { writing = true }
+        fieldFocused = true
+        SoundEngine.shared.play(.select)
+    }
+
+    /// The clock ran out: a line being written is dropped as it is, otherwise it's a blank.
+    private func timeUp() {
+        if writing, !trimmedDraft.isEmpty, dictionary != nil {
+            submitWritten()
+        } else {
+            drop(nil)
+        }
+    }
+
     private func drop(_ choice: Int?) {
         guard answered == nil, let current else { return }
         let number = minigame.round + 1
         guard let reaction = model.dropPunchline(choice) else { return }
         let ending = choice.map { current.round.endings[$0] }
+        fieldFocused = false
         reading = true
-        answered = Answered(number: number, round: current.round, ending: ending, reaction: reaction)
-        let best = (ending?.score ?? 0) >= PunchlinerEngine.bestScore
-        SoundEngine.shared.play(best ? .strongHit : (ending?.score ?? 0) > 0 ? .hit : .miss)
-        Haptics.shared.play(best ? .strongHit : (ending?.score ?? 0) > 0 ? .good : .miss)
+        answered = Answered(number: number, round: current.round, ending: ending, written: nil, reaction: reaction)
+        feedback(points: ending?.score ?? 0)
+    }
+
+    private func submitWritten() {
+        guard answered == nil, let current, let dictionary, !trimmedDraft.isEmpty else { return }
+        let number = minigame.round + 1
+        guard let written = model.dropWrittenPunchline(trimmedDraft, dictionary: dictionary) else { return }
+        fieldFocused = false
+        reading = true
+        answered = Answered(number: number, round: current.round, ending: nil, written: written, reaction: written.reaction)
+        feedback(points: written.points)
+    }
+
+    private func feedback(points: Int) {
+        let best = points >= PunchlinerEngine.bestScore
+        SoundEngine.shared.play(best ? .strongHit : points > 0 ? .hit : .miss)
+        Haptics.shared.play(best ? .strongHit : points > 0 ? .good : .miss)
     }
 
     private func next() {
         answered = nil
         reading = false
+        writing = false
+        draft = ""
+        bonusGiven = false
         deadline = Date().addingTimeInterval(PunchlinerBoard.seconds)
     }
 }

@@ -267,6 +267,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "goslo radio";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Pour enregistrer ta voix sur ton propre son. L'enregistrement reste sur ton téléphone.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Pour enregistrer ta carte de fin de carrière dans tes photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -302,6 +303,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "goslo radio";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.simulation-games";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Pour enregistrer ta voix sur ton propre son. L'enregistrement reste sur ton téléphone.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "Pour enregistrer ta carte de fin de carrière dans tes photos.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

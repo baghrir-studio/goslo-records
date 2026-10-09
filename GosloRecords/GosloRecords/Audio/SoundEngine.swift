@@ -29,6 +29,8 @@ final class SoundEngine {
     private var playingTrack: SoundTrack?
     private var fadeTask: Task<Void, Never>?
     private var started = false
+    /// The voice booth has the audio session: the engine stays off until it gives it back.
+    private var inBooth = false
 
     private init() {
         let defaults = UserDefaults.standard
@@ -68,14 +70,14 @@ final class SoundEngine {
 
     /// Restarts the engine after an interruption or a return to the foreground.
     func resume() {
-        guard started, !engine.isRunning else { return }
+        guard started, !engine.isRunning, !inBooth else { return }
         startEngine()
         playingTrack = nil
         setMusic(wantedTrack)
     }
 
     private func startEngine() {
-        guard !engine.isRunning else { return }
+        guard !engine.isRunning, !inBooth else { return }
         try? engine.start()
     }
 
@@ -103,7 +105,7 @@ final class SoundEngine {
     /// Switches loop with a crossfade. nil = silence.
     func setMusic(_ track: SoundTrack?) {
         wantedTrack = track
-        guard started, musicEnabled else { return }
+        guard started, musicEnabled, !inBooth else { return }
         guard track != playingTrack else { return }
         guard let track else {
             fade(from: musicPlayers[activeMusic], to: nil)
@@ -145,7 +147,7 @@ final class SoundEngine {
     // MARK: Effects
 
     func play(_ effect: SoundEffect) {
-        guard started, effectsEnabled, let buffer = effects[effect] else { return }
+        guard started, effectsEnabled, !inBooth, let buffer = effects[effect] else { return }
         startEngine()
         let player: AVAudioPlayerNode
         if effect.isTick {
@@ -165,7 +167,7 @@ final class SoundEngine {
     /// Returns that moment: the notes on screen run on the same clock.
     func playSong(_ samples: [Float]) -> Date {
         let lead = 0.15
-        guard started, musicEnabled || effectsEnabled, let buffer = buffer(samples) else {
+        guard started, !inBooth, musicEnabled || effectsEnabled, let buffer = buffer(samples) else {
             return Date().addingTimeInterval(lead)
         }
         startEngine()
@@ -190,6 +192,27 @@ final class SoundEngine {
     func restoreMusic() {
         playingTrack = nil
         setMusic(wantedTrack)
+    }
+
+    // MARK: Voice booth
+
+    /// The voice booth takes the audio session over (to record): the loop fades, the engine stops.
+    func suspendForBooth() {
+        silenceMusic()
+        inBooth = true
+        songPlayer.stop()
+        if engine.isRunning { engine.stop() }
+    }
+
+    /// Back from the voice booth: the game's own session (ambient), the engine and the loop come back.
+    func resumeAfterBooth() {
+        inBooth = false
+        let session = AVAudioSession.sharedInstance()
+        try? session.setCategory(.ambient, options: [.mixWithOthers])
+        try? session.setActive(true)
+        guard started else { return }
+        startEngine()
+        restoreMusic()
     }
 
     // MARK: Settings
