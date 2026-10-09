@@ -16,6 +16,7 @@ struct CarnetView: View {
 
     @State private var tab: Tab = .quetes
     @State private var showTournament = false
+    @State private var showCrew = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -28,6 +29,14 @@ struct CarnetView: View {
                     Label("Tournoi", systemImage: "trophy.fill")
                         .font(.mono(12, weight: .bold))
                         .foregroundStyle(Color(red: 1, green: 0.85, blue: 0.3))
+                }
+                .padding(.trailing, 14)
+                Button {
+                    showCrew = true
+                } label: {
+                    Label("Crew", systemImage: "person.3.fill")
+                        .font(.mono(12, weight: .bold))
+                        .foregroundStyle(Theme.accent)
                 }
                 .padding(.trailing, 14)
                 Button("Fermer") { dismiss() }
@@ -75,6 +84,12 @@ struct CarnetView: View {
             .scrollIndicators(.hidden)
         }
         .foregroundStyle(Theme.text)
+        .sheet(isPresented: $showCrew) {
+            CrewView()
+                .environment(model)
+                .presentationBackground(Theme.background)
+                .presentationDragIndicator(.visible)
+        }
         .sheet(isPresented: $showTournament) {
             // Challenging a boss closes the notebook too: the clash starts on the map.
             TournamentView { id in

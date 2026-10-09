@@ -71,6 +71,8 @@ struct GameState: Codable, Equatable {
     var gateYearUses: [String: Int] = [:]
     /// The gated source the current event came from (the bench scales its rewards with progress).
     var currentGate: Gate?
+    /// Crew cards earned and the active crew (`Crew`).
+    var crew = CrewState()
     /// The finale is played: the player picks between retiring as a legend and carrying on.
     var finaleChoicePending = false
     var pendingFollowUp: String?
@@ -129,6 +131,7 @@ struct GameState: Codable, Equatable {
         case seenEvents, talkedAt, smallTalk, hooks, seenVerses, albums, freeCareer, finaleChoicePending
         case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank, decor, visitsThisYear, wardrobe, placed
         case gatePeriodUses, gateYearUses, currentGate
+        case crew
     }
 
     /// Tolerant decoding: fields added in later versions get their default value,
@@ -195,6 +198,9 @@ struct GameState: Codable, Equatable {
         gatePeriodUses = try c.decodeIfPresent([String: Int].self, forKey: .gatePeriodUses) ?? [:]
         gateYearUses = try c.decodeIfPresent([String: Int].self, forKey: .gateYearUses) ?? [:]
         currentGate = try c.decodeIfPresent(Gate.self, forKey: .currentGate)
+        // Saves from before the crew get the cards they already earned.
+        crew = try c.decodeIfPresent(CrewState.self, forKey: .crew)
+            ?? CrewState.retroactive(flags: flags, completedQuests: completedQuests, feats: singles.compactMap(\.feat))
     }
 
     /// Year 1 to 10 (no cap in a free career).

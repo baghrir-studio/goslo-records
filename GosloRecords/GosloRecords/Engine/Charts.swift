@@ -118,6 +118,7 @@ extension GameEngine {
             state.counters.increment(.featurings)
             let applied = state.changeRelation(withFeat, by: 5)
             if applied != 0 { outcome.relationChanges[withFeat, default: 0] += applied }
+            grantCrewCard(id: withFeat, from: .feat, in: &state, outcome: &outcome)
         }
         outcome.add(levelUps: state.skills.gain([.flow: 10, .plume: 5]))
         return finishAction(outcome, in: &state)
@@ -171,7 +172,9 @@ extension GameEngine {
             state.seasonBestRank = min(state.seasonBestRank ?? rank, rank)
             let points = ChartRules.size + 1 - rank
             let tour = rank <= 3 && ArtistLevel.unlocks(.tournee, in: state) ? 2 : 1
-            outcome.add(state.stats.apply([.streams: max(1, points / 3), .argent: max(1, points / 4) * tour]))
+            // A featured crew card pushes the streams (`CrewPerk.featStreams`).
+            let streams = Crew.boosted(max(1, points / 3), by: Crew.featBonus(single.feat, in: state))
+            outcome.add(state.stats.apply([.streams: streams, .argent: max(1, points / 4) * tour]))
             ArtistLevel.gain(rank == 1 ? 30 : 8, in: &state, outcome: &outcome)
             let move = previous.map { $0 > rank ? " ▲\($0 - rank)" : ($0 < rank ? " ▼\(rank - $0)" : " =") } ?? " (entrée)"
             outcome.notes.append("Top goslo radio : « \(single.title) » n°\(rank)\(move).")

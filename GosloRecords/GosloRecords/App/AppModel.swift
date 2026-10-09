@@ -148,6 +148,8 @@ final class AppModel {
     private(set) var inspectedDecorId: Int?
     /// A big moment to celebrate at the top of the screen (level up, n°1, challenge).
     private(set) var celebration: String?
+    /// A crew card just earned (or levelled up), revealed with a flip over the screen.
+    private(set) var cardReveal: CrewGain?
     /// The daily clash being played (the career waits in `careerAside`, untouched).
     private(set) var dailyClash: DailyChallenge?
     private var careerAside: GameState?
@@ -448,6 +450,9 @@ final class AppModel {
 
     /// Shows the biggest moment of an outcome as a banner, with a fanfare.
     private func celebrate(_ outcome: TurnOutcome) {
+        if let gain = outcome.crewCards.first(where: \.isNew) ?? outcome.crewCards.first(where: \.leveledUp) {
+            revealCard(gain)
+        }
         let notes = outcome.notes
         let moment = notes.first { $0.hasPrefix("NIVEAU") }
             ?? notes.first { $0.contains("n°1") }.map { _ in "N°1 DU TOP GOSLO RADIO !" }
@@ -460,6 +465,29 @@ final class AppModel {
             try? await Task.sleep(for: .seconds(2.6))
             withAnimation(.easeIn(duration: 0.3)) { if celebration == moment { celebration = nil } }
         }
+    }
+
+    /// « Nouvelle carte ! »: the card flips over the screen for a few seconds (a tap closes it).
+    private func revealCard(_ gain: CrewGain) {
+        sound.play(.quest)
+        Haptics.shared.play(.good)
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) { cardReveal = gain }
+        Task {
+            try? await Task.sleep(for: .seconds(4.5))
+            withAnimation(.easeIn(duration: 0.3)) { if cardReveal == gain { cardReveal = nil } }
+        }
+    }
+
+    func dismissCardReveal() {
+        withAnimation(.easeIn(duration: 0.2)) { cardReveal = nil }
+    }
+
+    /// « Mon crew »: puts a card in the active crew, or takes it out.
+    func setCrewMember(_ id: String, active: Bool) {
+        guard var current = state, engine.setCrewMember(id, active: active, in: &current) else { return }
+        state = current
+        sound.play(.select)
+        persist()
     }
 
     // MARK: - Interactions

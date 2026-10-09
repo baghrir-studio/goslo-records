@@ -100,6 +100,11 @@ enum Economy {
             effects[.argent, default: 0] += 3
             notes.append("Ton respect paie : les salles te bookent, le cachet tombe.")
         }
+        let crew = Crew.periodEffects(in: state)
+        if !crew.isEmpty {
+            effects.merge(crew, uniquingKeysWith: +)
+            notes.append("Ton crew assure : " + GameEngine.bonusText(crew) + ".")
+        }
         if stats.mental < burnout {
             notes.append("Burn-out : tu n'as la force que pour une seule chose la prochaine fois.")
         }
