@@ -421,6 +421,11 @@ struct GameEngine {
         state.currentGate = nil
         var effects = tired < 1 ? choice.effects.mapValues { $0 > 0 ? max(1, Int((Double($0) * tired).rounded())) : $0 } : choice.effects
         effects = Gates.scaled(effects, by: scale)
+        // The lawyer from the shop (`ShopPerk.avocat`) takes the losses of the next choice that has some.
+        if effects.values.contains(where: { $0 < 0 }), usePerk(.avocat, in: &state) {
+            effects = effects.filter { $0.value > 0 }
+            outcome.notes.append("Ton avocat a passé deux coups de fil : cette fois, ça ne te coûte rien.")
+        }
         outcome.add(state.applyStats(effects))
         if tired < 1, choice.effects.values.contains(where: { $0 > 0 }) {
             outcome.notes.append("Ici, tout le monde t'a déjà vu cette année : ça rapporte moins. Va voir ailleurs.")
@@ -1111,6 +1116,9 @@ struct GameEngine {
         return true
     }
 
+    /// The vocal coach's session (`ShopPerk.coachVocal`) lasts one clash.
+    static let coachSpentLine = "Les conseils du coach vocal ont tenu tout le clash. Pour le prochain, c'est sans filet."
+
     static let wildRewards = (win: [StatKind.streams: 2, .credibilite: 1], lose: [StatKind.mental: -5])
     static let wildXP = (win: 25, lose: 8)
 
@@ -1126,7 +1134,8 @@ struct GameEngine {
     /// Clash levels for the running clash, boss experience included.
     func clashLevels(for clash: ClashState, in state: GameState) -> (Skill) -> Int {
         let base = clashLevels(in: state)
-        let bonus = clash.isBoss ? bossExperience(against: clash.opponentId, in: state) : 0
+        let bonus = (clash.isBoss ? bossExperience(against: clash.opponentId, in: state) : 0)
+            + (hasPerk(.coachVocal, in: state) ? 1 : 0)
         return { skill in min(Skills.maxLevel, base(skill) + bonus) }
     }
 
@@ -1138,6 +1147,7 @@ struct GameEngine {
         let won = clash.playerWon
         let result = won ? clash.spec.win : clash.spec.lose
         var outcome = TurnOutcome(consequence: result.consequence)
+        if usePerk(.coachVocal, in: &state) { outcome.notes.append(GameEngine.coachSpentLine) }
         outcome.clash = clash
         outcome.add(state.applyStats(result.effects))
         state.flags.formUnion(result.setFlags)
@@ -1170,6 +1180,7 @@ struct GameEngine {
         let won = clash.playerWon
         var outcome = TurnOutcome(consequence: won ? clash.spec.win.consequence : clash.spec.lose.consequence)
         outcome.clash = clash
+        if usePerk(.coachVocal, in: &state) { outcome.notes.append(GameEngine.coachSpentLine) }
         // Only the period's first wins pay (`Gate.terrain`); after that a win still counts for the story
         // and the challenges. A defeat costs morale, so it doesn't need a cap: its small XP is how you learn.
         let paid = won ? useGate(.terrain, in: &state) : true

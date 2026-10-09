@@ -201,6 +201,8 @@ enum HeroSprite {
             for y in [28, 31, 34] {
                 c.fill(11, y, 28, y, p.topShade); c.fill(6, y, 10, y, p.topShade); c.fill(29, y, 33, y, p.topShade.shaded(0.85))
             }
+        case .djellaba:
+            djellabaRobe(c, p, leftUp: leftUp, rightUp: rightUp)
         case .hoodie, .jacket:
             break
         }
@@ -211,13 +213,14 @@ enum HeroSprite {
             switch look.outfit {
             case .jersey: number(c, p)
             case .puffer: c.fill(15, 21, 24, 23, p.top)
+            case .djellaba: if look.hat != .hood { qob(c, p) }
             case .hoodie, .jacket: break
             }
             return
         }
         c.fill(16, 23, 23, 24, p.topShade)
         c.fill(17, 23, 22, 23, p.skinShade)
-        if look.hat == .hood {
+        if look.hat == .hood && look.outfit != .djellaba {
             c.fill(17, 25, 17, 30, p.white); c.dot(17, 31, p.accent)
             c.fill(22, 25, 22, 30, p.white); c.dot(22, 31, p.accent)
         }
@@ -241,6 +244,14 @@ enum HeroSprite {
             c.fill(15, 21, 24, 24, p.top); c.fill(22, 21, 24, 24, p.topShade)
             c.fill(19, 25, 20, 36, p.topShade)
             c.dot(19, 26, p.accent)
+        case .djellaba:
+            // The hood gathered behind the neck shows on each side; a short slit; the green star on the chest.
+            if look.hat != .hood {
+                c.fill(13, 21, 16, 24, p.topShade); c.fill(23, 21, 26, 24, p.topShade.shaded(0.85))
+                c.fill(14, 21, 15, 22, p.top)
+            }
+            c.fill(19, 24, 20, 25, p.topShade)
+            moroccanStar(c, x: 16, y: 27)
         }
         if look.chain {
             for (x, y) in [(15, 24), (16, 26), (17, 27), (18, 28), (21, 28), (22, 27), (23, 26), (24, 24)] {
@@ -258,6 +269,44 @@ enum HeroSprite {
             for (dy, row) in rows.enumerated() {
                 for (dx, mark) in row.enumerated() where mark == "#" { c.dot(15 + index * 5 + dx, 27 + dy, p.white) }
             }
+        }
+    }
+
+    // MARK: Djellaba
+
+    private static let djellabaGreen = PixelColor(hex: Wardrobe.djellabaGreen)
+
+    /// The djellaba's robe, from the waist down to the ankles, a little flared. The hem lifts on the side of the
+    /// foot that steps (the shoe peeks out under it); a fold and a row of small buttons run down the middle.
+    private static func djellabaRobe(_ c: PixelCanvas, _ p: Palette, leftUp: Bool, rightUp: Bool) {
+        c.fill(11, 36, 28, 41, p.top)
+        c.fill(10, 42, 29, 49, p.top)
+        c.fill(26, 36, 28, 41, p.topShade); c.fill(26, 42, 29, 49, p.topShade)
+        c.fill(11, 36, 11, 41, p.topLight); c.fill(10, 42, 10, 48, p.topLight)
+        c.fill(19, 38, 19, 47, p.topShade)
+        // The hem's trim: the lifted side rises with the step.
+        c.fill(10, leftUp ? 47 : 48, 19, leftUp ? 47 : 48, p.topShade.shaded(0.85))
+        c.fill(20, rightUp ? 47 : 48, 29, rightUp ? 47 : 48, p.topShade.shaded(0.85))
+        if leftUp { c.fill(10, 49, 19, 49, p.topShade) }
+        if rightUp { c.fill(20, 49, 29, 49, p.topShade) }
+    }
+
+    /// The pointed hood (qob) hanging down the back, a green tassel at its tip.
+    private static func qob(_ c: PixelCanvas, _ p: Palette) {
+        for (index, y) in (21...36).enumerated() {
+            let half = max(0, 6 - index * 6 / 15)
+            c.fill(19 - half, y, 20 + half, y, p.topShade)
+            c.dot(19 - half, y, p.top)
+        }
+        c.fill(16, 21, 23, 23, p.topShade.shaded(0.7))  // The opening, in shadow.
+        c.fill(19, 37, 20, 39, djellabaGreen); c.dot(19, 40, djellabaGreen); c.dot(20, 40, djellabaGreen.shaded(0.75))
+    }
+
+    /// The flag's green pentagram, 7×7, top left corner at (x, y).
+    private static func moroccanStar(_ c: PixelCanvas, x: Int, y: Int) {
+        let rows = ["...#...", "...#...", "#######", ".##.##.", "..###..", ".##.##.", ".#...#."]
+        for (dy, row) in rows.enumerated() {
+            for (dx, mark) in row.enumerated() where mark == "#" { c.dot(x + dx, y + dy, djellabaGreen) }
         }
     }
 

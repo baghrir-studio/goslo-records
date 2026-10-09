@@ -20,6 +20,8 @@ enum CharacterSprite {
         }
     }
 
+    private static let djellabaGreen = PixelColor(hex: Wardrobe.djellabaGreen)
+
     private struct Palette {
         let skin, hair, hairShade, top, topShade, bottom, bottomShade, shoes, accent, accentShade: PixelColor
         let eye = PixelColor(hex: "#141418")
@@ -74,6 +76,14 @@ enum CharacterSprite {
             c.fill(12, 9, 12, rightArmEnd, p.skin)
             c.dot(7, 10, PixelColor(hex: "#f2efe8"))
         case .puffer: c.fill(4, 10, 11, 10, p.topShade)
+        case .djellaba:
+            // The robe down to the ankles: the stepping foot peeks out under the hem. The green star on the chest.
+            c.fill(4, 12, 11, 14, p.top)
+            c.fill(11, 12, 11, 14, p.topShade)
+            c.fill(4, 14, 11, 14, p.topShade)
+            if leftUp { c.fill(5, 14, 6, 14, p.shoes) }
+            if rightUp { c.fill(9, 14, 10, 14, p.shoes) }
+            c.fill(7, 9, 8, 10, djellabaGreen)
         }
         if look.chain {
             c.fill(6, 9, 9, 9, p.accent)
@@ -216,6 +226,14 @@ enum CharacterSprite {
             }
         }
         c.fill(7, 8, 8, 8, look.hat == .hood ? p.topShade : p.skin)
+        if look.outfit == .djellaba {
+            // No star on the back: the pointed hood (qob) hangs there, a green tassel at its tip.
+            c.fill(7, 9, 8, 10, p.top)
+            if look.hat != .hood {
+                c.fill(5, 8, 10, 8, p.topShade); c.fill(6, 9, 9, 9, p.topShade); c.fill(7, 10, 8, 10, p.topShade)
+                c.fill(7, 11, 8, 11, djellabaGreen)
+            }
+        }
         if look.headphones {
             c.fill(4, 1, 11, 1, p.gear)
             c.fill(3, 3, 4, 5, p.accent)
@@ -253,6 +271,15 @@ enum CharacterSprite {
         let armOffset = frame == 1 ? 1 : (frame == 2 ? -1 : 0)
         c.fill(7 + armOffset, 9, 8 + armOffset, 11, p.topShade)
         c.dot(8 + armOffset, 12, p.skin)
+        if look.outfit == .djellaba {
+            // The robe hides the legs and its hem swings with the stride; the hood on the back, the star in front.
+            c.fill(5, 12, 10, 14, p.top)
+            c.fill(5, 12, 5, 14, p.topShade)
+            if frame == 1 { c.dot(11, 14, p.top) } else if frame == 2 { c.dot(4, 14, p.top) }
+            c.dot(8 + armOffset, 12, p.skin)
+            if look.hat != .hood { c.fill(4, 8, 4, 10, p.topShade); c.dot(4, 11, djellabaGreen) }
+            c.dot(10, 9, djellabaGreen)
+        }
         if look.chain { c.fill(9, 9, 10, 9, p.accent) }
 
         // Head in profile.

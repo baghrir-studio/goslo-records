@@ -302,7 +302,7 @@ struct CreationView: View {
             }
             ChoiceRow(options: CharacterLook.HairStyle.allCases, selected: look.hairStyle, label: \.label) { hairStyle = $0 }
             ChoiceRow(options: CharacterLook.Hat.allCases, selected: look.hat, label: \.label) { hat = $0 }
-            ChoiceRow(options: CharacterLook.Outfit.allCases, selected: look.outfit, label: \.label) { outfit = $0 }
+            ChoiceRow(options: CharacterLook.Outfit.allCases.filter(\.isPickable), selected: look.outfit, label: \.label) { outfit = $0 }
             HStack(spacing: 12) {
                 ForEach(Rapper.outfitColors.indices, id: \.self) { index in
                     let colors = Rapper.outfitColors[index]
@@ -454,6 +454,7 @@ private extension CharacterLook.Outfit {
         case .jacket: "Veste"
         case .jersey: "Maillot"
         case .puffer: "Doudoune"
+        case .djellaba: "Djellaba"
         }
     }
 }

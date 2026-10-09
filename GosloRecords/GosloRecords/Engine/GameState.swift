@@ -207,7 +207,7 @@ struct GameState: Codable, Equatable {
     var careerYear: Int { turn / GameState.turnsPerYear + 1 }
     /// How far into the current year (0…1), actions included.
     var yearProgress: Double {
-        let done = (turn % GameState.turnsPerYear) * GameState.actionsPerTurn + (GameState.actionsPerTurn - actionsLeft)
+        let done = (turn % GameState.turnsPerYear) * GameState.actionsPerTurn + (GameState.actionsPerTurn - min(actionsLeft, GameState.actionsPerTurn))
         return min(1, max(0, Double(done) / Double(GameState.turnsPerYear * GameState.actionsPerTurn)))
     }
     /// This turn starts a new year (the year card shows).

@@ -60,6 +60,60 @@ enum ShopIcons {
             p.circle(cx: 11, cy: 7, radius: 1, metal)
             p.circle(cx: 11, cy: 11, radius: 2, metal)
             p.dot(7, 2, gold); p.dot(8, 1, gold)
+        case "hammam":
+            // A brass bowl of water, a black-soap jar and the steam rising.
+            p.fill(2, 10, 13, 12, c("#c9a63a"))
+            p.fill(3, 13, 12, 14, c("#9a7a2a"))
+            p.fill(3, 9, 12, 9, c("#5ab4e0"))
+            p.fill(11, 6, 14, 9, c("#3a2a1e")); p.fill(11, 5, 14, 5, c("#6b5a3a"))
+            for (x, y) in [(4, 7), (5, 6), (4, 5), (5, 4), (8, 7), (9, 6), (8, 5), (9, 4), (8, 3)] { p.dot(x, y, c("#e8e8f0")) }
+        case "coach_vocal":
+            // A microphone and the sound waves coming out of it.
+            p.circle(cx: 5, cy: 5, radius: 3, metal)
+            p.fill(4, 4, 6, 6, c("#8a8f9c"))
+            p.fill(4, 8, 6, 14, dark)
+            for (x, y) in [(10, 3), (11, 4), (11, 5), (11, 6), (10, 7), (13, 2), (14, 3), (14, 4), (14, 5), (14, 6), (14, 7), (13, 8)] {
+                p.dot(x, y, gold)
+            }
+        case "attache_presse":
+            // A folded newspaper with your face on the front page.
+            p.fill(2, 2, 13, 14, c("#efe6d2"))
+            p.fill(3, 3, 12, 4, dark)
+            p.fill(3, 6, 7, 10, c("#c68642")); p.fill(3, 6, 7, 7, dark)
+            for y in [6, 8, 10, 12] { p.fill(9, y, 12, y, c("#8a8f9c")) }
+            p.fill(3, 12, 7, 12, c("#8a8f9c"))
+            p.fill(13, 3, 13, 14, c("#c9bfa8"))
+        case "masterclass":
+            // A notebook, a quill and the gold star of the teacher.
+            p.fill(2, 4, 11, 14, c("#2e4a7a"))
+            p.fill(3, 5, 10, 13, c("#efe6d2"))
+            for y in [7, 9, 11] { p.fill(4, y, 9, y, c("#8a8f9c")) }
+            p.fill(12, 1, 13, 2, c("#f0eee8")); p.fill(11, 3, 12, 6, c("#f0eee8")); p.fill(10, 7, 10, 10, dark)
+            p.dot(4, 2, gold); p.fill(3, 3, 5, 3, gold); p.dot(4, 4, gold)
+        case "avocat":
+            // The scales of justice.
+            p.fill(7, 2, 8, 13, gold)
+            p.fill(3, 3, 12, 3, gold)
+            p.fill(5, 14, 10, 14, gold)
+            p.fill(2, 4, 2, 7, metal); p.fill(13, 4, 13, 7, metal)
+            p.fill(1, 8, 4, 9, c("#d9a92e")); p.fill(11, 8, 14, 9, c("#d9a92e"))
+        case "clip_real":
+            // A clapperboard.
+            p.fill(2, 6, 13, 14, dark)
+            p.fill(2, 3, 13, 5, c("#f0eee8"))
+            for x in stride(from: 3, to: 13, by: 3) { p.fill(x, 3, x + 1, 5, dark) }
+            p.fill(4, 8, 11, 8, c("#f0eee8")); p.fill(4, 11, 8, 11, c("#8a8f9c"))
+            p.dot(11, 11, red)
+        case "manager":
+            // The diary and the phone that never stops ringing.
+            p.fill(1, 3, 9, 14, c("#5a2e2e"))
+            p.fill(2, 4, 8, 13, c("#efe6d2"))
+            p.fill(2, 6, 8, 6, red)
+            for y in [8, 10, 12] { p.fill(3, y, 7, y, c("#8a8f9c")) }
+            p.fill(10, 6, 14, 14, dark)
+            p.fill(11, 7, 13, 12, c("#5ef2ff"))
+            p.dot(12, 13, metal)
+            p.dot(13, 3, gold); p.dot(14, 2, gold); p.dot(11, 3, gold)
         case "radio_goslo":
             p.fill(1, 6, 14, 14, dark)
             p.fill(2, 7, 13, 13, red)

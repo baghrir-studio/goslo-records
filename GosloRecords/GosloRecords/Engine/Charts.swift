@@ -100,13 +100,19 @@ extension GameEngine {
         guard studioRefusal(in: state) == nil, let material = singleCandidates(in: state).first(where: { $0.id == sourceId }) else {
             throw GameEngineError.cannotRecord
         }
-        let withClip = clip && ArtistLevel.unlocks(.clip, in: state)
+        // The director booked in the shop (`ShopPerk.clipReal`) shoots the clip for free, and it shows.
+        let director = hasPerk(.clipReal, in: state)
+        let withClip = director || (clip && ArtistLevel.unlocks(.clip, in: state))
         let withFeat = feat.flatMap { id in ArtistLevel.unlocks(.feat, in: state) ? featCandidates(in: state).first { $0.id == id }?.id : nil }
-        let price = ChartRules.studioPrice + (withClip ? ChartRules.clipPrice : 0)
+        let price = ChartRules.studioPrice + (withClip && !director ? ChartRules.clipPrice : 0)
         guard state.stats.argent > price else { throw GameEngineError.cannotRecord }
 
         state.actionsLeft -= 1
-        let quality = ChartRules.quality(material: material.quality, perfectTakes: perfectTakes, feat: withFeat != nil)
+        var quality = ChartRules.quality(material: material.quality, perfectTakes: perfectTakes, feat: withFeat != nil)
+        if director {
+            usePerk(.clipReal, in: &state)
+            quality = min(10, quality + 1)
+        }
         let single = Single(id: state.singles.count + 1, title: material.title, sourceId: material.id, quality: quality,
                             releasedTurn: state.turn, clip: withClip, feat: withFeat)
         state.singles.append(single)
@@ -114,6 +120,7 @@ extension GameEngine {
                                   : quality >= 5 ? "« \(single.title) » est sorti. Le quartier le partage, on verra où il entre dans le Top."
                                   : "« \(single.title) » est sorti… Fred n'a rien dit. Ce n'est jamais bon signe.")
         outcome.add(state.stats.apply([.argent: -price]))
+        if director { outcome.notes.append("Ton réal a tourné le clip : drone, figurants, étalonnage. Le single a de la gueule.") }
         if let withFeat {
             state.counters.increment(.featurings)
             let applied = state.changeRelation(withFeat, by: 5)

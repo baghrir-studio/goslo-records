@@ -4,7 +4,12 @@ import Foundation
 struct CharacterLook: Codable, Hashable {
     enum HairStyle: String, Codable, CaseIterable { case short, long, bald, puff, braids, fade, bun }
     enum Hat: String, Codable, CaseIterable { case none, cap, beanie, hood, bucket, bandana }
-    enum Outfit: String, Codable, CaseIterable { case hoodie, jacket, jersey, puffer }
+    /// The djellaba only comes from the shop (`Wardrobe`): it is not offered at creation (`isPickable`).
+    enum Outfit: String, Codable, CaseIterable {
+        case hoodie, jacket, jersey, puffer, djellaba
+
+        var isPickable: Bool { self != .djellaba }
+    }
     /// Body shape, picked at creation (the sprites widen or narrow everything below the head).
     enum Build: String, Codable, CaseIterable { case slim, regular, strong, heavy }
 
