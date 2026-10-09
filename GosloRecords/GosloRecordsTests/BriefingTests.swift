@@ -33,12 +33,14 @@ final class BriefingTests: XCTestCase {
         let period = try XCTUnwrap(outcome.period)
         XCTAssertEqual(period.rent, Difficulty.normal.rent)
         XCTAssertEqual(period.upkeep[.argent], -Difficulty.normal.rent, "respect moyen : ni booking ni malus")
-        XCTAssertEqual(period.income[.argent], 2 + 3, "food truck + goslo radio")
+        XCTAssertEqual(period.income[.argent], 3, "goslo radio (l'argent du food truck attend sur place)")
+        XCTAssertEqual(state.placed[0].stored, 2)
         XCTAssertEqual(period.income[.credibilite], 1, "goslo radio")
         XCTAssertGreaterThan(period.chart[.argent] ?? 0, 0, "le Top paie")
         XCTAssertEqual(period.chartNotes.count, 1)
         XCTAssertTrue(period.chartNotes[0].contains("Tube"))
-        XCTAssertEqual(period.earned, 5 + (period.chart[.argent] ?? 0))
+        XCTAssertEqual(period.earned, 3 + (period.chart[.argent] ?? 0))
+        XCTAssertTrue(engine.periodObjectives(in: state).contains("Ramasse 2 d'argent dans tes bâtiments"))
         XCTAssertEqual(period.net[.argent], period.earned - period.rent)
     }
 

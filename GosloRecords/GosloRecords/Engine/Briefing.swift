@@ -57,8 +57,11 @@ extension GameEngine {
             "\(challenge.label) (\(Challenges.progress(challenge, in: state))/\(Challenges.goal(challenge)))"
         }
         let money = savingGoal(in: state).map { ["\($0.name) : encore \($0.missing) d'argent"] } ?? []
+        // Money waiting in your buildings: go and pick it up before it stops piling up.
+        let waiting = state.placed.reduce(0) { $0 + $1.stored }
+        let pickup = waiting > 0 ? ["Ramasse \(waiting) d'argent dans tes bâtiments"] : []
         // One of each first, then more challenges if there's room.
-        var picked = story + challenges.prefix(1) + money
+        var picked = story + pickup + challenges.prefix(1) + money
         picked += challenges.dropFirst()
         return Array(picked.prefix(PeriodBriefing.maxObjectives))
     }
