@@ -35,6 +35,11 @@ struct TurnOutcome: Equatable {
     /// What the end of the turn brought (bookings, burn-out…), shown under the consequence.
     var notes: [String] = []
     var ending: Ending?
+    /// Trophies won or lost by a clash (nil: not a ranked clash).
+    var trophies: Int?
+    /// Victory chest granted, and league reached for the first time.
+    var chest: ChestRarity?
+    var league: League?
 
     mutating func add(_ applied: [StatKind: Int]) {
         deltas.merge(applied, uniquingKeysWith: +)
@@ -1146,7 +1151,12 @@ struct GameEngine {
         guard let clash = state.clash else { throw GameEngineError.noClash }
         guard clash.isOver else { throw GameEngineError.clashNotOver }
         if clash.isWild { return finishWildClash(clash, in: &state) }
-        if isRaidClash(clash) { return finishRaidClash(clash, in: &state) }
+        if isRaidClash(clash) {
+            // A raid is one at a time: its win is ranked and can drop a chest.
+            var outcome = finishRaidClash(clash, in: &state)
+            applyLadder(clash, ranked: true, in: &state, outcome: &outcome)
+            return outcome
+        }
 
         let won = clash.playerWon
         let result = won ? clash.spec.win : clash.spec.lose
@@ -1163,6 +1173,7 @@ struct GameEngine {
             grantCrewCard(id: clash.opponentId, from: .clash, in: &state, outcome: &outcome)
             if let boss = tournamentBoss(for: clash) { applyTournamentWin(boss, &outcome, in: &state) }
         }
+        applyLadder(clash, ranked: true, in: &state, outcome: &outcome)
         let penalty = won ? GameEngine.clashRelationPenalty.win : GameEngine.clashRelationPenalty.lose
         let applied = state.changeRelation(clash.opponentId, by: penalty)
         if applied != 0 { outcome.relationChanges[clash.opponentId] = applied }
@@ -1188,6 +1199,8 @@ struct GameEngine {
         if usePerk(.coachVocal, in: &state) { outcome.notes.append(GameEngine.coachSpentLine) }
         // Only the period's first wins pay (`Gate.terrain`); after that a win still counts for the story
         // and the challenges. A defeat costs morale, so it doesn't need a cap: its small XP is how you learn.
+        // Past the paid share, the duel is a friendly: no trophies either way, no chest.
+        let ranked = gateStatus(.terrain, in: state).isOpen
         let paid = won ? useGate(.terrain, in: &state) : true
         if won {
             if paid {
@@ -1207,6 +1220,7 @@ struct GameEngine {
         } else {
             outcome.notes.append(Gate.terrain.spentLine(yearly: false))
         }
+        applyLadder(clash, ranked: ranked, in: &state, outcome: &outcome)
         state.clash = nil
         applyQuestProgress(&outcome, in: &state)
         applyStoryProgress(&outcome, in: &state)

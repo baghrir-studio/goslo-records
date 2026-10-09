@@ -338,6 +338,18 @@ struct ConsequenceBox: View {
         + outcome.levelUps.map { ("\($0.label.uppercased()) NIV. \(state.skills.level($0)) ↑", true) }
         + outcome.gainedItems.map { ("OBJET : \($0.uppercased())", true) }
         + outcome.unlockedTechniques.map { ("TECHNIQUE : \($0.uppercased())", true) }
+        + ladderChips
+    }
+
+    /// Trophies won or lost (with the new total) and the chest won, on a clash result.
+    private var ladderChips: [(text: String, positive: Bool)] {
+        var chips: [(text: String, positive: Bool)] = []
+        if let trophies = outcome.trophies, trophies != 0 {
+            chips.append(("TROPHÉES \(trophies > 0 ? "+" : "−")\(abs(trophies)) · \(state.trophies)", trophies > 0))
+        }
+        if let chest = outcome.chest { chips.append(("COFFRE \(chest.name.uppercased())", true)) }
+        if let league = outcome.league { chips.append(("LIGUE \(league.name.uppercased())", true)) }
+        return chips
     }
 }
 

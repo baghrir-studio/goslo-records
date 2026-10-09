@@ -4,6 +4,7 @@ import SwiftUI
 struct GameView: View {
     @Environment(AppModel.self) private var model
     @State private var showCarnet = false
+    @State private var showChests = false
     @State private var showShop = false
     @State private var showStudio = false
     @State private var showCalibration = false
@@ -122,6 +123,12 @@ struct GameView: View {
             }
             .sheet(isPresented: $showShop) {
                 ShopView()
+                    .environment(model)
+                    .presentationBackground(Theme.background)
+                    .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $showChests) {
+                ChestsView()
                     .environment(model)
                     .presentationBackground(Theme.background)
                     .presentationDragIndicator(.visible)
@@ -302,8 +309,12 @@ struct GameView: View {
                     DPad { model.hold($0) }
                     Spacer()
                     if model.placingDecor == nil {
-                        ActionButton(label: "A") { model.interact() }
-                            .padding(.bottom, 20)
+                        VStack(alignment: .trailing, spacing: 14) {
+                            ChestsButton(state: state, ready: model.hasReadyChest) { showChests = true }
+                                .disabled(!model.canMove)
+                            ActionButton(label: "A") { model.interact() }
+                                .padding(.bottom, 20)
+                        }
                     }
                 }
             }
@@ -334,6 +345,46 @@ struct GameView: View {
         case .clash, .interview, .concert, .negotiation, .writing, .minigame, .cinematic:
             EmptyView()
         }
+    }
+}
+
+/// The victory chests and the league, next to the A button: the best chest waiting, the league badge and
+/// the trophies, and a "!" when a chest is ready to open.
+private struct ChestsButton: View {
+    let state: GameState
+    let ready: Bool
+    let action: () -> Void
+    @State private var pulse = false
+
+    var body: some View {
+        let shown = state.chests.max { $0.rarity.unlockPeriods < $1.rarity.unlockPeriods }
+        Button(action: action) {
+            VStack(spacing: 3) {
+                PixelImage(ChestArt.chest(shown?.rarity ?? .bronze), width: 34)
+                    .opacity(shown == nil ? 0.35 : 1)
+                LeagueBadge(league: state.league, trophies: state.trophies, size: 13)
+            }
+            .padding(.horizontal, 6)
+            .padding(.vertical, 5)
+            .background(Color.black.opacity(0.6))
+            .overlay(Rectangle().stroke(ready ? Color.green : Color.white.opacity(0.3), lineWidth: ready ? 2 : 1))
+            .overlay(alignment: .topTrailing) {
+                if ready {
+                    Text("!")
+                        .font(.mono(12, weight: .heavy))
+                        .foregroundStyle(.black)
+                        .frame(width: 18, height: 18)
+                        .background(Color.green)
+                        .scaleEffect(pulse ? 1.15 : 0.9)
+                        .offset(x: 6, y: -6)
+                        .onAppear {
+                            withAnimation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) { pulse = true }
+                        }
+                }
+            }
+        }
+        .buttonStyle(PressScaleStyle())
+        .accessibilityLabel(ready ? "Coffres : un coffre est prêt" : "Coffres et ligue")
     }
 }
 

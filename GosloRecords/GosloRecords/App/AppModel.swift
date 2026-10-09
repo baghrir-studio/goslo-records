@@ -456,7 +456,8 @@ final class AppModel {
             revealCard(gain)
         }
         let notes = outcome.notes
-        let moment = notes.first { $0.hasPrefix("NIVEAU") }
+        let moment = outcome.league.map { "LIGUE \($0.name.uppercased()) !" }
+            ?? notes.first { $0.hasPrefix("NIVEAU") }
             ?? notes.first { $0.contains("n°1") }.map { _ in "N°1 DU TOP GOSLO RADIO !" }
             ?? notes.first { $0.hasPrefix("Défi réussi") }.map { _ in "DÉFI RÉUSSI !" }
             ?? notes.first { $0.hasPrefix("Tu récupères") }.map { _ in "RAID REPOUSSÉ !" }
@@ -1751,6 +1752,36 @@ final class AppModel {
         current.flags.insert(tip.flag)
         state = current
         persist()
+    }
+
+    // MARK: - Victory chests
+
+    /// A chest is ready to open (the HUD's badge).
+    var hasReadyChest: Bool { state.map { engine.hasReadyChest(in: $0) } ?? false }
+
+    /// Starts the countdown of a waiting chest (one at a time).
+    func startChestUnlock(_ id: Int) {
+        guard var current = state, (try? engine.startUnlocking(id, in: &current)) != nil else { return }
+        state = current
+        sound.play(.select)
+        persist()
+    }
+
+    /// Opens a chest (ready, or right now for money): its contents are applied and saved before the animation plays.
+    func openChest(_ id: Int, rush: Bool) -> ChestLoot? {
+        guard var current = state else { return nil }
+        let before = current.stats
+        let opened: ChestLoot?
+        if rush {
+            opened = try? engine.rushChest(id, in: &current)
+        } else {
+            opened = try? engine.openChest(id, in: &current)
+        }
+        guard let loot = opened else { return nil }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        persist()
+        return loot
     }
 
     // MARK: - Daily clash

@@ -118,6 +118,12 @@ struct GameState: Codable, Equatable {
     var equippedTechnique: String?
     /// Unlocked techniques already announced to the player.
     var knownTechniques: Set<String> = []
+    /// Victory chests waiting in their slots (`Chests.slots` at most), and how many were ever granted.
+    var chests: [VictoryChest] = []
+    var chestSerial = 0
+    /// Trophies (`League`), and the best league reached: its floor is never lost.
+    var trophies = 0
+    var bestLeague: League = .bronze
 
     init(rapper: Rapper, stats: Stats? = nil) {
         self.rapper = rapper
@@ -133,6 +139,7 @@ struct GameState: Codable, Equatable {
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
         case seenEvents, talkedAt, smallTalk, hooks, seenVerses, albums, freeCareer, finaleChoicePending
         case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank, decor, visitsThisYear, wardrobe, placed
+        case chests, chestSerial, trophies, bestLeague
         case gatePeriodUses, gateYearUses, currentGate, raid, raidEndedTurn
         case crew
     }
@@ -201,6 +208,10 @@ struct GameState: Codable, Equatable {
         gatePeriodUses = try c.decodeIfPresent([String: Int].self, forKey: .gatePeriodUses) ?? [:]
         gateYearUses = try c.decodeIfPresent([String: Int].self, forKey: .gateYearUses) ?? [:]
         currentGate = try c.decodeIfPresent(Gate.self, forKey: .currentGate)
+        chests = try c.decodeIfPresent([VictoryChest].self, forKey: .chests) ?? []
+        chestSerial = try c.decodeIfPresent(Int.self, forKey: .chestSerial) ?? 0
+        trophies = try c.decodeIfPresent(Int.self, forKey: .trophies) ?? 0
+        bestLeague = try c.decodeIfPresent(League.self, forKey: .bestLeague) ?? .bronze
         // Saves from before the crew get the cards they already earned.
         crew = try c.decodeIfPresent(CrewState.self, forKey: .crew)
             ?? CrewState.retroactive(flags: flags, completedQuests: completedQuests, feats: singles.compactMap(\.feat))

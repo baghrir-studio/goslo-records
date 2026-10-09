@@ -46,6 +46,22 @@ struct CarnetView: View {
             .padding(.horizontal, Theme.gutter)
             .padding(.top, 24)
 
+            // The rapper, the league title won, and the trophies.
+            HStack(spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(state.rapper.name.uppercased()).font(.display(22)).lineLimit(1)
+                    if let title = state.leagueTitle {
+                        Text("« \(title) »")
+                            .font(.mono(11, weight: .bold))
+                            .foregroundStyle(state.bestLeague.tint)
+                    }
+                }
+                Spacer()
+                LeagueBadge(league: state.league, trophies: state.trophies, size: 18)
+            }
+            .padding(.horizontal, Theme.gutter)
+            .padding(.top, 6)
+
             HStack(spacing: 0) {
                 ForEach(Tab.allCases, id: \.self) { item in
                     Button {
