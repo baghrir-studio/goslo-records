@@ -39,6 +39,8 @@ struct GameState: Codable, Equatable {
     var smallTalk: [String: Int] = [:]
     /// The player's best punchlines, oldest first: the titles of their tracks, quoted back by the cast.
     var hooks: [String] = []
+    /// Punchliner verses already played, oldest first: the ones never seen are drawn first (`PunchlinerDeck`).
+    var seenVerses: [String] = []
     /// Albums released, in order (sales keep coming in for a few semesters).
     var albums: [Album] = []
     /// Free career: no time limit. It ends on a defeat or when the player hangs up the mic (`GameEngine.retire`).
@@ -119,7 +121,7 @@ struct GameState: Codable, Equatable {
         case minigame
         case questProgress, completedQuests, ending, position, facing, district, stepsSinceWild, challengedThisSemester
         case chapter, objectiveIndex, pendingCinematic, seenCinematics, items, equippedTechnique, knownTechniques, bossLosses
-        case seenEvents, talkedAt, smallTalk, hooks, albums, freeCareer, finaleChoicePending
+        case seenEvents, talkedAt, smallTalk, hooks, seenVerses, albums, freeCareer, finaleChoicePending
         case challengedAt, boughtAt, singles, artistXP, challenges, challengeSeason, seasonBestRank, decor, visitsThisYear, wardrobe, placed
     }
 
@@ -169,6 +171,7 @@ struct GameState: Codable, Equatable {
         talkedAt = try c.decodeIfPresent([String: String].self, forKey: .talkedAt) ?? [:]
         smallTalk = try c.decodeIfPresent([String: Int].self, forKey: .smallTalk) ?? [:]
         hooks = try c.decodeIfPresent([String].self, forKey: .hooks) ?? []
+        seenVerses = try c.decodeIfPresent([String].self, forKey: .seenVerses) ?? []
         albums = try c.decodeIfPresent([Album].self, forKey: .albums) ?? []
         freeCareer = try c.decodeIfPresent(Bool.self, forKey: .freeCareer) ?? false
         finaleChoicePending = try c.decodeIfPresent(Bool.self, forKey: .finaleChoicePending) ?? false

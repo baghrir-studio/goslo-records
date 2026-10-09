@@ -214,6 +214,8 @@ final class AppModel {
     func startCareer(_ rapper: Rapper) {
         var fresh = engine.newGame(rapper: rapper)
         HQ.apply(profile.hq, to: &fresh)
+        // The Punchliner verses already played in other careers and the arcade come last.
+        fresh.seenVerses = profile.punchliner.recentVerses
         fresh.freeCareer = true
         fresh.position = engine.world.map?.spawn
         state = fresh
@@ -1714,7 +1716,7 @@ final class AppModel {
     func startArcade(_ game: ArcadeGame) {
         guard dailyClash == nil, arcadePlaying == nil, isUnlocked(game), game.mode != .freestyle else { return }
         let rapper = state?.rapper ?? history.last?.rapper ?? Rapper(name: "MC Personne", city: .paris, style: .boomBap)
-        guard let sandbox = engine.arcadeGame(game, rapper: rapper) else { return }
+        guard let sandbox = engine.arcadeGame(game, rapper: rapper, seenVerses: profile.punchliner.recentVerses) else { return }
         careerAside = state
         state = sandbox
         arcadePlaying = game

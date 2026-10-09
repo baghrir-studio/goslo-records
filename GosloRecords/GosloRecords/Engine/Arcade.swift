@@ -71,15 +71,17 @@ extension TrophyCase {
 }
 
 extension GameEngine {
-    /// A throwaway game to play an arcade game in (never saved).
-    func arcadeGame(_ game: ArcadeGame, rapper: Rapper) -> GameState? {
+    /// A throwaway game to play an arcade game in (never saved). `seenVerses`: the Punchliner verses the player has
+    /// already played (`PunchlinerRecord.recentVerses`), so the arcade deals the unseen ones first, from every tier.
+    func arcadeGame(_ game: ArcadeGame, rapper: Rapper, seenVerses: [String] = []) -> GameState? {
         var state = newGame(rapper: rapper)
         state.pendingCinematic = nil
         state.skills = DailyClash.skills
+        state.seenVerses = seenVerses
         switch game.mode {
         case .minigame(let id):
             guard let minigame = minigame(id) else { return nil }
-            state.minigame = MinigameState(minigame: minigame)
+            _ = startMinigame(minigame, in: &state, maxTier: PunchlinerDeck.maxTier)
         case .concert(let id):
             guard let concert = concert(id) else { return nil }
             state.concert = ConcertState(concert: concert)

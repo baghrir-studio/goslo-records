@@ -18,6 +18,8 @@ struct Story: Codable, Equatable {
     var minigames: [Minigame]
     /// « Le Tournoi goslo radio »: the ladder of bosses, in order.
     var tournament: [TournamentBoss]
+    /// The Punchliner's shared pool of verses (punchlines.json, read by `EventLoader.loadWorld`).
+    var verses: [PunchlinerVerse] = []
 
     init(chapters: [Chapter] = [], events: [GameEvent] = [], cinematics: [Cinematic] = [],
          interviews: [Interview] = [], radio: [RadioHeadline] = [], items: [Item] = [], concerts: [Concert] = [],
@@ -51,6 +53,7 @@ struct Story: Codable, Equatable {
         techniques = try c.decodeIfPresent([UnlockableTechnique].self, forKey: .techniques) ?? []
         minigames = try c.decodeIfPresent([Minigame].self, forKey: .minigames) ?? []
         tournament = try c.decodeIfPresent([TournamentBoss].self, forKey: .tournament) ?? []
+        verses = try c.decodeIfPresent([PunchlinerVerse].self, forKey: .verses) ?? []
     }
 
     func chapter(_ number: Int) -> Chapter? { chapters.first { $0.number == number } }
@@ -61,6 +64,7 @@ struct Story: Codable, Equatable {
     func negotiation(_ id: String) -> Negotiation? { negotiations.first { $0.id == id } }
     func writing(_ id: String) -> Writing? { writings.first { $0.id == id } }
     func minigame(_ id: String) -> Minigame? { minigames.first { $0.id == id } }
+    func verse(_ id: String) -> PunchlinerVerse? { verses.first { $0.id == id } }
 }
 
 struct Chapter: Codable, Equatable, Identifiable {
