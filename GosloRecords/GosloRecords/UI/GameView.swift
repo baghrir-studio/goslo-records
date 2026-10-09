@@ -264,11 +264,20 @@ struct GameView: View {
     private func bottom(_ state: GameState) -> some View {
         switch model.phase {
         case .overworld:
-            HStack(alignment: .bottom) {
-                DPad { model.hold($0) }
-                Spacer()
-                ActionButton(label: "A") { model.interact() }
-                    .padding(.bottom, 20)
+            VStack(spacing: 10) {
+                if let decor = model.placingDecor {
+                    PlacementBar(decor: decor, refusal: model.placementRefusal,
+                                 confirm: { _ = model.confirmPlacing() }, cancel: { model.cancelPlacing() })
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
+                HStack(alignment: .bottom) {
+                    DPad { model.hold($0) }
+                    Spacer()
+                    if model.placingDecor == nil {
+                        ActionButton(label: "A") { model.interact() }
+                            .padding(.bottom, 20)
+                    }
+                }
             }
             .opacity(model.transition == nil ? 1 : 0)
             .transition(.opacity)
@@ -297,5 +306,51 @@ struct GameView: View {
         case .clash, .interview, .concert, .negotiation, .writing, .minigame, .cinematic:
             EmptyView()
         }
+    }
+}
+
+/// Construction mode: walk around, the ghost follows in front of you, put it down where it fits.
+private struct PlacementBar: View {
+    let decor: Decor
+    let refusal: String?
+    let confirm: () -> Void
+    let cancel: () -> Void
+
+    var body: some View {
+        HStack(spacing: 10) {
+            PixelImage(ShopIcons.decor(decor), width: 34)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("\(decor.name.uppercased()) · \(decor.price)")
+                    .font(.mono(11, weight: .bold))
+                    .foregroundStyle(.white)
+                Text(refusal ?? "Ici, c'est parfait")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(refusal == nil ? Color.green : Color(red: 1, green: 0.45, blue: 0.4))
+                    .lineLimit(2)
+            }
+            Spacer(minLength: 4)
+            Button(action: cancel) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(.white)
+                    .frame(width: 40, height: 40)
+                    .overlay(Rectangle().stroke(Color.white.opacity(0.4), lineWidth: 1))
+            }
+            .buttonStyle(PressScaleStyle())
+            .accessibilityLabel("Annuler")
+            Button(action: confirm) {
+                Text("POSER")
+                    .font(.mono(13, weight: .bold))
+                    .foregroundStyle(.black)
+                    .padding(.horizontal, 14)
+                    .frame(height: 40)
+                    .background(refusal == nil ? Color.green : Color.gray.opacity(0.6))
+            }
+            .buttonStyle(PressScaleStyle())
+            .disabled(refusal != nil)
+        }
+        .padding(10)
+        .background(Color.black.opacity(0.82))
+        .overlay(Rectangle().stroke(Color.white.opacity(0.25), lineWidth: 1))
     }
 }

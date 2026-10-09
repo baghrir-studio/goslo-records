@@ -56,11 +56,33 @@ struct WorldView: View {
                     }
                 }
 
-                // The free spots for decorations: a chalk outline while empty, the decoration once bought.
-                ForEach(map.decorPlots) { plot in
+                // Decorations bought on the old fixed spots (older saves).
+                ForEach(map.decorPlots.filter { state.decor[$0.id] != nil }) { plot in
                     DecorSpot(decor: state.decor[plot.id])
                         .position(decorPosition(plot, decor: state.decor[plot.id]))
                         .zIndex(Double(plot.y) + 0.3)
+                }
+                // Decorations and buildings put where the player chose.
+                ForEach(state.placed.filter { $0.district == state.district }) { item in
+                    DecorSpot(decor: item.decor)
+                        .position(placedPosition(item.decor, at: item.anchor))
+                        .zIndex(Double(item.anchor.y) + 0.3)
+                }
+                // Construction mode: the decoration in front of the player, green where it fits, red where it doesn't.
+                if let decor = model.placingDecor, let anchor = model.placementAnchor {
+                    let fits = model.placementRefusal == nil
+                    let size = decor.footprint
+                    Rectangle()
+                        .fill((fits ? Color.green : Color.red).opacity(0.28))
+                        .overlay(Rectangle().stroke(fits ? Color.green : Color.red, style: StrokeStyle(lineWidth: 2, dash: [6, 4])))
+                        .frame(width: CGFloat(size.width) * tile, height: CGFloat(size.height) * tile)
+                        .position(x: (CGFloat(anchor.x) + CGFloat(size.width) / 2) * tile,
+                                  y: (CGFloat(anchor.y + 1) - CGFloat(size.height) / 2) * tile)
+                        .zIndex(Double(anchor.y) + 0.35)
+                    DecorSpot(decor: decor)
+                        .opacity(fits ? 0.85 : 0.45)
+                        .position(placedPosition(decor, at: anchor))
+                        .zIndex(Double(anchor.y) + 0.4)
                 }
 
                 if let spot = model.happening {
@@ -137,6 +159,16 @@ struct WorldView: View {
             .zIndex(Double(point.y))
             .animation(.spring(response: 0.25, dampingFraction: 0.5), value: model.exclaiming)
         }
+    }
+
+    /// A placed decoration: its sprite stands on the anchor tile (bottom-left of its footprint).
+    private func placedPosition(_ decor: Decor, at anchor: TilePoint) -> CGPoint {
+        let tile = WorldView.tile
+        let size = DecorSpot.size(of: decor)
+        if decor == .fresque {
+            return CGPoint(x: (CGFloat(anchor.x) + 0.5) * tile, y: (CGFloat(anchor.y) + 0.5) * tile)
+        }
+        return CGPoint(x: CGFloat(anchor.x) * tile + max(size.width, tile) / 2, y: CGFloat(anchor.y + 1) * tile - size.height / 2 - 2)
     }
 
     /// A decoration stands on its tile (bottom edges together); a wide one (the food truck) starts at the tile's

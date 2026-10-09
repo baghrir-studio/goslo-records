@@ -136,6 +136,8 @@ final class AppModel {
     /// Something going on a few steps away on the map (walk onto it to join in).
     private(set) var happening: StreetHappening?
     private var happeningTurn = -1
+    /// Construction mode: the decoration being placed in front of the player (bought on "Poser").
+    private(set) var placingDecor: Decor?
     /// A big moment to celebrate at the top of the screen (level up, n°1, challenge).
     private(set) var celebration: String?
     /// The daily clash being played (the career waits in `careerAside`, untouched).
@@ -338,6 +340,7 @@ final class AppModel {
         }
         guard OverworldRules.canStep(to: target, on: map) else { return }
         if let state, state.district == .bloc, OverworldRules.blockedByScenery(target, in: state.rapper.city) { return }
+        if let state, engine.isBlockedByDecor(target, in: state) { return }
 
         busy = true
         walkFrame = walkFrame == 1 ? 2 : 1
@@ -387,7 +390,8 @@ final class AppModel {
         if let spot = happening, happeningTurn != current.turn || spot.point == point { happening = nil }
         guard happening == nil, happeningTurn != current.turn,
               Int.random(in: 0..<100, using: &rng) < Happenings.chancePercent,
-              let spot = Happenings.spot(near: point, on: map, city: current.rapper.city, using: &rng) else { return }
+              let spot = Happenings.spot(near: point, on: map, city: current.rapper.city, using: &rng),
+              !engine.decorTiles(in: current.district, state: current).contains(spot) else { return }
         let kind = Happenings.pick(canClash: !engine.wildOpponents(in: current.rapper.city).isEmpty, using: &rng)
         happeningTurn = current.turn
         sound.play(.exclaim)
@@ -578,6 +582,7 @@ final class AppModel {
         }
         guard (try? engine.travel(to: district, in: &current)) != nil else { return }
         happening = nil
+        placingDecor = nil
         let arrived = current
         busy = true
         heldDirection = nil
@@ -956,6 +961,68 @@ final class AppModel {
         state = current
         sound.play(.select)
         persist()
+    }
+
+    // MARK: - Construction mode
+
+    /// Where the decoration being placed would go: in front of the player.
+    var placementAnchor: TilePoint? {
+        placingDecor.map { GameEngine.placementAnchor(for: $0, front: position.moved(facing), facing: facing) }
+    }
+
+    /// Why it can't go there (nil: it can).
+    var placementRefusal: String? {
+        guard let decor = placingDecor, let anchor = placementAnchor, let state else { return "—" }
+        return engine.placementRefusal(decor, at: anchor, in: state, player: position)
+    }
+
+    /// From the shop: walk around with the decoration in front of you, then put it down.
+    func beginPlacing(_ decor: Decor) {
+        sound.play(.select)
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { placingDecor = decor }
+    }
+
+    func cancelPlacing() {
+        withAnimation(.easeOut(duration: 0.2)) { placingDecor = nil }
+    }
+
+    /// Buys the decoration and puts it down where it stands. Returns why not, nil when done.
+    @discardableResult
+    func confirmPlacing() -> String? {
+        guard let decor = placingDecor, let anchor = placementAnchor, var current = state else { return "—" }
+        if let refusal = engine.placementRefusal(decor, at: anchor, in: current, player: position) {
+            sound.play(.miss)
+            return refusal
+        }
+        let before = current.stats
+        guard (try? engine.place(decor, at: anchor, in: &current, player: position)) != nil else { return "Impossible" }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        sound.play(.levelUp)
+        Haptics.shared.play(.victory)
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) { placingDecor = nil }
+        persist()
+        return nil
+    }
+
+    /// Buys goslo radio.
+    @discardableResult
+    func buyRadio() -> String? {
+        guard var current = state else { return "Pas de carrière en cours" }
+        if let refusal = RadioDeal.refusal(in: current) { return refusal }
+        let before = current.stats
+        guard (try? engine.buyRadio(in: &current)) != nil else { return "Impossible" }
+        state = current
+        publishDeltas(from: before, to: current.stats)
+        celebration = "GOSLO RADIO EST À TOI !"
+        sound.play(.victory)
+        Haptics.shared.play(.victory)
+        Task {
+            try? await Task.sleep(for: .seconds(2.6))
+            withAnimation { celebration = nil }
+        }
+        persist()
+        return nil
     }
 
     /// The shop's decorations: buys one and puts it on a free spot of the map.
