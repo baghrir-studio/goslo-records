@@ -16,6 +16,9 @@ enum DecorArt {
         case .borneArcade: PixelColor(hex: "#4fd6e0")
         case .statueMicro: PixelColor(hex: "#f2c14e")
         case .sono: PixelColor(hex: "#e04fb0")
+        case .studioPerso: PixelColor(hex: "#ff4d2e")
+        case .scenePleinAir: PixelColor(hex: "#e04fb0")
+        case .boutiqueMerch, .panneauGeant: PixelColor(hex: "#f2c14e")
         case .fresque, .bancDore, .palmier, .foodTruck: nil
         }
     }
@@ -30,6 +33,10 @@ enum DecorArt {
         case .foodTruck: foodTruck().outlined()
         case .statueMicro: statue().outlined()
         case .neonGoslo: neon().outlined()
+        case .panneauGeant: billboard().outlined()
+        case .studioPerso: studio().outlined()
+        case .scenePleinAir: stage().outlined()
+        case .boutiqueMerch: merch().outlined()
         }
     }
 
@@ -198,6 +205,92 @@ enum DecorArt {
         }
         let text = "GOSLO"
         PixelFont.draw(text, on: c, x: (24 - PixelFont.width(text)) / 2, y: 9, pink)
+        return c
+    }
+
+    // MARK: Buildings (two tiles wide, they block the way)
+
+    /// A 4×3 billboard on two posts: the player's name in lights would need the name; a gold mic and stars do.
+    private static func billboard() -> PixelCanvas {
+        let c = PixelCanvas(width: 32, height: 36)
+        c.fill(5, 20, 6, 35, NightPalette.metal); c.fill(25, 20, 26, 35, NightPalette.metal)
+        c.fill(0, 0, 31, 21, PixelColor(hex: "#14141a"))
+        c.fill(1, 1, 30, 20, PixelColor(hex: "#2a1a40"))
+        // A spotlight beam, the gold mic and stars.
+        for y in 2...19 { c.fill(16 - y / 3, y, 16 + y / 3, y, PixelColor(hex: "#3d2a5a")) }
+        c.circle(cx: 16, cy: 7, radius: 3, gold)
+        c.fill(15, 10, 17, 15, gold); c.fill(13, 16, 19, 17, goldDark)
+        for (x, y) in [(4, 4), (27, 6), (6, 15), (25, 16), (22, 3)] { c.dot(x, y, goldLight) }
+        PixelFont.draw("STAR", on: c, x: 2, y: 2, PixelColor(hex: "#ff5ab4"))
+        // Lamps on top.
+        for x in [4, 15, 26] { c.fill(x, 0, x + 2, 0, NightPalette.lampLight) }
+        return c
+    }
+
+    /// The player's own studio: a small brick block, the red REC light, a lit window with the console.
+    private static func studio() -> PixelCanvas {
+        let c = PixelCanvas(width: 32, height: 46)
+        let brick = PixelColor(hex: "#6b3a30")
+        c.fill(1, 12, 30, 45, brick)
+        for y in stride(from: 14, through: 44, by: 3) { c.fill(1, y, 30, y, brick.shaded(0.8)) }
+        // Flat roof, an AC unit.
+        c.fill(0, 10, 31, 12, PixelColor(hex: "#2a2a30"))
+        c.fill(20, 5, 27, 9, NightPalette.metal); c.fill(21, 6, 26, 8, NightPalette.metal.shaded(0.7))
+        // The sign and the REC light.
+        c.fill(4, 15, 27, 21, PixelColor(hex: "#14141a"))
+        PixelFont.draw("STUDIO", on: c, x: 5, y: 16, PixelColor(hex: "#f0eee8"))
+        c.circle(cx: 27, cy: 26, radius: 2, PixelColor(hex: "#ff4d2e"))
+        // Window: the console's lights.
+        c.fill(4, 25, 20, 33, NightPalette.windowLit.shaded(0.8))
+        for x in stride(from: 6, through: 18, by: 3) { c.fill(x, 30, x, 32, PixelColor(hex: x % 2 == 0 ? "#4fd6e0" : "#ff4d2e")) }
+        // Heavy door.
+        c.fill(22, 33, 29, 45, PixelColor(hex: "#1c1c22")); c.dot(23, 39, gold)
+        return c
+    }
+
+    /// An open-air stage: a wooden deck, a truss with lights, speakers on each side.
+    private static func stage() -> PixelCanvas {
+        let c = PixelCanvas(width: 32, height: 44)
+        let wood = PixelColor(hex: "#8a5a34"), truss = NightPalette.metal
+        // Truss frame.
+        c.fill(1, 6, 2, 43, truss); c.fill(29, 6, 30, 43, truss); c.fill(1, 6, 30, 8, truss)
+        for x in stride(from: 4, through: 28, by: 4) { c.fill(x, 9, x + 1, 10, PixelColor(hex: ["#ff5ab4", "#f2c14e", "#4fd6e0"][(x / 4) % 3])) }
+        // Back drop.
+        c.fill(3, 11, 28, 30, PixelColor(hex: "#1a1030"))
+        PixelFont.draw("LIVE", on: c, x: 9, y: 14, PixelColor(hex: "#ff5ab4"))
+        c.circle(cx: 16, cy: 25, radius: 3, gold); c.fill(15, 28, 17, 30, gold)
+        // The deck.
+        c.fill(0, 31, 31, 37, wood)
+        c.fill(0, 31, 31, 31, wood.shaded(1.3))
+        for x in stride(from: 3, through: 30, by: 6) { c.fill(x, 32, x, 37, wood.shaded(0.75)) }
+        c.fill(2, 38, 29, 43, wood.shaded(0.6))
+        // Speakers.
+        for x in [3, 24] {
+            c.fill(x, 21, x + 4, 30, PixelColor(hex: "#14141a"))
+            c.circle(cx: x + 2, cy: 27, radius: 1, NightPalette.metal)
+        }
+        return c
+    }
+
+    /// The merch shop: a shopfront with an awning, T-shirts and caps in the window, MERCH in gold.
+    private static func merch() -> PixelCanvas {
+        let c = PixelCanvas(width: 32, height: 46)
+        let wall = PixelColor(hex: "#2e2e3a"), awning = PixelColor(hex: "#ff4d2e")
+        c.fill(1, 10, 30, 45, wall)
+        c.fill(0, 8, 31, 10, PixelColor(hex: "#1c1c24"))
+        // Sign.
+        c.fill(3, 12, 28, 18, PixelColor(hex: "#14141a"))
+        PixelFont.draw("MERCH", on: c, x: 6, y: 13, gold)
+        // Awning stripes.
+        for x in 1...30 { c.fill(x, 20, x, 23, (x / 3) % 2 == 0 ? awning : PixelColor(hex: "#f0eee8")) }
+        // Window with T-shirts and a cap.
+        c.fill(3, 25, 19, 37, NightPalette.windowLit.shaded(0.85))
+        for (x, color) in [(5, "#ff4d2e"), (11, "#14141a")] {
+            c.fill(x, 28, x + 4, 33, PixelColor(hex: color)); c.fill(x - 1, 28, x + 5, 29, PixelColor(hex: color))
+        }
+        c.fill(16, 30, 18, 31, PixelColor(hex: "#4fd6e0")); c.fill(15, 32, 19, 32, PixelColor(hex: "#4fd6e0"))
+        // Door.
+        c.fill(22, 27, 28, 45, PixelColor(hex: "#141418")); c.fill(23, 28, 27, 35, NightPalette.windowLit.shaded(0.6))
         return c
     }
 }

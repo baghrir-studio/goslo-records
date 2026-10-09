@@ -15,8 +15,6 @@ struct ShopView: View {
 
     @State private var tab: Tab = .fringues
     @State private var message: String?
-    /// Decoration picked, waiting for a spot.
-    @State private var placing: Decor?
 
     private let columns = [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)]
 
@@ -50,7 +48,7 @@ struct ShopView: View {
 
                 HStack(spacing: 6) {
                     ForEach(Tab.allCases) { item in
-                        Button { tab = item; placing = nil } label: {
+                        Button { tab = item } label: {
                             Text(item.rawValue.uppercased())
                                 .font(.mono(11, weight: .bold))
                                 .foregroundStyle(tab == item ? Theme.background : Theme.text)
@@ -74,17 +72,20 @@ struct ShopView: View {
                 }
 
                 ScrollView {
-                    Group {
-                        if let placing {
-                            plotPicker(for: placing, in: state)
-                        } else {
-                            LazyVGrid(columns: columns, spacing: 10) {
-                                switch tab {
-                                case .fringues: ForEach(Wardrobe.items) { wearableCard($0, in: state) }
-                                case .matos: ForEach(Shop.gear) { offerCard($0, in: state) }
-                                case .services: ForEach(Shop.services) { offerCard($0, in: state) }
-                                case .deco: ForEach(Decor.allCases) { decorCard($0, in: state) }
-                                }
+                    VStack(alignment: .leading, spacing: 10) {
+                        if tab == .deco {
+                            Text("Choisis, puis pose-la où tu veux sur la carte. Les bâtiments rapportent à chaque période.")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Theme.muted)
+                        }
+                        LazyVGrid(columns: columns, spacing: 10) {
+                            switch tab {
+                            case .fringues: ForEach(Wardrobe.items) { wearableCard($0, in: state) }
+                            case .matos: ForEach(Shop.gear) { offerCard($0, in: state) }
+                            case .services: ForEach(Shop.services) { offerCard($0, in: state) }
+                            case .deco:
+                                radioCard(in: state)
+                                ForEach(Decor.allCases) { decorCard($0, in: state) }
                             }
                         }
                     }
@@ -130,12 +131,26 @@ struct ShopView: View {
     }
 
     private func decorCard(_ decor: Decor, in state: GameState) -> some View {
-        let placed = state.decor.values.filter { $0 == decor }.count
+        let placed = state.decor.values.filter { $0 == decor }.count + state.placed.filter { $0.decor == decor }.count
         let levelLock = ArtistLevel.level(xp: state.artistXP) < decor.minLevel ? "Niveau \(decor.minLevel) requis" : nil
         let moneyLock = state.stats.argent <= decor.price ? "Pas assez d'argent" : nil
-        return card(image: ShopIcons.decor(decor), imageWidth: 56, title: decor.name, pitch: decor.pitch,
+        return card(image: ShopIcons.decor(decor), imageWidth: decor.isBuilding ? 64 : 56, title: decor.name,
+                    pitch: placed > 0 ? "\(decor.pitch) · \(placed) posé\(placed > 1 ? "s" : "")" : decor.pitch,
                     price: "\(decor.price)", locked: levelLock ?? moneyLock, highlighted: placed > 0) {
-            withAnimation { placing = decor }
+            model.beginPlacing(decor)
+            dismiss()
+        }
+    }
+
+    /// The big one: buy goslo radio itself. Your sounds get more airplay and it pays every period.
+    private func radioCard(in state: GameState) -> some View {
+        let refusal = RadioDeal.refusal(in: state)
+        let owned = state.flags.contains(RadioDeal.flag)
+        return card(image: ShopIcons.gear("radio_goslo"), imageWidth: 64, title: "Racheter goslo radio",
+                    pitch: "La radio devient la tienne : tes sons tournent plus, elle rapporte chaque période.",
+                    price: owned ? "À TOI" : "\(RadioDeal.price)", locked: owned ? nil : refusal, highlighted: owned) {
+            guard !owned else { return say("goslo radio, c'est chez toi maintenant.") }
+            say(model.buyRadio() ?? "goslo radio est à toi. DJ Noize bosse pour toi maintenant.")
         }
     }
 
@@ -173,58 +188,5 @@ struct ShopView: View {
         }
         .buttonStyle(PressScaleStyle())
         .disabled(locked != nil && locked != "Déjà à toi")
-    }
-
-    // MARK: Decorations
-
-    /// Where to put the decoration: the free spots of the districts you can reach.
-    private func plotPicker(for decor: Decor, in state: GameState) -> some View {
-        let open = Set(model.engine.openDistricts(in: state))
-        let spots = model.engine.decorPlots(in: state).filter { open.contains($0.district) }
-        return VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 12) {
-                PixelImage(ShopIcons.decor(decor), width: 48)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(decor.name.uppercased()).font(.mono(13, weight: .bold)).foregroundStyle(Theme.text)
-                    Text("Choisis où la poser · \(decor.price) d'argent").font(.system(size: 12)).foregroundStyle(Theme.muted)
-                }
-            }
-            if spots.isEmpty {
-                Text("Aucun emplacement libre pour l'instant.").font(.system(size: 13)).foregroundStyle(Theme.muted)
-            }
-            ForEach(Array(spots.enumerated()), id: \.element.plot.id) { index, spot in
-                let taken = state.decor[spot.plot.id]
-                Button {
-                    if let refusal = model.placeDecor(decor, plot: spot.plot.id) {
-                        say(refusal)
-                    } else {
-                        say("« \(decor.name) » est posée à \(spot.district.name). Va voir !")
-                        withAnimation { placing = nil }
-                    }
-                } label: {
-                    HStack {
-                        Text("\(spot.district.name.uppercased()) · EMPLACEMENT \(index + 1)")
-                            .font(.mono(12, weight: .bold))
-                            .foregroundStyle(taken == nil ? Theme.text : Theme.faint)
-                        Spacer()
-                        if let taken {
-                            PixelImage(ShopIcons.decor(taken), width: 22)
-                            Text("PRIS").font(.mono(10, weight: .bold)).foregroundStyle(Theme.faint)
-                        } else {
-                            Text("POSER ›").font(.mono(11, weight: .bold)).foregroundStyle(shopGold)
-                        }
-                    }
-                    .padding(12)
-                    .overlay(Rectangle().stroke(Theme.line, lineWidth: 1))
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .disabled(taken != nil)
-            }
-            Button("‹ Retour aux décos") { withAnimation { placing = nil } }
-                .font(.mono(12, weight: .bold))
-                .foregroundStyle(Theme.muted)
-                .padding(.top, 6)
-        }
     }
 }
