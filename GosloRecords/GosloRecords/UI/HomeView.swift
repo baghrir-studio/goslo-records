@@ -139,14 +139,17 @@ struct Logo: View {
             Text("goslo")
                 .foregroundStyle(Theme.text)
             HStack(alignment: .firstTextBaseline, spacing: 0) {
-                Text("radio")
+                Text("records")
                 Text(".").foregroundStyle(Theme.accent)
             }
             .foregroundStyle(Theme.text.opacity(0.92))
         }
         .font(.display(size))
+        // « records » is wider than the old word: shrink instead of wrapping on small iPhones.
+        .lineLimit(1)
+        .minimumScaleFactor(0.7)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("goslo radio")
+        .accessibilityLabel("goslo records")
     }
 }
 

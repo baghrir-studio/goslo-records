@@ -77,7 +77,7 @@ struct ShareCardView: View {
 
                 HStack(alignment: .lastTextBaseline) {
                     HStack(spacing: 0) {
-                        Text("goslo radio")
+                        Text("goslo records")
                         Text(".").foregroundStyle(Theme.accent)
                     }
                     .font(.display(20))
