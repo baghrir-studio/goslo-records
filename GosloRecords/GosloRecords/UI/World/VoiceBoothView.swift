@@ -107,7 +107,7 @@ struct VoiceBoothView: View {
     private var phaseHint: String {
         switch booth.phase {
         case .denied:
-            "Pas d'accès au micro. Autorise-le dans Réglages › goslo radio › Micro, puis reviens enregistrer ton couplet."
+            "Pas d'accès au micro. Autorise-le dans Réglages › goslo records › Micro, puis reviens enregistrer ton couplet."
         case .failed(let message):
             message
         case .recording:

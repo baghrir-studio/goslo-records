@@ -73,7 +73,7 @@ private struct PunchlinerShareButton: View {
             if let image, let rapper = model.state?.rapper {
                 let picture = Image(uiImage: image)
                 ShareLink(item: picture,
-                          subject: Text("Punchliner sur goslo radio"),
+                          subject: Text("Punchliner sur goslo records"),
                           message: Text("\(rapper.name) : \(score) % au Punchliner. @goslo_radio_lejeu"),
                           preview: SharePreview("\(rapper.name) · Punchliner \(score) %", image: picture)) {
                     Label("Partager ma carte", systemImage: "square.and.arrow.up")
@@ -207,7 +207,7 @@ struct PunchlinerCard: View {
 
                 HStack(alignment: .lastTextBaseline) {
                     HStack(spacing: 0) {
-                        Text("goslo radio")
+                        Text("goslo records")
                         Text(".").foregroundStyle(Theme.accent)
                     }
                     .font(.display(20))
