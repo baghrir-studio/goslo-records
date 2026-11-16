@@ -106,11 +106,10 @@ Apple calcule l'âge à partir de ces réponses. On peut s'attendre à 12+ ou 13
    4. Le quartier avec ses façades (et des affiches si les streams sont hauts).
    5. Le Punchliner, verdict « PUNCHLINE ! » affiché.
    6. « Ton son tourne », avec le karaoké.
-2. **URL d'assistance** (obligatoire) : une page avec un moyen de contact. La politique de confidentialité publiée peut servir, en y ajoutant une adresse e-mail.
+2. **URL d'assistance** (obligatoire) : la page de la politique de confidentialité, qui donne l'adresse de contact goslo.contact@gmail.com.
 3. **Politique de confidentialité** : rendre publique la page indiquée plus haut et coller son lien.
 4. **Classification par âge**, **Confidentialité**, **Catégories**, **textes** : voir les sections plus haut.
 5. **Prix** : gratuit. **Disponibilité** : tous les pays francophones au minimum (France, Belgique, Suisse, Canada, Maroc…).
 6. **Build** : choisir le dernier build TestFlight dans la page de la version.
 7. **Informations pour la relecture** : « Jeu entièrement hors ligne, aucun compte, aucune donnée collectée. » Laisser vide la partie connexion.
-8. **Juridique** (rappel du README) : faire relire les personnages et les textes par un avocat avant la sortie publique.
-9. Cliquer **Soumettre pour vérification**. Apple répond en général en 24 à 48 heures.
+8. Cliquer **Soumettre pour vérification**. Apple répond en général en 24 à 48 heures.
